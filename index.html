@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdn.jsdelivr.net; img-src * data: blob:;">
+
+<title>Markdown Editor</title>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.1/marked.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/encoding-japanese@2.0.0/encoding.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/typo-js@1.2.3/typo.js" crossorigin="anonymous"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+JP:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0f0f11;--surface:#17171a;--surface2:#1e1e23;--surface3:#26262d;
+  --border:#2e2e38;--border2:#3d3d4d;--accent:#7c6af7;--accent2:#a897ff;
+  --accent-dim:rgba(124,106,247,0.12);--text:#e8e8f0;--text2:#9898b0;--text3:#5a5a72;
+  --success:#4ecb8f;--warn:#e8a84a;--danger:#f07070;
+  --mono:'JetBrains Mono',monospace;--serif:'Noto Serif JP',serif;--sans:'Zen Kaku Gothic New',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);display:flex;flex-direction:column}
+
+/* MENUBAR */
+#menubar{height:32px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:stretch;padding:0 8px;flex-shrink:0;position:relative;z-index:100}
+.menu-item{position:relative;display:flex;align-items:center}
+.menu-trigger{border:none;background:transparent;color:var(--text2);font-family:var(--sans);font-size:13px;font-weight:500;padding:0 10px;cursor:pointer;border-radius:4px;transition:all .12s;height:100%}
+.menu-trigger:hover,.menu-trigger.open{background:var(--surface3);color:var(--text)}
+.menu-dropdown{display:none;position:absolute;top:calc(100% + 2px);left:0;min-width:240px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:4px;box-shadow:0 8px 24px rgba(0,0,0,.5);z-index:200}
+.menu-dropdown.open{display:block}
+.menu-entry{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-radius:5px;font-size:13px;color:var(--text2);cursor:pointer;transition:all .1s;gap:16px;user-select:none}
+.menu-entry:hover{background:var(--surface3);color:var(--text)}
+.menu-entry.active{color:var(--accent2)}
+.menu-entry.active .menu-check{opacity:1}
+.menu-check{opacity:0;color:var(--accent2);font-size:11px;transition:opacity .1s}
+.menu-shortcut{font-family:var(--mono);font-size:11px;color:var(--text3)}
+.menu-sep-line{height:1px;background:var(--border);margin:4px 0}
+
+/* TITLEBAR */
+#titlebar{height:44px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0}
+#app-name{font-size:13px;font-weight:700;color:var(--accent2);letter-spacing:.08em;text-transform:uppercase;font-family:var(--mono);flex-shrink:0}
+#filename-display{font-size:13px;color:var(--text2);font-family:var(--mono);padding:3px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:5px;min-width:180px;cursor:text;outline:none;transition:border-color .15s}
+#filename-display:focus{border-color:var(--accent);color:var(--text)}
+.titlebar-spacer{flex:1}
+#file-input{display:none}
+
+/* TOOLBAR */
+#toolbar{height:40px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:2px;flex-shrink:0;overflow-x:auto}
+.tool-sep{width:1px;height:18px;background:var(--border);margin:0 6px;flex-shrink:0}
+.tool-btn{border:none;background:transparent;color:var(--text2);font-family:var(--mono);font-size:12px;font-weight:500;padding:4px 8px;border-radius:5px;cursor:pointer;transition:all .12s;white-space:nowrap;flex-shrink:0}
+.tool-btn:hover{background:var(--surface3);color:var(--text)}
+.tool-btn:active{transform:scale(.95)}
+.tool-btn.heading{color:var(--accent2);font-weight:700}
+.tool-btn.active-spell{color:var(--warn)!important;background:rgba(232,168,74,.1)}
+
+/* MAIN */
+#main{display:flex;flex:1;overflow:hidden}
+
+/* EDITOR */
+#editor-wrap{flex:1;min-width:0;display:flex;flex-direction:column;border-right:1px solid var(--border)}
+#editor{flex:1;resize:none;border:none;outline:none;background:var(--bg);color:var(--text);font-family:var(--mono);font-size:14.5px;line-height:1.75;padding:24px 28px;tab-size:2;caret-color:var(--accent2)}
+#editor::placeholder{color:var(--text3)}
+#editor::selection{background:rgba(124,106,247,.25)}
+
+/* PREVIEW */
+#preview-wrap{width:0;min-width:0;overflow:hidden;background:var(--surface);transition:width .25s cubic-bezier(.4,0,.2,1);border-left:0px solid var(--border)}
+#preview-wrap.open{width:50%;min-width:300px;border-left-width:1px;overflow-y:auto}
+#preview{font-family:var(--serif);font-size:15px;line-height:1.9;color:var(--text);padding:32px 40px;max-width:760px}
+#preview h1,#preview h2,#preview h3,#preview h4,#preview h5,#preview h6{font-family:var(--sans);font-weight:700;margin:1.6em 0 .5em;line-height:1.3;color:var(--text)}
+#preview h1{font-size:26px;padding-bottom:.3em;border-bottom:2px solid var(--border2)}
+#preview h2{font-size:20px;padding-bottom:.2em;border-bottom:1px solid var(--border)}
+#preview h3{font-size:17px;color:var(--accent2)}
+#preview h4{font-size:15px}
+#preview p{margin:.7em 0}
+#preview ul,#preview ol{margin:.7em 0;padding-left:1.6em}
+#preview li{margin:.25em 0}
+#preview a{color:var(--accent2);text-decoration:none}
+#preview a:hover{text-decoration:underline}
+#preview strong{font-weight:700;color:var(--text)}
+#preview em{font-style:italic;color:var(--text2)}
+#preview code{font-family:var(--mono);font-size:13px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:1px 5px;color:var(--accent2)}
+#preview pre{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;overflow-x:auto;margin:1em 0}
+#preview pre code{background:none;border:none;padding:0;color:var(--text);font-size:13.5px}
+#preview blockquote{border-left:3px solid var(--accent);margin:1em 0;padding:4px 16px;color:var(--text2);background:var(--accent-dim);border-radius:0 4px 4px 0}
+#preview hr{border:none;border-top:1px solid var(--border2);margin:1.5em 0}
+#preview table{border-collapse:collapse;width:100%;margin:1em 0;font-family:var(--sans);font-size:14px}
+#preview th,#preview td{border:1px solid var(--border2);padding:8px 12px}
+#preview th{background:var(--surface2);font-weight:500;color:var(--accent2)}
+#preview tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+#preview img{max-width:100%;border-radius:6px;border:1px solid var(--border)}
+
+/* STATUS BAR */
+#statusbar{height:26px;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:20px;flex-shrink:0}
+.stat-item{font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px}
+.stat-label{color:var(--text3)}
+.stat-val{color:var(--text2);font-weight:500}
+.stat-item.accent .stat-val{color:var(--accent2)}
+#spell-status{font-family:var(--mono);font-size:11px;color:var(--text3)}
+#spell-status.on{color:var(--warn)}
+#dict-badge{font-family:var(--mono);font-size:10px;padding:1px 6px;border-radius:3px;border:1px solid var(--border);color:var(--text3)}
+#dict-badge.ready{color:var(--success);border-color:rgba(78,203,143,.3)}
+#dict-badge.loading{color:var(--warn);border-color:rgba(232,168,74,.3)}
+#dict-badge.failed{color:var(--danger);border-color:rgba(240,112,112,.3)}
+#saved-indicator{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--success);opacity:0;transition:opacity .3s}
+#saved-indicator.show{opacity:1}
+
+/* TOAST */
+#toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface3);border:1px solid var(--border2);color:var(--text);font-family:var(--sans);font-size:13px;padding:8px 18px;border-radius:8px;opacity:0;transition:all .2s;pointer-events:none;white-space:nowrap;z-index:999}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* SPELL PANEL */
+#spell-panel{position:fixed;bottom:40px;right:20px;width:290px;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:0;z-index:300;display:none;box-shadow:0 8px 32px rgba(0,0,0,.6);overflow:hidden}
+#spell-panel.show{display:block}
+#sph{display:flex;align-items:center;justify-content:space-between;padding:9px 12px 8px;border-bottom:1px solid var(--border)}
+#sph h3{font-size:11px;color:var(--text3);font-weight:500;letter-spacing:.06em;text-transform:uppercase;font-family:var(--mono)}
+#spell-close{border:none;background:transparent;color:var(--text3);cursor:pointer;font-size:14px;padding:0 2px;line-height:1;border-radius:3px;transition:color .1s}
+#spell-close:hover{color:var(--text)}
+#spell-loading{padding:14px 12px;font-family:var(--mono);font-size:12px;color:var(--text3);display:none;align-items:center;gap:8px}
+#spell-loading.show{display:flex}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin-icon{width:12px;height:12px;border:1.5px solid var(--border2);border-top-color:var(--accent2);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+#spell-list{max-height:240px;overflow-y:auto;padding:4px}
+#spell-empty{font-size:13px;color:var(--success);padding:12px;display:none}
+.spell-word{padding:6px 8px;border-radius:6px;margin-bottom:2px}
+.spell-word:hover{background:var(--surface3)}
+.spell-word-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:3px}
+.spell-word-text{font-family:var(--mono);font-size:13px;color:var(--danger);flex:1}
+.spell-actions{display:flex;gap:4px;flex-shrink:0}
+.spell-btn{font-size:10px;color:var(--text3);padding:2px 7px;border:1px solid var(--border);border-radius:4px;cursor:pointer;background:transparent;font-family:var(--sans);transition:all .1s;white-space:nowrap}
+.spell-btn:hover{color:var(--text2);border-color:var(--border2);background:var(--surface3)}
+.spell-btn.add{color:var(--accent2);border-color:rgba(124,106,247,.3)}
+.spell-btn.add:hover{background:var(--accent-dim)}
+.spell-suggestions{display:flex;flex-wrap:wrap;gap:4px}
+.spell-sug{font-size:11px;font-family:var(--mono);color:var(--text2);padding:2px 7px;background:var(--surface3);border:1px solid var(--border);border-radius:4px;cursor:pointer;transition:all .1s}
+.spell-sug:hover{color:var(--accent2);border-color:rgba(124,106,247,.4);background:var(--accent-dim)}
+#spell-footer{font-family:var(--mono);font-size:11px;color:var(--text3);padding:7px 12px;border-top:1px solid var(--border);display:none}
+#spell-footer span{color:var(--danger);font-weight:500}
+
+/* ─── PDF PRINT STYLES ─── */
+@media print {
+  #menubar, #titlebar, #toolbar, #statusbar, #editor-wrap, #spell-panel, #toast { display: none !important; }
+  body { background: white !important; }
+  #main { display: block !important; overflow: visible !important; height: auto !important; }
+  #preview-wrap { width: 100% !important; max-width: none !important; display: block !important; border: none !important; overflow: visible !important; background: white !important; }
+  #preview { max-width: none !important; padding: 0 !important; color: black !important; }
+  #preview h1, #preview h2, #preview h3, #preview h4, #preview h5, #preview h6,
+  #preview p, #preview li, #preview strong { color: black !important; }
+  #preview em { color: #333 !important; }
+  #preview code { border: 1px solid #ccc !important; color: black !important; background: transparent !important; }
+  #preview pre { border: 1px solid #ccc !important; background: transparent !important; page-break-inside: avoid; }
+  #preview blockquote { border-left-color: #999 !important; background: transparent !important; color: #444 !important; }
+  #preview table { width: 100% !important; border-collapse: collapse !important; }
+  #preview th { background: #f0f0f0 !important; color: black !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  h1, h2, h3 { page-break-after: avoid; }
+  img { max-width: 100% !important; page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<div id="menubar">
+  <div class="menu-item">
+    <button class="menu-trigger" data-menu="file" id="t-file"></button>
+    <div class="menu-dropdown" id="dd-file">
+      <div class="menu-entry" onclick="newFile()">
+        <span id="m-new"></span><span class="menu-shortcut">Ctrl+N</span>
+      </div>
+      <div class="menu-entry" onclick="document.getElementById('file-input').click()">
+        <span id="m-open"></span><span class="menu-shortcut">Ctrl+O</span>
+      </div>
+      <div class="menu-sep-line"></div>
+      <div class="menu-entry" onclick="saveFile()">
+        <span id="m-save"></span><span class="menu-shortcut">Ctrl+S</span>
+      </div>
+      <div class="menu-entry" onclick="saveFileAs()">
+        <span id="m-save-as"></span><span class="menu-shortcut">Ctrl+Shift+S</span>
+      </div>
+      <div class="menu-sep-line"></div>
+      <div class="menu-entry" onclick="exportHtml()">
+        <span id="m-export-html"></span>
+      </div>
+      <div class="menu-entry" onclick="exportPdf()">
+        <span id="m-export-pdf"></span>
+      </div>
+    </div>
+  </div>
+  <div class="menu-item">
+    <button class="menu-trigger" data-menu="view" id="t-view"></button>
+    <div class="menu-dropdown" id="dd-view">
+      <div class="menu-entry" id="m-preview-entry" onclick="togglePreview()">
+        <span id="m-preview-label"></span><span class="menu-check" id="preview-check">✓</span>
+      </div>
+    </div>
+  </div>
+  <div class="menu-item">
+    <button class="menu-trigger" data-menu="edit" id="t-edit"></button>
+    <div class="menu-dropdown" id="dd-edit">
+      <div class="menu-entry" id="m-spell-entry" onclick="toggleSpell()">
+        <span id="m-spell-label"></span><span class="menu-check" id="spell-check">✓</span>
+      </div>
+      <div class="menu-sep-line"></div>
+      <div class="menu-entry" onclick="closeMenus();ins('# ',true)">H1</div>
+      <div class="menu-entry" onclick="closeMenus();ins('## ',true)">H2</div>
+      <div class="menu-entry" onclick="closeMenus();ins('### ',true)">H3</div>
+      <div class="menu-sep-line"></div>
+      <div class="menu-entry" onclick="closeMenus();wrap('**')"><span id="m-bold"></span></div>
+      <div class="menu-entry" onclick="closeMenus();wrap('_')"><span id="m-italic"></span></div>
+    </div>
+  </div>
+</div>
+
+<div id="titlebar">
+  <span id="app-name">md//edit</span>
+  <input type="text" id="filename-display" value="document.md" spellcheck="false">
+  <div class="titlebar-spacer"></div>
+  <input type="file" id="file-input" accept=".md,.txt,.markdown">
+</div>
+
+<div id="toolbar">
+  <button class="tool-btn heading" onclick="ins('# ',true)">H1</button>
+  <button class="tool-btn heading" onclick="ins('## ',true)">H2</button>
+  <button class="tool-btn heading" onclick="ins('### ',true)">H3</button>
+  <div class="tool-sep"></div>
+  <button class="tool-btn" onclick="wrap('**')"><b>B</b></button>
+  <button class="tool-btn" onclick="wrap('_')"><i>I</i></button>
+  <button class="tool-btn" onclick="wrap('~~')"><s>S</s></button>
+  <button class="tool-btn" onclick="wrap('`')">` `</button>
+  <div class="tool-sep"></div>
+  <button class="tool-btn" id="tb-list-btn"></button>
+  <button class="tool-btn" id="tb-olist-btn"></button>
+  <button class="tool-btn" onclick="ins('- [ ] ',true)">☐ <span id="tb-task"></span></button>
+  <button class="tool-btn" onclick="ins('> ',true)">" <span id="tb-quote"></span></button>
+  <div class="tool-sep"></div>
+  <button class="tool-btn" onclick="insBlock('```\n','\n```')">{ } <span id="tb-code"></span></button>
+  <button class="tool-btn" onclick="insertLink()">⌘ <span id="tb-link"></span></button>
+  <button class="tool-btn" onclick="insertTable()">⊞ <span id="tb-table"></span></button>
+  <button class="tool-btn" onclick="ins('---\n',true)">── <span id="tb-hr"></span></button>
+  <div class="tool-sep"></div>
+  <button class="tool-btn" id="spell-toggle-btn" onclick="toggleSpell()"></button>
+</div>
+
+<div id="main">
+  <div id="editor-wrap">
+    <textarea id="editor" spellcheck="false"></textarea>
+  </div>
+  <div id="preview-wrap"><div id="preview"></div></div>
+</div>
+
+<div id="statusbar">
+  <div class="stat-item accent"><span class="stat-label" id="s-label-lines"></span><span class="stat-val" id="s-lines">1</span></div>
+  <div class="stat-item"><span class="stat-label" id="s-label-words"></span><span class="stat-val" id="s-words">0</span></div>
+  <div class="stat-item"><span class="stat-label" id="s-label-chars"></span><span class="stat-val" id="s-chars">0</span></div>
+  <div class="stat-item"><span class="stat-label" id="s-label-full"></span><span class="stat-val" id="s-full">0</span></div>
+  <div class="stat-item"><span class="stat-label" id="s-label-half"></span><span class="stat-val" id="s-half">0</span></div>
+  <span id="spell-status"></span>
+  <span id="dict-badge"></span>
+  <span id="saved-indicator"></span>
+</div>
+<div id="toast"></div>
+
+<div id="spell-panel">
+  <div id="sph"><h3 id="sp-title"></h3><button id="spell-close" onclick="closeSpellPanel()">✕</button></div>
+  <div id="spell-loading"><div class="spin-icon"></div><span id="sp-loading-text"></span></div>
+  <div id="spell-list"></div>
+  <div id="spell-empty"></div>
+  <div id="spell-footer"></div>
+</div>
+
+<script>
+/* ── i18n ── */
+const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
+document.documentElement.lang = isJa ? 'ja' : 'en';
+
+const T = {
+  menuFile:    isJa ? 'ファイル' : 'File',
+  menuView:    isJa ? '表示'     : 'View',
+  menuEdit:    isJa ? '編集'     : 'Edit',
+  newFile:     isJa ? '新規作成' : 'New',
+  open:        isJa ? '開く'     : 'Open',
+  save:        isJa ? '保存'     : 'Save',
+  saveAs:      isJa ? '名前を付けて保存' : 'Save As',
+  exportHtml:  isJa ? 'HTMLとしてエクスポート' : 'Export as HTML',
+  exportPdf:   isJa ? 'PDFとしてエクスポート (印刷)' : 'Export as PDF (Print)',
+  confirmNew:  isJa ? '編集中の内容は失われます。新規作成しますか？' : 'Unsaved changes will be lost. Create new file?',
+  promptSaveAs:isJa ? '新しいファイル名を入力してください:' : 'Enter new file name:',
+  preview:     'Markdown Preview',
+  spellCheck:  isJa ? 'スペルチェック (英語)' : 'Spell Check (English)',
+  bold:        isJa ? '太字'     : 'Bold',
+  italic:      isJa ? '斜体'     : 'Italic',
+  tbList:      isJa ? 'リスト'   : 'List',
+  tbOList:     isJa ? '番号リスト': 'Numbered',
+  tbTask:      isJa ? 'タスク'   : 'Task',
+  tbQuote:     isJa ? '引用'     : 'Quote',
+  tbCode:      isJa ? 'コード'   : 'Code',
+  tbLink:      isJa ? 'リンク'   : 'Link',
+  tbTable:     isJa ? '表'       : 'Table',
+  tbHr:        isJa ? '区切り'   : 'Rule',
+  spellBtn:    isJa ? '🔤 スペルチェック' : '🔤 Spell Check',
+  spellOn:     isJa ? '🔤 スペルチェック ON' : '🔤 Spell Check ON',
+  spellPanelTitle: isJa ? 'スペルミスの候補' : 'Possible misspellings',
+  spellOk:     isJa ? 'スペルミスは見つかりませんでした ✓' : 'No misspellings found ✓',
+  spellIgnore: isJa ? '無視' : 'Ignore',
+  spellAdd:    isJa ? '辞書に追加' : 'Add to dict',
+  spellCount:  isJa ? n => `${n} 件のミスが見つかりました` : n => `${n} issue${n!==1?'s':''} found`,
+  dictLoading: isJa ? '辞書: 読み込み中…' : 'Dict: loading…',
+  dictReady:   isJa ? '辞書: 準備完了' : 'Dict: ready',
+  dictFailed:  isJa ? '辞書: 読み込み失敗' : 'Dict: failed',
+  loadingDict: isJa ? '辞書を読み込んでいます…' : 'Loading dictionary…',
+  checking:    isJa ? 'チェック中…' : 'Checking…',
+  saved:       isJa ? '✓ 保存しました' : '✓ Saved',
+  opened:      isJa ? f => `"${f}" を開きました` : f => `Opened "${f}"`,
+  sLines:      isJa ? '行'   : 'Lines',
+  sWords:      isJa ? '単語' : 'Words',
+  sChars:      isJa ? '文字' : 'Chars',
+  sFull:       isJa ? '全角' : 'Full',
+  sHalf:       isJa ? '半角' : 'Half',
+  insertLink:  isJa ? 'リンクテキスト' : 'Link Text',
+  tableSnippet: isJa
+    ? '\n| 列1 | 列2 | 列3 |\n|------|------|------|\n| データ | データ | データ |\n'
+    : '\n| Col1 | Col2 | Col3 |\n|------|------|------|\n| data | data | data |\n',
+  placeholder: isJa
+    ? '# タイトル\n\nここにマークダウンを入力してください。\n\n**太字** や *斜体*、`コード` が使えます。'
+    : '# Title\n\nStart writing Markdown here.\n\n**Bold**, *italic*, `code` are supported.',
+  defaultMd: isJa
+    ? `# Markdown エディタへようこそ\n\nこのエディタは**ファイルの開き・保存**に対応した高機能エディタです。\n\n## 主な機能\n\n- **表示** メニューから Markdown Preview\n- ファイルを開く（Shift-JIS・UTF-8 自動判定）\n- UTF-8 BOM 付きで保存\n- **PDF / HTML エクスポート** \n- **英語スペルチェック** — Hunspell 辞書 + 修正候補\n- 全角 / 半角文字カウント\n\n## コード例\n\n\`\`\`js\nfunction greet(name) {\n  return \`こんにちは、\${name}！\`;\n}\n\`\`\`\n\n> マークダウンは読みやすく書きやすい。\n\n---\n\n*さっそく編集してみましょう！*\n`
+    : `# Welcome to Markdown Editor\n\nA **feature-rich** editor with file open/save support.\n\n## Features\n\n- **Markdown Preview** from the View menu\n- Open files (auto-detect Shift-JIS / UTF-8)\n- Save with UTF-8 BOM\n- **PDF / HTML Export**\n- **Spell check** with Hunspell dictionary + suggestions\n- Full-width / half-width character count\n\n## Code Example\n\n\`\`\`js\nfunction greet(name) {\n  return \`Hello, \${name}!\`;\n}\n\`\`\`\n\n> Markdown is easy to read and write.\n\n---\n\n*Start editing!*\n`,
+};
+
+const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+set('t-file', T.menuFile); set('t-view', T.menuView); set('t-edit', T.menuEdit);
+set('m-new', T.newFile); set('m-save-as', T.saveAs);
+set('m-open', T.open); set('m-save', T.save);
+set('m-export-html', T.exportHtml); set('m-export-pdf', T.exportPdf);
+set('m-preview-label', T.preview); set('m-spell-label', T.spellCheck);
+set('m-bold', T.bold); set('m-italic', T.italic);
+set('tb-list-btn', '─ ' + T.tbList); set('tb-olist-btn', '1. ' + T.tbOList);
+set('tb-task', T.tbTask); set('tb-quote', T.tbQuote); set('tb-code', T.tbCode);
+set('tb-link', T.tbLink); set('tb-table', T.tbTable); set('tb-hr', T.tbHr);
+set('s-label-lines', T.sLines); set('s-label-words', T.sWords); set('s-label-chars', T.sChars);
+set('s-label-full', T.sFull); set('s-label-half', T.sHalf);
+set('saved-indicator', T.saved); set('sp-title', T.spellPanelTitle);
+set('spell-empty', T.spellOk); set('spell-toggle-btn', T.spellBtn);
+document.getElementById('tb-list-btn').onclick = () => ins('- ', true);
+document.getElementById('tb-olist-btn').onclick = () => ins('1. ', true);
+
+/* ── Core refs ── */
+const editor       = document.getElementById('editor');
+const preview      = document.getElementById('preview');
+const previewWrap  = document.getElementById('preview-wrap');
+const filenameInput = document.getElementById('filename-display');
+
+let previewOpen  = false;
+let spellEnabled = false;
+let customDict   = new Set();
+let ignoredWords = new Set();
+
+editor.placeholder = T.placeholder;
+editor.value = T.defaultMd;
+
+if (window.marked) marked.use({ gfm: true, breaks: true });
+const segmenter = typeof Intl.Segmenter !== 'undefined'
+  ? new Intl.Segmenter('ja', { granularity: 'word' }) : null;
+
+update();
+
+/* ════════════════════════════════════════
+   HUNSPELL via Typo.js
+════════════════════════════════════════ */
+let typo = null;
+let dictReady = false;
+
+const DICT_BASE = 'https://cdn.jsdelivr.net/npm/typo-js@1.2.3/dictionaries/en_US/en_US';
+
+function setDictBadge(state, label) {
+  const el = document.getElementById('dict-badge');
+  el.textContent = label;
+  el.className = 'dict-badge ' + state; /* ready | loading | failed */
+  el.id = 'dict-badge'; /* keep id */
+  el.classList.add(state);
+}
+
+async function loadDictionary() {
+  setDictBadge('loading', T.dictLoading);
+  try {
+    const [affRes, dicRes] = await Promise.all([
+      fetch(DICT_BASE + '.aff'),
+      fetch(DICT_BASE + '.dic'),
+    ]);
+    if (!affRes.ok || !dicRes.ok) throw new Error('HTTP error');
+    const [aff, dic] = await Promise.all([affRes.text(), dicRes.text()]);
+    typo = new Typo('en_US', aff, dic, { platform: 'any' });
+    dictReady = true;
+    setDictBadge('ready', T.dictReady);
+    if (spellEnabled) runSpellCheck();
+  } catch (err) {
+    setDictBadge('failed', T.dictFailed);
+    console.warn('Dictionary load failed:', err);
+  }
+}
+
+if (window.Typo) {
+  loadDictionary();
+} else {
+  setDictBadge('failed', T.dictFailed);
+}
+
+/* ════════════════════════════════════════
+   MENU
+════════════════════════════════════════ */
+document.querySelectorAll('.menu-trigger').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const dd = document.getElementById('dd-' + btn.dataset.menu);
+    const wasOpen = dd.classList.contains('open');
+    closeMenus();
+    if (!wasOpen) { dd.classList.add('open'); btn.classList.add('open'); }
+  });
+});
+document.addEventListener('click', closeMenus);
+function closeMenus() {
+  document.querySelectorAll('.menu-dropdown').forEach(d => d.classList.remove('open'));
+  document.querySelectorAll('.menu-trigger').forEach(b => b.classList.remove('open'));
+}
+
+/* ════════════════════════════════════════
+   PREVIEW (【セキュリティ強化】DOMPurifyのフェールセーフ実装)
+════════════════════════════════════════ */
+function togglePreview() {
+  previewOpen = !previewOpen;
+  previewWrap.classList.toggle('open', previewOpen);
+  document.getElementById('preview-check').style.opacity = previewOpen ? '1' : '0';
+  document.getElementById('m-preview-entry').classList.toggle('active', previewOpen);
+  if (previewOpen) renderPreview();
+  closeMenus();
+}
+
+function renderPreview() {
+  if (!previewOpen || !window.marked) return;
+  const raw = marked.parse(editor.value);
+  
+  if (window.DOMPurify) {
+    preview.innerHTML = DOMPurify.sanitize(raw);
+  } else {
+    // 危険な状態を避けるためプレビューを強制停止
+    preview.innerHTML = `<div style="color:var(--danger); border: 1px solid var(--danger); padding: 15px; border-radius: 8px; font-family: var(--sans); background: rgba(240,112,112,0.1); margin: 20px;">
+      <b>Security Error:</b><br>
+      ${isJa ? "サニタイズライブラリ (DOMPurify) が読み込めなかったため、セキュリティ保護の観点からプレビューを一時停止しました。" : "Preview has been disabled for security reasons because the sanitization library (DOMPurify) failed to load."}
+    </div>`;
+  }
+}
+
+/* ════════════════════════════════════════
+   UPDATE / STATS
+════════════════════════════════════════ */
+function update() {
+  renderPreview();
+  const text = editor.value;
+  const lines = text.length === 0 ? 1 : text.split('\n').length;
+  let words = 0;
+  if (segmenter) { for (const s of segmenter.segment(text)) { if (s.isWordLike) words++; } }
+  else words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  let full = 0, half = 0;
+  for (const ch of text) {
+    if (ch === '\n' || ch === '\r') continue;
+    const c = ch.charCodeAt(0);
+    if ((c <= 0x7F) || (c >= 0xFF61 && c <= 0xFF9F)) half++; else full++;
+  }
+  set('s-lines', lines); set('s-words', words);
+  set('s-chars', full + half); set('s-full', full); set('s-half', half);
+}
+editor.addEventListener('input', () => { update(); if (spellEnabled) runSpellCheck(); });
+editor.addEventListener('keydown', e => {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const s = editor.selectionStart, en = editor.selectionEnd;
+    editor.value = editor.value.slice(0, s) + '  ' + editor.value.slice(en);
+    editor.selectionStart = editor.selectionEnd = s + 2;
+    update();
+  }
+  
+  if ((e.ctrlKey || e.metaKey) && e.key === 'n') { e.preventDefault(); newFile(); }
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 's' || e.key === 'S')) { e.preventDefault(); saveFileAs(); return; }
+  if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 's') { e.preventDefault(); saveFile(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'o') { e.preventDefault(); document.getElementById('file-input').click(); }
+});
+
+/* ════════════════════════════════════════
+   SPELL CHECK
+════════════════════════════════════════ */
+function toggleSpell() {
+  spellEnabled = !spellEnabled;
+  const btn    = document.getElementById('spell-toggle-btn');
+  const entry  = document.getElementById('m-spell-entry');
+  const chk    = document.getElementById('spell-check');
+  const status = document.getElementById('spell-status');
+  btn.classList.toggle('active-spell', spellEnabled);
+  entry.classList.toggle('active', spellEnabled);
+  chk.style.opacity = spellEnabled ? '1' : '0';
+  if (spellEnabled) {
+    status.textContent = T.spellOn; status.classList.add('on');
+    runSpellCheck();
+  } else {
+    status.textContent = ''; status.classList.remove('on');
+    closeSpellPanel();
+  }
+  closeMenus();
+}
+
+function closeSpellPanel() {
+  document.getElementById('spell-panel').classList.remove('show');
+}
+
+let spellTimer = null;
+function runSpellCheck() {
+  if (!spellEnabled) return;
+  clearTimeout(spellTimer);
+  spellTimer = setTimeout(doSpellCheck, 400);
+}
+
+function stripMarkdown(src) {
+  return src
+    .replace(/```[\s\S]*?```/g, '')             /* fenced code */
+    .replace(/`[^`\n]+`/g, '')                 /* inline code */
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')      /* images */
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')  /* links — keep display text */
+    .replace(/^#{1,6}\s+/gm, '')               /* heading markers */
+    .replace(/^[-*+]\s+/gm, '')                /* unordered list markers */
+    .replace(/^\d+\.\s+/gm, '')                /* ordered list markers */
+    .replace(/^>\s*/gm, '')                    /* blockquotes */
+    .replace(/[*_~|\\]/g, ' ');               /* inline formatting */
+}
+
+function doSpellCheck() {
+  if (!spellEnabled) return;
+  const panel   = document.getElementById('spell-panel');
+  const list    = document.getElementById('spell-list');
+  const empty   = document.getElementById('spell-empty');
+  const loading = document.getElementById('spell-loading');
+  const footer  = document.getElementById('spell-footer');
+
+  panel.classList.add('show');
+  list.innerHTML = '';
+  empty.style.display = 'none';
+  footer.style.display = 'none';
+
+  if (!dictReady || !typo) {
+    loading.classList.add('show');
+    set('sp-loading-text', dictReady === false ? T.loadingDict : T.loadingDict);
+    return;
+  }
+
+  loading.classList.add('show');
+  set('sp-loading-text', T.checking);
+
+  setTimeout(() => {
+    const stripped = stripMarkdown(editor.value);
+    const wordRe = /\b([a-zA-Z]{2,}(?:'[a-zA-Z]+)?)\b/g;
+    const seen   = new Set();
+    const errors = [];
+    let m;
+    while ((m = wordRe.exec(stripped)) !== null) {
+      const raw  = m[1];
+      const lower = raw.toLowerCase();
+      if (seen.has(lower)) continue;
+      seen.add(lower);
+      if (ignoredWords.has(lower) || customDict.has(lower)) continue;
+      if (/[A-Z]/.test(raw.slice(1))) continue;
+      if (/\d/.test(raw)) continue;
+      const ok = typo.check(raw) || typo.check(raw.charAt(0).toUpperCase() + raw.slice(1));
+      if (!ok) {
+        const sugs = typo.suggest(raw).slice(0, 5);
+        errors.push({ word: raw, lower, sugs });
+      }
+    }
+
+    loading.classList.remove('show');
+    list.innerHTML = '';
+
+    if (errors.length === 0) {
+      empty.style.display = 'block';
+    } else {
+      errors.forEach(({ word, lower, sugs }) => {
+        const row = document.createElement('div');
+        row.className = 'spell-word';
+        row.id = 'sw-' + lower;
+
+        const topRow = document.createElement('div');
+        topRow.className = 'spell-word-row';
+        const wordSpan = document.createElement('span');
+        wordSpan.className = 'spell-word-text';
+        wordSpan.textContent = word;
+
+        const actions = document.createElement('div');
+        actions.className = 'spell-actions';
+
+        const ignBtn = document.createElement('button');
+        ignBtn.className = 'spell-btn';
+        ignBtn.textContent = T.spellIgnore;
+        ignBtn.onclick = () => { ignoredWords.add(lower); removeSpellRow(lower); };
+
+        const addBtn = document.createElement('button');
+        addBtn.className = 'spell-btn add';
+        addBtn.textContent = T.spellAdd;
+        addBtn.onclick = () => { customDict.add(lower); removeSpellRow(lower); };
+
+        actions.append(ignBtn, addBtn);
+        topRow.append(wordSpan, actions);
+        row.appendChild(topRow);
+
+        if (sugs.length > 0) {
+          const sugDiv = document.createElement('div');
+          sugDiv.className = 'spell-suggestions';
+          sugs.forEach(sug => {
+            const s = document.createElement('span');
+            s.className = 'spell-sug';
+            s.textContent = sug;
+            s.title = isJa
+              ? `"${word}" を "${sug}" に置換`
+              : `Replace "${word}" with "${sug}"`;
+            s.onclick = () => replaceWord(word, sug);
+            sugDiv.appendChild(s);
+          });
+          row.appendChild(sugDiv);
+        }
+
+        list.appendChild(row);
+      });
+
+      footer.innerHTML = T.spellCount(errors.length)
+        .replace(/\d+/, n => `<span>${n}</span>`);
+      footer.style.display = 'block';
+    }
+  }, 0);
+}
+
+function removeSpellRow(lower) {
+  const el = document.getElementById('sw-' + lower);
+  if (el) el.remove();
+  const list = document.getElementById('spell-list');
+  if (list.children.length === 0) {
+    document.getElementById('spell-empty').style.display = 'block';
+    document.getElementById('spell-footer').style.display = 'none';
+  }
+}
+
+function replaceWord(original, replacement) {
+  const val  = editor.value;
+  const esc  = original.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re   = new RegExp('\\b' + esc + '\\b', 'i');
+  const m    = re.exec(val);
+  if (!m) return;
+  const rep = m[0][0] === m[0][0].toUpperCase() && m[0][0] !== m[0][0].toLowerCase()
+    ? replacement.charAt(0).toUpperCase() + replacement.slice(1)
+    : replacement;
+  editor.value = val.slice(0, m.index) + rep + val.slice(m.index + m[0].length);
+  editor.selectionStart = editor.selectionEnd = m.index + rep.length;
+  editor.focus();
+  update();
+  runSpellCheck();
+}
+
+/* ════════════════════════════════════════
+   INSERT / WRAP HELPERS
+════════════════════════════════════════ */
+function getPos() { return { s: editor.selectionStart, e: editor.selectionEnd }; }
+function setRange(s, e) { editor.selectionStart = s; editor.selectionEnd = e; editor.focus(); }
+
+function ins(text, lineStart) {
+  const { s } = getPos();
+  if (lineStart) {
+    const val = editor.value, ls = val.lastIndexOf('\n', s - 1) + 1;
+    editor.value = val.slice(0, ls) + text + val.slice(ls);
+    setRange(ls + text.length, ls + text.length);
+  } else {
+    editor.value = editor.value.slice(0, s) + text + editor.value.slice(s);
+    setRange(s + text.length, s + text.length);
+  }
+  update();
+}
+function wrap(mark) {
+  const { s, e } = getPos();
+  const sel = editor.value.slice(s, e) || (isJa ? '文字' : 'text');
+  const rep = mark + sel + mark;
+  editor.value = editor.value.slice(0, s) + rep + editor.value.slice(e);
+  setRange(s + mark.length, s + mark.length + sel.length);
+  update();
+}
+function insBlock(before, after) {
+  const { s, e } = getPos();
+  const sel = editor.value.slice(s, e);
+  const rep = before + sel + after;
+  editor.value = editor.value.slice(0, s) + rep + editor.value.slice(e);
+  setRange(s + before.length, s + before.length + sel.length);
+  update();
+}
+function insertLink() {
+  const { s, e } = getPos();
+  const sel = editor.value.slice(s, e) || T.insertLink;
+  const rep = `[${sel}](URL)`;
+  editor.value = editor.value.slice(0, s) + rep + editor.value.slice(e);
+  setRange(s, s + rep.length);
+  update();
+}
+function insertTable() {
+  const tbl = T.tableSnippet, { s } = getPos();
+  editor.value = editor.value.slice(0, s) + tbl + editor.value.slice(s);
+  setRange(s + tbl.length, s + tbl.length);
+  update();
+}
+
+/* ════════════════════════════════════════
+   FILE OPEN / SAVE / NEW
+════════════════════════════════════════ */
+
+function newFile() {
+  if (editor.value.trim() !== '' && editor.value !== T.defaultMd) {
+    if (!confirm(T.confirmNew)) return;
+  }
+  editor.value = '';
+  filenameInput.value = 'untitled.md';
+  update();
+  closeMenus();
+}
+
+document.getElementById('file-input').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  filenameInput.value = file.name;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    let text;
+    if (window.Encoding) {
+      const uint8 = new Uint8Array(ev.target.result);
+      text = Encoding.codeToString(Encoding.convert(uint8, { to: 'UNICODE', from: 'AUTO' }));
+    } else {
+      text = new TextDecoder('utf-8').decode(ev.target.result);
+    }
+    editor.value = text;
+    update();
+    if (spellEnabled) runSpellCheck();
+    toast(T.opened(file.name));
+  };
+  reader.readAsArrayBuffer(file);
+  e.target.value = '';
+});
+
+function saveFile() {
+  const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+  const blob = new Blob([bom, editor.value], { type: 'text/markdown;charset=utf-8' });
+  let filename = filenameInput.value.trim() || 'untitled.md';
+  if (!/\.(md|txt|markdown)$/i.test(filename)) filename += '.md';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename; a.click();
+  URL.revokeObjectURL(a.href);
+  const ind = document.getElementById('saved-indicator');
+  ind.classList.add('show');
+  setTimeout(() => ind.classList.remove('show'), 2000);
+  closeMenus();
+}
+
+function saveFileAs() {
+  const currentName = filenameInput.value.trim() || 'untitled.md';
+  const newName = prompt(T.promptSaveAs, currentName);
+  if (newName) {
+    filenameInput.value = newName;
+    saveFile();
+  } else {
+    closeMenus();
+  }
+}
+
+/* ════════════════════════════════════════
+   HTML & PDF EXPORT (【セキュリティ強化】厳格なチェック)
+════════════════════════════════════════ */
+function exportHtml() {
+  closeMenus();
+  if (!window.marked) return;
+
+  // DOMPurifyが存在しない場合はエクスポート自体をブロック（フェールセーフ）
+  if (!window.DOMPurify) {
+    alert(isJa ? "セキュリティエラー: サニタイズライブラリ (DOMPurify) が読み込めないため、HTMLエクスポートを中止しました。" : "Security Error: Export aborted because DOMPurify failed to load.");
+    return;
+  }
+
+  const rawHtml = marked.parse(editor.value);
+  const safeHtml = DOMPurify.sanitize(rawHtml);
+  const title = filenameInput.value.replace(/\.[^/.]+$/, "") || 'document';
+  
+  const fullHtml = `<!DOCTYPE html>
+<html lang="${isJa ? 'ja' : 'en'}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${title}</title>
+<style>
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.8; color: #333; max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+  h1, h2, h3, h4, h5, h6 { font-family: sans-serif; font-weight: bold; margin-top: 1.5em; margin-bottom: 0.5em; }
+  h1 { border-bottom: 2px solid #eee; padding-bottom: 5px; }
+  h2 { border-bottom: 1px solid #eee; padding-bottom: 5px; }
+  code { background-color: #f4f4f4; padding: 2px 5px; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+  pre { background-color: #f6f8fa; border-radius: 6px; padding: 16px; overflow-x: auto; border: 1px solid #e1e4e8; }
+  pre code { background: none; border: none; padding: 0; }
+  blockquote { border-left: 4px solid #dfe2e5; margin: 1em 0; padding-left: 16px; color: #6a737d; }
+  table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+  th, td { border: 1px solid #dfe2e5; padding: 8px 13px; }
+  th { background-color: #f6f8fa; font-weight: 600; }
+  tr:nth-child(even) { background-color: #fcfcfc; }
+  img { max-width: 100%; height: auto; }
+</style>
+</head>
+<body>
+${safeHtml}
+</body>
+</html>`;
+
+  const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = title + '.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast(isJa ? 'HTMLをダウンロードしました' : 'HTML Exported');
+}
+
+function exportPdf() {
+  closeMenus();
+  
+  if (window.marked) {
+    // PDF化の前にも必ず安全なDOMツリーを構築しておく
+    if (!window.DOMPurify) {
+      alert(isJa ? "セキュリティエラー: サニタイズライブラリが読み込めないため、PDFエクスポートを中止しました。" : "Security Error: Export aborted because DOMPurify failed to load.");
+      return;
+    }
+    const raw = marked.parse(editor.value);
+    preview.innerHTML = DOMPurify.sanitize(raw);
+  }
+  
+  setTimeout(() => {
+    window.print();
+  }, 100);
+}
+
+/* ── TOAST ── */
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
