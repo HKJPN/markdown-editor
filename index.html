@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdn.jsdelivr.net; img-src * data: blob:;">
 
-<title>Markdown Editor </title>
+<title>Markdown Editor</title>
 
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.1/marked.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/encoding-japanese@2.0.0/encoding.min.js" crossorigin="anonymous"></script>
@@ -276,14 +276,14 @@ button,input,textarea{font:inherit}
       <div class="menu-entry" onclick="newFile()">
         <span id="m-new"></span><span class="menu-shortcut">Ctrl+N</span>
       </div>
-      <div class="menu-entry" onclick="document.getElementById('file-input').click()">
+      <div class="menu-entry" onclick="handleOpen()">
         <span id="m-open"></span><span class="menu-shortcut">Ctrl+O</span>
       </div>
       <div class="menu-sep-line"></div>
-      <div class="menu-entry" onclick="saveFile()">
+      <div class="menu-entry" onclick="handleSave(false)">
         <span id="m-save"></span><span class="menu-shortcut">Ctrl+S</span>
       </div>
-      <div class="menu-entry" onclick="saveFileAs()">
+      <div class="menu-entry" id="menu-save-as" onclick="handleSave(true)">
         <span id="m-save-as"></span><span class="menu-shortcut">Ctrl+Shift+S</span>
       </div>
       <div class="menu-sep-line"></div>
@@ -330,13 +330,13 @@ button,input,textarea{font:inherit}
 <div id="titlebar">
   <div class="title-left">
     <span id="app-name">md//edit</span>
-    <input type="text" id="filename-display" value="document.md" spellcheck="false">
+    <input type="text" id="filename-display" value="untitled.md" spellcheck="false">
     <span id="inline-save-state" class="save-state">Saved</span>
   </div>
 
   <div class="title-actions">
-    <button class="title-btn" onclick="document.getElementById('file-input').click()" id="open-btn">Open</button>
-    <button class="title-btn primary" onclick="saveFile()" id="save-btn">Save</button>
+    <button class="title-btn" onclick="handleOpen()" id="open-btn">Open</button>
+    <button class="title-btn primary" onclick="handleSave(false)" id="save-btn">Save</button>
     <button class="title-btn" onclick="togglePreview()" id="preview-toggle-btn">Preview</button>
     <button class="title-btn" onclick="toggleSpell()" id="spell-toggle-title-btn">Spell</button>
   </div>
@@ -439,6 +439,11 @@ button,input,textarea{font:inherit}
 </div>
 
 <script>
+/* ── Environment Detection ── */
+// iPadOSを確実にモバイル(タブレット)として判定
+const isIPadOS = (navigator.platform === 'MacIntel' || /Macintosh/i.test(navigator.userAgent)) && navigator.maxTouchPoints > 1;
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || isIPadOS || (navigator.maxTouchPoints > 0 && window.innerWidth <= 1024);
+
 /* ── i18n ── */
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
@@ -451,10 +456,14 @@ const T = {
   open:        isJa ? '開く'     : 'Open',
   save:        isJa ? '保存'     : 'Save',
   saveAs:      isJa ? '名前を付けて保存' : 'Save As',
+  download:    isJa ? 'ダウンロード' : 'Download',
+  downloadAs:  isJa ? '名前を付けてDL' : 'Download As',
+  share:       isJa ? '共有 (Share)' : 'Share',
   exportHtml:  isJa ? 'HTMLとしてエクスポート' : 'Export as HTML',
   exportPdf:   isJa ? '印刷 / PDF保存' : 'Print / Save as PDF',
   confirmNew:  isJa ? '編集中の内容は失われます。新規作成しますか？' : 'Unsaved changes will be lost. Create new file?',
   promptSaveAs:isJa ? '新しいファイル名を入力してください:' : 'Enter new file name:',
+  restorePrompt:isJa ? '前回の未保存データが見つかりました。復元しますか？\n(キャンセルすると破棄されます)' : 'Found unsaved changes from your last session. Restore them?\n(Cancel to discard)',
 
   findMenu:    isJa ? '検索' : 'Find',
   replaceMenu: isJa ? '置換' : 'Replace',
@@ -498,8 +507,10 @@ const T = {
   loadingDict: isJa ? '辞書を読み込んでいます…' : 'Loading dictionary…',
   checking:    isJa ? 'チェック中…' : 'Checking…',
   saved:       isJa ? 'Saved' : 'Saved',
+  downloaded:  isJa ? 'ダウンロードしました' : 'Downloaded',
   unsaved:     isJa ? 'Unsaved' : 'Unsaved',
   opened:      isJa ? f => `「${f}」を開きました` : f => `Opened "${f}"`,
+  shared:      isJa ? '共有しました' : 'Shared successfully',
   sLines:      isJa ? '行'   : 'Lines',
   sWords:      isJa ? '単語' : 'Words',
   sChars:      isJa ? '文字' : 'Chars',
@@ -508,17 +519,17 @@ const T = {
     ? '\n| 列1 | 列2 | 列3 |\n|------|------|------|\n| データ | データ | データ |\n'
     : '\n| Col1 | Col2 | Col3 |\n|------|------|------|\n| data | data | data |\n',
   placeholder: isJa
-    ? '# タイトル\n\nここにマークダウンを入力してください。\n\n**太字** や *斜体*、`コード` が使えます。'
-    : '# Title\n\nStart writing Markdown here.\n\n**Bold**, *italic*, `code` are supported.',
+    ? '# タイトル\n\nここにマークダウンを入力してください。'
+    : '# Title\n\nStart writing Markdown here.',
   defaultMd: isJa
-    ? `# Markdown エディタへようこそ\n\nこの版では、上部の操作を整理し、Preview の使いやすさを改善しています。\n\n## 改善ポイント\n\n- タイトルバーに **Open / Save / Preview / Spell** を集約\n- Preview 幅をドラッグで調整可能\n- 検索パネルの視認性を改善\n- ステータスバーを簡素化\n\n## コード例\n\n\`\`\`js\nfunction greet(name) {\n  return \`こんにちは、${name}！\`;\n}\n\`\`\`\n\n> Markdown は読みやすく、書きやすい。\n\n---\n\n*そのまま編集して使えます。*\n`
-    : `# Welcome to Markdown Editor\n\nThis revision improves the top controls and preview usability.\n\n## Improvements\n\n- **Open / Save / Preview / Spell** moved into the title bar\n- Resizable preview pane\n- Cleaner search panel\n- Simpler status bar\n\n## Code Example\n\n\`\`\`js\nfunction greet(name) {\n  return \`Hello, ${name}!\`;\n}\n\`\`\`\n\n> Markdown is easy to read and write.\n\n---\n\n*Start editing.*\n`,
+    ? `# Markdown エディタ\n\nこの版は、**ブラウザ最適化UI** と **BOM無しUTF-8・NFC正規化** を備えた最終バージョンです。\n\n## 主な機能\n\n- **文字コード**: 保存時は常に綺麗な「BOM無し UTF-8」に自動変換。\n- **NFC正規化**: Mac等からの濁点ペーストによる検索バグを自動防止。\n- **ブラウザ判別UI**: Firefox等では「ダウンロード」、Chromeでは「保存」にメニューが自動変化。\n- **スマホ/タブレット**: 「Share (共有)」機能でのファイル受け渡し。\n- **共通**: ブラウザ内での入力自動保存 (Auto-save)。\n\n---\n\n*そのまま編集を開始してください。*\n`
+    : `# Markdown Editor\n\nThis is the final version featuring **Browser-Optimized UI** and **BOM-less UTF-8 / NFC Normalization**.\n\n## Key Features\n\n- **Encoding**: Files are cleanly exported as BOM-less UTF-8.\n- **NFC Normalization**: Auto-fixes search bugs from decomposed characters pasted from macOS.\n- **Adaptive UI**: Menus switch to "Download" on Firefox/Safari, and "Save" on Chrome/Edge.\n- **Mobile**: Native file sharing (Web Share API).\n- **Universal**: Local browser Auto-save.\n\n---\n\n*Start editing!*\n`,
 };
 
 const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 set('t-file', T.menuFile); set('t-view', T.menuView); set('t-edit', T.menuEdit);
-set('m-new', T.newFile); set('m-save-as', T.saveAs);
-set('m-open', T.open); set('m-save', T.save);
+set('m-new', T.newFile);
+set('m-open', T.open);
 set('m-find', T.findMenu); set('m-replace', T.replaceMenu);
 set('m-export-html', T.exportHtml); set('m-export-pdf', T.exportPdf);
 set('m-preview-label', T.preview); set('m-spell-label', T.spellCheck);
@@ -531,9 +542,27 @@ set('sp-title', T.spellPanelTitle); set('spell-empty', T.spellOk);
 set('spell-toggle-btn', T.spellBtn); set('tab-find', T.findTab); set('tab-replace', T.replaceTab);
 set('sr-lbl-regex', T.regexLbl); set('sr-lbl-case', T.caseLbl); set('sr-lbl-word', T.wordLbl);
 set('sr-btn-replace', T.replaceBtn); set('sr-btn-replace-all', T.replaceAllBtn); set('sr-error', T.invalidRegex);
-set('open-btn', T.open); set('save-btn', T.save); set('preview-toggle-btn', T.preview); set('spell-toggle-title-btn', T.spellCheck);
+set('open-btn', T.open); set('preview-toggle-btn', T.preview); set('spell-toggle-title-btn', T.spellCheck);
 document.getElementById('sr-search-input').placeholder = T.findHolder;
 document.getElementById('sr-replace-input').placeholder = T.replaceHolder;
+
+/* ── Dynamic UI based on Device and API support ── */
+if (isMobile) {
+  // 1. スマホ・タブレットの場合 = 「共有 (Share)」
+  set('save-btn', T.share);
+  set('m-save', T.share);
+  document.getElementById('menu-save-as').style.display = 'none';
+} else if (!window.showSaveFilePicker) {
+  // 2. PCだが上書き保存APIがない場合(Firefox, Safariなど) = 「ダウンロード」
+  set('save-btn', T.download);
+  set('m-save', T.download);
+  set('m-save-as', T.downloadAs);
+} else {
+  // 3. PCで上書き保存APIがある場合(Chrome, Edgeなど) = 「保存」
+  set('save-btn', T.save);
+  set('m-save', T.save);
+  set('m-save-as', T.saveAs);
+}
 
 /* ── Core refs ── */
 const editor = document.getElementById('editor');
@@ -559,8 +588,36 @@ if (window.marked) marked.use({ gfm: true, breaks: true });
 const segmenter = typeof Intl.Segmenter !== 'undefined'
   ? new Intl.Segmenter('ja', { granularity: 'word' }) : null;
 
-update();
-markSaved();
+/* ── Auto-save Logic ── */
+const AUTOSAVE_TXT_KEY = 'md_editor_draft_text';
+const AUTOSAVE_NAME_KEY = 'md_editor_draft_name';
+
+function triggerAutoSave() {
+  localStorage.setItem(AUTOSAVE_TXT_KEY, editor.value);
+  localStorage.setItem(AUTOSAVE_NAME_KEY, filenameInput.value);
+}
+
+function loadAutoSave() {
+  const savedTxt = localStorage.getItem(AUTOSAVE_TXT_KEY);
+  const savedName = localStorage.getItem(AUTOSAVE_NAME_KEY);
+  if (savedTxt && savedTxt !== T.defaultMd && savedTxt !== '') {
+    if (confirm(T.restorePrompt)) {
+      editor.value = savedTxt;
+      if (savedName) filenameInput.value = savedName;
+      markDirty();
+    } else {
+      localStorage.removeItem(AUTOSAVE_TXT_KEY);
+      localStorage.removeItem(AUTOSAVE_NAME_KEY);
+    }
+  }
+}
+
+// Initial Boot
+document.addEventListener('DOMContentLoaded', () => {
+  loadAutoSave();
+  update();
+  if (!isDirty) markSaved();
+});
 
 /* ════════════════════════════════════════
    HUNSPELL via Typo.js
@@ -586,7 +643,7 @@ async function loadDictionary() {
 if (window.Typo) loadDictionary();
 
 /* ════════════════════════════════════════
-   MENU
+   MENU & UI
 ════════════════════════════════════════ */
 document.querySelectorAll('.menu-trigger').forEach(btn => {
   btn.addEventListener('click', e => {
@@ -603,9 +660,6 @@ function closeMenus() {
   document.querySelectorAll('.menu-trigger').forEach(b => b.classList.remove('open'));
 }
 
-/* ════════════════════════════════════════
-   PREVIEW
-════════════════════════════════════════ */
 function togglePreview() {
   previewOpen = !previewOpen;
   previewWrap.classList.toggle('open', previewOpen);
@@ -624,7 +678,7 @@ function renderPreview() {
   if (window.DOMPurify) {
     preview.innerHTML = DOMPurify.sanitize(raw);
   } else {
-    preview.innerHTML = `<div style="color:var(--danger); border: 1px solid var(--danger); padding: 15px; border-radius: 8px; font-family: var(--sans); background: rgba(240,112,112,0.1); margin: 20px;"><b>Security Error:</b><br>${isJa ? 'サニタイズライブラリ (DOMPurify) が読み込めなかったため、プレビューを一時停止しました。' : 'Preview has been disabled because DOMPurify failed to load.'}</div>`;
+    preview.innerHTML = `<div style="color:var(--danger); border: 1px solid var(--danger); padding: 15px; border-radius: 8px; font-family: var(--sans); background: rgba(240,112,112,0.1); margin: 20px;"><b>Security Error:</b><br>Preview disabled because DOMPurify failed to load.</div>`;
   }
 }
 
@@ -679,11 +733,27 @@ editor.addEventListener('scroll', () => {
   backdrop.scrollLeft = editor.scrollLeft;
 });
 
+let autoSaveTimeout;
 editor.addEventListener('input', () => {
   update();
   markDirty();
   if (spellEnabled) runSpellCheck();
   if (srPanelOpen) performSearch(false);
+  
+  // Debounced Auto-save
+  clearTimeout(autoSaveTimeout);
+  autoSaveTimeout = setTimeout(triggerAutoSave, 1000);
+});
+
+// 【NFC正規化】ペースト時の分離濁点バグ防止
+editor.addEventListener('paste', e => {
+  e.preventDefault();
+  // クリップボードのテキストを取得し、瞬時にNFCで正規化
+  const text = (e.clipboardData || window.clipboardData).getData('text').normalize('NFC');
+  // Undo履歴に残るように挿入
+  document.execCommand('insertText', false, text);
+  markDirty();
+  triggerAutoSave();
 });
 
 /* ════════════════════════════════════════
@@ -699,17 +769,10 @@ let srPanelOpen = false;
 let srMode = 'find';
 let srMatches = [];
 let srCurrentIdx = -1;
-
-// 【追加】IME状態を管理する変数
 let isComposing = false;
 
-// IME入力状態の監視
 srInput.addEventListener('compositionstart', () => { isComposing = true; });
-srInput.addEventListener('compositionend', () => { 
-  isComposing = false; 
-  performSearch(true); // 確定時に検索＆スクロールを実行
-});
-
+srInput.addEventListener('compositionend', () => { isComposing = false; performSearch(true); });
 srReplaceInput.addEventListener('compositionstart', () => { isComposing = true; });
 srReplaceInput.addEventListener('compositionend', () => { isComposing = false; });
 
@@ -748,51 +811,33 @@ document.getElementById('tab-find').onclick = () => openSearchPanel('find');
 document.getElementById('tab-replace').onclick = () => openSearchPanel('replace');
 document.getElementById('sr-close').onclick = closeSearchPanel;
 
-function escapeRegExp(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
+function escapeRegExp(string) { return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 
 function buildRegex(isGlobal = true) {
   const query = srInput.value;
   if (!query) return null;
-
   const useRegex = document.getElementById('sr-opt-regex').checked;
   const matchCase = document.getElementById('sr-opt-case').checked;
   const wholeWord = document.getElementById('sr-opt-word').checked;
-
   let patternStr = useRegex ? query : escapeRegExp(query);
   if (wholeWord) patternStr = `\\b${patternStr}\\b`;
-
   let flags = 'm';
   if (isGlobal) flags += 'g';
   if (!matchCase) flags += 'i';
-
-  try {
-    return new RegExp(patternStr, flags);
-  } catch (e) {
-    return null;
-  }
+  try { return new RegExp(patternStr, flags); } catch (e) { return null; }
 }
 
 function setSearchCount() {
-  if (srMatches.length === 0 || srCurrentIdx === -1) {
-    srCount.textContent = T.noMatches;
-    return;
-  }
+  if (srMatches.length === 0 || srCurrentIdx === -1) { srCount.textContent = T.noMatches; return; }
   srCount.textContent = `${srCurrentIdx + 1} / ${srMatches.length}`;
 }
 
 function updateBackdrop() {
-  if (!srPanelOpen || srMatches.length === 0) {
-    backdrop.innerHTML = '';
-    return;
-  }
+  if (!srPanelOpen || srMatches.length === 0) { backdrop.innerHTML = ''; return; }
   const text = editor.value;
   let html = '';
   let lastIdx = 0;
-  
   const esc = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
   srMatches.forEach((m, i) => {
     html += esc(text.slice(lastIdx, m.start));
     const className = (i === srCurrentIdx) ? 'active' : '';
@@ -800,9 +845,7 @@ function updateBackdrop() {
     lastIdx = m.end;
   });
   html += esc(text.slice(lastIdx));
-  
   if (text.endsWith('\n')) html += '<br>';
-  
   backdrop.innerHTML = html;
 }
 
@@ -811,21 +854,10 @@ function performSearch(jumpToClosest = false) {
   srError.style.display = 'none';
   const query = srInput.value;
 
-  if (!query) {
-    srCount.textContent = '';
-    srCurrentIdx = -1;
-    updateBackdrop();
-    return;
-  }
+  if (!query) { srCount.textContent = ''; srCurrentIdx = -1; updateBackdrop(); return; }
 
   const regex = buildRegex(true);
-  if (!regex) {
-    srError.style.display = 'block';
-    srCount.textContent = '';
-    srCurrentIdx = -1;
-    updateBackdrop();
-    return;
-  }
+  if (!regex) { srError.style.display = 'block'; srCount.textContent = ''; srCurrentIdx = -1; updateBackdrop(); return; }
 
   const text = editor.value;
   let match;
@@ -834,12 +866,7 @@ function performSearch(jumpToClosest = false) {
     srMatches.push({ start: match.index, end: match.index + match[0].length, text: match[0] });
   }
 
-  if (srMatches.length === 0) {
-    srCurrentIdx = -1;
-    srCount.textContent = T.noMatches;
-    updateBackdrop();
-    return;
-  }
+  if (srMatches.length === 0) { srCurrentIdx = -1; srCount.textContent = T.noMatches; updateBackdrop(); return; }
 
   if (jumpToClosest) {
     const cursorPos = editor.selectionStart;
@@ -855,29 +882,14 @@ function performSearch(jumpToClosest = false) {
 }
 
 function highlightCurrentMatch() {
-  if (srMatches.length === 0 || srCurrentIdx === -1) {
-    updateBackdrop();
-    return;
-  }
-  
+  if (srMatches.length === 0 || srCurrentIdx === -1) { updateBackdrop(); return; }
   const m = srMatches[srCurrentIdx];
-
-  // 【重要】IME入力中（変換中）は、強制フォーカス移動（自動確定）を防止する
-  if (isComposing) {
-    setSearchCount();
-    updateBackdrop();
-    return;
-  }
+  if (isComposing) { setSearchCount(); updateBackdrop(); return; }
 
   const activeEl = document.activeElement; 
-  
   editor.focus();
   editor.setSelectionRange(m.start, m.end);
-  
-  if (activeEl && activeEl.closest('#sr-panel')) {
-    activeEl.focus();
-  }
-  
+  if (activeEl && activeEl.closest('#sr-panel')) activeEl.focus();
   setSearchCount();
   updateBackdrop(); 
 }
@@ -899,45 +911,15 @@ document.getElementById('sr-prev').onclick = () => navMatch(-1);
 });
 
 srPanel.addEventListener('keydown', e => {
-  // 【重要】IME変換確定のためのEnterなどを無視する
   if (e.isComposing) return;
-  
   if (e.key === 'Escape') { e.preventDefault(); closeSearchPanel(); }
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    navMatch(e.shiftKey ? -1 : 1);
-  }
-});
-
-editor.addEventListener('keydown', e => {
-  if (e.key === 'Tab') {
-    e.preventDefault();
-    const s = editor.selectionStart, en = editor.selectionEnd;
-    editor.value = editor.value.slice(0, s) + '  ' + editor.value.slice(en);
-    editor.selectionStart = editor.selectionEnd = s + 2;
-    update();
-    markDirty();
-  }
-});
-
-window.addEventListener('keydown', e => {
-  const meta = e.ctrlKey || e.metaKey;
-  if (meta && e.key.toLowerCase() === 'n') { e.preventDefault(); newFile(); }
-  if (meta && e.shiftKey && e.key.toLowerCase() === 's') { e.preventDefault(); saveFileAs(); return; }
-  if (meta && !e.shiftKey && e.key.toLowerCase() === 's') { e.preventDefault(); saveFile(); }
-  if (meta && e.key.toLowerCase() === 'o') { e.preventDefault(); document.getElementById('file-input').click(); }
-  if (meta && e.key.toLowerCase() === 'f') { e.preventDefault(); openSearchPanel('find'); }
-  if (meta && e.key.toLowerCase() === 'h') { e.preventDefault(); openSearchPanel('replace'); }
-  if (e.key === 'Escape' && srPanelOpen) { e.preventDefault(); closeSearchPanel(); }
+  if (e.key === 'Enter') { e.preventDefault(); navMatch(e.shiftKey ? -1 : 1); }
 });
 
 document.getElementById('sr-btn-replace').onclick = () => {
   if (srMatches.length === 0 || srCurrentIdx === -1) return;
   const m = srMatches[srCurrentIdx];
-  if (editor.selectionStart !== m.start || editor.selectionEnd !== m.end) {
-    highlightCurrentMatch();
-    return;
-  }
+  if (editor.selectionStart !== m.start || editor.selectionEnd !== m.end) { highlightCurrentMatch(); return; }
   const regex = buildRegex(false);
   if (!regex) return;
   const repStr = srReplaceInput.value;
@@ -994,9 +976,7 @@ function toggleSpell() {
   closeMenus();
 }
 
-function closeSpellPanel() {
-  document.getElementById('spell-panel').classList.remove('show');
-}
+function closeSpellPanel() { document.getElementById('spell-panel').classList.remove('show'); }
 
 let spellTimer = null;
 function runSpellCheck() {
@@ -1006,134 +986,71 @@ function runSpellCheck() {
 }
 
 function stripMarkdown(src) {
-  return src
-    .replace(/```[\s\S]*?```/g, '')
-    .replace(/`[^`\n]+`/g, '')
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-    .replace(/^#{1,6}\s+/gm, '')
-    .replace(/^[-*+]\s+/gm, '')
-    .replace(/^\d+\.\s+/gm, '')
-    .replace(/^>\s*/gm, '')
-    .replace(/[*_~|\\]/g, ' ');
+  return src.replace(/```[\s\S]*?```/g, '').replace(/`[^`\n]+`/g, '').replace(/!\[[^\]]*\]\([^)]*\)/g, '').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/^#{1,6}\s+/gm, '').replace(/^[-*+]\s+/gm, '').replace(/^\d+\.\s+/gm, '').replace(/^>\s*/gm, '').replace(/[*_~|\\]/g, ' ');
 }
 
 function doSpellCheck() {
   if (!spellEnabled) return;
-  const panel = document.getElementById('spell-panel');
-  const list = document.getElementById('spell-list');
-  const empty = document.getElementById('spell-empty');
-  const loading = document.getElementById('spell-loading');
-  const footer = document.getElementById('spell-footer');
-
-  panel.classList.add('show');
-  list.innerHTML = '';
-  empty.style.display = 'none';
-  footer.style.display = 'none';
-
-  if (!dictReady || !typo) {
-    loading.classList.add('show');
-    set('sp-loading-text', T.loadingDict);
-    return;
-  }
-
-  loading.classList.add('show');
-  set('sp-loading-text', T.checking);
+  const panel = document.getElementById('spell-panel'), list = document.getElementById('spell-list'), empty = document.getElementById('spell-empty'), loading = document.getElementById('spell-loading'), footer = document.getElementById('spell-footer');
+  panel.classList.add('show'); list.innerHTML = ''; empty.style.display = 'none'; footer.style.display = 'none';
+  if (!dictReady || !typo) { loading.classList.add('show'); set('sp-loading-text', T.loadingDict); return; }
+  loading.classList.add('show'); set('sp-loading-text', T.checking);
 
   setTimeout(() => {
     const stripped = stripMarkdown(editor.value);
     const wordRe = /\b([a-zA-Z]{2,}(?:'[a-zA-Z]+)?)\b/g;
-    const seen = new Set();
-    const errors = [];
+    const seen = new Set(), errors = [];
     let m;
     while ((m = wordRe.exec(stripped)) !== null) {
-      const raw = m[1];
-      const lower = raw.toLowerCase();
+      const raw = m[1], lower = raw.toLowerCase();
       if (seen.has(lower)) continue;
       seen.add(lower);
       if (ignoredWords.has(lower) || customDict.has(lower)) continue;
       if (/[A-Z]/.test(raw.slice(1))) continue;
       if (/\d/.test(raw)) continue;
       const ok = typo.check(raw) || typo.check(raw.charAt(0).toUpperCase() + raw.slice(1));
-      if (!ok) {
-        const sugs = typo.suggest(raw).slice(0, 5);
-        errors.push({ word: raw, lower, sugs });
-      }
+      if (!ok) { const sugs = typo.suggest(raw).slice(0, 5); errors.push({ word: raw, lower, sugs }); }
     }
-
-    loading.classList.remove('show');
-    list.innerHTML = '';
-
-    if (errors.length === 0) {
-      empty.style.display = 'block';
-    } else {
+    loading.classList.remove('show'); list.innerHTML = '';
+    if (errors.length === 0) { empty.style.display = 'block'; } else {
       errors.forEach(({ word, lower, sugs }) => {
-        const row = document.createElement('div');
-        row.className = 'spell-word'; row.id = 'sw-' + lower;
-
-        const topRow = document.createElement('div');
-        topRow.className = 'spell-word-row';
-        const wordSpan = document.createElement('span');
-        wordSpan.className = 'spell-word-text'; wordSpan.textContent = word;
-
-        const actions = document.createElement('div');
-        actions.className = 'spell-actions';
-
-        const ignBtn = document.createElement('button');
-        ignBtn.className = 'spell-btn'; ignBtn.textContent = T.spellIgnore;
+        const row = document.createElement('div'); row.className = 'spell-word'; row.id = 'sw-' + lower;
+        const topRow = document.createElement('div'); topRow.className = 'spell-word-row';
+        const wordSpan = document.createElement('span'); wordSpan.className = 'spell-word-text'; wordSpan.textContent = word;
+        const actions = document.createElement('div'); actions.className = 'spell-actions';
+        const ignBtn = document.createElement('button'); ignBtn.className = 'spell-btn'; ignBtn.textContent = T.spellIgnore;
         ignBtn.onclick = () => { ignoredWords.add(lower); removeSpellRow(lower); };
-
-        const addBtn = document.createElement('button');
-        addBtn.className = 'spell-btn add'; addBtn.textContent = T.spellAdd;
+        const addBtn = document.createElement('button'); addBtn.className = 'spell-btn add'; addBtn.textContent = T.spellAdd;
         addBtn.onclick = () => { customDict.add(lower); removeSpellRow(lower); };
-
-        actions.append(ignBtn, addBtn);
-        topRow.append(wordSpan, actions);
-        row.appendChild(topRow);
-
+        actions.append(ignBtn, addBtn); topRow.append(wordSpan, actions); row.appendChild(topRow);
         if (sugs.length > 0) {
-          const sugDiv = document.createElement('div');
-          sugDiv.className = 'spell-suggestions';
+          const sugDiv = document.createElement('div'); sugDiv.className = 'spell-suggestions';
           sugs.forEach(sug => {
-            const s = document.createElement('span');
-            s.className = 'spell-sug'; s.textContent = sug;
-            s.onclick = () => replaceWord(word, sug);
-            sugDiv.appendChild(s);
+            const s = document.createElement('span'); s.className = 'spell-sug'; s.textContent = sug;
+            s.onclick = () => replaceWord(word, sug); sugDiv.appendChild(s);
           });
           row.appendChild(sugDiv);
         }
         list.appendChild(row);
       });
-      footer.innerHTML = T.spellCount(errors.length).replace(/\d+/, n => `<span>${n}</span>`);
-      footer.style.display = 'block';
+      footer.innerHTML = T.spellCount(errors.length).replace(/\d+/, n => `<span>${n}</span>`); footer.style.display = 'block';
     }
   }, 0);
 }
 
 function removeSpellRow(lower) {
-  const el = document.getElementById('sw-' + lower);
-  if (el) el.remove();
-  const list = document.getElementById('spell-list');
-  if (list.children.length === 0) {
+  const el = document.getElementById('sw-' + lower); if (el) el.remove();
+  if (document.getElementById('spell-list').children.length === 0) {
     document.getElementById('spell-empty').style.display = 'block';
     document.getElementById('spell-footer').style.display = 'none';
   }
 }
 
 function replaceWord(original, replacement) {
-  const val = editor.value;
-  const esc = original.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const re = new RegExp('\\b' + esc + '\\b', 'i');
-  const m = re.exec(val);
+  const val = editor.value, esc = original.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), re = new RegExp('\\b' + esc + '\\b', 'i'), m = re.exec(val);
   if (!m) return;
-  const rep = m[0][0] === m[0][0].toUpperCase() && m[0][0] !== m[0][0].toLowerCase()
-    ? replacement.charAt(0).toUpperCase() + replacement.slice(1)
-    : replacement;
-  editor.setSelectionRange(m.index, m.index + m[0].length);
-  editor.focus();
-  document.execCommand('insertText', false, rep);
-  markDirty();
-  runSpellCheck();
+  const rep = m[0][0] === m[0][0].toUpperCase() && m[0][0] !== m[0][0].toLowerCase() ? replacement.charAt(0).toUpperCase() + replacement.slice(1) : replacement;
+  editor.setSelectionRange(m.index, m.index + m[0].length); editor.focus(); document.execCommand('insertText', false, rep); markDirty(); runSpellCheck();
 }
 
 /* ════════════════════════════════════════
@@ -1141,81 +1058,96 @@ function replaceWord(original, replacement) {
 ════════════════════════════════════════ */
 function getPos() { return { s: editor.selectionStart, e: editor.selectionEnd }; }
 function setRange(s, e) { editor.selectionStart = s; editor.selectionEnd = e; editor.focus(); }
-
 function ins(text, lineStart) {
   const { s } = getPos();
-  if (lineStart) {
-    const val = editor.value, ls = val.lastIndexOf('\n', s - 1) + 1;
-    editor.setSelectionRange(ls, ls);
-  }
-  editor.focus();
-  document.execCommand('insertText', false, text);
-  markDirty();
+  if (lineStart) { const val = editor.value, ls = val.lastIndexOf('\n', s - 1) + 1; editor.setSelectionRange(ls, ls); }
+  editor.focus(); document.execCommand('insertText', false, text); markDirty(); triggerAutoSave();
 }
 function wrap(mark) {
-  const { s, e } = getPos();
-  const sel = editor.value.slice(s, e) || (isJa ? '文字' : 'text');
-  const rep = mark + sel + mark;
-  editor.focus();
-  document.execCommand('insertText', false, rep);
-  setRange(s + mark.length, s + mark.length + sel.length);
-  markDirty();
+  const { s, e } = getPos(), sel = editor.value.slice(s, e) || (isJa ? '文字' : 'text'), rep = mark + sel + mark;
+  editor.focus(); document.execCommand('insertText', false, rep); setRange(s + mark.length, s + mark.length + sel.length); markDirty(); triggerAutoSave();
 }
 function insBlock(before, after) {
-  const { s, e } = getPos();
-  const sel = editor.value.slice(s, e);
-  const rep = before + sel + after;
-  editor.focus();
-  document.execCommand('insertText', false, rep);
-  setRange(s + before.length, s + before.length + sel.length);
-  markDirty();
+  const { s, e } = getPos(), sel = editor.value.slice(s, e), rep = before + sel + after;
+  editor.focus(); document.execCommand('insertText', false, rep); setRange(s + before.length, s + before.length + sel.length); markDirty(); triggerAutoSave();
 }
 function insertLink() {
-  const { s, e } = getPos();
-  const sel = editor.value.slice(s, e) || T.insertLink;
-  const rep = `[${sel}](URL)`;
-  editor.focus();
-  document.execCommand('insertText', false, rep);
-  setRange(s, s + rep.length);
-  markDirty();
+  const { s, e } = getPos(), sel = editor.value.slice(s, e) || T.insertLink, rep = `[${sel}](URL)`;
+  editor.focus(); document.execCommand('insertText', false, rep); setRange(s, s + rep.length); markDirty(); triggerAutoSave();
 }
 function insertTable() {
-  const tbl = T.tableSnippet;
-  editor.focus();
-  document.execCommand('insertText', false, tbl);
-  markDirty();
+  editor.focus(); document.execCommand('insertText', false, T.tableSnippet); markDirty(); triggerAutoSave();
 }
 
 /* ════════════════════════════════════════
-   FILE OPEN / SAVE / NEW
+   FILE OPEN / SAVE / SHARE (Device Optimized)
 ════════════════════════════════════════ */
+let fileHandle = null; // For Desktop File System Access API
+
 function newFile() {
   if (isDirty && editor.value.trim() !== '' && editor.value !== T.defaultMd) {
     if (!confirm(T.confirmNew)) return;
   }
   editor.value = '';
   filenameInput.value = 'untitled.md';
+  fileHandle = null;
   update();
   markSaved();
+  triggerAutoSave();
   closeMenus();
 }
 
+// ── Open Handling ──
+async function handleOpen() {
+  closeMenus();
+  if (!isMobile && window.showOpenFilePicker) {
+    try {
+      const [handle] = await window.showOpenFilePicker({
+        types: [{ description: 'Markdown / Text', accept: { 'text/plain': ['.md', '.txt', '.markdown'] } }]
+      });
+      fileHandle = handle;
+      const file = await handle.getFile();
+      filenameInput.value = file.name;
+      
+      // 【NFC正規化】読み込みテキストの文字化け・分離バグ防止
+      const text = await file.text();
+      editor.value = text.normalize('NFC');
+      
+      update();
+      markSaved();
+      triggerAutoSave();
+      if (spellEnabled) runSpellCheck();
+      toast(T.opened(file.name));
+    } catch (e) {
+      // User canceled or failed, silently abort.
+    }
+  } else {
+    // Fallback for Mobile / Unsupported browsers
+    document.getElementById('file-input').click();
+  }
+}
+
+// Standard file input fallback
 document.getElementById('file-input').addEventListener('change', e => {
   const file = e.target.files[0];
   if (!file) return;
   filenameInput.value = file.name;
+  fileHandle = null; // Reset handle since it's a new upload
   const reader = new FileReader();
   reader.onload = ev => {
     let text;
     if (window.Encoding) {
       const uint8 = new Uint8Array(ev.target.result);
-      text = Encoding.codeToString(Encoding.convert(uint8, { to: 'UNICODE', from: 'AUTO' }));
+      // 【NFC正規化】ここで文字コードを変換しつつ、最後に normalize('NFC') で分離濁点を結合
+      text = Encoding.codeToString(Encoding.convert(uint8, { to: 'UNICODE', from: 'AUTO' })).normalize('NFC');
     } else {
-      text = new TextDecoder('utf-8').decode(ev.target.result);
+      // 【NFC正規化】非対応環境でも、一応NFCをかける
+      text = new TextDecoder('utf-8').decode(ev.target.result).normalize('NFC');
     }
     editor.value = text;
     update();
     markSaved();
+    triggerAutoSave();
     if (spellEnabled) runSpellCheck();
     toast(T.opened(file.name));
   };
@@ -1223,9 +1155,72 @@ document.getElementById('file-input').addEventListener('change', e => {
   e.target.value = '';
 });
 
-function saveFile() {
-  const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
-  const blob = new Blob([bom, editor.value], { type: 'text/markdown;charset=utf-8' });
+// ── Save / Share Handling ──
+async function handleSave(isSaveAs = false) {
+  closeMenus();
+  
+  if (isMobile) {
+    // 【モバイル】Web Share API
+    const filename = filenameInput.value.trim() || 'untitled.md';
+    const finalName = /\.(md|txt|markdown)$/i.test(filename) ? filename : filename + '.md';
+    // 【BOM無し UTF-8】のファイルとして書き出す
+    const file = new File([editor.value], finalName, { type: 'text/markdown;charset=utf-8' });
+    
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: finalName,
+          text: 'Shared from MD Editor'
+        });
+        markSaved();
+        toast(T.shared);
+      } catch (e) {
+        console.warn('Share canceled', e);
+      }
+    } else {
+      fallbackDownload();
+    }
+  } else {
+    // 【デスクトップ】File System Access API
+    if (window.showSaveFilePicker) {
+      try {
+        if (!fileHandle || isSaveAs) {
+          fileHandle = await window.showSaveFilePicker({
+            suggestedName: filenameInput.value.trim() || 'untitled.md',
+            types: [{ description: 'Markdown', accept: { 'text/markdown': ['.md'] } }]
+          });
+        }
+        const writable = await fileHandle.createWritable();
+        // 直接書き込み（BOM無しのUTF-8で保存される）
+        await writable.write(editor.value);
+        await writable.close();
+        filenameInput.value = fileHandle.name;
+        markSaved();
+        triggerAutoSave();
+        toast(T.saved);
+      } catch (e) {
+        // User canceled
+      }
+    } else {
+      // Fallback for unsupported desktop browsers (Firefox, Safari desktop)
+      if (isSaveAs) {
+        const newName = prompt(T.promptSaveAs, filenameInput.value.trim() || 'untitled.md');
+        if (newName) {
+          filenameInput.value = newName;
+          fallbackDownload();
+        }
+      } else {
+        fallbackDownload();
+      }
+    }
+  }
+}
+
+// 従来のダウンロード保存（フォールバック用：【BOM無し化】完了）
+function fallbackDownload() {
+  // BOM配列を削除し、純粋なUTF-8として出力
+  const blob = new Blob([editor.value], { type: 'text/markdown;charset=utf-8' });
   let filename = filenameInput.value.trim() || 'untitled.md';
   if (!/\.(md|txt|markdown)$/i.test(filename)) filename += '.md';
   const a = document.createElement('a');
@@ -1234,20 +1229,22 @@ function saveFile() {
   a.click();
   URL.revokeObjectURL(a.href);
   markSaved();
-  toast(isJa ? '保存しました' : 'Saved');
-  closeMenus();
+  toast(T.downloaded); // 「ダウンロードしました」に変更
 }
 
-function saveFileAs() {
-  const currentName = filenameInput.value.trim() || 'untitled.md';
-  const newName = prompt(T.promptSaveAs, currentName);
-  if (newName) {
-    filenameInput.value = newName;
-    saveFile();
-  } else {
-    closeMenus();
-  }
-}
+/* ════════════════════════════════════════
+   KEYBOARD SHORTCUTS
+════════════════════════════════════════ */
+window.addEventListener('keydown', e => {
+  const meta = e.ctrlKey || e.metaKey;
+  if (meta && e.key.toLowerCase() === 'n') { e.preventDefault(); newFile(); }
+  if (meta && e.shiftKey && e.key.toLowerCase() === 's') { e.preventDefault(); handleSave(true); return; }
+  if (meta && !e.shiftKey && e.key.toLowerCase() === 's') { e.preventDefault(); handleSave(false); }
+  if (meta && e.key.toLowerCase() === 'o') { e.preventDefault(); handleOpen(); }
+  if (meta && e.key.toLowerCase() === 'f') { e.preventDefault(); openSearchPanel('find'); }
+  if (meta && e.key.toLowerCase() === 'h') { e.preventDefault(); openSearchPanel('replace'); }
+  if (e.key === 'Escape' && srPanelOpen) { e.preventDefault(); closeSearchPanel(); }
+});
 
 /* ════════════════════════════════════════
    HTML & PDF EXPORT
@@ -1255,29 +1252,31 @@ function saveFileAs() {
 function exportHtml() {
   closeMenus();
   if (!window.marked) return;
-  if (!window.DOMPurify) {
-    alert(isJa ? 'セキュリティエラー: DOMPurify が読み込めないため、HTMLエクスポートを中止しました。' : 'Security Error: Export aborted because DOMPurify failed to load.');
-    return;
-  }
+  if (!window.DOMPurify) { alert(isJa ? 'セキュリティエラー: DOMPurify が読み込めないため、HTMLエクスポートを中止しました。' : 'Security Error: Export aborted.'); return; }
   const safeHtml = DOMPurify.sanitize(marked.parse(editor.value));
   const title = filenameInput.value.replace(/\.[^/.]+$/, '') || 'document';
+  // エクスポートされるHTMLもBOM無しUTF-8
   const fullHtml = `<!DOCTYPE html>\n<html lang="${isJa ? 'ja' : 'en'}">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>${title}</title>\n<style>body{font-family:'Helvetica Neue',Arial,sans-serif;line-height:1.8;color:#333;max-width:800px;margin:0 auto;padding:40px 20px}h1,h2,h3,h4,h5,h6{font-family:sans-serif;font-weight:bold;margin-top:1.5em;margin-bottom:.5em}h1{border-bottom:2px solid #eee;padding-bottom:5px}h2{border-bottom:1px solid #eee;padding-bottom:5px}code{background-color:#f4f4f4;padding:2px 5px;border-radius:4px;font-family:monospace;font-size:.9em}pre{background-color:#f6f8fa;border-radius:6px;padding:16px;overflow-x:auto;border:1px solid #e1e4e8}pre code{background:none;border:none;padding:0}blockquote{border-left:4px solid #dfe2e5;margin:1em 0;padding-left:16px;color:#6a737d}table{border-collapse:collapse;width:100%;margin:1em 0}th,td{border:1px solid #dfe2e5;padding:8px 13px}th{background-color:#f6f8fa;font-weight:600}tr:nth-child(even){background-color:#fcfcfc}img{max-width:100%;height:auto}</style>\n</head>\n<body>\n${safeHtml}\n</body>\n</html>`;
-  const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = title + '.html';
-  a.click();
-  URL.revokeObjectURL(a.href);
-  toast(isJa ? 'HTMLをダウンロードしました' : 'HTML exported');
+  
+  if (isMobile) {
+    const file = new File([fullHtml], title + '.html', { type: 'text/html;charset=utf-8' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file], title: title + '.html' }).catch(e=>{});
+    } else {
+      const b = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = title + '.html'; a.click();
+    }
+  } else {
+    const b = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = title + '.html'; a.click();
+    toast(T.downloaded);
+  }
 }
 
 function exportPdf() {
   closeMenus();
   if (window.marked) {
-    if (!window.DOMPurify) {
-      alert(isJa ? 'セキュリティエラー: DOMPurify が読み込めないため、印刷を中止しました。' : 'Security Error: Print aborted because DOMPurify failed to load.');
-      return;
-    }
+    if (!window.DOMPurify) { alert(isJa ? 'セキュリティエラー: 印刷を中止しました。' : 'Security Error.'); return; }
     preview.innerHTML = DOMPurify.sanitize(marked.parse(editor.value));
   }
   setTimeout(() => window.print(), 100);
@@ -1286,8 +1285,7 @@ function exportPdf() {
 /* ── TOAST ── */
 function toast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2200);
 }
 </script>
