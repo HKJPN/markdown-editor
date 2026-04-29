@@ -1,4 +1,5 @@
 # 🚀 MD//WORKS v1.3 — Standalone Markdown Editor
+<img width="1363" height="634" alt="スクリーンショット 2026-04-28 103042" src="https://github.com/user-attachments/assets/7d94c942-3dce-4c5d-b3aa-84652a8ac3fe" />
 
 **MD//WORKS** is a powerful, browser‑based Markdown editor designed for focused writing, advanced editing, and long‑term portability — all without installation.
 
