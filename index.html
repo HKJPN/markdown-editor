@@ -26,7 +26,9 @@
    [CSS-07] SEARCH & REPLACE PANEL
    [CSS-08] STATUS BAR, TOAST & LOADER
    [CSS-09] SPELL CHECK PANEL
-   [CSS-10] RESPONSIVE & PRINT STYLES
+   [CSS-10] OUTLINE & HISTORY PANELS
+   [CSS-11] RELEASE NOTES MODAL (NEW)
+   [CSS-12] RESPONSIVE & PRINT STYLES
    ========================================================================== */
 
 /* #region [CSS-01] VARIABLES & BASE SETTINGS */
@@ -219,7 +221,6 @@ button,input,textarea{font:inherit}
 }
 .tool-btn:active{transform:scale(.97)}
 .tool-btn.heading{color:var(--accent2);font-weight:700;text-shadow:0 0 18px rgba(143,130,255,.16)}
-.tool-btn.active-spell{color:var(--warn)!important;background:rgba(232,168,74,.1)}
 /* #endregion */
 
 /* #region [CSS-05] EDITOR & BACKDROP ENGINE */
@@ -241,20 +242,15 @@ button,input,textarea{font:inherit}
   overflow-y:auto;background:transparent;
 }
 
-/* Robust line-based backdrop */
 #editor-backdrop .editor-line{
   display:block;
   min-height:1.82em;
-  /* テキストの座標ズレを防ぐため、ネガティブマージンで相殺 */
   margin: 0 -0.18em;
   padding: 0 0.18em;
   border-radius:8px;
 }
-#editor-backdrop .editor-line.blank{
-  min-height:1.82em;
-}
+#editor-backdrop .editor-line.blank{ min-height:1.82em; }
 
-/* task tint */
 #editor-backdrop .task-open-line{
   background:linear-gradient(90deg, rgba(235,176,91,.16), rgba(235,176,91,.045) 48%, transparent 84%);
   box-shadow:inset 0 0 0 1px rgba(235,176,91,.06);
@@ -264,7 +260,6 @@ button,input,textarea{font:inherit}
   box-shadow:inset 0 0 0 1px rgba(90,215,160,.055);
 }
 
-/* search highlight coexists above line tint */
 #editor-backdrop mark{
   background:rgba(143,130,255,.30);
   color:transparent;
@@ -275,8 +270,6 @@ button,input,textarea{font:inherit}
   background:rgba(235,176,91,.56);
   box-shadow:0 0 0 1px rgba(235,176,91,.22);
 }
-
-/* スペルミス用のハイライト */
 #editor-backdrop mark.spell-error {
   background: rgba(241, 119, 134, 0.15);
   border-bottom: 2px dashed rgba(241, 119, 134, 0.8);
@@ -310,119 +303,48 @@ button,input,textarea{font:inherit}
   border-left:1px solid rgba(255,255,255,.055);
   box-shadow:inset 1px 0 0 rgba(255,255,255,.03);
 }
-#preview-wrap.open{
-  width:42%;min-width:320px;border-left-width:0;overflow-y:auto
-}
-#preview{
-  font-family:var(--serif);font-size:15px;line-height:1.95;color:#eef1fc;
-  padding:42px 50px;max-width:760px
-}
-#preview h1,#preview h2,#preview h3,#preview h4,#preview h5,#preview h6{
-  font-family:var(--sans);font-weight:700;margin:1.6em 0 .5em;line-height:1.3;color:var(--text)
-}
-#preview h1{
-  font-size:29px;padding-bottom:.35em;border-bottom:1px solid rgba(255,255,255,.13);letter-spacing:.01em
-}
-#preview h2{
-  font-size:21px;padding-bottom:.25em;border-bottom:1px solid rgba(255,255,255,.09)
-}
-#preview h3{font-size:17px;color:var(--accent2)}
-#preview h4{font-size:15px}
-#preview p{margin:.7em 0}
-#preview ul,#preview ol{margin:.7em 0;padding-left:1.6em}
-#preview li{margin:.25em 0}
-#preview a{color:var(--accent2);text-decoration:none}
-#preview a:hover{text-decoration:underline}
-#preview strong{font-weight:700;color:var(--text)}
-#preview em{font-style:italic;color:var(--text2)}
-#preview code{
-  font-family:var(--mono);font-size:13px;background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:1px 6px;color:var(--accent2)
-}
-#preview pre{
-  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.018));
-  border:1px solid rgba(255,255,255,.085);border-radius:14px;
-  padding:16px 20px;overflow-x:auto;margin:1em 0;box-shadow:var(--glow)
-}
-#preview pre code{background:none;border:none;padding:0;color:var(--text);font-size:13.5px}
-#preview blockquote{
-  border-left:3px solid rgba(143,130,255,.9);margin:1.1em 0;padding:8px 16px;
-  color:var(--text2);
-  background:linear-gradient(90deg, rgba(143,130,255,.13), rgba(143,130,255,.035));
-  border-radius:0 12px 12px 0
-}
-#preview hr{border:none;border-top:1px solid var(--border2);margin:1.5em 0}
-#preview table{
-  border-collapse:separate;border-spacing:0;width:100%;margin:1em 0;
-  font-family:var(--sans);font-size:14px;overflow:hidden;border-radius:14px;
-  border:1px solid rgba(255,255,255,.08)
-}
-#preview th,#preview td{border-bottom:1px solid rgba(255,255,255,.06);padding:10px 12px}
-#preview th{background:rgba(255,255,255,.045);font-weight:500;color:var(--accent2)}
-#preview tr:nth-child(even) td{background:rgba(255,255,255,.02)}
-#preview img{max-width:100%;border-radius:6px;border:1px solid var(--border)}
+#preview-wrap.open{ width:42%;min-width:320px;border-left-width:0;overflow-y:auto }
+#preview{ font-family:var(--serif);font-size:15px;line-height:1.95;color:#eef1fc; padding:42px 50px;max-width:760px }
+#preview h1,#preview h2,#preview h3,#preview h4,#preview h5,#preview h6{ font-family:var(--sans);font-weight:700;margin:1.6em 0 .5em;line-height:1.3;color:var(--text) }
+#preview h1{ font-size:29px;padding-bottom:.35em;border-bottom:1px solid rgba(255,255,255,.13);letter-spacing:.01em }
+#preview h2{ font-size:21px;padding-bottom:.25em;border-bottom:1px solid rgba(255,255,255,.09) }
+#preview h3{ font-size:17px;color:var(--accent2) }
+#preview h4{ font-size:15px }
+#preview p{ margin:.7em 0 }
+#preview ul,#preview ol{ margin:.7em 0;padding-left:1.6em }
+#preview li{ margin:.25em 0 }
+#preview a{ color:var(--accent2);text-decoration:none }
+#preview a:hover{ text-decoration:underline }
+#preview strong{ font-weight:700;color:var(--text) }
+#preview em{ font-style:italic;color:var(--text2) }
+#preview code{ font-family:var(--mono);font-size:13px;background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:1px 6px;color:var(--accent2) }
+#preview pre{ background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.018)); border:1px solid rgba(255,255,255,.085);border-radius:14px; padding:16px 20px;overflow-x:auto;margin:1em 0;box-shadow:var(--glow) }
+#preview pre code{ background:none;border:none;padding:0;color:var(--text);font-size:13.5px }
+#preview blockquote{ border-left:3px solid rgba(143,130,255,.9);margin:1.1em 0;padding:8px 16px; color:var(--text2); background:linear-gradient(90deg, rgba(143,130,255,.13), rgba(143,130,255,.035)); border-radius:0 12px 12px 0 }
+#preview hr{ border:none;border-top:1px solid var(--border2);margin:1.5em 0 }
+#preview table{ border-collapse:separate;border-spacing:0;width:100%;margin:1em 0; font-family:var(--sans);font-size:14px;overflow:hidden;border-radius:14px; border:1px solid rgba(255,255,255,.08) }
+#preview th,#preview td{ border-bottom:1px solid rgba(255,255,255,.06);padding:10px 12px }
+#preview th{ background:rgba(255,255,255,.045);font-weight:500;color:var(--accent2) }
+#preview tr:nth-child(even) td{ background:rgba(255,255,255,.02) }
+#preview img{ max-width:100%;border-radius:6px;border:1px solid var(--border) }
 
-/* Polished task list in preview */
-#preview li.task-open-item,
-#preview li.task-done-item{
-  list-style:none;
-  display:flex;
-  align-items:flex-start;
-  gap:.72em;
-  margin:.28em 0;
-  padding:.42em .58em .42em .48em;
-  border-radius:10px;
-  transition:background-color .16s ease, opacity .16s ease, color .16s ease;
-}
-#preview li.task-open-item:hover,
-#preview li.task-done-item:hover{
-  background:rgba(255,255,255,.032);
-}
-#preview li.task-open-item input[type="checkbox"],
-#preview li.task-done-item input[type="checkbox"]{
-  flex:0 0 auto;
-  margin:.18em 0 0;
-  width:15px;
-  height:15px;
-  accent-color:var(--accent2);
-  opacity:.95;
-  transform:scale(.96);
-}
-#preview li.task-open-item{
-  color:var(--text);
-  opacity:.98;
-}
-#preview li.task-open-item:hover{
-  background:linear-gradient(90deg, rgba(143,130,255,.08), rgba(143,130,255,.02));
-}
-#preview li.task-done-item{
-  color:var(--text2);
-  opacity:.72;
-  text-decoration:line-through;
-  text-decoration-color:rgba(255,255,255,.14);
-  text-decoration-thickness:1px;
-  text-underline-offset:.14em;
-}
-#preview li.task-done-item:hover{
-  background:rgba(255,255,255,.022);
-  opacity:.82;
-}
-#preview li.task-done-item strong,
-#preview li.task-done-item em,
-#preview li.task-done-item code,
-#preview li.task-done-item a{
-  opacity:.86;
-}
-#preview li.task-done-item a{color:var(--text2)}
-#preview li.task-done-item a:hover{color:var(--accent2)}
+#preview li.task-open-item, #preview li.task-done-item{ list-style:none; display:flex; align-items:flex-start; gap:.72em; margin:.28em 0; padding:.42em .58em .42em .48em; border-radius:10px; transition:background-color .16s ease, opacity .16s ease, color .16s ease; }
+#preview li.task-open-item:hover, #preview li.task-done-item:hover{ background:rgba(255,255,255,.032); }
+#preview li.task-open-item input[type="checkbox"], #preview li.task-done-item input[type="checkbox"]{ flex:0 0 auto; margin:.18em 0 0; width:15px; height:15px; accent-color:var(--accent2); opacity:.95; transform:scale(.96); }
+#preview li.task-open-item{ color:var(--text); opacity:.98; }
+#preview li.task-open-item:hover{ background:linear-gradient(90deg, rgba(143,130,255,.08), rgba(143,130,255,.02)); }
+#preview li.task-done-item{ color:var(--text2); opacity:.72; text-decoration:line-through; text-decoration-color:rgba(255,255,255,.14); text-decoration-thickness:1px; text-underline-offset:.14em; }
+#preview li.task-done-item:hover{ background:rgba(255,255,255,.022); opacity:.82; }
+#preview li.task-done-item strong, #preview li.task-done-item em, #preview li.task-done-item code, #preview li.task-done-item a{ opacity:.86; }
+#preview li.task-done-item a{ color:var(--text2) }
+#preview li.task-done-item a:hover{ color:var(--accent2) }
 /* #endregion */
 
 /* #region [CSS-07] SEARCH & REPLACE PANEL */
 #sr-panel{
   position:absolute;top:12px;right:18px;width:392px;
   background:linear-gradient(180deg, rgba(29,35,49,.95), rgba(17,21,31,.96));
-  border:1px solid rgba(255,255,255,.085);
-  border-radius:18px;
+  border:1px solid rgba(255,255,255,.085); border-radius:18px;
   box-shadow:var(--shadow-lg), var(--glow);
   z-index:150;display:none;flex-direction:column;font-family:var(--sans);
   overflow:hidden;backdrop-filter:blur(16px)
@@ -446,16 +368,11 @@ button,input,textarea{font:inherit}
 .sr-count{font-size:11px;color:var(--text3);font-family:var(--mono);position:absolute;right:10px;pointer-events:none}
 .sr-nav-btn,.sr-action-btn{
   background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
-  border:1px solid rgba(255,255,255,.085);
-  color:var(--text2);border-radius:10px;cursor:pointer;
-  transition:all .1s
+  border:1px solid rgba(255,255,255,.085); color:var(--text2);border-radius:10px;cursor:pointer; transition:all .1s
 }
 .sr-nav-btn{height:36px;padding:4px 10px;font-size:12px}
 .sr-action-btn{height:36px;padding:6px 12px;font-size:12px;font-weight:500;flex:1}
-.sr-nav-btn:hover,.sr-action-btn:hover{
-  background:linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.03));
-  color:var(--text)
-}
+.sr-nav-btn:hover,.sr-action-btn:hover{ background:linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.03)); color:var(--text) }
 .sr-options{display:flex;gap:12px;font-size:11px;color:var(--text2);margin-bottom:8px;user-select:none;flex-wrap:wrap}
 .sr-options label{display:flex;align-items:center;gap:4px;cursor:pointer}
 .sr-options input[type="checkbox"]{accent-color:var(--accent)}
@@ -477,8 +394,7 @@ button,input,textarea{font:inherit}
 #spell-status.on{color:var(--warn)}
 
 #toast{
-  position:fixed;bottom:38px;left:50%;
-  transform:translateX(-50%) translateY(20px);
+  position:fixed;bottom:38px;left:50%; transform:translateX(-50%) translateY(20px);
   background:linear-gradient(180deg, rgba(29,34,48,.97), rgba(18,23,33,.98));
   border:1px solid rgba(255,255,255,.08);color:var(--text);
   font-family:var(--sans);font-size:13px;padding:9px 18px;border-radius:14px;
@@ -503,8 +419,7 @@ button,input,textarea{font:inherit}
 #spell-panel{
   position:fixed;bottom:36px;right:20px;width:332px;
   background:linear-gradient(180deg, rgba(29,35,49,.95), rgba(17,21,31,.96));
-  border:1px solid rgba(255,255,255,.085);
-  border-radius:18px;padding:0;z-index:300;display:none;
+  border:1px solid rgba(255,255,255,.085); border-radius:18px;padding:0;z-index:300;display:none;
   box-shadow:var(--shadow-lg), var(--glow);overflow:hidden;backdrop-filter:blur(16px)
 }
 #spell-panel.show{display:block}
@@ -525,24 +440,83 @@ button,input,textarea{font:inherit}
 .spell-word-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:3px}
 .spell-word-text{font-family:var(--mono);font-size:13px;color:var(--danger);flex:1}
 .spell-actions{display:flex;gap:4px;flex-shrink:0}
-.spell-btn{
-  font-size:10px;color:var(--text3);padding:2px 7px;border:1px solid var(--border);
-  border-radius:8px;cursor:pointer;background:transparent;font-family:var(--sans);transition:all .1s;white-space:nowrap
-}
+.spell-btn{ font-size:10px;color:var(--text3);padding:2px 7px;border:1px solid var(--border); border-radius:8px;cursor:pointer;background:transparent;font-family:var(--sans);transition:all .1s;white-space:nowrap }
 .spell-btn:hover{color:var(--text2);border-color:var(--border2);background:var(--surface3)}
 .spell-btn.add{color:var(--accent2);border-color:rgba(124,106,247,.3)}
 .spell-btn.add:hover{background:var(--accent-dim)}
 .spell-suggestions{display:flex;flex-wrap:wrap;gap:4px}
-.spell-sug{
-  font-size:11px;font-family:var(--mono);color:var(--text2);padding:2px 7px;
-  background:var(--surface3);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .1s
-}
+.spell-sug{ font-size:11px;font-family:var(--mono);color:var(--text2);padding:2px 7px; background:var(--surface3);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .1s }
 .spell-sug:hover{color:var(--accent2);border-color:rgba(124,106,247,.4);background:var(--accent-dim)}
 #spell-footer{font-family:var(--mono);font-size:11px;color:var(--text3);padding:7px 12px;border-top:1px solid var(--border);display:none}
 #spell-footer span{color:var(--danger);font-weight:500}
 /* #endregion */
 
-/* #region [CSS-10] RESPONSIVE & PRINT STYLES */
+/* #region [CSS-10] OUTLINE & HISTORY PANELS */
+#outline-panel {
+  position:fixed; top:90px; right:20px; width:280px; 
+  background:linear-gradient(180deg, rgba(29,35,49,.95), rgba(17,21,31,.96));
+  border:1px solid rgba(255,255,255,.085); border-radius:16px;
+  box-shadow:var(--shadow-lg), var(--glow); z-index:140; display:none; 
+  flex-direction:column; overflow:hidden; backdrop-filter:blur(16px);
+  max-height: calc(100vh - 140px);
+}
+#outline-panel.show { display:flex; }
+#outline-panel .op-head { display:flex; align-items:center; justify-content:space-between; padding:10px 12px 9px; border-bottom:1px solid var(--border); }
+#outline-panel .op-head h3 { font-size:11px; color:var(--text3); font-weight:500; letter-spacing:.06em; text-transform:uppercase; font-family:var(--mono); }
+#outline-list { overflow-y:auto; padding:6px; flex:1; }
+#outline-list::-webkit-scrollbar{width:8px}
+#outline-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:999px}
+.ol-item { padding:6px 10px; font-size:13px; color:var(--text2); cursor:pointer; border-radius:8px; transition:all 0.1s; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:2px; font-family:var(--sans); }
+.ol-item:hover { background:var(--surface3); color:var(--text); }
+.ol-h1 { font-weight:700; color:var(--accent2); margin-top:4px; font-size:13.5px; }
+.ol-h2 { padding-left:18px; }
+.ol-h3 { padding-left:28px; font-size:12px; }
+.ol-h4, .ol-h5, .ol-h6 { padding-left:38px; font-size:11.5px; opacity:0.8; }
+
+#history-modal {
+  position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; display:none; align-items:center; justify-content:center; backdrop-filter:blur(4px);
+}
+#history-modal.show { display:flex; }
+.hist-content {
+  background:linear-gradient(180deg, rgba(29,35,49,.98), rgba(17,21,31,.98));
+  border: 1px solid rgba(255,255,255,.085); border-radius: 18px; width: 440px; max-width:90%; padding: 20px; box-shadow: var(--shadow-lg), var(--glow); display:flex; flex-direction:column;
+}
+.hist-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--border); padding-bottom:10px; }
+.hist-head h3 { font-size:14px; font-weight:700; color:var(--text); font-family:var(--sans); }
+#hist-list { max-height:40vh; overflow-y:auto; font-size:13px; padding-right:4px;}
+#hist-list::-webkit-scrollbar{width:8px}
+#hist-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:999px}
+.hist-item {
+  padding: 12px; border: 1px solid transparent; border-bottom-color: rgba(255,255,255,.04); cursor: pointer; transition: all 0.12s; border-radius:10px; display:flex; justify-content:space-between; align-items:center; gap:12px;
+}
+.hist-item:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,.08); }
+.hist-name { font-family:var(--mono); color:var(--accent2); font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.hist-date { font-size:11px; color:var(--text3); font-family:var(--mono); flex-shrink:0; }
+/* #endregion */
+
+/* #region [CSS-11] RELEASE NOTES MODAL (NEW) */
+#rn-modal {
+  position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; display:none; align-items:center; justify-content:center; backdrop-filter:blur(4px);
+}
+#rn-modal.show { display:flex; }
+.rn-content {
+  background:linear-gradient(180deg, rgba(29,35,49,.98), rgba(17,21,31,.98));
+  border: 1px solid rgba(255,255,255,.085); border-radius: 18px; width: 600px; max-width:90%; max-height: 85vh; display:flex; flex-direction:column; box-shadow: var(--shadow-lg), var(--glow); overflow:hidden;
+}
+.rn-head { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid var(--border); background:rgba(0,0,0,0.2); }
+.rn-head h3 { font-size:15px; font-weight:700; color:var(--text); font-family:var(--sans); margin:0; }
+.rn-body { padding:20px; overflow-y:auto; font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--text2); }
+.rn-body h2 { color:var(--text); font-size:18px; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:6px;}
+.rn-body h3 { color:var(--accent2); font-size:15px; margin:16px 0 8px; }
+.rn-body ul { padding-left:20px; margin-bottom:12px; }
+.rn-body li { margin-bottom:6px; }
+.rn-body code { font-family:var(--mono); background:rgba(255,255,255,0.06); padding:2px 5px; border-radius:4px; font-size:0.9em; color:var(--accent2); }
+.rn-foot { padding:12px 20px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; background:rgba(0,0,0,0.2); }
+.rn-btn { background:var(--accent); color:#fff; border:none; padding:8px 24px; border-radius:8px; cursor:pointer; font-weight:600; font-family:var(--sans); transition:opacity 0.2s;}
+.rn-btn:hover { opacity:0.8; }
+/* #endregion */
+
+/* #region [CSS-12] RESPONSIVE & PRINT STYLES */
 @media (max-width:980px){
   #titlebar{padding:0 10px;gap:8px}
   #filename-display{min-width:140px;max-width:none}
@@ -558,10 +532,11 @@ button,input,textarea{font:inherit}
   #toolbar{height:42px}
   #preview-wrap.open{width:100%!important;min-width:0}
   #main-container.preview-on #splitter{display:none}
+  #outline-panel{right:10px; left:10px; width:auto; max-height:40vh;}
 }
 
 @media print{
-  #menubar,#titlebar,#toolbar,#statusbar,#editor-wrap,#splitter,#spell-panel,#toast,#sr-panel{display:none!important}
+  #menubar,#titlebar,#toolbar,#statusbar,#editor-wrap,#splitter,#spell-panel,#toast,#sr-panel,#outline-panel,#history-modal,#rn-modal{display:none!important}
   body{background:white!important}
   #main-container{display:block!important;overflow:visible!important;height:auto!important}
   #preview-wrap{width:100%!important;max-width:none!important;display:block!important;border:none!important;overflow:visible!important;background:white!important}
@@ -576,7 +551,6 @@ button,input,textarea{font:inherit}
   h1,h2,h3{page-break-after:avoid}
   img{max-width:100%!important;page-break-inside:avoid}
 }
-/* #endregion */
 
 /* Zen Mode (Focus Mode) */
 body.zen-mode #menubar,
@@ -584,18 +558,10 @@ body.zen-mode #titlebar,
 body.zen-mode #toolbar,
 body.zen-mode #statusbar,
 body.zen-mode #splitter,
-body.zen-mode #preview-wrap {
-  display: none !important;
-}
-body.zen-mode #main-container {
-  height: 100vh;
-}
-body.zen-mode #editor-wrap {
-  max-width: 840px;
-  margin: 0 auto;
-  border-left: 1px solid rgba(255,255,255,.05);
-  border-right: 1px solid rgba(255,255,255,.05);
-}
+body.zen-mode #preview-wrap { display: none !important; }
+body.zen-mode #main-container { height: 100vh; }
+body.zen-mode #editor-wrap { max-width: 840px; margin: 0 auto; border-left: 1px solid rgba(255,255,255,.05); border-right: 1px solid rgba(255,255,255,.05); }
+/* #endregion */
 </style>
 </head>
 <body>
@@ -633,6 +599,10 @@ body.zen-mode #editor-wrap {
       </div>
       <div class="menu-entry" onclick="exportPdf()">
         <span id="m-export-pdf"></span>
+      </div>
+      <div class="menu-sep-line"></div>
+      <div class="menu-entry" onclick="openHistory()">
+        <span id="m-history"></span>
       </div>
       <div class="menu-sep-line"></div>
       <div class="menu-entry" onclick="closeFile()">
@@ -673,8 +643,8 @@ body.zen-mode #editor-wrap {
         <span id="m-replace"></span><span class="menu-shortcut">Ctrl+H</span>
       </div>
       <div class="menu-sep-line"></div>
-      <div class="menu-entry" id="m-spell-entry" onclick="toggleSpell()">
-        <span id="m-spell-label"></span><span class="menu-check" id="spell-check">✓</span>
+      <div class="menu-entry" onclick="formatDoc()">
+        <span id="m-format"></span>
       </div>
       <div class="menu-sep-line"></div>
       <div class="menu-entry" onclick="closeMenus();ins('# ',true)">H1</div>
@@ -691,6 +661,13 @@ body.zen-mode #editor-wrap {
     <div class="menu-dropdown" id="dd-view">
       <div class="menu-entry" id="m-preview-entry" onclick="togglePreview()">
         <span id="m-preview-label"></span><span class="menu-check" id="preview-check">✓</span>
+      </div>
+      <div class="menu-entry" id="m-outline-entry" onclick="toggleOutline()">
+        <span id="m-outline-label"></span><span class="menu-check" id="outline-check">✓</span>
+      </div>
+      <div class="menu-sep-line"></div>
+      <div class="menu-entry" id="m-spell-entry" onclick="toggleSpell()">
+        <span id="m-spell-label"></span><span class="menu-check" id="spell-check">✓</span>
       </div>
       <div class="menu-entry" id="m-zen-entry" onclick="toggleZenMode()">
         <span>Zenモード (集中モード)</span><span class="menu-check" id="zen-check">✓</span>
@@ -734,7 +711,8 @@ body.zen-mode #editor-wrap {
     <button class="tool-btn" onclick="ins('> ',true)">❝ <span id="tb-quote"></span></button>
   </div>
   <div class="tool-group">
-    <button class="tool-btn" onclick="insBlock('```\n','\n```')">{ } <span id="tb-code"></span></button>
+    <button class="tool-btn" onclick="insBlock('```\n','\n
+```')">{ } <span id="tb-code"></span></button>
     <button class="tool-btn" onclick="insertLink()">⌘ <span id="tb-link"></span></button>
     <button class="tool-btn" onclick="insertTable()">⊞ <span id="tb-table"></span></button>
     <button class="tool-btn" onclick="ins('---\n',true)">─ <span id="tb-hr"></span></button>
@@ -780,7 +758,39 @@ body.zen-mode #editor-wrap {
       </div>
     </div>
   </div>
+
+  <div id="outline-panel">
+    <div class="op-head">
+      <h3 id="op-title"></h3>
+      <button id="spell-close" onclick="toggleOutline()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;">✕</button>
+    </div>
+    <div id="outline-list"></div>
+  </div>
 </div>
+
+<div id="history-modal">
+  <div class="hist-content">
+    <div class="hist-head">
+      <h3 id="hist-title"></h3>
+      <button onclick="closeHistory()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;">✕</button>
+    </div>
+    <div id="hist-list"></div>
+  </div>
+</div>
+
+<div id="rn-modal">
+  <div class="rn-content">
+    <div class="rn-head">
+      <h3 id="rn-title"></h3>
+      <button onclick="closeRN()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;">✕</button>
+    </div>
+    <div id="rn-body" class="rn-body"></div>
+    <div class="rn-foot">
+      <button class="rn-btn" onclick="closeRN()">OK</button>
+    </div>
+  </div>
+</div>
+
 <div id="statusbar">
   <div class="stat-item accent"><span class="stat-label" id="s-label-lines"></span><span class="stat-val" id="s-lines">1</span></div>
   <div class="stat-item"><span class="stat-label" id="s-label-words"></span><span class="stat-val" id="s-words">0</span></div>
@@ -814,7 +824,9 @@ body.zen-mode #editor-wrap {
    [JS-11] TEXT INSERTION HELPERS
    [JS-12] WORD IMPORT (MAMMOTH + TURNDOWN)
    [JS-13] FILE SYSTEM (OPEN / SAVE / STANDALONE)
-   [JS-14] SHORTCUTS, EXPORTS & UTILS
+   [JS-14] OUTLINE, HISTORY & LINTER (NEW)
+   [JS-15] RELEASE NOTES LOGIC (NEW)
+   [JS-16] SHORTCUTS, EXPORTS & UTILS
    ========================================================================== */
 
 //#region [JS-01] ENVIRONMENT & I18N (DICTIONARY)
@@ -845,6 +857,13 @@ const T = {
   paste:       isJa ? '貼り付け' : 'Paste',
   selectAll:   isJa ? 'すべて選択' : 'Select All',
   errPaste:    isJa ? 'メニューからの貼り付けはブロックされました。Ctrl+V を使用してください。' : 'Pasting from menu is blocked. Please use Ctrl+V.',
+
+  menuOutline: isJa ? 'アウトライン表示' : 'Outline',
+  menuHistory: isJa ? '作業履歴 (最近のファイル)' : 'History',
+  menuFormat:  isJa ? 'Markdownを整形' : 'Format Markdown',
+  historyEmpty:isJa ? '履歴がありません' : 'No history found',
+  formatDone:  isJa ? '整形を完了しました' : 'Formatting complete',
+  outlineEmpty:isJa ? '見出しがありません' : 'No headings found',
 
   download:    isJa ? 'ダウンロード' : 'Download',
   downloadAs:  isJa ? '名前を付けてDL' : 'Download As',
@@ -927,6 +946,66 @@ const T = {
   defaultMd: isJa
     ? `# MD//WORKS エディタ\n\n**スタンドアロン保存**に対応した究極版です。\n\n## 主な機能\n\n- **アプリごと保存**: [ファイル] > [スタンドアロン保存] で、現在の原稿とエディタ本体を \`.app.html\` として1ファイルに書き出します。USB等で持ち運べます。\n- **独立したオートセーブ**: スタンドアロン版で起動した際は、専用のローカルストレージに保存されるため、通常版の下書きを破壊しません。\n- **スマートタスク変換**: 複数行を選択してタスクボタンを押してみてください。\n\n---\n\n*そのまま編集を開始してください。*\n`
     : `# MD//WORKS Editor\n\nThe ultimate edition featuring **Standalone Save**.\n\n## Key Features\n\n- **Save as App**: Go to [File] > [Save as App] to export your current text and this entire editor into a single \`.app.html\` file for easy portability.\n- **Isolated Auto-save**: When opened as a standalone app, it uses separate local storage keys so it never overwrites your main app's drafts.\n- **Smart Task Toggling**: Try selecting multiple lines and clicking the Task button.\n\n---\n\n*Start editing!*\n`,
+  
+  rnTitle: isJa ? 'リリースノート (v1.1.0)' : 'Release Notes (v1.1.0)',
+  rnContent: isJa ? `
+## 新機能
+
+### 📑 アウトライン (目次)
+
+*   **機能**: 本文から見出し (\`#\` 〜 \`####\`) を自動的に抽出し、右側にアウトラインパネルを表示します。
+*   **UI**: **[表示] › [アウトライン表示]** から開閉できます。
+*   **挙動**: 見出しをクリックすると、エディタ内の該当箇所へ瞬時にジャンプ（スクロール）します。編集中もリアルタイムに更新されます。
+
+***
+
+### 🕘 作業履歴 (履歴から復元)
+
+*   **機能**: 開いたファイル、保存したファイル、閉じる直前のテキストなど、直近の最大 **10件** の状態をブラウザ (LocalStorage) に自動保存します。
+*   **UI**: **[ファイル] › [作業履歴 (最近のファイル)]** からアクセスできます。
+*   **挙動**: 誤ってタブを閉じたりファイルを破棄してしまった場合でも、履歴から過去のバージョンを即座に復元できます。
+
+***
+
+### ✨ Markdown整形補助 (リンター / フォーマッター)
+
+*   **機能**: 乱れたMarkdownテキストをワンアクションで綺麗に整えます。
+*   **UI**: **[編集] › [Markdownを整形]**
+*   **挙動**:
+    *   3行以上連続する空行を2行に圧縮
+    *   見出し (\`#\`) とテキストの間にスペースがない場合は自動挿入
+    *   行末の無駄な余白を削除 (Markdownの改行用スペースは保持)  
+        最小限の手間で、文書を常にクリーンで一貫性のある状態に保ちます。
+` : `
+## New Features
+
+### 📑 Outline (Table of Contents)
+
+*   **Feature**: Automatically extracts headings (\`#\` to \`####\`) from the document and displays them in an outline panel on the right.
+*   **UI**: Open or close via **View › Outline**.
+*   **Behavior**: Clicking a heading instantly jumps (scrolls) to the corresponding position in the editor.  
+    The outline updates in real time as you edit the document.
+
+***
+
+### 🕘 Edit History (Restore from History)
+
+*   **Feature**: Automatically stores up to **10 recent states** (opened files, saved files, and the text just before closing) in browser storage (LocalStorage).
+*   **UI**: Accessible via **File › History (Recent Files)**.
+*   **Behavior**: Even if you accidentally close a tab or discard a file, you can quickly restore a previous version from the history list.
+
+***
+
+### ✨ Markdown Formatting Helper (Linter / Formatter)
+
+*   **Feature**: Cleans up messy Markdown text with a single action.
+*   **UI**: **Edit › Format Markdown**.
+*   **Behavior**:
+    *   Compresses excessive blank lines (3+ → 2)
+    *   Automatically inserts a space between heading markers (\`#\`) and text
+    *   Removes unnecessary trailing spaces (while preserving Markdown line breaks)  
+        This helps keep your documents clean and consistent with minimal effort.
+`
 };
 
 const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
@@ -940,6 +1019,12 @@ set('m-save-as-app', T.saveAsApp);
 set('m-undo', T.undo); set('m-redo', T.redo);
 set('m-cut', T.cut); set('m-copy', T.copy); set('m-paste', T.paste);
 set('m-select-all', T.selectAll);
+
+set('m-history', T.menuHistory);
+set('m-format', T.menuFormat);
+set('m-outline-label', T.menuOutline);
+set('op-title', T.menuOutline);
+set('hist-title', T.menuHistory);
 
 set('m-find', T.findMenu); set('m-replace', T.replaceMenu);
 set('m-export-html', T.exportHtml); set('m-export-pdf', T.exportPdf);
@@ -983,6 +1068,7 @@ const splitter = document.getElementById('splitter');
 const inlineSaveState = document.getElementById('inline-save-state');
 
 let previewOpen = false;
+let outlineOpen = false;
 let spellEnabled = false;
 let customDict = new Set();
 let ignoredWords = new Set();
@@ -1044,6 +1130,8 @@ document.addEventListener('DOMContentLoaded', () => {
   loadAutoSave();
   update();
   if (!isDirty) markSaved();
+  
+  checkReleaseNotes(); // バージョンアップ時にリリースノートを表示
 });
 //#endregion
 
@@ -1113,6 +1201,8 @@ function markSaved() {
 function update() {
   renderPreview();
   refreshBackdrop();
+  if (outlineOpen) renderOutline(); 
+  
   const text = editor.value;
   const lines = text.length === 0 ? 1 : text.split('\n').length;
   let words = 0;
@@ -1121,7 +1211,6 @@ function update() {
   set('s-lines', lines); set('s-words', words); set('s-chars', text.replace(/[\n\r]/g, '').length);
 }
 
-// エディタのIME入力状態を追跡するフラグ
 let isEditorComposing = false;
 editor.addEventListener('compositionstart', () => { isEditorComposing = true; });
 editor.addEventListener('compositionend', () => { isEditorComposing = false; });
@@ -1130,7 +1219,6 @@ editor.addEventListener('scroll', () => {
   backdrop.scrollTop = editor.scrollTop;
   backdrop.scrollLeft = editor.scrollLeft;
   
-  // Previewの比率ベースのスクロール同期
   if (previewOpen) {
     const editorScrollable = editor.scrollHeight - editor.clientHeight;
     if (editorScrollable > 0) {
@@ -1282,7 +1370,6 @@ function refreshBackdrop() {
 
   backdrop.innerHTML = lineHtml.join('');
   
-  // 再描画時にスクロール位置がリセットされるのを防ぐ（確実な同期）
   backdrop.scrollTop = editor.scrollTop;
   backdrop.scrollLeft = editor.scrollLeft;
   requestAnimationFrame(() => {
@@ -2006,6 +2093,8 @@ document.getElementById('word-input').addEventListener('change', async (e) => {
 
     if (!md || !md.trim()) throw new Error('Converted markdown is empty.');
 
+    saveToHistoryList(filenameInput.value, editor.value); // 変換前に今の状態を履歴へ
+    
     editor.value = md;
     filenameInput.value = file.name.replace(/\.docx$/i, '.md');
     fileHandle = null;
@@ -2245,6 +2334,7 @@ function newFile() {
   if (isDirty && editor.value.trim() !== '' && editor.value !== T.defaultMd) {
     if (!confirm(T.confirmNew)) return;
   }
+  saveToHistoryList(filenameInput.value, editor.value); // 閉じる前に履歴へ
   editor.value = '';
   filenameInput.value = 'untitled.md';
   fileHandle = null;
@@ -2263,6 +2353,9 @@ async function handleOpen() {
       });
       fileHandle = handle;
       const file = await handle.getFile();
+      
+      saveToHistoryList(filenameInput.value, editor.value); // 現在のファイルを履歴へ
+      
       filenameInput.value = file.name;
       const text = await file.text();
       editor.value = text.normalize('NFC');
@@ -2280,6 +2373,9 @@ async function handleOpen() {
 document.getElementById('file-input').addEventListener('change', e => {
   const file = e.target.files[0];
   if (!file) return;
+  
+  saveToHistoryList(filenameInput.value, editor.value); // 現在のファイルを履歴へ
+  
   filenameInput.value = file.name;
   fileHandle = null;
   const reader = new FileReader();
@@ -2306,6 +2402,8 @@ document.getElementById('file-input').addEventListener('change', e => {
 
 async function handleSave(isSaveAs = false) {
   closeMenus();
+  saveToHistoryList(filenameInput.value, editor.value); // 保存時に履歴も更新
+  
   if (isMobile) {
     const filename = filenameInput.value.trim() || 'untitled.md';
     const finalName = /\.(md|txt|markdown)$/i.test(filename) ? filename : filename + '.md';
@@ -2367,6 +2465,7 @@ function fallbackDownload() {
 
 function exportStandalone() {
   closeMenus();
+  saveToHistoryList(filenameInput.value, editor.value); // スタンドアロン保存時も履歴更新
   
   const clone = document.documentElement.cloneNode(true);
   
@@ -2391,6 +2490,15 @@ function exportStandalone() {
 
   const spellList = clone.querySelector('#spell-list');
   if (spellList) spellList.innerHTML = '';
+  
+  const histList = clone.querySelector('#hist-list');
+  if (histList) histList.innerHTML = '';
+  
+  const outlineList = clone.querySelector('#outline-list');
+  if (outlineList) outlineList.innerHTML = '';
+  
+  const rnBody = clone.querySelector('#rn-body');
+  if (rnBody) rnBody.innerHTML = '';
 
   const dataScript = clone.querySelector('#standalone-data');
   if (dataScript) {
@@ -2429,13 +2537,192 @@ function triggerDownload(content, filename, mimeType) {
 }
 //#endregion
 
-//#region [JS-14] SHORTCUTS, EXPORTS & UTILS
+//#region [JS-14] OUTLINE, HISTORY & LINTER (NEW)
+// ========== アウトライン (目次) ==========
+function toggleOutline() {
+  outlineOpen = !outlineOpen;
+  const panel = document.getElementById('outline-panel');
+  const check = document.getElementById('outline-check');
+  const entry = document.getElementById('m-outline-entry');
+  
+  panel.classList.toggle('show', outlineOpen);
+  check.style.opacity = outlineOpen ? '1' : '0';
+  entry.classList.toggle('active', outlineOpen);
+  
+  if (outlineOpen) renderOutline();
+  closeMenus();
+}
+
+function renderOutline() {
+  if (!outlineOpen) return;
+  const lines = editor.value.split('\n');
+  const container = document.getElementById('outline-list');
+  container.innerHTML = '';
+  
+  let found = false;
+  let charOffset = 0;
+  
+  lines.forEach(line => {
+    const m = line.match(/^(#{1,6})\s+(.+)/);
+    if (m) {
+      found = true;
+      const level = m[1].length;
+      const text = m[2];
+      const div = document.createElement('div');
+      div.className = `ol-item ol-h${level}`;
+      div.textContent = text;
+      const targetOffset = charOffset;
+      div.onclick = () => jumpToOffset(targetOffset);
+      container.appendChild(div);
+    }
+    charOffset += line.length + 1; // +1 for newline
+  });
+  
+  if (!found) {
+    container.innerHTML = `<div style="padding:10px; color:var(--text3); font-size:12px;">${T.outlineEmpty}</div>`;
+  }
+}
+
+function jumpToOffset(offset) {
+  editor.focus();
+  editor.setSelectionRange(offset, offset);
+  
+  // スクロール位置の計算 (行数ベースでの概算)
+  const textBefore = editor.value.substring(0, offset);
+  const linesBefore = textBefore.split('\n').length;
+  
+  requestAnimationFrame(() => {
+    const lineHeight = parseFloat(getComputedStyle(editor).lineHeight);
+    const paddingTop = parseFloat(getComputedStyle(editor).paddingTop);
+    const targetTop = (linesBefore - 1) * lineHeight + paddingTop - (editor.clientHeight / 3);
+    
+    editor.scrollTop = Math.max(0, targetTop);
+    backdrop.scrollTop = editor.scrollTop;
+  });
+}
+
+// ========== 作業履歴 (History) ==========
+const HIST_KEY = 'md_editor_history_list';
+
+function saveToHistoryList(filename, content) {
+  if (!content || content.trim() === '' || content === T.defaultMd) return;
+  let hist = JSON.parse(localStorage.getItem(HIST_KEY) || '[]');
+  
+  // 同じファイル名の履歴があれば削除して最新を先頭に
+  hist = hist.filter(h => h.filename !== filename);
+  hist.unshift({ filename, content, date: Date.now() });
+  
+  // 最大10件まで保持
+  if (hist.length > 10) hist.pop();
+  localStorage.setItem(HIST_KEY, JSON.stringify(hist));
+}
+
+function openHistory() {
+  closeMenus();
+  const list = JSON.parse(localStorage.getItem(HIST_KEY) || '[]');
+  const container = document.getElementById('hist-list');
+  container.innerHTML = '';
+  
+  if (list.length === 0) {
+    container.innerHTML = `<div style="color:var(--text3); font-size:13px; padding:10px 0;">${T.historyEmpty}</div>`;
+  } else {
+    list.forEach(h => {
+      const div = document.createElement('div');
+      div.className = 'hist-item';
+      
+      const nameDiv = document.createElement('div');
+      nameDiv.className = 'hist-name';
+      nameDiv.textContent = h.filename;
+      
+      const dateDiv = document.createElement('div');
+      dateDiv.className = 'hist-date';
+      dateDiv.textContent = new Date(h.date).toLocaleString();
+      
+      div.appendChild(nameDiv);
+      div.appendChild(dateDiv);
+      
+      div.onclick = () => {
+        if (isDirty && editor.value !== T.defaultMd && !confirm(T.confirmNew)) return;
+        saveToHistoryList(filenameInput.value, editor.value); // 今開いているものを退避
+        editor.value = h.content;
+        filenameInput.value = h.filename;
+        fileHandle = null;
+        update();
+        markDirty();
+        closeHistory();
+      };
+      container.appendChild(div);
+    });
+  }
+  document.getElementById('history-modal').classList.add('show');
+}
+
+function closeHistory() {
+  document.getElementById('history-modal').classList.remove('show');
+}
+
+// ========== Markdown整形補助 (Linter/Formatter) ==========
+function formatDoc() {
+  closeMenus();
+  let val = editor.value;
+  
+  // 1. 3行以上の連続する空行を2行に圧縮
+  val = val.replace(/\n{3,}/g, '\n\n');
+  
+  // 2. 見出し(#)と文字の間にスペースがない場合に自動挿入 (例: ##見出し -> ## 見出し)
+  val = val.replace(/^(#{1,6})([^#\s\n])/gm, '$1 $2');
+  
+  // 3. 各行の行末の無駄な空白(Trailing spaces)を削除 (Markdownの改行用2スペースは残す)
+  val = val.split('\n').map(line => {
+    if (line.endsWith('  ')) return line; // 強制改行の2スペースは維持
+    return line.trimEnd();
+  }).join('\n');
+  
+  editor.value = val;
+  markDirty();
+  update();
+  toast(T.formatDone);
+}
+//#endregion
+
+//#region [JS-15] RELEASE NOTES LOGIC (NEW)
+const CURRENT_VERSION = '1.1.0';
+
+function checkReleaseNotes() {
+  const lastSeen = localStorage.getItem('md_editor_version');
+  if (lastSeen !== CURRENT_VERSION) {
+    showReleaseNotes();
+  }
+}
+
+function showReleaseNotes() {
+  set('rn-title', T.rnTitle);
+  const body = document.getElementById('rn-body');
+  
+  // 既存のmarkedとDOMPurifyを使ってMarkdownをHTMLに変換して表示
+  if (window.marked && window.DOMPurify) {
+     body.innerHTML = DOMPurify.sanitize(marked.parse(T.rnContent));
+  } else {
+     body.innerText = "Updated to " + CURRENT_VERSION;
+  }
+  document.getElementById('rn-modal').classList.add('show');
+}
+
+function closeRN() {
+  localStorage.setItem('md_editor_version', CURRENT_VERSION);
+  document.getElementById('rn-modal').classList.remove('show');
+}
+//#endregion
+
+//#region [JS-16] SHORTCUTS, EXPORTS & UTILS
 window.addEventListener('keydown', e => {
   const meta = e.ctrlKey || e.metaKey;
 
-  // Zenモード中はEscapeで解除できるようにする
-  if (e.key === 'Escape' && document.body.classList.contains('zen-mode')) {
-    toggleZenMode();
+  if (e.key === 'Escape') {
+    if (document.body.classList.contains('zen-mode')) toggleZenMode();
+    if (srPanelOpen) { e.preventDefault(); closeSearchPanel(); }
+    if (document.getElementById('history-modal').classList.contains('show')) closeHistory();
+    if (document.getElementById('rn-modal').classList.contains('show')) closeRN();
     return;
   }
 
@@ -2454,11 +2741,8 @@ window.addEventListener('keydown', e => {
     e.preventDefault();
     if (document.activeElement === editor && !isEditorComposing) wrap('*');
   }
-  
-  if (e.key === 'Escape' && srPanelOpen) { e.preventDefault(); closeSearchPanel(); }
 });
 
-// 未保存時の離脱防止警告
 window.addEventListener('beforeunload', (e) => {
   if (isDirty && editor.value.trim() !== '' && editor.value !== T.defaultMd) {
     e.preventDefault();
@@ -2466,12 +2750,12 @@ window.addEventListener('beforeunload', (e) => {
   }
 });
 
-// 「閉じる」機能
 function closeFile() {
   closeMenus();
   if (isDirty && editor.value.trim() !== '' && editor.value !== T.defaultMd) {
     if (!confirm(T.confirmClose)) return;
   }
+  saveToHistoryList(filenameInput.value, editor.value); // 閉じる前に履歴へ
   editor.value = '';
   filenameInput.value = 'untitled.md';
   fileHandle = null;
@@ -2481,7 +2765,6 @@ function closeFile() {
   toast(T.closedToast);
 }
 
-// 編集メニューからの標準操作実行
 async function execEdit(action) {
   closeMenus();
   editor.focus();
@@ -2503,7 +2786,6 @@ async function execEdit(action) {
     return;
   }
   
-  // undo, redo, cut, copy
   document.execCommand(action);
   if (action === 'cut' || action === 'undo' || action === 'redo') {
     markDirty();
@@ -2511,7 +2793,6 @@ async function execEdit(action) {
   }
 }
 
-// Zenモード（集中モード）切り替え
 function toggleZenMode() {
   const isZen = document.body.classList.toggle('zen-mode');
   const chk = document.getElementById('zen-check');
