@@ -1,111 +1,281 @@
-# 🚀 MD//WORKS — Standalone Markdown Editor
-<img width="1363" height="634" alt="スクリーンショット 2026-04-28 103042" src="https://github.com/user-attachments/assets/7d94c942-3dce-4c5d-b3aa-84652a8ac3fe" />
+# 🚀 MD//WORKS v1.5 — Standalone Markdown Editor
 
-**MD//WORKS** is a powerful, browser‑based Markdown editor designed for focused writing, advanced editing, and long‑term portability — all without installation.
+**No install. No setup. Just write.**
 
-The editor runs entirely in the browser and introduces a unique **“Save as App”** feature that lets you bundle your document *and the editor itself* into a single portable HTML file.
+**MD//WORKS** is a lightweight, browser-based Markdown editor built for focused writing, clean editing, and long-term portability.
 
-***
+Write Markdown, preview it live, import Word documents, recover previous drafts, and even save the entire editor together with your document as a single portable HTML app.
 
-## ✨ Key Features
+With its unique **Save as App** feature, MD//WORKS lets you carry not just your text — but your complete writing environment — anywhere.
 
-### ✅ Word (.docx) Import
+---
 
-*   Import Microsoft Word documents directly into Markdown
-*   Preserves headings, lists, paragraphs, and simple tables
-*   Safely converts complex tables and shapes into readable text placeholders
-*   Designed for **content fidelity over visual mimicry**
+## ✨ What’s New in v1.5
 
-### ✅ Save as App (Standalone HTML)
+MD//WORKS v1.5 brings a major upgrade to everyday writing workflows:
+- 📑 Outline (Table of Contents)
+- 🕘 Edit History (Restore from History)
 
-*   Export your document and the full editor into a **single `.app.html` file**
-*   Works completely **offline**
-*   Portable via USB or cloud storage
-*   Standalone files use **isolated autosave storage**, preventing conflicts with the main app
+## ✨ Upcoming Updates for iPadOS / Mobile
+* **Touch-Friendly Splitter:** Add touch event support to the preview pane splitter for seamless resizing with a finger or Apple Pencil.
+* **UI & Menu Optimization:** Increase menu bar height and touch targets to prevent UI elements from being hidden or hard to press on tablets.
+* **Undo/Redo Accessibility:** Improve access to Undo/Redo functions for Apple Pencil users (e.g., adding dedicated buttons to the mobile toolbar).
+* **Zen Mode Exit:** Implement a touch gesture or floating button to exit Zen Mode without requiring a physical `Esc` key.
+* **Save Behavior Improvement:** Refine the save mechanism on iPadOS to overwrite existing files correctly, preventing the creation of numbered duplicate files.
 
-### ✅ Advanced Markdown Editing
+---
+# Features
 
-*   GitHub Flavored Markdown (GFM) support
-*   One‑click insertion for headings, emphasis, lists, tasks, code blocks, tables, and rules
-*   **Bulk task toggling** across multiple selected lines
-*   Clean monospace editing with line‑aligned visual highlights
+### 📝 Word (.docx) Import
 
-### ✅ Live Preview
+Bring Word documents directly into your Markdown workflow.
 
-*   Real‑time preview rendered with `marked`
-*   Sanitized via **DOMPurify** for safety
-*   Visual task‑list styling with completion states
-*   **Scroll‑synchronized** editor and preview panes
-*   Adjustable split view
+- **UI**: Accessible via **File › Import Word**.
+- Imports headings, paragraphs, lists, and simple tables
+- Converts Word content into editable Markdown
+- Handles complex tables and shapes as readable placeholders
+- Prioritizes **content fidelity over visual mimicry**
 
-### ✅ Search & Replace (Powerful)
+Ideal for turning Word drafts, manuals, reports, and meeting notes into clean Markdown text.
 
-*   Regular expression support
-*   Case‑sensitive and whole‑word options
-*   Find & Replace / Replace All
-*   Automatically jumps to the closest match from the cursor
+---
 
-### ✅ English Spell Check (Hunspell)
+### 📦 Save as App — Your Document, Your Editor, One File
 
-*   Lightweight inline spell checker for English text
-*   Markdown‑aware text stripping (ignores code, links, formatting)
-*   Suggestions, ignore, or add to custom dictionary
-*   Non‑blocking background checks
+The signature feature of MD//WORKS.
 
+With **Save as App**, you can export your current document together with the full editor into a single `.app.html` file.
 
+That file can be opened later in a browser — with your document already inside.
 
-### ✅ Zen Mode (Focus Mode)
+- One self-contained HTML file
+- Works offline
+- Portable via USB, email, or cloud storage
+- No installation required
+- Uses isolated autosave storage to avoid conflicts with the main editor
 
-*   Hides menus, toolbars, status bar, and preview
-*   Centers the editor for distraction‑free writing
-*   Exit instantly with the `Esc` key
+This makes MD//WORKS especially useful for internal sharing, field work, workshops, secure environments, and long-term document archiving.
 
-***
+---
 
-## 📤 Export Options
+### ✍️ Advanced Markdown Editing
 
-*   Save as Markdown (`.md`)
-*   Export styled HTML
-*   Print or Save as PDF
+- GitHub Flavored Markdown support
+- One-click insertion for headings, bold, italic, lists, task lists, code blocks, links, tables, and horizontal rules
+- **Bulk task toggling** across selected lines
+- Clean monospace editor optimized for structured writing
+- Visual highlights for tasks, search results, and spelling suggestions
 
-***
+It keeps Markdown visible and editable, while making common formatting tasks faster.
 
-## 🌍 Language Support
+---
 
-*   Automatic UI language detection
-*   English and Japanese supported
+### 👀 Live Preview
 
-***
+Preview your Markdown instantly as you write.
+
+- Real-time rendering powered by `marked`
+- Sanitized output with `DOMPurify`
+- Styled headings, tables, code blocks, quotes, and task lists
+- Scroll-synchronized editor and preview panes
+- Adjustable split view
+
+Perfect for checking structure, readability, and final output while drafting.
+
+---
+
+### 🧭 Outline Navigation
+
+Long documents are easier to manage with the built-in outline panel.
+
+- **UI**: Open or close via **View › Outline**.
+- Supports headings from `#` to `####`
+- Jump instantly to any section
+- Updates automatically while editing
+- Useful for reports, manuals, articles, and release notes
+
+---
+
+### 🛟 Edit History & Recovery
+
+Accidental edits happen. MD//WORKS helps you recover.
+
+- **UI**: Accessible via **File › History (Recent Files)**.
+- Stores up to 10 recent document states in browser storage
+- Captures opened files, saved files, and pre-close text states
+- Restore previous versions from the History menu
+- Autosave and recovery prompt help prevent data loss
+
+A lightweight safety net for everyday writing.
+
+---
+
+### 🧹 Markdown Formatter
+
+Clean up messy Markdown with one click.
+
+The built-in formatter helps keep documents consistent by:
+
+- **UI**: Accessible via **Edit › Format Markdown**.
+- Reducing excessive blank lines
+- Adding missing spaces after heading markers
+- Removing unnecessary trailing spaces
+- Preserving valid Markdown line breaks
+
+Useful when importing, pasting, or editing rough drafts.
+
+---
+
+### 🔍 Powerful Search & Replace
+
+Find and revise text quickly, even in long documents.
+
+- Find and replace
+- Replace all
+- Regular expression support
+- Case-sensitive search
+- Whole-word matching
+- Automatically jumps to the nearest match from the cursor
+
+A practical editing tool for writers who handle structured documents.
+
+---
+
+### 🔤 English Spell Check
+
+MD//WORKS includes a lightweight English spell checker designed for Markdown documents.
+
+- Inline spelling suggestions
+- Ignores code, links, and Markdown formatting where possible
+- Add words to a custom dictionary
+- Ignore selected terms
+- Background checking with visual wavy-line highlights
+
+Best suited for English titles, abstracts, release notes, product copy, and bilingual documents.
+
+---
+
+### 🧘 Zen Mode
+
+When you need to focus, enter Zen Mode.
+
+- **UI**: Accessible via **View › Zen Mode**.
+- Hides menus, toolbar, status bar, and preview
+- Centers the editor
+- Creates a distraction-free writing space
+- Exit instantly with the `Esc` key
+
+For drafting, thinking, and finishing.
+
+---
+
+### 📤 Export Options
+
+MD//WORKS supports practical export formats for everyday use.
+
+- Save as Markdown `.md`
+- Export styled HTML
+- Print or save as PDF
+- Save as standalone `.app.html`
+
+---
+
+### 🌍 Language Support
+
+MD//WORKS automatically detects your browser language and switches the interface accordingly.
+
+- English UI
+- Japanese UI
+- Automatic release note display after updates
+
+---
 
 ## 💻 Supported Environments
 
-*   Latest Chrome / Edge / Firefox / Safari
-*   Desktop and mobile browsers
-*   No installation required — **single HTML file**
+MD//WORKS runs in modern browsers such as Chrome, Edge, Firefox and Safari.
 
-***
+No installation required. Just open the HTML file and start writing.
+
+---
 
 ## 🔒 Safety & Reliability
 
-*   Autosave with recovery prompt
-*   Unsaved‑changes exit warning
-*   Content Security Policy (CSP) enabled
-*   Preview content sanitized before rendering
+Built for local, reliable writing.
 
-***
+- Autosave with recovery prompt
+- Unsaved-changes warning
+- Content Security Policy enabled
+- Sanitized preview rendering
+- Standalone files use separated local storage
 
-## ⚠️ Notes & Limitations
+Your writing stays local unless you choose to export or share it.
 
-*   Spell check applies to **English only**
-*   Word import simplifies complex formatting by design
-*   File System Access features depend on browser support
+---
 
-***
+## 🧭 How It Compares
+
+**MD//WORKS is not trying to replace IDEs, knowledge bases, or collaborative writing platforms.**  
+It occupies a different space: a focused, portable Markdown editor for people who want to write, recover, and carry their work with minimal friction.
+
+| Capability | VS Code | Obsidian | Typora | MD//WORKS |
+|---|---:|---:|---:|---:|
+| True portability / single-file app | ❌ | △ | ❌ | ✅ |
+| Draft recovery & writing safety | △ | △ | ❌ | ✅ |
+| Distraction-free writing | △ | △ | ○ | ✅ |
+| Plugin & extension ecosystem | ✅✅✅ | ✅✅ | △ | ❌ |
+
+**Legend:**  
+✅ Excellent ○ Good △ Limited ❌ Not supported
+
+---
+
+## 🚫 What MD//WORKS Is Not
+
+MD//WORKS is not:
+
+- A plugin-based platform
+- A knowledge graph system
+- A code IDE
+- A cloud collaboration editor
+- A replacement for full publishing or layout software
+
+These are deliberate design choices.
+
+MD//WORKS focuses on being lightweight, portable, and safe for everyday writing — rather than becoming a large, highly customizable platform.
+
+---
+
+## ✅ Who MD//WORKS Is For
+
+MD//WORKS is designed for:
+
+- Writers drafting articles, technical documents, manuals, or manuscripts
+- Engineers writing specs, RFCs, release notes, or design documents
+- Researchers and business users converting Word drafts into clean Markdown
+- Anyone who values portability, offline access, and draft recovery
+- Users working in restricted environments where installation or cloud tools are difficult
+
+It is especially useful when you want to open one file, write immediately, preview your work, and save the entire writing environment together with the document.
+
+---
+
+## ⚠️ Who May Prefer Another Tool
+
+MD//WORKS may not be the best fit for users who need:
+
+- Heavy customization through plugins
+- Large multi-document knowledge bases
+- Backlink graphs or personal knowledge management
+- IDE-style development workflows
+- Real-time collaborative editing
+- Advanced desktop publishing features
+
+For those workflows, tools like VS Code, Obsidian, Typora, or collaborative document platforms may be better suited.
+
+MD//WORKS is intentionally simpler:  
+**a focused Markdown writing workspace that can travel with your document.**
+---
 
 ## 📄 License
 
-*   *MIT License*
-
-***
-
-
+MIT License
