@@ -1,6 +1,6 @@
 # 🚀 MD//WORKS v1.5 — スタンドアロン Markdown エディタ
 **Languages:** [🇺🇸 English](README.md) or [🇯🇵 日本語](README-ja.md)
-
+<img width="1280" height="720" alt="screenshotveronepointfivejp" src="https://github.com/user-attachments/assets/9fe92d22-a5a7-4872-b074-2091f66b8b4c" />
 **インストール不要。設定不要。すぐ書ける。**
 
 **MD//WORKS** は、集中して書くための軽量なブラウザベースの Markdown エディタです。  
