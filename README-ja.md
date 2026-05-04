@@ -216,6 +216,12 @@ MD//WORKS は、軽量・ポータブル・安全な「日常的に書くため�
 
 ---
 
+## 🐛既知のバグ (Android / Mobile Chrome)
+* **ChromeのWeb Share API制限:** Android Chromeは共有可能なファイル形式を厳しく制限しているため、`.md` ファイルの共有は失敗し、裏側でローカルへのダウンロードにフォールバックします。（※Android版Firefoxでは想定通り機能します）。
+* **スタンドアロン保存時の共有失敗:** Android ChromeではMIMEタイプの厳格な判定により `.app.html` の共有が弾かれます（`;charset=utf-8`が付与されているため）。これは次期パッチでMIMEタイプをシンプルにすることで修正予定です。
+
+---
+
 ## 📄 ライセンス
 
 MIT License
