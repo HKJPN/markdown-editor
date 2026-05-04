@@ -278,6 +278,12 @@ MD//WORKS is intentionally simpler:
 **a focused Markdown writing workspace that can travel with your document.**
 ---
 
+## 🐛Known Issues (Android / Mobile Chrome)
+* **Web Share API Restrictions on Chrome:** Android Chrome strictly limits the file types allowed for sharing. Sharing `.md` (`text/markdown`) files fails and silently falls back to a local download. (Note: This feature works as expected on Android Firefox).
+* **Standalone Save (.app.html) Share Failure:** Sharing the "Save as App" file via Android Chrome currently fails due to strict MIME type validation (`text/html;charset=utf-8` is blocked). This will be addressed in an upcoming patch by simplifying the MIME type.
+
+---
+
 ## 📄 License
 
 MIT License
