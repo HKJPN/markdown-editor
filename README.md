@@ -28,10 +28,60 @@ MD//WORKS v1.5.1 is a small but meaningful update focused on making your workflo
 
 ---
 
-## ✨ Coming Soon
+## ✨ **What’s Coming Next**
 
-We’re planning to introduce PWA support in an upcoming major update. This will let you install MD//WORKS like a native app on your device for quicker access, smoother performance, and even offline use in certain situations—bringing a more flexible and app-like experience wherever you work.
+We’re excited to share what’s ahead for *MD//WORKS*—bringing it even closer to a seamless, modern writing experience.
 
+***
+
+### 🚀 Progressive Web App (PWA) Support
+
+MD//WORKS will soon support **Progressive Web App (PWA)** functionality, transforming it from a browser-based tool into an experience that feels like a native application.
+
+With this update, you’ll be able to:
+
+*   Install MD//WORKS directly to your home screen or desktop
+*   Launch instantly with blazing-fast, cache-powered startup
+*   Continue working smoothly even when offline
+*   Enjoy a more reliable and flexible writing environment anywhere, anytime
+
+This enhancement significantly improves performance, accessibility, and portability—without ever sacrificing the simplicity of the web.
+
+***
+
+### 🎨 New Appearance Modes
+
+We’re also introducing a set of thoughtfully designed color themes, allowing you to tailor your workspace to your environment, mood, and workflow.
+
+#### Available Themes
+
+*   **🌙 Midnight (Default)**  
+    A refined dark theme designed for focus and clarity—perfect for developers and long writing sessions.
+
+*   **📄 Paper**  
+    A clean, bright interface that mimics real paper—ideal for drafting, reviewing, and print-oriented writing.
+
+*   **☕ Warm**  
+    A gentle sepia tone that reduces eye strain—crafted for extended sessions and late-night creativity.
+
+***
+
+### ⚡ Effortless Switching
+
+*   Access themes instantly from the **\[View] menu → Theme section**
+*   Switch with a single click—no disruptions to your workflow
+
+***
+
+### 🧠 Smart Persistence
+
+Your preferred theme is automatically saved in your browser, so every time you return, MD//WORKS looks exactly the way you like it.
+
+Even better, this design is **fully isolated**—your preferences will **never interfere with standalone exported files**, ensuring portability and consistency across environments.
+
+***
+
+Stay tuned—these updates are designed to make MD//WORKS not just a tool, but a truly adaptive writing companion.
 ---
 # Features
 
