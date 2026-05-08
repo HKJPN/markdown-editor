@@ -15,7 +15,6 @@ With its unique **Save as App** feature, MD//WORKS lets you carry not just your 
 
 MD//WORKS v1.5.1 is a small but meaningful update focused on making your workflow smoother and more comfortable across devices.
 *   **Directory Memory (Desktop)**  
-
     The file open/save dialog now remembers your last accessed folder, making local editing faster and more seamless.
 
 *   **Touch-Friendly UI & Menus (iPad & Mobile)**  
