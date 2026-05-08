@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.5 — Standalone Markdown Editor
+# 🚀 MD//WORKS v1.5.1 — Standalone Markdown Editor
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
 <img width="1280" height="720" alt="screenshotveronepointfive" src="https://github.com/user-attachments/assets/22b369e3-638d-4491-b56a-fdb81cb3c398" />
 
@@ -11,19 +11,28 @@ Write Markdown, preview it live, import Word documents, recover previous drafts,
 With its unique **Save as App** feature, MD//WORKS lets you carry not just your text — but your complete writing environment — anywhere.
 
 ---
+## ✨ What’s New in v1.5.1
 
-## ✨ What’s New in v1.5
+MD//WORKS v1.5.1 is a small but meaningful update focused on making your workflow smoother and more comfortable across devices.
 
-MD//WORKS v1.5 brings a major upgrade to everyday writing workflows:
-- 📑 Outline (Table of Contents)
-- 🕘 Edit History (Restore from History)
+*   **Directory Memory (Desktop)**  
 
-## ✨ Upcoming Updates for iPadOS / Mobile
-* **Touch-Friendly Splitter:** Add touch event support to the preview pane splitter for seamless resizing with a finger or Apple Pencil.
-* **UI & Menu Optimization:** Increase menu bar height and touch targets to prevent UI elements from being hidden or hard to press on tablets.
-* **Undo/Redo Accessibility:** Improve access to Undo/Redo functions for Apple Pencil users (e.g., adding dedicated buttons to the mobile toolbar).
-* **Zen Mode Exit:** Implement a touch gesture or floating button to exit Zen Mode without requiring a physical `Esc` key.
-* **Save Behavior Improvement:** Refine the save mechanism on iPadOS to overwrite existing files correctly, preventing the creation of numbered duplicate files.
+    The file open/save dialog now remembers your last accessed folder, making local editing faster and more seamless.
+
+*   **Touch-Friendly UI & Menus (iPad & Mobile)**  
+    We’ve improved touch usability by increasing the size of menu bars and toolbar targets. Tap buttons and navigate menus more comfortably with your fingers or Apple Pencil—no more frustrating mis-taps.
+
+*   **Draggable Preview Splitter (iPad & Mobile)**  
+    The preview pane now fully supports touch. Simply drag the center divider to resize the preview area smoothly and intuitively.
+
+*   **Zen Mode Exit Button (iPad & Mobile)**  
+    A floating “Close” (✕) button has been added to the top-right corner in Zen Mode, making it easy to exit focus mode without needing a physical `Esc` key.
+
+---
+
+## ✨ Coming Soon
+
+We’re planning to introduce PWA support in an upcoming major update. This will let you install MD//WORKS like a native app on your device for quicker access, smoother performance, and even offline use in certain situations—bringing a more flexible and app-like experience wherever you work.
 
 ---
 # Features
@@ -276,12 +285,6 @@ For those workflows, tools like VS Code, Obsidian, Typora, or collaborative docu
 
 MD//WORKS is intentionally simpler:  
 **a focused Markdown writing workspace that can travel with your document.**
----
-
-## 🐛Known Issues (Android / Mobile Chrome)
-* **Web Share API Restrictions on Chrome:** Android Chrome strictly limits the file types allowed for sharing. Sharing `.md` (`text/markdown`) files fails and silently falls back to a local download. (Note: This feature works as expected on Android Firefox).
-* **Standalone Save (.app.html) Share Failure:** Sharing the "Save as App" file via Android Chrome currently fails due to strict MIME type validation (`text/html;charset=utf-8` is blocked). This will be addressed in an upcoming patch by simplifying the MIME type.
-
 ---
 
 ## 📄 License
