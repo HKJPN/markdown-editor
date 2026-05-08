@@ -284,7 +284,7 @@ button,input,textarea{font:inherit}
 #editor::placeholder{color:#7482a1}
 #editor::selection{background:rgba(124,106,247,.35)}
 
-#splitter{width:10px;background:transparent;cursor:col-resize;display:none;position:relative;flex-shrink:0}
+#splitter{width:10px;background:transparent;cursor:col-resize;display:none;position:relative;flex-shrink:0; touch-action:none;}
 #splitter::after{
   content:"";position:absolute;top:50%;left:50%;width:4px;height:62px;
   transform:translate(-50%,-50%);border-radius:999px;
@@ -517,6 +517,23 @@ button,input,textarea{font:inherit}
 /* #endregion */
 
 /* #region [CSS-12] RESPONSIVE & PRINT STYLES */
+@media (max-width: 1024px) {
+  /* メニューバーの高さとタッチ領域の拡大 */
+  #menubar { height: 44px; padding: 0 10px; }
+  .menu-trigger { padding: 0 16px; font-size: 14px; }
+  
+  /* ドロップダウンメニューの項目を押しやすく */
+  .menu-entry { padding: 12px 16px; font-size: 15px; }
+  .menu-shortcut { font-size: 13px; }
+  
+  /* タイトルバーのボタン拡大 */
+  #titlebar { height: 60px; }
+  .title-btn { padding: 10px 14px; font-size: 13px; }
+  
+  /* ツールバーのボタンと高さを調整 */
+  #toolbar { height: 50px; }
+  .tool-btn { padding: 8px 12px; font-size: 14px; }
+}
 @media (max-width:980px){
   #titlebar{padding:0 10px;gap:8px}
   #filename-display{min-width:140px;max-width:none}
@@ -561,6 +578,38 @@ body.zen-mode #splitter,
 body.zen-mode #preview-wrap { display: none !important; }
 body.zen-mode #main-container { height: 100vh; }
 body.zen-mode #editor-wrap { max-width: 840px; margin: 0 auto; border-left: 1px solid rgba(255,255,255,.05); border-right: 1px solid rgba(255,255,255,.05); }
+
+/* ▼▼▼ ここから追加（Zenモード解除ボタン） ▼▼▼ */
+#zen-exit-btn {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.1);
+  color: var(--text2);
+  font-size: 18px;
+  z-index: 9999;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-lg), var(--glow);
+  display: none; /* 通常時は非表示 */
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+#zen-exit-btn:hover, #zen-exit-btn:active {
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.05));
+  transform: scale(1.05);
+}
+/* Zenモードの時だけ flex にして表示する */
+body.zen-mode #zen-exit-btn {
+  display: flex;
+}
+/* ▲▲▲ ここまで追加 ▲▲▲ */
 /* #endregion */
 </style>
 </head>
@@ -807,6 +856,7 @@ body.zen-mode #editor-wrap { max-width: 840px; margin: 0 auto; border-left: 1px 
   <div id="spell-footer"></div>
 </div>
 
+<button id="zen-exit-btn" onclick="toggleZenMode()" title="Zenモード解除">✕</button>
 <script id="standalone-data" type="application/json">{}</script>
 <script>
 /* ==========================================================================
@@ -947,7 +997,7 @@ const T = {
     ? `# MD//WORKS エディタ\n\n**スタンドアロン保存**に対応した究極版です。\n\n## 主な機能\n\n- **アプリごと保存**: [ファイル] > [スタンドアロン保存] で、現在の原稿とエディタ本体を \`.app.html\` として1ファイルに書き出します。USB等で持ち運べます。\n- **独立したオートセーブ**: スタンドアロン版で起動した際は、専用のローカルストレージに保存されるため、通常版の下書きを破壊しません。\n- **スマートタスク変換**: 複数行を選択してタスクボタンを押してみてください。\n\n---\n\n*そのまま編集を開始してください。*\n`
     : `# MD//WORKS Editor\n\nThe ultimate edition featuring **Standalone Save**.\n\n## Key Features\n\n- **Save as App**: Go to [File] > [Save as App] to export your current text and this entire editor into a single \`.app.html\` file for easy portability.\n- **Isolated Auto-save**: When opened as a standalone app, it uses separate local storage keys so it never overwrites your main app's drafts.\n- **Smart Task Toggling**: Try selecting multiple lines and clicking the Task button.\n\n---\n\n*Start editing!*\n`,
   
-  rnTitle: isJa ? 'リリースノート (v1.1.0)' : 'Release Notes (v1.1.0)',
+  rnTitle: isJa ? 'リリースノート (v1.5)' : 'Release Notes (v1.5)',
   rnContent: isJa ? `
 ## 新機能
 
@@ -1181,6 +1231,33 @@ window.addEventListener('mouseup', () => {
   isDraggingSplitter = false;
   document.body.style.cursor = '';
 });
+
+/* ▼▼▼ ここから追加（iPad・モバイル向けタッチ対応） ▼▼▼ */
+splitter.addEventListener('touchstart', (e) => {
+  if (!previewOpen) return;
+  isDraggingSplitter = true;
+  // タッチ操作時のデフォルト挙動（画面スクロール等）を防ぐ場合は以下を有効化
+  // e.preventDefault(); 
+}, { passive: true });
+
+window.addEventListener('touchmove', (e) => {
+  if (!isDraggingSplitter || !previewOpen) return;
+  const clientX = e.touches[0].clientX; // タッチ位置のX座標を取得
+  const rect = mainContainer.getBoundingClientRect();
+  const rightWidth = rect.right - clientX;
+  const minWidth = Math.min(320, rect.width - 220);
+  const maxWidth = rect.width * 0.72;
+  const nextWidth = Math.max(minWidth, Math.min(rightWidth, maxWidth));
+  previewWrap.style.width = `${nextWidth}px`;
+});
+
+window.addEventListener('touchend', () => {
+  isDraggingSplitter = false;
+});
+window.addEventListener('touchcancel', () => {
+  isDraggingSplitter = false;
+});
+/* ▲▲▲ ここまで追加 ▲▲▲ */
 //#endregion
 
 //#region [JS-05] EDITOR EVENTS & STATS UPDATER
@@ -2349,6 +2426,7 @@ async function handleOpen() {
   if (!isMobile && window.showOpenFilePicker) {
     try {
       const [handle] = await window.showOpenFilePicker({
+        id: 'md-works-dir', // ←これを追加
         types: [{ description: 'Markdown / Text', accept: { 'text/plain': ['.md', '.txt', '.markdown'] } }]
       });
       fileHandle = handle;
@@ -2407,23 +2485,38 @@ async function handleSave(isSaveAs = false) {
   if (isMobile) {
     const filename = filenameInput.value.trim() || 'untitled.md';
     const finalName = /\.(md|txt|markdown)$/i.test(filename) ? filename : filename + '.md';
-    const file = new File([editor.value], finalName, { type: 'text/markdown;charset=utf-8' });
+    
+    // 1. まずは本来の .md (text/plain) で試す（Firefox等はこれで通る）
+    const file = new File([editor.value], finalName, { type: 'text/plain' });
+    
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({ files: [file], title: finalName, text: 'Shared from MD Editor' });
         markSaved();
         toast(T.shared);
-      } catch (e) {
-        console.warn('Share canceled', e);
-      }
+      } catch (e) { console.warn('Share canceled', e); }
     } else {
-      fallbackDownload();
+      // 2. Chrome対策: .md が弾かれたら、.txt に偽装してShareを試みる
+      const txtName = finalName.replace(/\.(md|markdown)$/i, '.txt');
+      const txtFile = new File([editor.value], txtName, { type: 'text/plain' });
+      
+      if (navigator.canShare && navigator.canShare({ files: [txtFile] })) {
+        try {
+          await navigator.share({ files: [txtFile], title: txtName, text: 'Shared from MD Editor' });
+          markSaved();
+          toast(T.shared); 
+        } catch (e) { console.warn('Share canceled', e); }
+      } else {
+        // 3. txtでもダメなら従来のダウンロード処理へ
+        fallbackDownload();
+      }
     }
   } else {
     if (window.showSaveFilePicker) {
       try {
         if (!fileHandle || isSaveAs) {
           fileHandle = await window.showSaveFilePicker({
+            id: 'md-works-dir', // ←これを追加
             suggestedName: filenameInput.value.trim() || 'untitled.md',
             types: [{ description: 'Markdown', accept: { 'text/markdown': ['.md'] } }]
           });
@@ -2515,7 +2608,7 @@ function exportStandalone() {
   let outName = baseName + '.app.html';
 
   if (isMobile) {
-    const file = new File([htmlStr], outName, { type: 'text/html;charset=utf-8' });
+    const file = new File([htmlStr], outName, { type: 'text/html' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       navigator.share({ files: [file], title: outName }).catch(e => console.warn('Share canceled', e));
     } else {
