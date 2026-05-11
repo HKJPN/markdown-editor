@@ -3,9 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdn.jsdelivr.net; img-src * data: blob:;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdn.jsdelivr.net; img-src 'self' data: blob:;">
 
-<title>Markdown Editor</title>
+<title>MD//WORKS Editor</title>
+
+<script>
+  (function() {
+    try {
+      const saved = localStorage.getItem('mdworks_theme_mode');
+      if (saved && (saved === 'paper' || saved === 'warm')) {
+        document.documentElement.classList.add('theme-' + saved);
+      }
+    } catch(e) {}
+  })();
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.1/marked.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/encoding-japanese@2.0.0/encoding.min.js" crossorigin="anonymous"></script>
@@ -28,7 +39,8 @@
    [CSS-09] SPELL CHECK PANEL
    [CSS-10] OUTLINE & HISTORY PANELS
    [CSS-11] RELEASE NOTES MODAL (NEW)
-   [CSS-12] RESPONSIVE & PRINT STYLES
+   [CSS-12] THEME VARIANTS (PAPER / WARM)
+   [CSS-13] RESPONSIVE & PRINT STYLES
    ========================================================================== */
 
 /* #region [CSS-01] VARIABLES & BASE SETTINGS */
@@ -108,7 +120,7 @@ button,input,textarea{font:inherit}
   color:var(--text);
 }
 .menu-dropdown{
-  display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:240px;
+  display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:260px;
   background:linear-gradient(180deg, rgba(26,32,45,.96), rgba(15,19,28,.97));
   backdrop-filter:blur(14px);
   border:1px solid rgba(255,255,255,.09);
@@ -131,6 +143,12 @@ button,input,textarea{font:inherit}
 .menu-check{opacity:0;color:var(--accent2);font-size:11px;transition:opacity .1s}
 .menu-shortcut{font-family:var(--mono);font-size:11px;color:var(--text3)}
 .menu-sep-line{height:1px;background:var(--border);margin:5px 0}
+.menu-section-label{
+  padding:7px 10px 4px;
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  color:var(--text3);letter-spacing:.08em;text-transform:uppercase;
+  user-select:none;opacity:.9;
+}
 /* #endregion */
 
 /* #region [CSS-03] UI: TITLEBAR */
@@ -390,8 +408,9 @@ button,input,textarea{font:inherit}
 .stat-label{color:var(--text3)}
 .stat-val{color:var(--text2);font-weight:500}
 .stat-item.accent .stat-val{color:var(--accent2)}
-#spell-status{font-family:var(--mono);font-size:10.5px;color:var(--text3);margin-left:auto}
+#spell-status{font-family:var(--mono);font-size:10.5px;color:var(--text3);margin-left:auto;margin-right:10px}
 #spell-status.on{color:var(--warn)}
+#storage-badge {font-family:var(--mono);font-size:10px;font-weight:600;color:var(--accent2);padding:2px 6px;border-radius:4px;background:var(--surface3);}
 
 #toast{
   position:fixed;bottom:38px;left:50%; transform:translateX(-50%) translateY(20px);
@@ -516,21 +535,317 @@ button,input,textarea{font:inherit}
 .rn-btn:hover { opacity:0.8; }
 /* #endregion */
 
-/* #region [CSS-12] RESPONSIVE & PRINT STYLES */
+/* #region [CSS-12] THEME VARIANTS (PAPER / WARM)
+   Midnight remains the default :root theme. Paper and Warm only override
+   visual variables and presentation styles; editing/saving logic is untouched.
+   ========================================================================== */
+
+/* Paper Theme: clean, light, document-first. Intended as a future Lite default. */
+body.theme-paper {
+  --bg:#f5f7fb;
+  --surface:#ffffff;
+  --surface2:#f1f4f9;
+  --surface3:#e8edf5;
+  --border:#d8dee9;
+  --border2:#c6cfdd;
+  --accent:#6d5dfc;
+  --accent2:#5146d8;
+  --accent-dim:rgba(109,93,252,.10);
+  --text:#1f2937;
+  --text2:#4b5563;
+  --text3:#8a94a6;
+  --success:#15803d;
+  --warn:#b7791f;
+  --danger:#dc2626;
+  --shadow-lg:0 18px 44px rgba(30,41,59,.14);
+  --shadow-md:0 10px 24px rgba(30,41,59,.10);
+  --glow:0 0 0 1px rgba(15,23,42,.035) inset;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(109,93,252,.06), transparent 26%),
+    linear-gradient(180deg, #fbfcff 0%, #f5f7fb 100%);
+}
+
+/* Sepia / Warm Theme: softer long-form writing mode. */
+body.theme-warm {
+  --bg:#f3eadb;
+  --surface:#fff8ec;
+  --surface2:#f7eddc;
+  --surface3:#eadcc8;
+  --border:#dccab2;
+  --border2:#cbb390;
+  --accent:#b7791f;
+  --accent2:#8a5a16;
+  --accent-dim:rgba(183,121,31,.12);
+  --text:#2f2418;
+  --text2:#5f4b36;
+  --text3:#9a856b;
+  --success:#4f7d3a;
+  --warn:#a16207;
+  --danger:#b45309;
+  --shadow-lg:0 18px 44px rgba(92,64,38,.16);
+  --shadow-md:0 10px 24px rgba(92,64,38,.11);
+  --glow:0 0 0 1px rgba(92,64,38,.035) inset;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(183,121,31,.08), transparent 28%),
+    linear-gradient(180deg, #fff8ec 0%, #f3eadb 100%);
+}
+
+body.theme-paper::before,
+body.theme-warm::before{
+  mix-blend-mode:normal;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.25), transparent 20%, transparent 84%, rgba(255,255,255,.16)),
+    radial-gradient(circle at center top, rgba(255,255,255,.28), transparent 50%);
+}
+body.theme-warm::before{
+  background:
+    linear-gradient(180deg, rgba(255,248,236,.36), transparent 20%, transparent 84%, rgba(92,64,38,.05)),
+    radial-gradient(circle at center top, rgba(255,248,236,.36), transparent 50%);
+}
+
+/* Shared light-theme surfaces */
+body.theme-paper #menubar,
+body.theme-paper #titlebar,
+body.theme-paper #toolbar,
+body.theme-paper #statusbar,
+body.theme-warm #menubar,
+body.theme-warm #titlebar,
+body.theme-warm #toolbar,
+body.theme-warm #statusbar{
+  background:rgba(255,255,255,.78);
+  border-color:var(--border);
+  box-shadow:var(--glow);
+  backdrop-filter:blur(16px);
+}
+body.theme-warm #menubar,
+body.theme-warm #titlebar,
+body.theme-warm #toolbar,
+body.theme-warm #statusbar{
+  background:rgba(255,248,236,.78);
+}
+
+body.theme-paper .menu-dropdown,
+body.theme-paper #sr-panel,
+body.theme-paper #spell-panel,
+body.theme-paper #outline-panel,
+body.theme-paper .hist-content,
+body.theme-paper .rn-content,
+body.theme-warm .menu-dropdown,
+body.theme-warm #sr-panel,
+body.theme-warm #spell-panel,
+body.theme-warm #outline-panel,
+body.theme-warm .hist-content,
+body.theme-warm .rn-content{
+  background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(245,247,251,.97));
+  border-color:var(--border);
+  box-shadow:var(--shadow-lg), var(--glow);
+}
+body.theme-warm .menu-dropdown,
+body.theme-warm #sr-panel,
+body.theme-warm #spell-panel,
+body.theme-warm #outline-panel,
+body.theme-warm .hist-content,
+body.theme-warm .rn-content{
+  background:linear-gradient(180deg, rgba(255,248,236,.98), rgba(247,237,220,.97));
+}
+
+body.theme-paper #editor-wrap,
+body.theme-warm #editor-wrap{
+  background:linear-gradient(180deg, rgba(255,255,255,.74), rgba(255,255,255,.58));
+}
+body.theme-warm #editor-wrap{
+  background:linear-gradient(180deg, rgba(255,248,236,.82), rgba(247,237,220,.66));
+}
+
+body.theme-paper #editor,
+body.theme-warm #editor{
+  color:var(--text);
+  caret-color:var(--accent2);
+}
+body.theme-paper #editor::placeholder,
+body.theme-warm #editor::placeholder{color:var(--text3)}
+body.theme-paper #editor::selection{background:rgba(109,93,252,.18)}
+body.theme-warm #editor::selection{background:rgba(183,121,31,.20)}
+
+body.theme-paper #editor-backdrop mark{
+  background:rgba(109,93,252,.18);
+  box-shadow:0 0 0 1px rgba(109,93,252,.08);
+}
+body.theme-warm #editor-backdrop mark{
+  background:rgba(183,121,31,.18);
+  box-shadow:0 0 0 1px rgba(183,121,31,.08);
+}
+body.theme-paper #editor-backdrop mark.active,
+body.theme-warm #editor-backdrop mark.active{
+  background:rgba(235,176,91,.42);
+  box-shadow:0 0 0 1px rgba(183,121,31,.16);
+}
+
+body.theme-paper .tool-group,
+body.theme-paper .title-btn,
+body.theme-paper #filename-display,
+body.theme-paper .sr-input,
+body.theme-paper .sr-nav-btn,
+body.theme-paper .sr-action-btn,
+body.theme-warm .tool-group,
+body.theme-warm .title-btn,
+body.theme-warm #filename-display,
+body.theme-warm .sr-input,
+body.theme-warm .sr-nav-btn,
+body.theme-warm .sr-action-btn{
+  background:linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.44));
+  border-color:var(--border);
+  color:var(--text2);
+  box-shadow:var(--glow);
+}
+body.theme-warm .tool-group,
+body.theme-warm .title-btn,
+body.theme-warm #filename-display,
+body.theme-warm .sr-input,
+body.theme-warm .sr-nav-btn,
+body.theme-warm .sr-action-btn{
+  background:linear-gradient(180deg, rgba(255,248,236,.82), rgba(247,237,220,.50));
+}
+body.theme-paper .title-btn:hover,
+body.theme-paper .tool-btn:hover,
+body.theme-paper .sr-nav-btn:hover,
+body.theme-paper .sr-action-btn:hover,
+body.theme-warm .title-btn:hover,
+body.theme-warm .tool-btn:hover,
+body.theme-warm .sr-nav-btn:hover,
+body.theme-warm .sr-action-btn:hover{
+  background:var(--surface3);
+  color:var(--text);
+  box-shadow:var(--shadow-md), var(--glow);
+}
+body.theme-paper .title-btn.primary{
+  background:linear-gradient(180deg, #eef2ff, #e8ebff);
+  color:var(--accent2);
+  border-color:rgba(109,93,252,.24);
+  box-shadow:0 8px 18px rgba(109,93,252,.10), var(--glow);
+}
+body.theme-warm .title-btn.primary{
+  background:linear-gradient(180deg, #fff1d6, #f3dfbd);
+  color:var(--accent2);
+  border-color:rgba(183,121,31,.26);
+  box-shadow:0 8px 18px rgba(183,121,31,.10), var(--glow);
+}
+
+body.theme-paper .menu-trigger,
+body.theme-paper .menu-entry,
+body.theme-paper .tool-btn,
+body.theme-warm .menu-trigger,
+body.theme-warm .menu-entry,
+body.theme-warm .tool-btn{color:var(--text2)}
+body.theme-paper .menu-trigger:hover,
+body.theme-paper .menu-trigger.open,
+body.theme-paper .menu-entry:hover,
+body.theme-paper .tool-btn:hover,
+body.theme-warm .menu-trigger:hover,
+body.theme-warm .menu-trigger.open,
+body.theme-warm .menu-entry:hover,
+body.theme-warm .tool-btn:hover{
+  color:var(--text);
+  background:var(--accent-dim);
+}
+body.theme-paper .menu-entry.active,
+body.theme-paper .tool-btn.heading,
+body.theme-paper #app-name,
+body.theme-warm .menu-entry.active,
+body.theme-warm .tool-btn.heading,
+body.theme-warm #app-name{color:var(--accent2)}
+
+body.theme-paper #preview-wrap,
+body.theme-warm #preview-wrap{
+  background:var(--surface);
+  border-left-color:var(--border);
+  box-shadow:inset 1px 0 0 rgba(0,0,0,.03);
+}
+body.theme-paper #preview,
+body.theme-warm #preview{
+  color:var(--text);
+}
+body.theme-paper #preview h1,
+body.theme-paper #preview h2,
+body.theme-paper #preview h3,
+body.theme-paper #preview h4,
+body.theme-paper #preview h5,
+body.theme-paper #preview h6,
+body.theme-warm #preview h1,
+body.theme-warm #preview h2,
+body.theme-warm #preview h3,
+body.theme-warm #preview h4,
+body.theme-warm #preview h5,
+body.theme-warm #preview h6{color:var(--text)}
+body.theme-paper #preview h3,
+body.theme-warm #preview h3{color:var(--accent2)}
+body.theme-paper #preview h1,
+body.theme-paper #preview h2,
+body.theme-warm #preview h1,
+body.theme-warm #preview h2{border-bottom-color:var(--border)}
+body.theme-paper #preview code,
+body.theme-warm #preview code{
+  background:rgba(15,23,42,.045);
+  border-color:var(--border);
+  color:var(--accent2);
+}
+body.theme-warm #preview code{background:rgba(92,64,38,.06)}
+body.theme-paper #preview pre,
+body.theme-warm #preview pre{
+  background:linear-gradient(180deg, rgba(255,255,255,.76), rgba(255,255,255,.42));
+  border-color:var(--border);
+}
+body.theme-warm #preview pre{
+  background:linear-gradient(180deg, rgba(255,248,236,.76), rgba(247,237,220,.46));
+}
+body.theme-paper #preview blockquote,
+body.theme-warm #preview blockquote{
+  border-left-color:var(--accent);
+  background:var(--accent-dim);
+  color:var(--text2);
+}
+body.theme-paper #preview table,
+body.theme-warm #preview table{border-color:var(--border)}
+body.theme-paper #preview th,
+body.theme-warm #preview th{
+  background:var(--surface2);
+  color:var(--accent2);
+}
+body.theme-paper #preview th,
+body.theme-paper #preview td,
+body.theme-warm #preview th,
+body.theme-warm #preview td{border-bottom-color:var(--border)}
+
+/* Warm is intentionally a little more relaxed for long-form writing. */
+body.theme-warm #editor,
+body.theme-warm #editor-backdrop{
+  font-size:15.5px;
+  line-height:1.9;
+}
+body.theme-warm #preview{
+  font-size:15.5px;
+  line-height:2.0;
+}
+body.theme-warm #preview li.task-done-item,
+body.theme-paper #preview li.task-done-item{color:var(--text2)}
+
+body.theme-paper #toast,
+body.theme-warm #toast{
+  background:linear-gradient(180deg, var(--surface), var(--surface2));
+  border-color:var(--border);
+  color:var(--text);
+}
+
+/* #endregion */
+
+/* #region [CSS-13] RESPONSIVE & PRINT STYLES */
 @media (max-width: 1024px) {
-  /* メニューバーの高さとタッチ領域の拡大 */
   #menubar { height: 44px; padding: 0 10px; }
   .menu-trigger { padding: 0 16px; font-size: 14px; }
-  
-  /* ドロップダウンメニューの項目を押しやすく */
   .menu-entry { padding: 12px 16px; font-size: 15px; }
   .menu-shortcut { font-size: 13px; }
-  
-  /* タイトルバーのボタン拡大 */
   #titlebar { height: 60px; }
   .title-btn { padding: 10px 14px; font-size: 13px; }
-  
-  /* ツールバーのボタンと高さを調整 */
   #toolbar { height: 50px; }
   .tool-btn { padding: 8px 12px; font-size: 14px; }
 }
@@ -542,7 +857,6 @@ button,input,textarea{font:inherit}
   #sr-panel{right:10px;left:10px;width:auto}
   #preview{padding:28px}
 }
-
 @media (max-width:760px){
   #app-name{display:none}
   .save-state{display:none}
@@ -551,7 +865,6 @@ button,input,textarea{font:inherit}
   #main-container.preview-on #splitter{display:none}
   #outline-panel{right:10px; left:10px; width:auto; max-height:40vh;}
 }
-
 @media print{
   #menubar,#titlebar,#toolbar,#statusbar,#editor-wrap,#splitter,#spell-panel,#toast,#sr-panel,#outline-panel,#history-modal,#rn-modal{display:none!important}
   body{background:white!important}
@@ -568,48 +881,22 @@ button,input,textarea{font:inherit}
   h1,h2,h3{page-break-after:avoid}
   img{max-width:100%!important;page-break-inside:avoid}
 }
-
 /* Zen Mode (Focus Mode) */
-body.zen-mode #menubar,
-body.zen-mode #titlebar,
-body.zen-mode #toolbar,
-body.zen-mode #statusbar,
-body.zen-mode #splitter,
-body.zen-mode #preview-wrap { display: none !important; }
+body.zen-mode #menubar, body.zen-mode #titlebar, body.zen-mode #toolbar, body.zen-mode #statusbar, body.zen-mode #splitter, body.zen-mode #preview-wrap { display: none !important; }
 body.zen-mode #main-container { height: 100vh; }
 body.zen-mode #editor-wrap { max-width: 840px; margin: 0 auto; border-left: 1px solid rgba(255,255,255,.05); border-right: 1px solid rgba(255,255,255,.05); }
 
-/* ▼▼▼ ここから追加（Zenモード解除ボタン） ▼▼▼ */
 #zen-exit-btn {
-  position: fixed;
-  top: 24px;
-  right: 24px;
-  width: 48px;
-  height: 48px;
-  border-radius: 24px;
+  position: fixed; top: 24px; right: 24px; width: 48px; height: 48px; border-radius: 24px;
   background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
-  border: 1px solid rgba(255,255,255,.1);
-  color: var(--text2);
-  font-size: 18px;
-  z-index: 9999;
-  cursor: pointer;
-  backdrop-filter: blur(12px);
-  box-shadow: var(--shadow-lg), var(--glow);
-  display: none; /* 通常時は非表示 */
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
+  border: 1px solid rgba(255,255,255,.1); color: var(--text2); font-size: 18px; z-index: 9999;
+  cursor: pointer; backdrop-filter: blur(12px); box-shadow: var(--shadow-lg), var(--glow);
+  display: none; align-items: center; justify-content: center; transition: all 0.2s ease;
 }
 #zen-exit-btn:hover, #zen-exit-btn:active {
-  color: var(--text);
-  background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.05));
-  transform: scale(1.05);
+  color: var(--text); background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.05)); transform: scale(1.05);
 }
-/* Zenモードの時だけ flex にして表示する */
-body.zen-mode #zen-exit-btn {
-  display: flex;
-}
-/* ▲▲▲ ここまで追加 ▲▲▲ */
+body.zen-mode #zen-exit-btn { display: flex; }
 /* #endregion */
 </style>
 </head>
@@ -650,6 +937,16 @@ body.zen-mode #zen-exit-btn {
         <span id="m-export-pdf"></span>
       </div>
       <div class="menu-sep-line"></div>
+      
+      <div class="menu-section-label">Storage Security</div>
+      <div class="menu-entry" id="private-entry" onclick="togglePrivateStorage()">
+        <span>Private Storage</span><span class="menu-check" id="private-check">✓</span>
+      </div>
+      <div class="menu-entry" onclick="clearProtectedStorage()">
+        <span style="color:var(--danger)">ローカル保存データ削除</span>
+      </div>
+      <div class="menu-sep-line"></div>
+
       <div class="menu-entry" onclick="openHistory()">
         <span id="m-history"></span>
       </div>
@@ -684,7 +981,6 @@ body.zen-mode #zen-exit-btn {
         <span id="m-select-all"></span><span class="menu-shortcut">Ctrl+A</span>
       </div>
       <div class="menu-sep-line"></div>
-
       <div class="menu-entry" onclick="openSearchPanel('find')">
         <span id="m-find"></span><span class="menu-shortcut">Ctrl+F</span>
       </div>
@@ -715,6 +1011,17 @@ body.zen-mode #zen-exit-btn {
         <span id="m-outline-label"></span><span class="menu-check" id="outline-check">✓</span>
       </div>
       <div class="menu-sep-line"></div>
+      <div class="menu-section-label" id="m-theme-label"></div>
+      <div class="menu-entry" id="theme-midnight-entry" onclick="setTheme('midnight')">
+        <span id="m-theme-midnight"></span><span class="menu-check" id="theme-midnight-check">✓</span>
+      </div>
+      <div class="menu-entry" id="theme-paper-entry" onclick="setTheme('paper')">
+        <span id="m-theme-paper"></span><span class="menu-check" id="theme-paper-check">✓</span>
+      </div>
+      <div class="menu-entry" id="theme-warm-entry" onclick="setTheme('warm')">
+        <span id="m-theme-warm"></span><span class="menu-check" id="theme-warm-check">✓</span>
+      </div>
+      <div class="menu-sep-line"></div>
       <div class="menu-entry" id="m-spell-entry" onclick="toggleSpell()">
         <span id="m-spell-label"></span><span class="menu-check" id="spell-check">✓</span>
       </div>
@@ -724,6 +1031,7 @@ body.zen-mode #zen-exit-btn {
     </div>
   </div>
 </div>
+
 <div id="titlebar">
   <div class="title-left">
     <span id="app-name">MD//WORKS</span>
@@ -741,6 +1049,7 @@ body.zen-mode #zen-exit-btn {
   <input type="file" id="file-input" accept=".md,.txt,.markdown">
   <input type="file" id="word-input" accept=".docx" style="display:none">
 </div>
+
 <div id="toolbar">
   <div class="tool-group">
     <button class="tool-btn heading" onclick="ins('# ',true)">H1</button>
@@ -760,13 +1069,13 @@ body.zen-mode #zen-exit-btn {
     <button class="tool-btn" onclick="ins('> ',true)">❝ <span id="tb-quote"></span></button>
   </div>
   <div class="tool-group">
-    <button class="tool-btn" onclick="insBlock('```\n','\n
-```')">{ } <span id="tb-code"></span></button>
+    <button class="tool-btn" onclick="insBlock('```\n','\n```')">{ } <span id="tb-code"></span></button>
     <button class="tool-btn" onclick="insertLink()">⌘ <span id="tb-link"></span></button>
     <button class="tool-btn" onclick="insertTable()">⊞ <span id="tb-table"></span></button>
     <button class="tool-btn" onclick="ins('---\n',true)">─ <span id="tb-hr"></span></button>
   </div>
 </div>
+
 <div id="main-container">
   <div id="editor-wrap">
     <div id="editor-backdrop" aria-hidden="true"></div>
@@ -811,7 +1120,7 @@ body.zen-mode #zen-exit-btn {
   <div id="outline-panel">
     <div class="op-head">
       <h3 id="op-title"></h3>
-      <button id="spell-close" onclick="toggleOutline()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;">✕</button>
+      <button id="outline-close" onclick="toggleOutline()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;">✕</button>
     </div>
     <div id="outline-list"></div>
   </div>
@@ -845,6 +1154,7 @@ body.zen-mode #zen-exit-btn {
   <div class="stat-item"><span class="stat-label" id="s-label-words"></span><span class="stat-val" id="s-words">0</span></div>
   <div class="stat-item"><span class="stat-label" id="s-label-chars"></span><span class="stat-val" id="s-chars">0</span></div>
   <span id="spell-status"></span>
+  <span class="stat-item" id="storage-badge" style="margin-left:auto; margin-right:10px; font-weight:600; color:var(--accent2); background:var(--surface3); padding:2px 6px; border-radius:4px;">Auto encrypted</span>
 </div>
 <div id="toast"></div>
 
@@ -858,25 +1168,27 @@ body.zen-mode #zen-exit-btn {
 
 <button id="zen-exit-btn" onclick="toggleZenMode()" title="Zenモード解除">✕</button>
 <script id="standalone-data" type="application/json">{}</script>
+
 <script>
 /* ==========================================================================
    JAVASCRIPT INDEX
    [JS-01] ENVIRONMENT & I18N (DICTIONARY)
    [JS-02] DOM REFERENCES & STATE VARIABLES
-   [JS-03] BOOTSTRAP & AUTO-SAVE LOGIC
-   [JS-04] UI TOGGLES & MENU HANDLING
-   [JS-05] EDITOR EVENTS & STATS UPDATER
-   [JS-06] PREVIEW RENDERING & DECORATION
-   [JS-07] BACKDROP ENGINE (TINT & HIGHLIGHT)
-   [JS-08] LIST & TASK BULK TOGGLING
-   [JS-09] SEARCH & REPLACE LOGIC
-   [JS-10] SPELL CHECK (HUNSPELL)
-   [JS-11] TEXT INSERTION HELPERS
-   [JS-12] WORD IMPORT (MAMMOTH + TURNDOWN)
-   [JS-13] FILE SYSTEM (OPEN / SAVE / STANDALONE)
-   [JS-14] OUTLINE, HISTORY & LINTER (NEW)
-   [JS-15] RELEASE NOTES LOGIC (NEW)
-   [JS-16] SHORTCUTS, EXPORTS & UTILS
+   [JS-03] SECURE STORAGE & ENCRYPTION LOGIC (NEW: Auto/Private mode via IndexedDB)
+   [JS-04] BOOTSTRAP & AUTO-SAVE LOGIC
+   [JS-05] UI TOGGLES & MENU HANDLING
+   [JS-06] EDITOR EVENTS & STATS UPDATER (w/ Image Drag & Drop)
+   [JS-07] PREVIEW RENDERING & DECORATION
+   [JS-08] BACKDROP ENGINE (TINT & HIGHLIGHT)
+   [JS-09] LIST & TASK BULK TOGGLING
+   [JS-10] SEARCH & REPLACE LOGIC
+   [JS-11] SPELL CHECK (HUNSPELL)
+   [JS-12] TEXT INSERTION HELPERS
+   [JS-13] WORD IMPORT (MAMMOTH + TURNDOWN)
+   [JS-14] FILE SYSTEM (OPEN / SAVE / STANDALONE)
+   [JS-15] OUTLINE, HISTORY & LINTER
+   [JS-16] RELEASE NOTES LOGIC
+   [JS-17] SHORTCUTS, EXPORTS & UTILS
    ========================================================================== */
 
 //#region [JS-01] ENVIRONMENT & I18N (DICTIONARY)
@@ -909,8 +1221,13 @@ const T = {
   errPaste:    isJa ? 'メニューからの貼り付けはブロックされました。Ctrl+V を使用してください。' : 'Pasting from menu is blocked. Please use Ctrl+V.',
 
   menuOutline: isJa ? 'アウトライン表示' : 'Outline',
-  menuHistory: isJa ? '作業履歴 (最近のファイル)' : 'History',
+  menuHistory: isJa ? '作業履歴' : 'History',
   menuFormat:  isJa ? 'Markdownを整形' : 'Format Markdown',
+  themeLabel:  isJa ? 'テーマ' : 'Theme',
+  themeMidnight:isJa ? 'Midnight（集中・開発者向け）' : 'Midnight (Focus / Developer)',
+  themePaper:   isJa ? 'Paper（白背景・文書作成）' : 'Paper (Light / Document)',
+  themeWarm:    isJa ? 'Warm（長文執筆・目にやさしい）' : 'Warm (Long Writing)',
+  themeChanged: isJa ? name => `テーマを ${name} に変更しました` : name => `Theme changed to ${name}`,
   historyEmpty:isJa ? '履歴がありません' : 'No history found',
   formatDone:  isJa ? '整形を完了しました' : 'Formatting complete',
   outlineEmpty:isJa ? '見出しがありません' : 'No headings found',
@@ -920,7 +1237,11 @@ const T = {
   share:       isJa ? '共有 (Share)' : 'Share',
   exportHtml:  isJa ? 'HTMLとしてエクスポート' : 'Export as HTML',
   exportPdf:   isJa ? '印刷 / PDF保存' : 'Print / Save as PDF',
-  confirmNew:  isJa ? '編集中の内容は失われます。新規作成しますか？' : 'Unsaved changes will be lost. Create new file?',
+  confirmNew:  isJa ? '現在の内容を履歴に保存して、新規ファイルを作成しますか？' : 'Save the current draft to history and create a new file?',
+  newCreated: isJa ? '新規ファイルを作成しました' : 'New file created',
+  processingPasteToast: isJa ? '大きなテキストを処理中...' : 'Processing large paste...',
+  processingPasteStatus: isJa ? 'Processing paste...' : 'Processing paste...',
+  pasteReadyStatus: isJa ? 'Ready' : 'Ready',
   promptSaveAs:isJa ? '新しいファイル名を入力してください:' : 'Enter new file name:',
   restorePrompt:isJa ? '前回の未保存データが見つかりました。復元しますか？\n(キャンセルすると破棄されます)' : 'Found unsaved changes from your last session. Restore them?\n(Cancel to discard)',
 
@@ -991,70 +1312,31 @@ const T = {
     ? '\n| 列1 | 列2 | 列3 |\n|------|------|------|\n| データ | データ | データ |\n'
     : '\n| Col1 | Col2 | Col3 |\n|------|------|------|\n| data | data | data |\n',
   placeholder: isJa
-    ? '# タイトル\n\nここにマークダウンを入力してください。'
-    : '# Title\n\nStart writing Markdown here.',
+    ? 'ここにMarkdownを入力、または画像をドロップ (上限200KB)...'
+    : 'Start writing Markdown here, or drop an image (max 200KB)...',
   defaultMd: isJa
-    ? `# MD//WORKS エディタ\n\n**スタンドアロン保存**に対応した究極版です。\n\n## 主な機能\n\n- **アプリごと保存**: [ファイル] > [スタンドアロン保存] で、現在の原稿とエディタ本体を \`.app.html\` として1ファイルに書き出します。USB等で持ち運べます。\n- **独立したオートセーブ**: スタンドアロン版で起動した際は、専用のローカルストレージに保存されるため、通常版の下書きを破壊しません。\n- **スマートタスク変換**: 複数行を選択してタスクボタンを押してみてください。\n\n---\n\n*そのまま編集を開始してください。*\n`
-    : `# MD//WORKS Editor\n\nThe ultimate edition featuring **Standalone Save**.\n\n## Key Features\n\n- **Save as App**: Go to [File] > [Save as App] to export your current text and this entire editor into a single \`.app.html\` file for easy portability.\n- **Isolated Auto-save**: When opened as a standalone app, it uses separate local storage keys so it never overwrites your main app's drafts.\n- **Smart Task Toggling**: Try selecting multiple lines and clicking the Task button.\n\n---\n\n*Start editing!*\n`,
+    ? `# MD//WORKS エディタ\n\n**スタンドアロン保存**に対応した究極版です。\n\n## 主な機能\n\n- **アプリごと保存**: [ファイル] > [スタンドアロン保存] で、現在の原稿とエディタ本体を \`.app.html\` として1ファイルに書き出します。USB等で持ち運べます。\n- **暗号化保存**: ローカルの下書きと履歴は、Web Crypto API を用いてすべて暗号化保存されます。Private Storageをオンにするとパスワード保護も可能です。\n\n---\n\n*そのまま編集を開始してください。*\n`
+    : `# MD//WORKS Editor\n\nThe ultimate edition featuring **Standalone Save**.\n\n## Key Features\n\n- **Save as App**: Go to [File] > [Save as App] to export your current text and this entire editor into a single \`.app.html\` file for easy portability.\n- **Encrypted Storage**: Drafts and history are securely encrypted via Web Crypto API. You can also enforce a password using Private Storage.\n\n---\n\n*Start editing!*\n`,
   
-  rnTitle: isJa ? 'リリースノート (v1.5)' : 'Release Notes (v1.5)',
+  rnTitle: isJa ? 'リリースノート (v1.5.3)' : 'Release Notes (v1.5.3)',
   rnContent: isJa ? `
 ## 新機能
 
-### 📑 アウトライン (目次)
+### 🔒 暗号化オートセーブ (Web Crypto API)
+* **Auto Encrypted**: 意識することなく、ブラウザ内の下書き・履歴が自動的にAES-GCMで暗号化されます。
+* **Private Storage**: ファイルメニューからオンにすると、強固なパスフレーズ（PBKDF2生成）でロックをかけられます。
 
-*   **機能**: 本文から見出し (\`#\` 〜 \`####\`) を自動的に抽出し、右側にアウトラインパネルを表示します。
-*   **UI**: **[表示] › [アウトライン表示]** から開閉できます。
-*   **挙動**: 見出しをクリックすると、エディタ内の該当箇所へ瞬時にジャンプ（スクロール）します。編集中もリアルタイムに更新されます。
-
-***
-
-### 🕘 作業履歴 (履歴から復元)
-
-*   **機能**: 開いたファイル、保存したファイル、閉じる直前のテキストなど、直近の最大 **10件** の状態をブラウザ (LocalStorage) に自動保存します。
-*   **UI**: **[ファイル] › [作業履歴 (最近のファイル)]** からアクセスできます。
-*   **挙動**: 誤ってタブを閉じたりファイルを破棄してしまった場合でも、履歴から過去のバージョンを即座に復元できます。
-
-***
-
-### ✨ Markdown整形補助 (リンター / フォーマッター)
-
-*   **機能**: 乱れたMarkdownテキストをワンアクションで綺麗に整えます。
-*   **UI**: **[編集] › [Markdownを整形]**
-*   **挙動**:
-    *   3行以上連続する空行を2行に圧縮
-    *   見出し (\`#\`) とテキストの間にスペースがない場合は自動挿入
-    *   行末の無駄な余白を削除 (Markdownの改行用スペースは保持)  
-        最小限の手間で、文書を常にクリーンで一貫性のある状態に保ちます。
+### 🖼️ 画像のドラッグ＆ドロップ対応
+* ローカル容量保護のため上限は**200KB**ですが、エディタに画像をドロップすると自動でBase64形式に変換され、画像が埋め込まれます。スタンドアロン保存と相性抜群です。
 ` : `
 ## New Features
 
-### 📑 Outline (Table of Contents)
+### 🔒 Encrypted Auto-save
+* **Auto Encrypted**: Drafts and history are automatically encrypted with AES-GCM without any prompt.
+* **Private Storage**: You can enable passphrase-based robust encryption from the File menu.
 
-*   **Feature**: Automatically extracts headings (\`#\` to \`####\`) from the document and displays them in an outline panel on the right.
-*   **UI**: Open or close via **View › Outline**.
-*   **Behavior**: Clicking a heading instantly jumps (scrolls) to the corresponding position in the editor.  
-    The outline updates in real time as you edit the document.
-
-***
-
-### 🕘 Edit History (Restore from History)
-
-*   **Feature**: Automatically stores up to **10 recent states** (opened files, saved files, and the text just before closing) in browser storage (LocalStorage).
-*   **UI**: Accessible via **File › History (Recent Files)**.
-*   **Behavior**: Even if you accidentally close a tab or discard a file, you can quickly restore a previous version from the history list.
-
-***
-
-### ✨ Markdown Formatting Helper (Linter / Formatter)
-
-*   **Feature**: Cleans up messy Markdown text with a single action.
-*   **UI**: **Edit › Format Markdown**.
-*   **Behavior**:
-    *   Compresses excessive blank lines (3+ → 2)
-    *   Automatically inserts a space between heading markers (\`#\`) and text
-    *   Removes unnecessary trailing spaces (while preserving Markdown line breaks)  
-        This helps keep your documents clean and consistent with minimal effort.
+### 🖼️ Image Drag & Drop
+* You can drop images (up to 200KB) directly into the editor. They will be auto-converted to Base64 to keep your standalone exported files truly independent.
 `
 };
 
@@ -1075,6 +1357,10 @@ set('m-format', T.menuFormat);
 set('m-outline-label', T.menuOutline);
 set('op-title', T.menuOutline);
 set('hist-title', T.menuHistory);
+set('m-theme-label', T.themeLabel);
+set('m-theme-midnight', T.themeMidnight);
+set('m-theme-paper', T.themePaper);
+set('m-theme-warm', T.themeWarm);
 
 set('m-find', T.findMenu); set('m-replace', T.replaceMenu);
 set('m-export-html', T.exportHtml); set('m-export-pdf', T.exportPdf);
@@ -1131,35 +1417,288 @@ editor.value = T.defaultMd;
 if (window.marked) marked.use({ gfm: true, breaks: true });
 const segmenter = typeof Intl.Segmenter !== 'undefined'
   ? new Intl.Segmenter('ja', { granularity: 'word' }) : null;
+
+const THEME_STORAGE_KEY = 'mdworks_theme_mode';
+const THEME_LIST = ['midnight', 'paper', 'warm'];
+let currentTheme = 'midnight';
 //#endregion
 
-//#region [JS-03] BOOTSTRAP & AUTO-SAVE LOGIC
-let AUTOSAVE_TXT_KEY = 'md_editor_draft_text';
-let AUTOSAVE_NAME_KEY = 'md_editor_draft_name';
 
-function triggerAutoSave() {
-  localStorage.setItem(AUTOSAVE_TXT_KEY, editor.value);
-  localStorage.setItem(AUTOSAVE_NAME_KEY, filenameInput.value);
+//#region [JS-03] SECURE STORAGE & ENCRYPTION LOGIC
+// DOMPurify Hooks
+const MARKDOWN_SANITIZE_CONFIG = Object.freeze({
+  ALLOWED_TAGS: ['h1','h2','h3','h4','h5','h6','p','br','hr','strong','b','em','i','s','del','code','pre','blockquote','ul','ol','li','table','thead','tbody','tr','th','td','a','img','input'],
+  ALLOWED_ATTR: ['href','title','target','rel','alt','src','class','type','checked','disabled','aria-checked','colspan','rowspan','align'],
+  ALLOW_DATA_ATTR: false,
+  FORBID_TAGS: ['script','style','iframe','object','embed','form','meta','link','base','svg','math'],
+  FORBID_ATTR: ['style','srcset','onerror','onclick','onload','onmouseover','onfocus'],
+  KEEP_CONTENT: true
+});
+
+const WORD_SANITIZE_CONFIG = Object.freeze({
+  ALLOWED_TAGS: ['h1','h2','h3','h4','h5','h6','p','br','hr','strong','b','em','i','s','del','code','pre','blockquote','ul','ol','li','table','thead','tbody','tr','th','td','a','img','span','sup','sub'],
+  ALLOWED_ATTR: ['href','title','alt','src','class','colspan','rowspan','align'],
+  ALLOW_DATA_ATTR: false,
+  FORBID_TAGS: ['script','style','iframe','object','embed','form','meta','link','base','svg','math'],
+  FORBID_ATTR: ['style','srcset','onerror','onclick','onload','onmouseover','onfocus'],
+  KEEP_CONTENT: true
+});
+
+function isSafeLocalOrDataImage(src) {
+  if (!src) return false;
+  const value = String(src).trim();
+  if (/^data:image\/(png|gif|jpeg|jpg|webp|svg\+xml);base64,/i.test(value)) return true;
+  if (/^(?:\.\.?\/|\/|#|\?)/.test(value)) return true;
+  return !/^[a-z][a-z0-9+.-]*:/i.test(value);
 }
 
-function loadAutoSave() {
-  const savedTxt = localStorage.getItem(AUTOSAVE_TXT_KEY);
-  const savedName = localStorage.getItem(AUTOSAVE_NAME_KEY);
+function setupDOMPurifyHooks() {
+  if (!window.DOMPurify || window.__mdworksPurifyHooksReady) return;
+  window.__mdworksPurifyHooksReady = true;
+  DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+    if (!node || !node.tagName) return;
+    const tag = node.tagName.toLowerCase();
+    if (tag === 'a') {
+      const href = node.getAttribute('href') || '';
+      if (/^javascript:/i.test(href)) node.removeAttribute('href');
+      if (node.hasAttribute('href')) {
+        node.setAttribute('target', '_blank');
+        node.setAttribute('rel', 'noopener noreferrer nofollow');
+      }
+    }
+    if (tag === 'img') {
+      const src = node.getAttribute('src') || '';
+      if (!isSafeLocalOrDataImage(src)) node.removeAttribute('src');
+      node.removeAttribute('srcset');
+      node.removeAttribute('loading');
+    }
+    if (tag === 'input') {
+      if ((node.getAttribute('type') || '').toLowerCase() !== 'checkbox') {
+        node.remove(); return;
+      }
+      node.setAttribute('disabled', 'disabled');
+    }
+  });
+}
+
+function sanitizeHtml(html, config = MARKDOWN_SANITIZE_CONFIG) {
+  if (!window.DOMPurify) return '';
+  setupDOMPurifyHooks();
+  return DOMPurify.sanitize(String(html || ''), config);
+}
+function safeMarkdownHtml(markdownText) {
+  if (!window.marked || !window.DOMPurify) return '';
+  return sanitizeHtml(marked.parse(String(markdownText || '')), MARKDOWN_SANITIZE_CONFIG);
+}
+
+// ----------------------------------------------------
+// Web Crypto API (Auto & Private Mode)
+// ----------------------------------------------------
+let AUTOSAVE_TXT_KEY = "mdworks_secure_draft_text_v2";
+let AUTOSAVE_NAME_KEY = "mdworks_secure_draft_name_v2";
+const HISTORY_KEY = "mdworks_secure_history_v2";
+const META_KEY = "mdworks_secure_meta_v2";
+const AUTO_DB_NAME = "mdworks_auto_crypto_db";
+const AUTO_DB_STORE = "keys";
+const AUTO_KEY_ID = "auto-aes-key";
+const FALLBACK_AUTO_JWK_KEY = "mdworks_auto_key_jwk_fallback";
+const LEGACY_TEXT_KEY = "md_editor_draft_text"; // old plaintext
+const LEGACY_NAME_KEY = "md_editor_draft_name";
+
+let privateSession = { passphrase: null, key: null };
+let secureStoreUnavailable = false;
+
+function bytesToB64(bytes) {
+  let bin = "";
+  bytes.forEach((b) => { bin += String.fromCharCode(b); });
+  return btoa(bin);
+}
+function b64ToBytes(b64) {
+  const bin = atob(b64);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i += 1) out[i] = bin.charCodeAt(i);
+  return out;
+}
+const enc = new TextEncoder();
+const dec = new TextDecoder();
+
+function getMeta() {
+  try { return JSON.parse(localStorage.getItem(META_KEY) || "{}"); } catch { return {}; }
+}
+function setMeta(meta) {
+  localStorage.setItem(META_KEY, JSON.stringify({ v: 2, mode: "auto", ...meta }));
+  renderStorageBadge();
+}
+function currentMode() {
+  return getMeta().mode === "private" ? "private" : "auto";
+}
+
+function openKeyDb() {
+  return new Promise((resolve, reject) => {
+    if (!window.indexedDB) return reject(new Error("IndexedDB unavailable"));
+    const req = indexedDB.open(AUTO_DB_NAME, 1);
+    req.onupgradeneeded = () => req.result.createObjectStore(AUTO_DB_STORE);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error("IndexedDB open failed"));
+  });
+}
+async function idbGetKey() {
+  const db = await openKeyDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(AUTO_DB_STORE, "readonly");
+    const req = tx.objectStore(AUTO_DB_STORE).get(AUTO_KEY_ID);
+    req.onsuccess = () => resolve(req.result || null);
+    req.onerror = () => reject(req.error || new Error("key get failed"));
+    tx.oncomplete = () => db.close();
+  });
+}
+async function idbSetKey(key) {
+  const db = await openKeyDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(AUTO_DB_STORE, "readwrite");
+    tx.objectStore(AUTO_DB_STORE).put(key, AUTO_KEY_ID);
+    tx.oncomplete = () => { db.close(); resolve(); };
+    tx.onerror = () => { db.close(); reject(tx.error || new Error("key set failed")); };
+  });
+}
+
+async function getAutoKey() {
+  if (!window.crypto || !crypto.subtle) throw new Error("Crypto API not found");
+  try {
+    const existing = await idbGetKey();
+    if (existing) return existing;
+    const key = await crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, true, ["encrypt", "decrypt"]);
+    await idbSetKey(key);
+    return key;
+  } catch (e) {
+    console.warn("IndexedDB failed, falling back to JWK localStorage", e);
+    const stored = localStorage.getItem(FALLBACK_AUTO_JWK_KEY);
+    if (stored) return crypto.subtle.importKey("jwk", JSON.parse(stored), { name: "AES-GCM" }, true, ["encrypt", "decrypt"]);
+    const key = await crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, true, ["encrypt", "decrypt"]);
+    localStorage.setItem(FALLBACK_AUTO_JWK_KEY, JSON.stringify(await crypto.subtle.exportKey("jwk", key)));
+    return key;
+  }
+}
+
+async function derivePrivateKey(passphrase, saltB64) {
+  const salt = b64ToBytes(saltB64);
+  const material = await crypto.subtle.importKey("raw", enc.encode(passphrase), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt, iterations: 310000, hash: "SHA-256" },
+    material, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]
+  );
+}
+
+async function getPrivateKey() {
+  const meta = getMeta();
+  if (!meta.privateSalt) throw new Error("Private Storage salt is missing");
+  if (privateSession.key) return privateSession.key;
+  const passphrase = window.prompt("Private Storageのパスフレーズを入力してください。\n※標準のAuto暗号化モードでは通常この入力は不要です。") || "";
+  if (!passphrase) throw new Error("Passphrase cancelled");
+  privateSession.passphrase = passphrase;
+  privateSession.key = await derivePrivateKey(passphrase, meta.privateSalt);
+  return privateSession.key;
+}
+
+async function getActiveKey() {
+  return currentMode() === "private" ? getPrivateKey() : getAutoKey();
+}
+
+async function encryptString(value, key) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const cipher = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(value));
+  return JSON.stringify({ v: 2, alg: "AES-GCM", iv: bytesToB64(iv), data: bytesToB64(new Uint8Array(cipher)) });
+}
+
+async function decryptString(payload, key) {
+  const box = JSON.parse(payload);
+  if (box.v !== 2) throw new Error("Unsupported version");
+  const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64ToBytes(box.iv) }, key, b64ToBytes(box.data));
+  return dec.decode(plain);
+}
+
+async function secureSetItem(key, value) {
+  try {
+    const cryptoKey = await getActiveKey();
+    const payload = await encryptString(String(value ?? ""), cryptoKey);
+    localStorage.setItem(key, payload);
+    return true;
+  } catch (err) {
+    secureStoreUnavailable = true;
+    console.warn("secureSetItem failed", err);
+    return false;
+  }
+}
+
+async function secureGetItem(key) {
+  const payload = localStorage.getItem(key);
+  if (!payload) return null;
+  // Handle old plaintext fallback if it exists (legacy support)
+  if (!payload.startsWith('{')) return payload; 
+  try {
+    return await decryptString(payload, await getActiveKey());
+  } catch (err) {
+    console.warn("secureGetItem failed", err);
+    alert(isJa ? 'ローカル保存データの復号に失敗しました。パスフレーズを確認してください。' : 'Failed to decrypt local data.');
+    return null;
+  }
+}
+
+function secureRemoveItem(key) {
+  localStorage.removeItem(key);
+}
+
+function renderStorageBadge() {
+  const badge = document.getElementById('storage-badge');
+  if (badge) badge.textContent = currentMode() === "private" ? "Private Storage" : "Auto encrypted";
+}
+
+function setStatusBadge(text) {
+  const badge = document.getElementById('storage-badge');
+  if (badge) badge.textContent = text;
+}
+
+let historyCache = [];
+//#endregion
+
+//#region [JS-04] BOOTSTRAP & AUTO-SAVE LOGIC
+let isSaving = false;
+async function triggerAutoSave() {
+  if (isSaving) return;
+  isSaving = true;
+  try {
+    await secureSetItem(AUTOSAVE_TXT_KEY, editor.value);
+    await secureSetItem(AUTOSAVE_NAME_KEY, filenameInput.value);
+  } catch (e) {}
+  isSaving = false;
+}
+
+async function loadAutoSave() {
+  // Legacy migration check
+  if (localStorage.getItem(LEGACY_TEXT_KEY)) {
+    await secureSetItem(AUTOSAVE_TXT_KEY, localStorage.getItem(LEGACY_TEXT_KEY));
+    await secureSetItem(AUTOSAVE_NAME_KEY, localStorage.getItem(LEGACY_NAME_KEY) || 'untitled.md');
+    localStorage.removeItem(LEGACY_TEXT_KEY);
+    localStorage.removeItem(LEGACY_NAME_KEY);
+  }
+
+  const savedTxt = await secureGetItem(AUTOSAVE_TXT_KEY);
+  const savedName = await secureGetItem(AUTOSAVE_NAME_KEY);
   if (savedTxt && savedTxt !== T.defaultMd && savedTxt !== '') {
     if (confirm(T.restorePrompt)) {
       editor.value = savedTxt;
       if (savedName) filenameInput.value = savedName;
       markDirty();
     } else {
-      localStorage.removeItem(AUTOSAVE_TXT_KEY);
-      localStorage.removeItem(AUTOSAVE_NAME_KEY);
+      secureRemoveItem(AUTOSAVE_TXT_KEY);
+      secureRemoveItem(AUTOSAVE_NAME_KEY);
     }
   }
 }
 
 let hasStandaloneData = false;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   try {
     const dataScript = document.getElementById('standalone-data');
     if (dataScript && dataScript.textContent.trim().length > 2) {
@@ -1177,15 +1716,19 @@ document.addEventListener('DOMContentLoaded', () => {
     console.warn('Failed to load standalone data', e);
   }
 
-  loadAutoSave();
+  if (!getMeta().mode) setMeta({ mode: "auto" });
+  renderStorageBadge();
+
+  await loadAutoSave();
   update();
   if (!isDirty) markSaved();
   
   checkReleaseNotes(); // バージョンアップ時にリリースノートを表示
+  renderThemeMenuChecks();
 });
 //#endregion
 
-//#region [JS-04] UI TOGGLES & MENU HANDLING
+//#region [JS-05] UI TOGGLES & MENU HANDLING
 document.querySelectorAll('.menu-trigger').forEach(btn => {
   btn.addEventListener('click', e => {
     e.stopPropagation();
@@ -1199,6 +1742,123 @@ document.addEventListener('click', closeMenus);
 function closeMenus() {
   document.querySelectorAll('.menu-dropdown').forEach(d => d.classList.remove('open'));
   document.querySelectorAll('.menu-trigger').forEach(b => b.classList.remove('open'));
+}
+
+function toggleZenMode() {
+  const isZen = document.body.classList.toggle('zen-mode');
+  const entry = document.getElementById('m-zen-entry');
+  const check = document.getElementById('zen-check');
+  if (entry) entry.classList.toggle('active', isZen);
+  if (check) check.style.opacity = isZen ? '1' : '0';
+  closeMenus();
+}
+
+function getThemeDisplayName(theme) {
+  if (theme === 'paper') return 'Paper';
+  if (theme === 'warm') return 'Warm';
+  return 'Midnight';
+}
+
+function renderThemeMenuChecks() {
+  THEME_LIST.forEach(theme => {
+    const isActive = theme === currentTheme;
+    const check = document.getElementById(`theme-${theme}-check`);
+    const entry = document.getElementById(`theme-${theme}-entry`);
+    if (check) check.style.opacity = isActive ? '1' : '0';
+    if (entry) entry.classList.toggle('active', isActive);
+  });
+  
+  const pEntry = document.getElementById('private-entry');
+  const pCheck = document.getElementById('private-check');
+  if (pEntry) pEntry.classList.toggle('active', currentMode() === "private");
+  if (pCheck) pCheck.style.opacity = currentMode() === "private" ? '1' : '0';
+}
+
+function applyTheme(theme, opts = {}) {
+  const nextTheme = THEME_LIST.includes(theme) ? theme : 'midnight';
+  currentTheme = nextTheme;
+
+  document.documentElement.classList.remove('theme-paper', 'theme-warm');
+  document.body.classList.remove('theme-paper', 'theme-warm');
+  if (nextTheme !== 'midnight') {
+    document.documentElement.classList.add(`theme-${nextTheme}`);
+    document.body.classList.add(`theme-${nextTheme}`);
+  }
+
+  renderThemeMenuChecks();
+
+  if (opts.persist) {
+    try { localStorage.setItem(THEME_STORAGE_KEY, nextTheme); } catch (e) { console.warn('Theme save failed', e); }
+  }
+}
+
+function setTheme(theme) {
+  applyTheme(theme, { persist: true });
+  closeMenus();
+  toast(T.themeChanged(getThemeDisplayName(currentTheme)));
+}
+
+// -- Storage Security Menu Functions --
+async function getCurrentHistoryForMigration() {
+  try {
+    const raw = await secureGetItem(HISTORY_KEY);
+    const parsed = JSON.parse(raw || '[]');
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (err) {
+    console.warn('Failed to read history before storage migration', err);
+    return [];
+  }
+}
+
+async function migrateToMode(mode, passphrase = null) {
+  const currentText = editor.value;
+  const currentName = filenameInput.value || "untitled.md";
+  // Important: read the encrypted history with the CURRENT mode/key before switching modes.
+  // Using historyCache here can overwrite the real saved history with an empty/stale array.
+  const currentHistory = await getCurrentHistoryForMigration();
+
+  if (mode === "private") {
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    setMeta({ mode: "private", privateSalt: bytesToB64(salt) });
+    privateSession.passphrase = passphrase;
+    privateSession.key = await derivePrivateKey(passphrase, bytesToB64(salt));
+  } else {
+    setMeta({ mode: "auto" });
+    privateSession = { passphrase: null, key: null };
+  }
+
+  await secureSetItem(AUTOSAVE_TXT_KEY, currentText);
+  await secureSetItem(AUTOSAVE_NAME_KEY, currentName);
+  await secureSetItem(HISTORY_KEY, JSON.stringify(currentHistory));
+  historyCache = currentHistory;
+}
+
+async function togglePrivateStorage() {
+  closeMenus();
+  if (currentMode() === "private") {
+    const ok = confirm("Private Storageを解除して、自動暗号化に戻しますか？\n現在の下書き・履歴は自動暗号化で保存し直されます。");
+    if (!ok) return;
+    await migrateToMode("auto");
+    toast("自動暗号化に戻しました");
+  } else {
+    const p1 = prompt("Private Storage用のパスフレーズを設定してください。\n※忘れると下書き・履歴は復元できません。") || "";
+    if (!p1) return;
+    const p2 = prompt("確認のため、もう一度入力してください。") || "";
+    if (p1 !== p2) { toast("パスフレーズが一致しません"); return; }
+    await migrateToMode("private", p1);
+    toast("Private Storageを有効化しました");
+  }
+  renderStorageBadge();
+  renderThemeMenuChecks();
+}
+
+async function clearProtectedStorage() {
+  closeMenus();
+  const ok = confirm("保護された下書き・履歴を完全に削除しますか？\n現在のエディタ内容は画面上には残ります。");
+  if (!ok) return;
+  [AUTOSAVE_TXT_KEY, AUTOSAVE_NAME_KEY, HISTORY_KEY, LEGACY_TEXT_KEY, LEGACY_NAME_KEY].forEach((k) => localStorage.removeItem(k));
+  historyCache = [];
+  toast("ローカル保存データを削除しました");
 }
 
 function togglePreview() {
@@ -1232,17 +1892,14 @@ window.addEventListener('mouseup', () => {
   document.body.style.cursor = '';
 });
 
-/* ▼▼▼ ここから追加（iPad・モバイル向けタッチ対応） ▼▼▼ */
+/* Touch Support */
 splitter.addEventListener('touchstart', (e) => {
   if (!previewOpen) return;
   isDraggingSplitter = true;
-  // タッチ操作時のデフォルト挙動（画面スクロール等）を防ぐ場合は以下を有効化
-  // e.preventDefault(); 
 }, { passive: true });
-
 window.addEventListener('touchmove', (e) => {
   if (!isDraggingSplitter || !previewOpen) return;
-  const clientX = e.touches[0].clientX; // タッチ位置のX座標を取得
+  const clientX = e.touches[0].clientX;
   const rect = mainContainer.getBoundingClientRect();
   const rightWidth = rect.right - clientX;
   const minWidth = Math.min(320, rect.width - 220);
@@ -1250,17 +1907,11 @@ window.addEventListener('touchmove', (e) => {
   const nextWidth = Math.max(minWidth, Math.min(rightWidth, maxWidth));
   previewWrap.style.width = `${nextWidth}px`;
 });
-
-window.addEventListener('touchend', () => {
-  isDraggingSplitter = false;
-});
-window.addEventListener('touchcancel', () => {
-  isDraggingSplitter = false;
-});
-/* ▲▲▲ ここまで追加 ▲▲▲ */
+window.addEventListener('touchend', () => { isDraggingSplitter = false; });
+window.addEventListener('touchcancel', () => { isDraggingSplitter = false; });
 //#endregion
 
-//#region [JS-05] EDITOR EVENTS & STATS UPDATER
+//#region [JS-06] EDITOR EVENTS & STATS UPDATER (w/ Image Drag & Drop)
 function markDirty() {
   isDirty = true;
   inlineSaveState.textContent = T.unsaved;
@@ -1308,32 +1959,127 @@ editor.addEventListener('scroll', () => {
   }
 });
 
+// 入力イベントの二重発火を防ぐフラグ
+let suppressInputHandling = false;
+
+function runWhenIdle(fn) {
+  return new Promise(resolve => {
+    const run = () => {
+      try { fn(); }
+      finally { resolve(); }
+    };
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(run, { timeout: 220 });
+    } else {
+      setTimeout(run, 0);
+    }
+  });
+}
+
+function updateStatsOnly() {
+  const text = editor.value;
+  const lines = text.length === 0 ? 1 : text.split('\n').length;
+  let words = 0;
+  if (segmenter) {
+    for (const s of segmenter.segment(text)) {
+      if (s.isWordLike) words++;
+    }
+  } else {
+    words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  }
+  set('s-lines', lines);
+  set('s-words', words);
+  set('s-chars', text.replace(/[\n\r]/g, '').length);
+}
+
+async function runDeferredLargePasteUpdate() {
+  updateStatsOnly();
+  await runWhenIdle(() => renderPreview());
+  await runWhenIdle(() => refreshBackdrop());
+  if (outlineOpen) await runWhenIdle(() => renderOutline());
+  if (spellEnabled) await runWhenIdle(() => runSpellCheck());
+  if (srPanelOpen) await runWhenIdle(() => performSearch(false));
+}
+
+// 大容量ペースト時の砂時計＆非同期処理ロジック
+async function handlePlainTextPaste(text) {
+  if (!text) return;
+
+  // 1万文字以上なら大容量と判定
+  if (text.length > 10000) {
+    showLoader(T.processingPasteToast);
+    setStatusBadge(T.processingPasteStatus);
+    
+    // ブラウザに砂時計を描画させるための待機時間（50ms）
+    await new Promise(resolve => setTimeout(resolve, 50));
+    
+    // 巨大テキスト挿入時の重いinputイベント連鎖を防ぐ
+    suppressInputHandling = true;
+    
+    try {
+      // execCommandは非同期内で弾かれることがあるため、直接Rangeを書き換える
+      const start = editor.selectionStart;
+      const end = editor.selectionEnd;
+      editor.setRangeText(text, start, end, 'end');
+      
+      markDirty();
+      await runDeferredLargePasteUpdate();
+      await triggerAutoSave();
+    } finally {
+      suppressInputHandling = false;
+      hideLoader();
+      renderStorageBadge(); // バッジのテキストをAuto/Privateの状態に戻す
+    }
+  } else {
+    // 通常のテキストなら、Undo履歴を残せる標準のコマンドで即座に処理
+    document.execCommand('insertText', false, text);
+    markDirty();
+    triggerAutoSave();
+  }
+}
+
 let autoSaveTimeout;
 editor.addEventListener('input', () => {
+  if (suppressInputHandling) return;
   update();
   markDirty();
   if (spellEnabled) runSpellCheck();
   if (srPanelOpen) performSearch(false);
   
   clearTimeout(autoSaveTimeout);
-  autoSaveTimeout = setTimeout(triggerAutoSave, 1000);
+  autoSaveTimeout = setTimeout(triggerAutoSave, 1500); // デバウンス緩和: 手が止まってから1.5秒後
 });
 
 editor.addEventListener('paste', e => {
   e.preventDefault();
   const text = (e.clipboardData || window.clipboardData).getData('text').normalize('NFC');
-  document.execCommand('insertText', false, text);
-  markDirty();
-  triggerAutoSave();
+  handlePlainTextPaste(text);
+});
+
+editor.addEventListener("dragover", (e) => { e.preventDefault(); e.dataTransfer.dropEffect = "copy"; });
+editor.addEventListener("drop", (e) => {
+  e.preventDefault();
+  const file = e.dataTransfer.files && e.dataTransfer.files[0];
+  if (!file || !file.type.startsWith("image/")) return;
+  // 容量制限チェック (LocalStorage 5MBの壁を考慮)
+  if (file.size > 200 * 1024) { 
+    alert("画像が大きすぎます。ローカル保存容量を保護するため、200KB以下の画像のみ挿入できます。"); 
+    return; 
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    const snippet = `![${file.name}](${reader.result})`;
+    ins(snippet, false);
+  };
+  reader.readAsDataURL(file);
 });
 //#endregion
 
-//#region [JS-06] PREVIEW RENDERING & DECORATION
+//#region [JS-07] PREVIEW RENDERING & DECORATION
 function renderPreview() {
   if (!previewOpen || !window.marked) return;
-  const raw = marked.parse(editor.value);
   if (window.DOMPurify) {
-    preview.innerHTML = DOMPurify.sanitize(raw);
+    preview.innerHTML = safeMarkdownHtml(editor.value);
     decoratePreviewTasks();
   } else {
     preview.innerHTML = `<div style="color:var(--danger); border: 1px solid var(--danger); padding: 15px; border-radius: 8px; font-family: var(--sans); background: rgba(240,112,112,0.1); margin: 20px;"><b>Security Error:</b><br>Preview disabled because DOMPurify failed to load.</div>`;
@@ -1350,7 +2096,7 @@ function decoratePreviewTasks() {
 }
 //#endregion
 
-//#region [JS-07] BACKDROP ENGINE (TINT & HIGHLIGHT)
+//#region [JS-08] BACKDROP ENGINE (TINT & HIGHLIGHT)
 function escapeHtml(text) {
   return String(text)
     .replace(/&/g, '&amp;')
@@ -1456,19 +2202,16 @@ function refreshBackdrop() {
 }
 //#endregion
 
-//#region [JS-08] LIST & TASK BULK TOGGLING
+//#region [JS-09] LIST & TASK BULK TOGGLING
 function getSelectedBlockInfo() {
   const value = editor.value;
   const s = editor.selectionStart;
   const e = editor.selectionEnd;
-
   const lineStart = value.lastIndexOf('\n', Math.max(0, s - 1)) + 1;
   let lineEnd = value.indexOf('\n', e);
   if (lineEnd === -1) lineEnd = value.length;
-
   const block = value.slice(lineStart, lineEnd);
   const lines = block.split('\n');
-
   return { value, s, e, lineStart, lineEnd, block, lines };
 }
 
@@ -1476,7 +2219,6 @@ function replaceSelectedLines(transformer) {
   const { value, lineStart, lineEnd, lines } = getSelectedBlockInfo();
   const nextLines = transformer(lines.slice());
   const nextBlock = nextLines.join('\n');
-
   editor.value = value.slice(0, lineStart) + nextBlock + value.slice(lineEnd);
   editor.setSelectionRange(lineStart, lineStart + nextBlock.length);
   update();
@@ -1486,20 +2228,10 @@ function replaceSelectedLines(transformer) {
 }
 
 function stripListPrefix(line) {
-  return line
-    .replace(/^\s*-\s\[[ xX]\]\s+/, '')
-    .replace(/^\s*-\s+/, '')
-    .replace(/^\s*\d+\.\s+/, '');
+  return line.replace(/^\s*-\s\[[ xX]\]\s+/, '').replace(/^\s*-\s+/, '').replace(/^\s*\d+\.\s+/, '');
 }
-
-function isPlainBullet(line) {
-  return /^\s*-\s(?!\[[ xX]\]\s)/.test(line);
-}
-
-function isOrderedLine(line) {
-  return /^\s*\d+\.\s+/.test(line);
-}
-
+function isPlainBullet(line) { return /^\s*-\s(?!\[[ xX]\]\s)/.test(line); }
+function isOrderedLine(line) { return /^\s*\d+\.\s+/.test(line); }
 function taskStateOf(line) {
   if (/^\s*-\s\[\s\]\s/.test(line)) return 'open';
   if (/^\s*-\s\[x\]\s/i.test(line)) return 'done';
@@ -1510,15 +2242,10 @@ function toggleBulletList() {
   replaceSelectedLines(lines => {
     const nonEmpty = lines.filter(l => l.trim() !== '');
     const allBullets = nonEmpty.length > 0 && nonEmpty.every(isPlainBullet);
-
-    if (allBullets) {
-      return lines.map(line => line.replace(/^(\s*)-\s+/, '$1'));
-    }
-
+    if (allBullets) return lines.map(line => line.replace(/^(\s*)-\s+/, '$1'));
     return lines.map(line => {
       if (line.trim() === '') return line;
-      const content = stripListPrefix(line).trim();
-      return `- ${content}`;
+      return `- ${stripListPrefix(line).trim()}`;
     });
   });
 }
@@ -1527,16 +2254,11 @@ function toggleOrderedList() {
   replaceSelectedLines(lines => {
     const nonEmpty = lines.filter(l => l.trim() !== '');
     const allOrdered = nonEmpty.length > 0 && nonEmpty.every(isOrderedLine);
-
-    if (allOrdered) {
-      return lines.map(line => line.replace(/^(\s*)\d+\.\s+/, '$1'));
-    }
-
+    if (allOrdered) return lines.map(line => line.replace(/^(\s*)\d+\.\s+/, '$1'));
     let n = 1;
     return lines.map(line => {
       if (line.trim() === '') return line;
-      const content = stripListPrefix(line).trim();
-      return `${n++}. ${content}`;
+      return `${n++}. ${stripListPrefix(line).trim()}`;
     });
   });
 }
@@ -1544,7 +2266,6 @@ function toggleOrderedList() {
 function cycleSingleTaskLine(line) {
   const state = taskStateOf(line);
   const content = stripListPrefix(line).trim();
-
   if (state === 'none') return `- [ ] ${content}`.trimEnd();
   if (state === 'open') return `- [x] ${content}`.trimEnd();
   return content;
@@ -1553,10 +2274,7 @@ function cycleSingleTaskLine(line) {
 function toggleTaskList() {
   replaceSelectedLines(lines => {
     const nonEmpty = lines.filter(l => l.trim() !== '');
-
-    if (nonEmpty.length <= 1) {
-      return lines.map(line => line.trim() === '' ? line : cycleSingleTaskLine(line));
-    }
+    if (nonEmpty.length <= 1) return lines.map(line => line.trim() === '' ? line : cycleSingleTaskLine(line));
 
     const states = nonEmpty.map(taskStateOf);
     const allOpen = states.every(s => s === 'open');
@@ -1565,22 +2283,18 @@ function toggleTaskList() {
     if (allOpen) {
       return lines.map(line => {
         if (line.trim() === '') return line;
-        const content = stripListPrefix(line).trim();
-        return `- [x] ${content}`.trimEnd();
+        return `- [x] ${stripListPrefix(line).trim()}`.trimEnd();
       });
     }
-
     if (allDone) {
       return lines.map(line => {
         if (line.trim() === '') return line;
         return stripListPrefix(line).trim();
       });
     }
-
     return lines.map(line => {
       if (line.trim() === '') return line;
-      const content = stripListPrefix(line).trim();
-      return `- [ ] ${content}`.trimEnd();
+      return `- [ ] ${stripListPrefix(line).trim()}`.trimEnd();
     });
   });
 }
@@ -1590,7 +2304,7 @@ document.getElementById('tb-olist-btn').onclick = toggleOrderedList;
 document.getElementById('tb-task-btn').onclick = toggleTaskList;
 //#endregion
 
-//#region [JS-09] SEARCH & REPLACE LOGIC
+//#region [JS-10] SEARCH & REPLACE LOGIC
 const srPanel = document.getElementById('sr-panel');
 const srInput = document.getElementById('sr-search-input');
 const srReplaceInput = document.getElementById('sr-replace-input');
@@ -1780,7 +2494,7 @@ document.getElementById('sr-btn-replace-all').onclick = () => {
 };
 //#endregion
 
-//#region [JS-10] SPELL CHECK (HUNSPELL)
+//#region [JS-11] SPELL CHECK (HUNSPELL)
 let dictReady = false;
 let typo = null;
 let isDictLoading = false;
@@ -1900,7 +2614,6 @@ function doSpellCheck() {
     const ok = typo.check(raw) || typo.check(raw.charAt(0).toUpperCase() + raw.slice(1));
     if (!ok) {
       tempMatches.push({ start: m.index, end: m.index + raw.length });
-      
       if (!seen.has(lower)) {
         seen.add(lower);
         misspellings.push({ word: raw, lower });
@@ -1934,33 +2647,22 @@ function doSpellCheck() {
   set('sp-loading-text', `${T.checking} (0/${misspellings.length})`);
 
   let i = 0;
-  
   function processNext() {
     if (currentSpellRun !== thisRun || !spellEnabled) return;
-
     if (i >= misspellings.length) {
       loading.classList.remove('show');
       footer.innerHTML = T.spellCount(misspellings.length).replace(/\d+/, n => `<span>${n}</span>`);
       footer.style.display = 'block';
       return;
     }
-
     const item = misspellings[i];
     let sugs = [];
-    try {
-      sugs = typo.suggest(item.word).slice(0, 5);
-    } catch (e) {
-      console.warn('Suggest error', e);
-    }
-
+    try { sugs = typo.suggest(item.word).slice(0, 5); } catch (e) {}
     renderSpellRow(item.word, item.lower, sugs);
-
     i++;
     set('sp-loading-text', `${T.checking} (${i}/${misspellings.length})`);
-    
     setTimeout(processNext, 5);
   }
-
   processNext();
 }
 
@@ -2025,8 +2727,7 @@ function replaceWord(original, replacement) {
   const m = re.exec(val);
   if (!m) return;
 
-  const rep =
-    m[0][0] === m[0][0].toUpperCase() && m[0][0] !== m[0][0].toLowerCase()
+  const rep = m[0][0] === m[0][0].toUpperCase() && m[0][0] !== m[0][0].toLowerCase()
       ? replacement.charAt(0).toUpperCase() + replacement.slice(1)
       : replacement;
 
@@ -2038,7 +2739,7 @@ function replaceWord(original, replacement) {
 }
 //#endregion
 
-//#region [JS-11] TEXT INSERTION HELPERS
+//#region [JS-12] TEXT INSERTION HELPERS
 function getPos() { return { s: editor.selectionStart, e: editor.selectionEnd }; }
 function setRange(s, e) {
   editor.selectionStart = s;
@@ -2095,7 +2796,7 @@ function insertTable() {
 }
 //#endregion
 
-//#region [JS-12] WORD IMPORT (MAMMOTH + TURNDOWN)
+//#region [JS-13] WORD IMPORT (MAMMOTH + TURNDOWN)
 const WORD_MAX_BYTES = 10 * 1024 * 1024;
 
 function triggerWordImport() {
@@ -2116,62 +2817,17 @@ document.getElementById('word-input').addEventListener('change', async (e) => {
 
   try {
     showLoader(T.loadingWordLibs);
-    await ensureWordImportLibraries();
-
-    if (!window.DOMPurify) { hideLoader(); alert(T.errSanitizer); return; }
-
-    showLoader(T.loadingWordParse);
     const arrayBuffer = await file.arrayBuffer();
 
-    const mammothOptions = {
-      styleMap: [
-        "p[style-name='Heading 1'] => h1:fresh",
-        "p[style-name='Heading 2'] => h2:fresh",
-        "p[style-name='Heading 3'] => h3:fresh",
-        "p[style-name='Heading 4'] => h4:fresh",
-        "p[style-name='Heading 5'] => h5:fresh",
-        "p[style-name='Heading 6'] => h6:fresh",
-        "p[style-name='見出し 1'] => h1:fresh",
-        "p[style-name='見出し 2'] => h2:fresh",
-        "p[style-name='見出し 3'] => h3:fresh",
-        "p[style-name='見出し 4'] => h4:fresh",
-        "p[style-name='見出し 5'] => h5:fresh",
-        "p[style-name='見出し 6'] => h6:fresh"
-      ],
-      includeDefaultStyleMap: true,
-      convertImage: mammoth.images.imgElement((image) => {
-        const alt = image.altText || '';
-        const imgTag = isJa ? '画像' : 'Image';
-        return { src: '', alt: alt ? `${alt}` : imgTag };
-      })
-    };
-
-    const result = await mammoth.convertToHtml({ arrayBuffer }, mammothOptions);
-    const mammothMessages = Array.isArray(result.messages) ? result.messages : [];
-
-    let html = result.value || '';
-    html = DOMPurify.sanitize(html, {
-      USE_PROFILES: { html: true },
-      FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'form'],
-      FORBID_ATTR: ['onerror', 'onclick', 'onload', 'style']
-    });
-
-    let dom;
-    try {
-      dom = preprocessWordHtml(html);
-    } catch (prepError) {
-      console.error('Preprocess error:', prepError);
-      const parser = new DOMParser();
-      dom = parser.parseFromString(html, 'text/html');
-    }
+    showLoader(T.loadingWordParse);
+    const sandboxResult = await convertWordInSandbox(arrayBuffer);
+    const md = sandboxResult.markdown || '';
+    const mammothMessages = Array.isArray(sandboxResult.messages) ? sandboxResult.messages : [];
 
     showLoader(T.loadingWordConvert);
-    const md = convertDomToMarkdown(dom);
-
     if (!md || !md.trim()) throw new Error('Converted markdown is empty.');
 
-    saveToHistoryList(filenameInput.value, editor.value); // 変換前に今の状態を履歴へ
-    
+    await saveToHistoryList(filenameInput.value, editor.value); // 変換前に今の状態を履歴へ
     editor.value = md;
     filenameInput.value = file.name.replace(/\.docx$/i, '.md');
     fileHandle = null;
@@ -2186,7 +2842,7 @@ document.getElementById('word-input').addEventListener('change', async (e) => {
   } catch (error) {
     console.error('Word Import Error:', error);
     hideLoader();
-    if (/cdn|load|script/i.test(String(error?.message || '')) || /Failed to fetch/i.test(String(error?.message || ''))) {
+    if (/cdn|load|script|library/i.test(String(error?.message || '')) || /Failed to fetch/i.test(String(error?.message || ''))) {
       alert(T.errLibLoad);
     } else {
       alert(`${T.errImport}\n${error?.message || ''}`.trim());
@@ -2194,6 +2850,278 @@ document.getElementById('word-input').addEventListener('change', async (e) => {
   }
 });
 
+const WORD_IMPORT_SANDBOX_TIMEOUT_MS = 60000;
+function getWordImportSandboxSrcdoc() {
+  const runner = function () {
+    const WORD_SANITIZE_CONFIG = Object.freeze({
+      ALLOWED_TAGS: ['h1','h2','h3','h4','h5','h6','p','br','hr','strong','b','em','i','s','del','code','pre','blockquote','ul','ol','li','table','thead','tbody','tr','th','td','a','img','span','sup','sub'],
+      ALLOWED_ATTR: ['href','title','alt','src','class','colspan','rowspan','align'],
+      ALLOW_DATA_ATTR: false,
+      FORBID_TAGS: ['script','style','iframe','object','embed','form','meta','link','base','svg','math'],
+      FORBID_ATTR: ['style','srcset','onerror','onclick','onload','onmouseover','onfocus'],
+      KEEP_CONTENT: true
+    });
+
+    function normalizeInlineText(str) {
+      return String(str || '').replace(/\u00a0/g, ' ').replace(/[ \t\r\n]+/g, ' ').trim();
+    }
+
+    function sanitizeWordHtml(html) {
+      if (!self.DOMPurify) throw new Error('DOMPurify is unavailable in sandbox.');
+      DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+        if (!node || !node.tagName) return;
+        const tag = node.tagName.toLowerCase();
+        if (tag === 'a') {
+          const href = node.getAttribute('href') || '';
+          if (/^javascript:/i.test(href)) node.removeAttribute('href');
+        }
+        if (tag === 'img') {
+          node.removeAttribute('src');
+          node.removeAttribute('srcset');
+        }
+      });
+      return DOMPurify.sanitize(String(html || ''), WORD_SANITIZE_CONFIG);
+    }
+
+    function preprocessWordHtml(html, isJa) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      replaceTextboxesAndShapes(doc, isJa);
+      // replaceComplexTables(doc, isJa); // 表の再現性を保つために無効化
+      extractAndAppendFootnotes(doc, isJa);
+      normalizeImages(doc, isJa);
+      normalizeLinks(doc);
+      normalizeLineBreakHints(doc);
+      return doc;
+    }
+
+    function replaceTextboxesAndShapes(doc, isJa) {
+      const selectors = ['div[class*="textbox"]', 'div[class*="shape"]', 'v\\:textbox', 'w\\:txbxContent'];
+      doc.querySelectorAll(selectors.join(',')).forEach((node) => {
+        const text = normalizeInlineText(node.textContent || '');
+        const placeholder = text ? `\n\n[${isJa ? 'テキストボックス' : 'Textbox'}: ${text}]\n\n` : `\n\n[${isJa ? '図形またはテキストボックス' : 'Shape or textbox'}]\n\n`;
+        node.replaceWith(doc.createTextNode(placeholder));
+      });
+    }
+
+    function replaceComplexTables(doc, isJa) {
+      Array.from(doc.querySelectorAll('table')).forEach((table) => {
+        if (isComplexTable(table)) {
+          const replacement = tableToPlainText(table, isJa);
+          table.replaceWith(doc.createTextNode(`\n\n${replacement}\n\n`));
+        }
+      });
+    }
+
+    function isComplexTable(table) {
+      if (!table) return true;
+      if (table.querySelector('table')) return true;
+      if (table.querySelector('[rowspan], [colspan]')) return true;
+      const rows = Array.from(table.querySelectorAll('tr'));
+      if (rows.length === 0) return true;
+      const counts = rows.map((tr) => Array.from(tr.children).filter((el) => /^(TD|TH)$/i.test(el.tagName)).length);
+      if (new Set(counts).size !== 1) return true;
+      const cells = Array.from(table.querySelectorAll('th, td'));
+      for (const cell of cells) {
+        if (cell.querySelector('img, table')) return true;
+        if (cell.querySelectorAll('p, div, ul, ol, li, blockquote, h1, h2, h3, h4, h5, h6').length > 1) return true;
+        if (cell.querySelectorAll('br').length > 1) return true;
+        if (normalizeInlineText(cell.textContent || '').length > 200) return true;
+      }
+      return false;
+    }
+
+    function tableToPlainText(table, isJa) {
+      const rows = Array.from(table.querySelectorAll('tr'));
+      const lines = [`[${isJa ? '複雑な表をテキスト化' : 'Complex table flattened'}]`];
+      rows.forEach((tr, rowIndex) => {
+        const cells = Array.from(tr.children).filter((el) => /^(TD|TH)$/i.test(el.tagName));
+        const parts = cells.map((cell, colIndex) => {
+          const label = rowIndex === 0 && cell.tagName.toLowerCase() === 'th' ? `${isJa ? '見出し' : 'Header'}${colIndex + 1}` : `${isJa ? '列' : 'Col'}${colIndex + 1}`;
+          return `${label}: ${normalizeInlineText(cell.textContent || '') || '-'}`;
+        });
+        if (parts.length) lines.push(parts.join(' / '));
+      });
+      return lines.join('\n');
+    }
+
+    function extractAndAppendFootnotes(doc, isJa) {
+      const candidates = Array.from(doc.querySelectorAll('ol li[id*="footnote"], ol li[id*="note"], aside, section.footnotes li, div.footnotes li'));
+      if (!candidates.length) return;
+      const notes = [];
+      candidates.forEach((node, idx) => {
+        const text = normalizeInlineText(node.textContent || '');
+        if (text) notes.push(`${idx + 1}. ${text}`);
+        node.remove();
+      });
+      if (!notes.length) return;
+      const section = doc.createElement('section');
+      const h2 = doc.createElement('h2');
+      h2.textContent = isJa ? '注記' : 'Notes';
+      const p = doc.createElement('p');
+      p.innerHTML = notes.map((n) => n.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')).join('<br>');
+      section.appendChild(h2);
+      section.appendChild(p);
+      doc.body.appendChild(section);
+    }
+
+    function normalizeImages(doc, isJa) {
+      doc.querySelectorAll('img').forEach((img) => {
+        const alt = normalizeInlineText(img.getAttribute('alt') || '');
+        if (!alt) img.setAttribute('alt', isJa ? '画像' : 'Image');
+        img.removeAttribute('src');
+        img.removeAttribute('srcset');
+      });
+    }
+
+    function normalizeLinks(doc) {
+      doc.querySelectorAll('a').forEach((a) => {
+        const href = a.getAttribute('href') || '';
+        if (!href || /^#/.test(href)) return;
+        const txt = normalizeInlineText(a.textContent || '');
+        if (!txt) a.textContent = href;
+      });
+    }
+
+    function normalizeLineBreakHints(doc) {
+      const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
+      const textNodes = [];
+      while (walker.nextNode()) textNodes.push(walker.currentNode);
+      textNodes.forEach((node) => { node.textContent = node.textContent.replace(/[ \t]+\n/g, '\n'); });
+    }
+
+    function convertDomToMarkdown(doc, isJa) {
+      const turndownService = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced', bulletListMarker: '-', emDelimiter: '*', strongDelimiter: '**' });
+      if (self.turndownPluginGfm && self.turndownPluginGfm.gfm) turndownService.use(self.turndownPluginGfm.gfm);
+      turndownService.addRule('images', {
+        filter: 'img',
+        replacement: function (_content, node) {
+          const alt = normalizeInlineText(node.getAttribute('alt') || '');
+          const tag = isJa ? '画像' : 'Image';
+          return alt && alt !== tag ? `[${tag}: ${alt}]` : `[${tag}]`;
+        }
+      });
+      turndownService.addRule('lineBreak', { filter: 'br', replacement: function () { return '  \n'; } });
+      turndownService.addRule('headingsSpacing', {
+        filter: function (node) { return /^H[1-6]$/.test(node.nodeName); },
+        replacement: function (content, node) {
+          const hLevel = Number(node.nodeName.charAt(1));
+          const hashes = '#'.repeat(hLevel);
+          const text = normalizeInlineText(content || '');
+          return `\n\n${hashes} ${text}\n\n`;
+        }
+      });
+      turndownService.addRule('divAsBlock', { filter: 'div', replacement: function (content) { const txt = (content || '').trim(); return txt ? `\n\n${txt}\n\n` : '\n'; } });
+      return postProcessImportedMarkdown(turndownService.turndown(doc.body.innerHTML));
+    }
+
+    function postProcessImportedMarkdown(md) {
+      if (!md) return '';
+      let out = md.normalize('NFC').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+      out = out.replace(/[ \t]+$/gm, '');
+      out = out.replace(/\n{3,}/g, '\n\n');
+      out = out.replace(/^\s+|\s+$/g, '');
+      return out + '\n';
+    }
+
+    async function convert(arrayBuffer, isJa) {
+      if (!self.mammoth || !self.TurndownService || !self.DOMPurify) throw new Error('Required Word import libraries are unavailable in sandbox.');
+      const mammothOptions = {
+        styleMap: [
+          "p[style-name='Heading 1'] => h1:fresh", "p[style-name='Heading 2'] => h2:fresh",
+          "p[style-name='Heading 3'] => h3:fresh", "p[style-name='Heading 4'] => h4:fresh",
+          "p[style-name='Heading 5'] => h5:fresh", "p[style-name='Heading 6'] => h6:fresh",
+          "p[style-name='見出し 1'] => h1:fresh", "p[style-name='見出し 2'] => h2:fresh",
+          "p[style-name='見出し 3'] => h3:fresh", "p[style-name='見出し 4'] => h4:fresh",
+          "p[style-name='見出し 5'] => h5:fresh", "p[style-name='見出し 6'] => h6:fresh"
+        ],
+        includeDefaultStyleMap: true,
+        convertImage: mammoth.images.imgElement((image) => {
+          const alt = image.altText || '';
+          const imgTag = isJa ? '画像' : 'Image';
+          return { src: '', alt: alt ? `${alt}` : imgTag };
+        })
+      };
+      const result = await mammoth.convertToHtml({ arrayBuffer }, mammothOptions);
+      const safeHtml = sanitizeWordHtml(result.value || '');
+      const doc = preprocessWordHtml(safeHtml, isJa);
+      return { markdown: convertDomToMarkdown(doc, isJa), messages: Array.isArray(result.messages) ? result.messages : [] };
+    }
+
+    window.addEventListener('message', async (event) => {
+      const msg = event.data || {};
+      if (msg.type !== 'MDWORKS_WORD_IMPORT_REQUEST') return;
+      try {
+        const result = await convert(msg.arrayBuffer, !!msg.isJa);
+        parent.postMessage({ type: 'MDWORKS_WORD_IMPORT_RESULT', id: msg.id, ok: true, ...result }, '*');
+      } catch (err) {
+        parent.postMessage({ type: 'MDWORKS_WORD_IMPORT_RESULT', id: msg.id, ok: false, error: err?.message || String(err) }, '*');
+      }
+    });
+  };
+
+  return [
+    '<!doctype html><html><head><meta charset="utf-8"><title>MDWORKS Word Import Sandbox</title></head><body>',
+    '<script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js" crossorigin="anonymous"><\/script>',
+    '<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js" crossorigin="anonymous"><\/script>',
+    '<script src="https://cdn.jsdelivr.net/npm/turndown@7.1.3/lib/turndown.browser.umd.min.js" crossorigin="anonymous"><\/script>',
+    '<script src="https://cdn.jsdelivr.net/npm/turndown-plugin-gfm@1.0.2/dist/turndown-plugin-gfm.min.js" crossorigin="anonymous"><\/script>',
+    '<script>(', runner, ')();<\/script>',
+    '</body></html>'
+  ].join('');
+}
+
+function convertWordInSandbox(arrayBuffer) {
+  return new Promise((resolve, reject) => {
+    const id = `word-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const iframe = document.createElement('iframe');
+    let settled = false;
+    let loaded = false;
+    let loadTimer = null;
+
+    function cleanup() {
+      clearTimeout(loadTimer);
+      window.removeEventListener('message', onMessage);
+      iframe.remove();
+    }
+
+    function finish(fn, value) {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      fn(value);
+    }
+
+    function onMessage(event) {
+      if (event.source !== iframe.contentWindow) return;
+      const msg = event.data || {};
+      if (msg.type !== 'MDWORKS_WORD_IMPORT_RESULT' || msg.id !== id) return;
+      if (msg.ok) finish(resolve, { markdown: msg.markdown || '', messages: msg.messages || [] });
+      else finish(reject, new Error(msg.error || 'Sandboxed Word import failed.'));
+    }
+
+    window.addEventListener('message', onMessage);
+    iframe.style.display = 'none';
+    iframe.setAttribute('aria-hidden', 'true');
+    iframe.sandbox = 'allow-scripts';
+    iframe.srcdoc = getWordImportSandboxSrcdoc();
+    iframe.addEventListener('load', () => {
+      if (loaded || settled) return;
+      loaded = true;
+      try {
+        iframe.contentWindow.postMessage({ type: 'MDWORKS_WORD_IMPORT_REQUEST', id, arrayBuffer, isJa }, '*', [arrayBuffer]);
+      } catch (err) {
+        finish(reject, err);
+      }
+    }, { once: true });
+
+    loadTimer = setTimeout(() => finish(reject, new Error('Sandboxed Word import timed out.')), WORD_IMPORT_SANDBOX_TIMEOUT_MS);
+    document.body.appendChild(iframe);
+  });
+}
+
+
+const __scriptLoadCache = new Map();
 function loadScript(src) {
   if (__scriptLoadCache.has(src)) return __scriptLoadCache.get(src);
   const promise = new Promise((resolve, reject) => {
@@ -2223,19 +3151,15 @@ async function ensureWordImportLibraries() {
       loadScript('https://cdn.jsdelivr.net/npm/turndown@7.1.3/lib/turndown.browser.umd.min.js'),
       loadScript('https://cdn.jsdelivr.net/npm/turndown-plugin-gfm@1.0.2/dist/turndown-plugin-gfm.min.js')
     ]);
-  } catch (err) {
-    throw new Error(`Library load error: ${err?.message || err}`);
-  }
-  if (!window.mammoth || !window.TurndownService) {
-    throw new Error('Required Word import libraries are unavailable.');
-  }
+  } catch (err) { throw new Error(`Library load error: ${err?.message || err}`); }
+  if (!window.mammoth || !window.TurndownService) throw new Error('Required Word import libraries are unavailable.');
 }
 
 function preprocessWordHtml(html) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
   replaceTextboxesAndShapes(doc);
-  replaceComplexTables(doc);
+  // replaceComplexTables(doc); // 表の再現性を保つために無効化
   extractAndAppendFootnotes(doc);
   normalizeImages(doc);
   normalizeLinks(doc);
@@ -2247,9 +3171,7 @@ function replaceTextboxesAndShapes(doc) {
   const selectors = ['div[class*="textbox"]', 'div[class*="shape"]', 'v\\:textbox', 'w\\:txbxContent'];
   doc.querySelectorAll(selectors.join(',')).forEach((node) => {
     const text = normalizeInlineText(node.textContent || '');
-    const placeholder = text
-      ? `\n\n[${isJa ? 'テキストボックス' : 'Textbox'}: ${text}]\n\n`
-      : `\n\n[${isJa ? '図形またはテキストボックス' : 'Shape or textbox'}]\n\n`;
+    const placeholder = text ? `\n\n[${isJa ? 'テキストボックス' : 'Textbox'}: ${text}]\n\n` : `\n\n[${isJa ? '図形またはテキストボックス' : 'Shape or textbox'}]\n\n`;
     node.replaceWith(doc.createTextNode(placeholder));
   });
 }
@@ -2287,9 +3209,7 @@ function tableToPlainText(table) {
   rows.forEach((tr, rowIndex) => {
     const cells = Array.from(tr.children).filter((el) => /^(TD|TH)$/i.test(el.tagName));
     const parts = cells.map((cell, colIndex) => {
-      const label = rowIndex === 0 && cell.tagName.toLowerCase() === 'th'
-        ? `${isJa ? '見出し' : 'Header'}${colIndex + 1}`
-        : `${isJa ? '列' : 'Col'}${colIndex + 1}`;
+      const label = rowIndex === 0 && cell.tagName.toLowerCase() === 'th' ? `${isJa ? '見出し' : 'Header'}${colIndex + 1}` : `${isJa ? '列' : 'Col'}${colIndex + 1}`;
       return `${label}: ${normalizeInlineText(cell.textContent || '') || '-'}`;
     });
     if (parts.length) lines.push(parts.join(' / '));
@@ -2316,8 +3236,7 @@ function normalizeImages(doc) {
   doc.querySelectorAll('img').forEach((img) => {
     const alt = normalizeInlineText(img.getAttribute('alt') || '');
     if (!alt) img.setAttribute('alt', isJa ? '画像' : 'Image');
-    img.removeAttribute('src');
-    img.removeAttribute('srcset');
+    img.removeAttribute('src'); img.removeAttribute('srcset');
   });
 }
 
@@ -2334,18 +3253,12 @@ function normalizeLineBreakHints(doc) {
   const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
   const textNodes = [];
   while (walker.nextNode()) textNodes.push(walker.currentNode);
-  textNodes.forEach((node) => {
-    node.textContent = node.textContent.replace(/[ \t]+\n/g, '\n');
-  });
+  textNodes.forEach((node) => { node.textContent = node.textContent.replace(/[ \t]+\n/g, '\n'); });
 }
 
 function convertDomToMarkdown(doc) {
-  const turndownService = new TurndownService({
-    headingStyle: 'atx', codeBlockStyle: 'fenced', bulletListMarker: '-', emDelimiter: '*', strongDelimiter: '**'
-  });
-  if (window.turndownPluginGfm && window.turndownPluginGfm.gfm) {
-    turndownService.use(window.turndownPluginGfm.gfm);
-  }
+  const turndownService = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced', bulletListMarker: '-', emDelimiter: '*', strongDelimiter: '**' });
+  if (window.turndownPluginGfm && window.turndownPluginGfm.gfm) { turndownService.use(window.turndownPluginGfm.gfm); }
   turndownService.addRule('images', {
     filter: 'img',
     replacement: function (_content, node) {
@@ -2354,10 +3267,7 @@ function convertDomToMarkdown(doc) {
       return alt && alt !== tag ? `[${tag}: ${alt}]` : `[${tag}]`;
     }
   });
-  turndownService.addRule('lineBreak', {
-    filter: 'br',
-    replacement: function () { return '  \n'; }
-  });
+  turndownService.addRule('lineBreak', { filter: 'br', replacement: function () { return '  \n'; } });
   turndownService.addRule('headingsSpacing', {
     filter: function (node) { return /^H[1-6]$/.test(node.nodeName); },
     replacement: function (content, node) {
@@ -2367,13 +3277,7 @@ function convertDomToMarkdown(doc) {
       return `\n\n${hashes} ${text}\n\n`;
     }
   });
-  turndownService.addRule('divAsBlock', {
-    filter: 'div',
-    replacement: function (content) {
-      const txt = (content || '').trim();
-      return txt ? `\n\n${txt}\n\n` : '\n';
-    }
-  });
+  turndownService.addRule('divAsBlock', { filter: 'div', replacement: function (content) { const txt = (content || '').trim(); return txt ? `\n\n${txt}\n\n` : '\n'; } });
 
   let md = turndownService.turndown(doc.body.innerHTML);
   return postProcessImportedMarkdown(md);
@@ -2396,43 +3300,24 @@ function postProcessImportedMarkdown(md) {
   return out.trim() + '\n';
 }
 
-function normalizeInlineText(text) {
-  return String(text || '').normalize('NFC').replace(/\s+/g, ' ').trim();
-}
-const __scriptLoadCache = new Map();
+function normalizeInlineText(text) { return String(text || '').normalize('NFC').replace(/\s+/g, ' ').trim(); }
 function showLoader(msg) { set('loader-msg', msg); document.getElementById('global-loader').classList.add('show'); }
 function hideLoader() { document.getElementById('global-loader').classList.remove('show'); }
 //#endregion
 
-//#region [JS-13] FILE SYSTEM (OPEN / SAVE / STANDALONE)
-let fileHandle = null;
-
-function newFile() {
-  if (isDirty && editor.value.trim() !== '' && editor.value !== T.defaultMd) {
-    if (!confirm(T.confirmNew)) return;
-  }
-  saveToHistoryList(filenameInput.value, editor.value); // 閉じる前に履歴へ
-  editor.value = '';
-  filenameInput.value = 'untitled.md';
-  fileHandle = null;
-  update();
-  markSaved();
-  triggerAutoSave();
-  closeMenus();
-}
-
+//#region [JS-14] FILE SYSTEM (OPEN / SAVE / STANDALONE)
 async function handleOpen() {
   closeMenus();
   if (!isMobile && window.showOpenFilePicker) {
     try {
       const [handle] = await window.showOpenFilePicker({
-        id: 'md-works-dir', // ←これを追加
+        id: 'md-works-dir', 
         types: [{ description: 'Markdown / Text', accept: { 'text/plain': ['.md', '.txt', '.markdown'] } }]
       });
       fileHandle = handle;
       const file = await handle.getFile();
       
-      saveToHistoryList(filenameInput.value, editor.value); // 現在のファイルを履歴へ
+      saveToHistoryList(filenameInput.value, editor.value);
       
       filenameInput.value = file.name;
       const text = await file.text();
@@ -2448,66 +3333,29 @@ async function handleOpen() {
   }
 }
 
-document.getElementById('file-input').addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  
-  saveToHistoryList(filenameInput.value, editor.value); // 現在のファイルを履歴へ
-  
-  filenameInput.value = file.name;
-  fileHandle = null;
-  const reader = new FileReader();
-
-  reader.onload = ev => {
-    let text;
-    if (window.Encoding) {
-      const uint8 = new Uint8Array(ev.target.result);
-      text = Encoding.codeToString(Encoding.convert(uint8, { to: 'UNICODE', from: 'AUTO' })).normalize('NFC');
-    } else {
-      text = new TextDecoder('utf-8').decode(ev.target.result).normalize('NFC');
-    }
-    editor.value = text;
-    update();
-    markSaved();
-    triggerAutoSave();
-    if (spellEnabled) runSpellCheck();
-    toast(T.opened(file.name));
-  };
-
-  reader.readAsArrayBuffer(file);
-  e.target.value = '';
-});
-
 async function handleSave(isSaveAs = false) {
   closeMenus();
-  saveToHistoryList(filenameInput.value, editor.value); // 保存時に履歴も更新
+  saveToHistoryList(filenameInput.value, editor.value);
   
   if (isMobile) {
     const filename = filenameInput.value.trim() || 'untitled.md';
     const finalName = /\.(md|txt|markdown)$/i.test(filename) ? filename : filename + '.md';
-    
-    // 1. まずは本来の .md (text/plain) で試す（Firefox等はこれで通る）
     const file = new File([editor.value], finalName, { type: 'text/plain' });
     
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({ files: [file], title: finalName, text: 'Shared from MD Editor' });
-        markSaved();
-        toast(T.shared);
+        markSaved(); toast(T.shared);
       } catch (e) { console.warn('Share canceled', e); }
     } else {
-      // 2. Chrome対策: .md が弾かれたら、.txt に偽装してShareを試みる
       const txtName = finalName.replace(/\.(md|markdown)$/i, '.txt');
       const txtFile = new File([editor.value], txtName, { type: 'text/plain' });
-      
       if (navigator.canShare && navigator.canShare({ files: [txtFile] })) {
         try {
           await navigator.share({ files: [txtFile], title: txtName, text: 'Shared from MD Editor' });
-          markSaved();
-          toast(T.shared); 
+          markSaved(); toast(T.shared); 
         } catch (e) { console.warn('Share canceled', e); }
       } else {
-        // 3. txtでもダメなら従来のダウンロード処理へ
         fallbackDownload();
       }
     }
@@ -2516,7 +3364,7 @@ async function handleSave(isSaveAs = false) {
       try {
         if (!fileHandle || isSaveAs) {
           fileHandle = await window.showSaveFilePicker({
-            id: 'md-works-dir', // ←これを追加
+            id: 'md-works-dir',
             suggestedName: filenameInput.value.trim() || 'untitled.md',
             types: [{ description: 'Markdown', accept: { 'text/markdown': ['.md'] } }]
           });
@@ -2525,20 +3373,13 @@ async function handleSave(isSaveAs = false) {
         await writable.write(editor.value);
         await writable.close();
         filenameInput.value = fileHandle.name;
-        markSaved();
-        triggerAutoSave();
-        toast(T.saved);
+        markSaved(); triggerAutoSave(); toast(T.saved);
       } catch (e) {}
     } else {
       if (isSaveAs) {
         const newName = prompt(T.promptSaveAs, filenameInput.value.trim() || 'untitled.md');
-        if (newName) {
-          filenameInput.value = newName;
-          fallbackDownload();
-        }
-      } else {
-        fallbackDownload();
-      }
+        if (newName) { filenameInput.value = newName; fallbackDownload(); }
+      } else { fallbackDownload(); }
     }
   }
 }
@@ -2552,55 +3393,38 @@ function fallbackDownload() {
   a.download = filename;
   a.click();
   URL.revokeObjectURL(a.href);
-  markSaved();
-  toast(T.downloaded);
+  markSaved(); toast(T.downloaded);
 }
 
 function exportStandalone() {
   closeMenus();
-  saveToHistoryList(filenameInput.value, editor.value); // スタンドアロン保存時も履歴更新
+  saveToHistoryList(filenameInput.value, editor.value);
   
   const clone = document.documentElement.cloneNode(true);
-  
   clone.querySelectorAll('.open').forEach(el => el.classList.remove('open'));
   clone.querySelectorAll('.show').forEach(el => el.classList.remove('show'));
   
   const previewEl = clone.querySelector('#preview');
   if (previewEl) previewEl.innerHTML = '';
-  
   const backdropEl = clone.querySelector('#editor-backdrop');
   if (backdropEl) backdropEl.innerHTML = '';
-  
   const editorEl = clone.querySelector('#editor');
-  if (editorEl) {
-    editorEl.innerHTML = '';
-    editorEl.textContent = '';
-    editorEl.removeAttribute('value');
-  }
-
+  if (editorEl) { editorEl.innerHTML = ''; editorEl.textContent = ''; editorEl.removeAttribute('value'); }
   const toastEl = clone.querySelector('#toast');
   if (toastEl) { toastEl.className = ''; toastEl.innerHTML = ''; }
-
   const spellList = clone.querySelector('#spell-list');
   if (spellList) spellList.innerHTML = '';
-  
   const histList = clone.querySelector('#hist-list');
   if (histList) histList.innerHTML = '';
-  
   const outlineList = clone.querySelector('#outline-list');
   if (outlineList) outlineList.innerHTML = '';
-  
   const rnBody = clone.querySelector('#rn-body');
   if (rnBody) rnBody.innerHTML = '';
 
   const dataScript = clone.querySelector('#standalone-data');
   if (dataScript) {
-    const data = {
-      filename: filenameInput.value.trim() || 'untitled.md',
-      content: editor.value
-    };
-    const safeJson = JSON.stringify(data).replace(/</g, '\\u003c').replace(/>/g, '\\u003e');
-    dataScript.textContent = safeJson;
+    const data = { filename: filenameInput.value.trim() || 'untitled.md', content: editor.value };
+    dataScript.textContent = JSON.stringify(data).replace(/</g, '\\u003c').replace(/>/g, '\\u003e');
   }
 
   const htmlStr = '<!DOCTYPE html>\n' + clone.outerHTML;
@@ -2611,13 +3435,8 @@ function exportStandalone() {
     const file = new File([htmlStr], outName, { type: 'text/html' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       navigator.share({ files: [file], title: outName }).catch(e => console.warn('Share canceled', e));
-    } else {
-      triggerDownload(htmlStr, outName, 'text/html');
-    }
-  } else {
-    triggerDownload(htmlStr, outName, 'text/html');
-    toast(T.downloaded);
-  }
+    } else { triggerDownload(htmlStr, outName, 'text/html'); }
+  } else { triggerDownload(htmlStr, outName, 'text/html'); toast(T.downloaded); }
 }
 
 function triggerDownload(content, filename, mimeType) {
@@ -2630,18 +3449,15 @@ function triggerDownload(content, filename, mimeType) {
 }
 //#endregion
 
-//#region [JS-14] OUTLINE, HISTORY & LINTER (NEW)
-// ========== アウトライン (目次) ==========
+//#region [JS-15] OUTLINE, HISTORY & LINTER
 function toggleOutline() {
   outlineOpen = !outlineOpen;
   const panel = document.getElementById('outline-panel');
   const check = document.getElementById('outline-check');
   const entry = document.getElementById('m-outline-entry');
-  
   panel.classList.toggle('show', outlineOpen);
   check.style.opacity = outlineOpen ? '1' : '0';
   entry.classList.toggle('active', outlineOpen);
-  
   if (outlineOpen) renderOutline();
   closeMenus();
 }
@@ -2654,65 +3470,51 @@ function renderOutline() {
   
   let found = false;
   let charOffset = 0;
-  
   lines.forEach(line => {
     const m = line.match(/^(#{1,6})\s+(.+)/);
     if (m) {
       found = true;
       const level = m[1].length;
-      const text = m[2];
       const div = document.createElement('div');
       div.className = `ol-item ol-h${level}`;
-      div.textContent = text;
+      div.textContent = m[2];
       const targetOffset = charOffset;
       div.onclick = () => jumpToOffset(targetOffset);
       container.appendChild(div);
     }
-    charOffset += line.length + 1; // +1 for newline
+    charOffset += line.length + 1;
   });
-  
-  if (!found) {
-    container.innerHTML = `<div style="padding:10px; color:var(--text3); font-size:12px;">${T.outlineEmpty}</div>`;
-  }
+  if (!found) container.innerHTML = `<div style="padding:10px; color:var(--text3); font-size:12px;">${T.outlineEmpty}</div>`;
 }
 
 function jumpToOffset(offset) {
   editor.focus();
   editor.setSelectionRange(offset, offset);
-  
-  // スクロール位置の計算 (行数ベースでの概算)
   const textBefore = editor.value.substring(0, offset);
   const linesBefore = textBefore.split('\n').length;
-  
   requestAnimationFrame(() => {
     const lineHeight = parseFloat(getComputedStyle(editor).lineHeight);
     const paddingTop = parseFloat(getComputedStyle(editor).paddingTop);
     const targetTop = (linesBefore - 1) * lineHeight + paddingTop - (editor.clientHeight / 3);
-    
     editor.scrollTop = Math.max(0, targetTop);
     backdrop.scrollTop = editor.scrollTop;
   });
 }
 
-// ========== 作業履歴 (History) ==========
-const HIST_KEY = 'md_editor_history_list';
-
-function saveToHistoryList(filename, content) {
+async function saveToHistoryList(filename, content) {
   if (!content || content.trim() === '' || content === T.defaultMd) return;
-  let hist = JSON.parse(localStorage.getItem(HIST_KEY) || '[]');
-  
-  // 同じファイル名の履歴があれば削除して最新を先頭に
+  let hist = [];
+  try { hist = JSON.parse((await secureGetItem(HISTORY_KEY)) || '[]'); } catch (e) { hist = []; }
   hist = hist.filter(h => h.filename !== filename);
   hist.unshift({ filename, content, date: Date.now() });
-  
-  // 最大10件まで保持
   if (hist.length > 10) hist.pop();
-  localStorage.setItem(HIST_KEY, JSON.stringify(hist));
+  await secureSetItem(HISTORY_KEY, JSON.stringify(hist));
 }
 
-function openHistory() {
+async function openHistory() {
   closeMenus();
-  const list = JSON.parse(localStorage.getItem(HIST_KEY) || '[]');
+  let list = [];
+  try { list = JSON.parse((await secureGetItem(HISTORY_KEY)) || '[]'); } catch (e) { list = []; }
   const container = document.getElementById('hist-list');
   container.innerHTML = '';
   
@@ -2736,7 +3538,7 @@ function openHistory() {
       
       div.onclick = () => {
         if (isDirty && editor.value !== T.defaultMd && !confirm(T.confirmNew)) return;
-        saveToHistoryList(filenameInput.value, editor.value); // 今開いているものを退避
+        saveToHistoryList(filenameInput.value, editor.value);
         editor.value = h.content;
         filenameInput.value = h.filename;
         fileHandle = null;
@@ -2749,55 +3551,41 @@ function openHistory() {
   }
   document.getElementById('history-modal').classList.add('show');
 }
+function closeHistory() { document.getElementById('history-modal').classList.remove('show'); }
 
-function closeHistory() {
-  document.getElementById('history-modal').classList.remove('show');
-}
-
-// ========== Markdown整形補助 (Linter/Formatter) ==========
 function formatDoc() {
   closeMenus();
   let val = editor.value;
-  
-  // 1. 3行以上の連続する空行を2行に圧縮
   val = val.replace(/\n{3,}/g, '\n\n');
-  
-  // 2. 見出し(#)と文字の間にスペースがない場合に自動挿入 (例: ##見出し -> ## 見出し)
   val = val.replace(/^(#{1,6})([^#\s\n])/gm, '$1 $2');
-  
-  // 3. 各行の行末の無駄な空白(Trailing spaces)を削除 (Markdownの改行用2スペースは残す)
-  val = val.split('\n').map(line => {
-    if (line.endsWith('  ')) return line; // 強制改行の2スペースは維持
-    return line.trimEnd();
-  }).join('\n');
-  
+  val = val.split('\n').map(line => line.endsWith('  ') ? line : line.trimEnd()).join('\n');
   editor.value = val;
-  markDirty();
-  update();
-  toast(T.formatDone);
+  markDirty(); update(); toast(T.formatDone);
 }
 //#endregion
 
-//#region [JS-15] RELEASE NOTES LOGIC (NEW)
-const CURRENT_VERSION = '1.1.0';
+function toast(msg, duration = 1800) {
+  const toastEl = document.getElementById('toast');
+  if (!toastEl) return;
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastEl._timer);
+  toastEl._timer = setTimeout(() => toastEl.classList.remove('show'), duration);
+}
+
+//#region [JS-16] RELEASE NOTES LOGIC
+const CURRENT_VERSION = '1.1.2';
 
 function checkReleaseNotes() {
   const lastSeen = localStorage.getItem('md_editor_version');
-  if (lastSeen !== CURRENT_VERSION) {
-    showReleaseNotes();
-  }
+  if (lastSeen !== CURRENT_VERSION) showReleaseNotes();
 }
 
 function showReleaseNotes() {
   set('rn-title', T.rnTitle);
   const body = document.getElementById('rn-body');
-  
-  // 既存のmarkedとDOMPurifyを使ってMarkdownをHTMLに変換して表示
-  if (window.marked && window.DOMPurify) {
-     body.innerHTML = DOMPurify.sanitize(marked.parse(T.rnContent));
-  } else {
-     body.innerText = "Updated to " + CURRENT_VERSION;
-  }
+  if (window.marked && window.DOMPurify) body.innerHTML = safeMarkdownHtml(T.rnContent);
+  else body.innerText = "Updated to " + CURRENT_VERSION;
   document.getElementById('rn-modal').classList.add('show');
 }
 
@@ -2807,10 +3595,9 @@ function closeRN() {
 }
 //#endregion
 
-//#region [JS-16] SHORTCUTS, EXPORTS & UTILS
+//#region [JS-17] SHORTCUTS, EXPORTS & UTILS
 window.addEventListener('keydown', e => {
   const meta = e.ctrlKey || e.metaKey;
-
   if (e.key === 'Escape') {
     if (document.body.classList.contains('zen-mode')) toggleZenMode();
     if (srPanelOpen) { e.preventDefault(); closeSearchPanel(); }
@@ -2818,127 +3605,86 @@ window.addEventListener('keydown', e => {
     if (document.getElementById('rn-modal').classList.contains('show')) closeRN();
     return;
   }
-
   if (meta && e.key.toLowerCase() === 'n') { e.preventDefault(); newFile(); }
   if (meta && e.shiftKey && e.key.toLowerCase() === 's') { e.preventDefault(); handleSave(true); return; }
   if (meta && !e.shiftKey && e.key.toLowerCase() === 's') { e.preventDefault(); handleSave(false); }
   if (meta && e.key.toLowerCase() === 'o') { e.preventDefault(); handleOpen(); }
   if (meta && e.key.toLowerCase() === 'f') { e.preventDefault(); openSearchPanel('find'); }
   if (meta && e.key.toLowerCase() === 'h') { e.preventDefault(); openSearchPanel('replace'); }
-  
-  if (meta && e.key.toLowerCase() === 'b') {
-    e.preventDefault(); 
-    if (document.activeElement === editor && !isEditorComposing) wrap('**');
-  }
-  if (meta && e.key.toLowerCase() === 'i') {
-    e.preventDefault();
-    if (document.activeElement === editor && !isEditorComposing) wrap('*');
-  }
+  if (meta && e.key.toLowerCase() === 'b') { e.preventDefault(); if (document.activeElement === editor && !isEditorComposing) wrap('**'); }
+  if (meta && e.key.toLowerCase() === 'i') { e.preventDefault(); if (document.activeElement === editor && !isEditorComposing) wrap('*'); }
 });
 
 window.addEventListener('beforeunload', (e) => {
-  if (isDirty && editor.value.trim() !== '' && editor.value !== T.defaultMd) {
-    e.preventDefault();
-    e.returnValue = ''; 
-  }
+  if (isDirty && editor.value.trim() !== '' && editor.value !== T.defaultMd) { e.preventDefault(); e.returnValue = ''; }
 });
 
-function closeFile() {
+async function newFile() {
   closeMenus();
   if (isDirty && editor.value.trim() !== '' && editor.value !== T.defaultMd) {
-    if (!confirm(T.confirmClose)) return;
+    if (!confirm(T.confirmNew)) return;
   }
-  saveToHistoryList(filenameInput.value, editor.value); // 閉じる前に履歴へ
-  editor.value = '';
+  await saveToHistoryList(filenameInput.value, editor.value);
+  editor.value = T.defaultMd;
   filenameInput.value = 'untitled.md';
   fileHandle = null;
   update();
   markSaved();
-  triggerAutoSave();
+  await triggerAutoSave();
+  toast(T.newCreated);
+}
+
+// ▼ ファイルを閉じる処理（非同期[async/await]対応で安定化）
+async function closeFile() {
+  closeMenus();
+  if (isDirty && editor.value.trim() !== '' && editor.value !== T.defaultMd) {
+    if (!confirm(T.confirmClose)) return;
+  }
+  await saveToHistoryList(filenameInput.value, editor.value);
+  editor.value = '';
+  filenameInput.value = 'untitled.md';
+  fileHandle = null;
+  update(); 
+  markSaved(); 
+  await triggerAutoSave(); 
   toast(T.closedToast);
 }
 
 async function execEdit(action) {
-  closeMenus();
-  editor.focus();
-  
-  if (action === 'selectAll') {
-    editor.select();
-    return;
-  }
-  
+  closeMenus(); editor.focus();
+  if (action === 'selectAll') { editor.select(); return; }
   if (action === 'paste') {
     try {
       const text = await navigator.clipboard.readText();
-      document.execCommand('insertText', false, text.normalize('NFC'));
-      markDirty();
-      triggerAutoSave();
-    } catch (err) {
-      toast(T.errPaste);
-    }
+      handlePlainTextPaste(text);
+    } catch (err) { toast(T.errPaste); }
     return;
   }
-  
   document.execCommand(action);
-  if (action === 'cut' || action === 'undo' || action === 'redo') {
-    markDirty();
-    triggerAutoSave();
-  }
-}
-
-function toggleZenMode() {
-  const isZen = document.body.classList.toggle('zen-mode');
-  const chk = document.getElementById('zen-check');
-  const entry = document.getElementById('m-zen-entry');
-  
-  if (chk) chk.style.opacity = isZen ? '1' : '0';
-  if (entry) entry.classList.toggle('active', isZen);
-  
-  closeMenus();
-  if (isZen) {
-    toast('Zenモード起動 (Escで解除)');
-  }
+  if (action === 'cut' || action === 'undo' || action === 'redo') { markDirty(); triggerAutoSave(); }
 }
 
 function exportHtml() {
   closeMenus();
-  if (!window.marked) return;
-  if (!window.DOMPurify) {
-    alert(isJa ? 'セキュリティエラー: 処理を中止しました。' : 'Security Error');
-    return;
-  }
-  const safeHtml = DOMPurify.sanitize(marked.parse(editor.value));
+  if (!window.marked || !window.DOMPurify) { alert(isJa ? 'セキュリティエラー' : 'Security Error'); return; }
+  const safeHtml = safeMarkdownHtml(editor.value);
   const title = filenameInput.value.replace(/\.[^/.]+$/, '') || 'document';
   const fullHtml = `<!DOCTYPE html>\n<html lang="${isJa ? 'ja' : 'en'}">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>${title}</title>\n<style>body{font-family:'Helvetica Neue',Arial,sans-serif;line-height:1.8;color:#333;max-width:800px;margin:0 auto;padding:40px 20px}h1,h2,h3,h4,h5,h6{font-family:sans-serif;font-weight:bold;margin-top:1.5em;margin-bottom:.5em}h1{border-bottom:2px solid #eee;padding-bottom:5px}h2{border-bottom:1px solid #eee;padding-bottom:5px}code{background-color:#f4f4f4;padding:2px 5px;border-radius:4px;font-family:monospace;font-size:.9em}pre{background-color:#f6f8fa;border-radius:6px;padding:16px;overflow-x:auto;border:1px solid #e1e4e8}pre code{background:none;border:none;padding:0}blockquote{border-left:4px solid #dfe2e5;margin:1em 0;padding-left:16px;color:#6a737d}table{border-collapse:collapse;width:100%;margin:1em 0}th,td{border:1px solid #dfe2e5;padding:8px 13px}th{background-color:#f6f8fa;font-weight:600}tr:nth-child(even){background-color:#fcfcfc}img{max-width:100%;height:auto}</style>\n</head>\n<body>\n${safeHtml}\n</body>\n</html>`;
-
   if (isMobile) {
     const file = new File([fullHtml], title + '.html', { type: 'text/html;charset=utf-8' });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      navigator.share({ files: [file], title: title + '.html' }).catch(() => {});
-    } else {
-      triggerDownload(fullHtml, title + '.html', 'text/html');
-    }
+    if (navigator.canShare && navigator.canShare({ files: [file] })) navigator.share({ files: [file], title: title + '.html' }).catch(() => {});
+    else triggerDownload(fullHtml, title + '.html', 'text/html');
   } else {
-    triggerDownload(fullHtml, title + '.html', 'text/html');
-    toast(T.downloaded);
+    triggerDownload(fullHtml, title + '.html', 'text/html'); toast(T.downloaded);
   }
 }
 
 function exportPdf() {
   closeMenus();
-  if (window.marked) {
-    if (!window.DOMPurify) return;
-    preview.innerHTML = DOMPurify.sanitize(marked.parse(editor.value));
-    decoratePreviewTasks();
+  if (window.marked && window.DOMPurify) {
+    preview.innerHTML = safeMarkdownHtml(editor.value); decoratePreviewTasks();
   }
   setTimeout(() => window.print(), 100);
-}
-
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
 }
 //#endregion
 </script>
