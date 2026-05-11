@@ -247,18 +247,31 @@ Your writing stays local unless you choose to export or share it.
 ## 🧭 How It Compares
 
 **MD//WORKS is not trying to replace IDEs, knowledge bases, or collaborative writing platforms.**  
-It occupies a different space: a focused, portable Markdown editor for people who want to write, recover, and carry their work with minimal friction.
+It occupies a different space: a focused, portable Markdown editor for people who want to write, protect, recover, and carry their work with minimal friction.
 
 | Capability | VS Code | Obsidian | Typora | MD//WORKS |
 |---|---:|---:|---:|---:|
 | True portability / single-file app | ❌ | △ | ❌ | ✅ |
+| Editor + document bundled together | ❌ | △ | ❌ | ✅ |
+| Encrypted single-file export | ❌ | ❌ | ❌ | ✅ |
+| Local-only encryption / no server required | △ | △ | △ | ✅ |
 | Draft recovery & writing safety | △ | △ | ❌ | ✅ |
 | Distraction-free writing | △ | △ | ○ | ✅ |
+| Offline / restricted-environment usability | △ | ○ | ○ | ✅ |
 | Plugin & extension ecosystem | ✅✅✅ | ✅✅ | △ | ❌ |
 
-**Legend:**  
-✅ Excellent ○ Good △ Limited ❌ Not supported
+### What Makes MD//WORKS Different
 
+VS Code, Obsidian, and Typora are excellent tools, but they are built around different assumptions.
+
+- **VS Code** is a powerful development environment.
+- **Obsidian** is a knowledge base and note-linking system.
+- **Typora** is a polished Markdown writing app.
+- **MD//WORKS** is designed around a different idea:  
+  **write, protect, and carry your work as a single self-contained file.**
+
+With **Save as App** and **Private App export**, MD//WORKS turns a Markdown document into a portable HTML application.  
+The goal is not to add more complexity, but to make important writing easier to move, archive, reopen, and protect — without depending on a cloud service.
 ---
 
 ## 🚫 What MD//WORKS Is Not
