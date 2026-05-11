@@ -44,6 +44,17 @@ Even better, this design is **fully isolated**—your preferences will **never i
 
 ***
 
+## **Upcoming feature**
+
+The next version of MD//WORKS will include **Private App export**,  
+enabling encrypted single-file HTML documents using AES-GCM and local-only processing.
+
+- AES-GCM 256-bit encryption 
+- PBKDF2 key derivation (310,000 iterations) 
+- Fully local encryption / no server required
+
+**A new way to write, protect, and carry your work — all in one file.**
+
 ---
 # Features
 
