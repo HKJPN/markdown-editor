@@ -1,6 +1,7 @@
-# 🚀 MD//WORKS v1.5.1 — Standalone Markdown Editor
+# 🚀 MD//WORKS v1.5.2 — Standalone Markdown Editor
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
-<img width="1280" height="720" alt="screenshotveronepointfive" src="https://github.com/user-attachments/assets/22b369e3-638d-4491-b56a-fdb81cb3c398" />
+<img width="854" height="720" alt="1_5_2の画面cut" src="https://github.com/user-attachments/assets/17e1489b-cd58-42da-ab69-13293177e271" />
+
 
 **No install. No setup. Just write.**
 
@@ -11,47 +12,9 @@ Write Markdown, preview it live, import Word documents, recover previous drafts,
 With its unique **Save as App** feature, MD//WORKS lets you carry not just your text — but your complete writing environment — anywhere.
 
 ---
-## ✨ What’s New in v1.5.1
+## ✨ What’s New in v1.5.2
 
-MD//WORKS v1.5.1 is a small but meaningful update focused on making your workflow smoother and more comfortable across devices.
-*   **Directory Memory (Desktop)**  
-    The file open/save dialog now remembers your last accessed folder, making local editing faster and more seamless.
-
-*   **Touch-Friendly UI & Menus (iPad & Mobile)**  
-    We’ve improved touch usability by increasing the size of menu bars and toolbar targets. Tap buttons and navigate menus more comfortably with your fingers or Apple Pencil—no more frustrating mis-taps.
-
-*   **Draggable Preview Splitter (iPad & Mobile)**  
-    The preview pane now fully supports touch. Simply drag the center divider to resize the preview area smoothly and intuitively.
-
-*   **Zen Mode Exit Button (iPad & Mobile)**  
-    A floating “Close” (✕) button has been added to the top-right corner in Zen Mode, making it easy to exit focus mode without needing a physical `Esc` key.
-
----
-
-## ✨ **What’s Coming Next**
-
-We’re excited to share what’s ahead for *MD//WORKS*—bringing it even closer to a seamless, modern writing experience.
-
-***
-
-### 🚀 Progressive Web App (PWA) Support
-
-MD//WORKS will soon support **Progressive Web App (PWA)** functionality, transforming it from a browser-based tool into an experience that feels like a native application.
-
-With this update, you’ll be able to:
-
-*   Install MD//WORKS directly to your home screen or desktop
-*   Launch instantly with blazing-fast, cache-powered startup
-*   Continue working smoothly even when offline
-*   Enjoy a more reliable and flexible writing environment anywhere, anytime
-
-This enhancement significantly improves performance, accessibility, and portability—without ever sacrificing the simplicity of the web.
-
-***
-
-### 🎨 New Appearance Modes
-
-We’re also introducing a set of thoughtfully designed color themes, allowing you to tailor your workspace to your environment, mood, and workflow.
+We’re introducing a set of thoughtfully designed color themes, allowing you to tailor your workspace to your environment, mood, and workflow.
 
 #### Available Themes
 
@@ -81,7 +44,6 @@ Even better, this design is **fully isolated**—your preferences will **never i
 
 ***
 
-Stay tuned—these updates are designed to make MD//WORKS not just a tool, but a truly adaptive writing companion.
 ---
 # Features
 
