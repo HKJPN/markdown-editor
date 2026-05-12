@@ -8,6 +8,12 @@ Write Markdown, preview it live, import Word documents, recover previous drafts,
 
 With its unique **Save as App** feature, MD//WORKS lets you carry not just your text — but your complete writing environment — anywhere.
 
+# 🚀 Live Demo
+
+👉 **https://hkjpn.github.io/markdown-editor/**
+
+Try it instantly in your browser.  
+
 ---
 ## ✨ What’s New in v1.5.2
 
