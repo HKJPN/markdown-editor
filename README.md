@@ -3,11 +3,7 @@
 <img width="854" height="720" alt="1_5_2の画面cut" src="https://github.com/user-attachments/assets/17e1489b-cd58-42da-ab69-13293177e271" />
 
 
-The only editor that transforms your document into secure, portable application. No installation. No cloud. All you need is a browser but everything runs locally.
-
-
-# **MD//WORKS** is a lightweight, browser-based Markdown editor built for focused writing, clean editing, and long-term portability.
-
+## **MD//WORKS** is the only editor that transforms your document into secure, portable application. No installation. No cloud. All you need is a browser but everything runs locally.
 Write Markdown, preview it live, import Word documents, recover previous drafts, and even save the entire editor together with your document as a single portable HTML app.
 
 With its unique **Save as App** feature, MD//WORKS lets you carry not just your text — but your complete writing environment — anywhere.
