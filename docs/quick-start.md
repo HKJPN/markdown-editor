@@ -2,9 +2,13 @@
 ## 1. Introduction
 
 MD//WORKS is a browser-based Markdown editor.
-No installation required. Create, preview, save, and export Markdown documents as HTML files. You can also package the document and the editor together as a single self-contained HTML file.
+Create, preview, save, and export Markdown documents as HTML files. You can also package the document and the editor together as a single self-contained HTML file.
 
-## 2. Basic Operations
+## 2. Getting Started
+No installation needed. Get started immediately with the live demo:
+👉 https://hkjpn.github.io/markdown-editor/
+
+## 3. Basic Operations
 
 ### Create a New Document
 You can create a new document from File > New.
@@ -18,7 +22,7 @@ You can save your document as a Markdown file using Save or Download.
 ### Preview
 Click the Preview button to check how your Markdown will be rendered.
 
-## 3. Editing Features
+## 4. Editing Features
 
 - Headings
 - Bold and italic text
@@ -30,22 +34,22 @@ Click the Preview button to check how your Markdown will be rendered.
 - Tables
 - Links
 
-## 4. Importing Word Files
+## 5. Importing Word Files
 
 You can import `.docx` files and convert them into Markdown format.  
 Some complex layouts may be simplified during conversion.
 
-## 5. Standalone Save
+## 6. Standalone Save
 
 By using Save as App, you can save the current document and the editor together as a single HTML file.
 
-## 6. FAQ
+## 7. FAQ
 
 ### Do I need to install anything?
 No. MD//WORKS runs in your browser.
 
 ### Is my data uploaded to the cloud?
-No. Normal editing and saving operations are completed inside your browser.
+No. All editing and saving operations are completed inside your browser.
 
 ### Which browsers are recommended?
 Chrome or Edge for PC/Mac is recommended. Other browsers are also supported where possible, with available features automatically detected and enabled.
