@@ -2,4 +2,11 @@
 
 ## Supported Versions 
 
-Versions 1.4 or above are currently being supported with security updates.
+## Supported Versions
+
+| Version | Supported          |
+| ------- | ------------------ |
+| Latest  | ✅ Yes             |
+| < Latest | ❌ No             |
+
+Only the latest version receives security updates.
