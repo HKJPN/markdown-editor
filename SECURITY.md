@@ -2,8 +2,6 @@
 
 ## Supported Versions 
 
-## Supported Versions
-
 | Version | Supported          |
 | ------- | ------------------ |
 | Latest  | ✅ Yes             |
