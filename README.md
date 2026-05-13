@@ -83,7 +83,7 @@ MD//WORKS is fully open-source—no exceptions. Although it runs in the browser 
 - No account.
 - No analytics, no tracking. 
 
-Don’t take our word for it—review the code yourself.
+Don’t take our word for it—review the code yourself. If you find issues or potential weaknesses, please report them via Issues or contact us privately if needed.
 
 ---
 
