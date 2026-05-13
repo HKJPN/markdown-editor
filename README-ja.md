@@ -9,6 +9,10 @@ Markdown の編集、ライブプレビュー、Word 文書の取り込み、履
 
 独自の **「アプリとして保存」(Save as App)** 機能により、文章だけでなく **書くための環境そのもの** を持ち運べます。
 
+# 🚀 インストール不要で即実行可能
+
+👉 **https://hkjpn.github.io/markdown-editor/**
+
 ---
 
 ## ✨ What’s New in v1.5.2
