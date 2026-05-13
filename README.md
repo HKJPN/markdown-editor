@@ -79,9 +79,9 @@ Ideal for turning Word drafts, manuals, reports, and meeting notes into clean Ma
 
 MD//WORKS is fully open-source—no exceptions. Although it runs in the browser as an HTML app, your documents are processed locally on your device. Editing, saving, exporting, and encryption are performed in the browser, and your document data is not uploaded to a server.
 
-- No hidden cloud processing.  
-- No secret server-side logic.  
-- No black box between you and your work.
+- No account.
+- No installation.
+- No hidden cloud processing. 
 
 Don’t take our word for it—review the code yourself.
 
