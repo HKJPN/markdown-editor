@@ -75,6 +75,12 @@ Ideal for turning Word drafts, manuals, reports, and meeting notes into clean Ma
 
 ---
 
+## Full Transparency for Full Security
+
+MD//WORKS is fully open-source—no exceptions. Although it runs in the browser as an HTML app, your documents are processed locally on your device. Editing, saving, exporting, and encryption are performed in the browser, and your document data is not uploaded to a server. Don’t take our word for it—review the code yourself.
+
+---
+
 ### 📦 Save as App — Your Document, Your Editor, One File
 
 The signature feature of MD//WORKS.
