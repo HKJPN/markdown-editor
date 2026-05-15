@@ -18,6 +18,7 @@ MD//WORKS is designed to minimize unnecessary network communication and server- 
 Users handling highly sensitive, confidential, regulated, or legally privileged documents should review the source code, dependency list, and security posture before use.
 
 ## Reporting a Vulnerability
+
 If you find issues or potential weaknesses, please report them via GitHub Issues or contact us privately if needed.
 ---
 
