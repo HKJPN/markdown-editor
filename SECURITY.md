@@ -19,7 +19,7 @@ Users handling highly sensitive, confidential, regulated, or legally privileged 
 
 ## Reporting a Vulnerability
 
-If you find issues or potential weaknesses, please report them via GitHub Issues or contact us privately if needed.
+If you find issues or potential weaknesses, please report them via GitHub Issues or contact us privately if needed. We will do our best to address it as an open-source community effort.
 
 ---
 
@@ -51,4 +51,4 @@ MD//WORKSは、不要なネットワーク通信やサーバー側のリスク�
 
 ## 脆弱性の報告
 
-もし問題や潜在的な脆弱性を発見された場合は、GitHub Issues で報告をお願いします。公開での報告が適切でない内容については、必要に応じて非公開での報告をお願いします。
+もし問題や潜在的な脆弱性を発見された場合は、GitHub Issues で報告をお願いします。公開での報告が適切でない内容については、必要に応じて非公開での報告をお願いします。オープンソースコミュニティの取り組みとして、できる限り対応いたします。
