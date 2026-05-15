@@ -20,6 +20,7 @@ Users handling highly sensitive, confidential, regulated, or legally privileged 
 ## Reporting a Vulnerability
 
 If you find issues or potential weaknesses, please report them via GitHub Issues or contact us privately if needed.
+
 ---
 
 # セキュリティポリシー
