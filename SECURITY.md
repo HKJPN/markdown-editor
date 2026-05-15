@@ -17,6 +17,8 @@ MD//WORKS is designed to minimize unnecessary network communication and server- 
 
 Users handling highly sensitive, confidential, regulated, or legally privileged documents should review the source code, dependency list, and security posture before use.
 
+## Reporting a Vulnerability
+If you find issues or potential weaknesses, please report them via GitHub Issues or contact us privately if needed.
 ---
 
 # セキュリティポリシー
@@ -43,3 +45,8 @@ MD//WORKSは、不要なネットワーク通信やサーバー側のリスク�
 依存ライブラリのセキュリティ更新は、可能な範囲で確認し、必要に応じて適用します。利用者は、現在のバージョンが自身のセキュリティ要件を満たしているかを、必要に応じて個別に確認してください。
 
 高度な機密情報、規制対象となる情報、法的秘匿特権の対象となる文書などを扱う場合は、利用前にソースコード、依存ライブラリ一覧、および本ソフトウェアのセキュリティ上の特性を確認してください。
+
+
+## 脆弱性の報告
+
+もし問題や潜在的な脆弱性を発見された場合は、GitHub Issues で報告をお願いします。公開での報告が適切でない内容については、必要に応じて非公開での報告をお願いします。
