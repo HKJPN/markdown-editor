@@ -930,6 +930,9 @@ body.zen-mode #zen-exit-btn { display: flex; }
       <div class="menu-entry" onclick="exportStandalone()">
         <span id="m-save-as-app"></span>
       </div>
+      <div class="menu-entry" onclick="exportPrivateStandalone()">
+        <span id="m-save-as-private-app"></span>
+      </div>
       <div class="menu-entry" onclick="exportHtml()">
         <span id="m-export-html"></span>
       </div>
@@ -1144,7 +1147,7 @@ body.zen-mode #zen-exit-btn { display: flex; }
     </div>
     <div id="rn-body" class="rn-body"></div>
     <div class="rn-foot">
-      <button class="rn-btn" onclick="closeRN()">OK</button>
+      <button id="rn-close-btn" class="rn-btn" onclick="closeRN()"></button>
     </div>
   </div>
 </div>
@@ -1211,6 +1214,7 @@ const T = {
   save:        isJa ? '保存'     : 'Save',
   saveAs:      isJa ? '名前を付けて保存' : 'Save As',
   saveAsApp:   isJa ? 'スタンドアロン保存' : 'Save as App',
+  saveAsPrivateApp: isJa ? '暗号化Appとして保存' : 'Save as Private App',
   
   undo:        isJa ? '元に戻す' : 'Undo',
   redo:        isJa ? 'やり直し' : 'Redo',
@@ -1318,25 +1322,21 @@ const T = {
     ? `# MD//WORKS エディタ\n\n**スタンドアロン保存**に対応した究極版です。\n\n## 主な機能\n\n- **アプリごと保存**: [ファイル] > [スタンドアロン保存] で、現在の原稿とエディタ本体を \`.app.html\` として1ファイルに書き出します。USB等で持ち運べます。\n- **暗号化保存**: ローカルの下書きと履歴は、Web Crypto API を用いてすべて暗号化保存されます。Private Storageをオンにするとパスワード保護も可能です。\n\n---\n\n*そのまま編集を開始してください。*\n`
     : `# MD//WORKS Editor\n\nThe ultimate edition featuring **Standalone Save**.\n\n## Key Features\n\n- **Save as App**: Go to [File] > [Save as App] to export your current text and this entire editor into a single \`.app.html\` file for easy portability.\n- **Encrypted Storage**: Drafts and history are securely encrypted via Web Crypto API. You can also enforce a password using Private Storage.\n\n---\n\n*Start editing!*\n`,
   
-  rnTitle: isJa ? 'リリースノート (v1.5.3)' : 'Release Notes (v1.5.3)',
-  rnContent: isJa ? `
-## 新機能
+  releaseNotesTitle: isJa ? 'v1.5.3 の新機能' : "What's New in v1.5.3",
+  releaseNotesIntro: isJa ? '今回の主な改善内容です。' : 'Here are the main improvements in this release.',
+  releaseNotesClose: isJa ? '閉じる' : 'Close',
+  releaseNotesContent: isJa ? `
+## v1.5.3 - Save as Private App
 
-### 🔒 暗号化オートセーブ (Web Crypto API)
-* **Auto Encrypted**: 意識することなく、ブラウザ内の下書き・履歴が自動的にAES-GCMで暗号化されます。
-* **Private Storage**: ファイルメニューからオンにすると、強固なパスフレーズ（PBKDF2生成）でロックをかけられます。
-
-### 🖼️ 画像のドラッグ＆ドロップ対応
-* ローカル容量保護のため上限は**200KB**ですが、エディタに画像をドロップすると自動でBase64形式に変換され、画像が埋め込まれます。スタンドアロン保存と相性抜群です。
+- 現在のMD//WORKS Editorを、自分専用のプライベートHTMLアプリとして保存できるようになりました。
+- インストール不要・サーバー不要で、ブラウザだけで開ける1ファイルアプリとして持ち運べます。
+- File > New / File > Close 後に、以前のファイルへ誤って上書き保存される可能性がある問題を修正しました。
 ` : `
-## New Features
+## v1.5.3 - Save as Private App
 
-### 🔒 Encrypted Auto-save
-* **Auto Encrypted**: Drafts and history are automatically encrypted with AES-GCM without any prompt.
-* **Private Storage**: You can enable passphrase-based robust encryption from the File menu.
-
-### 🖼️ Image Drag & Drop
-* You can drop images (up to 200KB) directly into the editor. They will be auto-converted to Base64 to keep your standalone exported files truly independent.
+- You can now save the current MD//WORKS Editor as a private, self-contained HTML app.
+- The exported app opens directly in a browser, with no installation or server required.
+- Fixed an issue that could cause Save after File > New or File > Close to overwrite the previously opened file.
 `
 };
 
@@ -1347,6 +1347,7 @@ set('m-close', T.closeMenu);
 set('m-open', T.open);
 set('m-open-word', T.openWord);
 set('m-save-as-app', T.saveAsApp);
+set('m-save-as-private-app', T.saveAsPrivateApp);
 
 set('m-undo', T.undo); set('m-redo', T.redo);
 set('m-cut', T.cut); set('m-copy', T.copy); set('m-paste', T.paste);
@@ -1410,12 +1411,6 @@ let customDict = new Set();
 let ignoredWords = new Set();
 let isDirty = false;
 let isDraggingSplitter = false;
-let fileHandle = null;
-
-function resetDocumentIdentity(filename = 'untitled.md') {
-  filenameInput.value = filename;
-  fileHandle = null;
-}
 
 editor.placeholder = T.placeholder;
 editor.value = T.defaultMd;
@@ -1427,8 +1422,8 @@ const segmenter = typeof Intl.Segmenter !== 'undefined'
 const THEME_STORAGE_KEY = 'mdworks_theme_mode';
 const THEME_LIST = ['midnight', 'paper', 'warm'];
 let currentTheme = 'midnight';
+let fileHandle = null;
 //#endregion
-
 
 //#region [JS-03] SECURE STORAGE & ENCRYPTION LOGIC
 // DOMPurify Hooks
@@ -1704,6 +1699,19 @@ async function loadAutoSave() {
 
 let hasStandaloneData = false;
 
+function getStandaloneAutosaveSuffix(filename, content) {
+  const name = String(filename || 'untitled.md');
+  const text = String(content || '');
+  let hash = 2166136261;
+  const seed = `${name}\n${text}`;
+  for (let i = 0; i < seed.length; i += 1) {
+    hash ^= seed.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  const namePart = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 48) || 'document';
+  return `${namePart}_${(hash >>> 0).toString(16)}`;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     const dataScript = document.getElementById('standalone-data');
@@ -1714,8 +1722,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         filenameInput.value = data.filename || 'untitled.md';
         hasStandaloneData = true;
         
-        AUTOSAVE_TXT_KEY = 'md_editor_standalone_text';
-        AUTOSAVE_NAME_KEY = 'md_editor_standalone_name';
+        const standaloneKeySuffix = getStandaloneAutosaveSuffix(data.filename, data.content);
+        AUTOSAVE_TXT_KEY = `md_editor_standalone_text_${standaloneKeySuffix}`;
+        AUTOSAVE_NAME_KEY = `md_editor_standalone_name_${standaloneKeySuffix}`;
       }
     }
   } catch (e) {
@@ -1725,11 +1734,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!getMeta().mode) setMeta({ mode: "auto" });
   renderStorageBadge();
 
+  try {
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    if (THEME_LIST.includes(savedTheme)) {
+      applyTheme(savedTheme, { persist: false });
+    } else {
+      applyTheme('midnight', { persist: false });
+    }
+  } catch (e) {
+    applyTheme('midnight', { persist: false });
+  }
+
   await loadAutoSave();
   update();
   if (!isDirty) markSaved();
   
-  checkReleaseNotes(); // バージョンアップ時にリリースノートを表示
+  maybeShowReleaseNotes(); // バージョンアップ時にリリースノートを表示
   renderThemeMenuChecks();
 });
 //#endregion
@@ -1806,22 +1826,30 @@ function setTheme(theme) {
 
 // -- Storage Security Menu Functions --
 async function getCurrentHistoryForMigration() {
+  const payload = localStorage.getItem(HISTORY_KEY);
+  if (!payload) return { ok: true, history: [] };
+
   try {
-    const raw = await secureGetItem(HISTORY_KEY);
+    const raw = payload.startsWith('{')
+      ? await decryptString(payload, await getActiveKey())
+      : payload;
     const parsed = JSON.parse(raw || '[]');
-    return Array.isArray(parsed) ? parsed : [];
+    return { ok: true, history: Array.isArray(parsed) ? parsed : [] };
   } catch (err) {
     console.warn('Failed to read history before storage migration', err);
-    return [];
+    if (currentMode() === "private") privateSession = { passphrase: null, key: null };
+    return { ok: false, history: null, error: err };
   }
 }
 
 async function migrateToMode(mode, passphrase = null) {
   const currentText = editor.value;
   const currentName = filenameInput.value || "untitled.md";
-  // Important: read the encrypted history with the CURRENT mode/key before switching modes.
-  // Using historyCache here can overwrite the real saved history with an empty/stale array.
-  const currentHistory = await getCurrentHistoryForMigration();
+  const historyResult = await getCurrentHistoryForMigration();
+  if (!historyResult.ok) {
+    throw new Error('Failed to decrypt current history. Storage mode was not changed.');
+  }
+  const currentHistory = historyResult.history;
 
   if (mode === "private") {
     const salt = crypto.getRandomValues(new Uint8Array(16));
@@ -1841,18 +1869,24 @@ async function migrateToMode(mode, passphrase = null) {
 
 async function togglePrivateStorage() {
   closeMenus();
-  if (currentMode() === "private") {
-    const ok = confirm("Private Storageを解除して、自動暗号化に戻しますか？\n現在の下書き・履歴は自動暗号化で保存し直されます。");
-    if (!ok) return;
-    await migrateToMode("auto");
-    toast("自動暗号化に戻しました");
-  } else {
-    const p1 = prompt("Private Storage用のパスフレーズを設定してください。\n※忘れると下書き・履歴は復元できません。") || "";
-    if (!p1) return;
-    const p2 = prompt("確認のため、もう一度入力してください。") || "";
-    if (p1 !== p2) { toast("パスフレーズが一致しません"); return; }
-    await migrateToMode("private", p1);
-    toast("Private Storageを有効化しました");
+  try {
+    if (currentMode() === "private") {
+      const ok = confirm("Private Storageを解除して、自動暗号化に戻しますか？\n現在の下書き・履歴は自動暗号化で保存し直されます。");
+      if (!ok) return;
+      await migrateToMode("auto");
+      toast("自動暗号化に戻しました");
+    } else {
+      const p1 = prompt("Private Storage用のパスフレーズを設定してください。\n※忘れると下書き・履歴は復元できません。") || "";
+      if (!p1) return;
+      const p2 = prompt("確認のため、もう一度入力してください。") || "";
+      if (p1 !== p2) { toast("パスフレーズが一致しません"); return; }
+      await migrateToMode("private", p1);
+      toast("Private Storageを有効化しました");
+    }
+  } catch (err) {
+    console.error('Storage mode migration failed', err);
+    alert(isJa ? 'ストレージモードの変更に失敗しました。現在の設定は変更されていません。' : 'Failed to change storage mode. Current setting was not changed.');
+    return;
   }
   renderStorageBadge();
   renderThemeMenuChecks();
@@ -1965,7 +1999,6 @@ editor.addEventListener('scroll', () => {
   }
 });
 
-// 入力イベントの二重発火を防ぐフラグ
 let suppressInputHandling = false;
 
 function runWhenIdle(fn) {
@@ -2007,37 +2040,26 @@ async function runDeferredLargePasteUpdate() {
   if (srPanelOpen) await runWhenIdle(() => performSearch(false));
 }
 
-// 大容量ペースト時の砂時計＆非同期処理ロジック
 async function handlePlainTextPaste(text) {
   if (!text) return;
-
-  // 1万文字以上なら大容量と判定
   if (text.length > 10000) {
     showLoader(T.processingPasteToast);
     setStatusBadge(T.processingPasteStatus);
-    
-    // ブラウザに砂時計を描画させるための待機時間（50ms）
     await new Promise(resolve => setTimeout(resolve, 50));
-    
-    // 巨大テキスト挿入時の重いinputイベント連鎖を防ぐ
     suppressInputHandling = true;
-    
     try {
-      // execCommandは非同期内で弾かれることがあるため、直接Rangeを書き換える
       const start = editor.selectionStart;
       const end = editor.selectionEnd;
       editor.setRangeText(text, start, end, 'end');
-      
       markDirty();
       await runDeferredLargePasteUpdate();
       await triggerAutoSave();
     } finally {
       suppressInputHandling = false;
       hideLoader();
-      renderStorageBadge(); // バッジのテキストをAuto/Privateの状態に戻す
+      renderStorageBadge();
     }
   } else {
-    // 通常のテキストなら、Undo履歴を残せる標準のコマンドで即座に処理
     document.execCommand('insertText', false, text);
     markDirty();
     triggerAutoSave();
@@ -2051,9 +2073,14 @@ editor.addEventListener('input', () => {
   markDirty();
   if (spellEnabled) runSpellCheck();
   if (srPanelOpen) performSearch(false);
-  
   clearTimeout(autoSaveTimeout);
-  autoSaveTimeout = setTimeout(triggerAutoSave, 1500); // デバウンス緩和: 手が止まってから1.5秒後
+  autoSaveTimeout = setTimeout(triggerAutoSave, 1500);
+});
+
+filenameInput.addEventListener('input', () => {
+  markDirty();
+  clearTimeout(autoSaveTimeout);
+  autoSaveTimeout = setTimeout(triggerAutoSave, 800);
 });
 
 editor.addEventListener('paste', e => {
@@ -2067,7 +2094,6 @@ editor.addEventListener("drop", (e) => {
   e.preventDefault();
   const file = e.dataTransfer.files && e.dataTransfer.files[0];
   if (!file || !file.type.startsWith("image/")) return;
-  // 容量制限チェック (LocalStorage 5MBの壁を考慮)
   if (file.size > 200 * 1024) { 
     alert("画像が大きすぎます。ローカル保存容量を保護するため、200KB以下の画像のみ挿入できます。"); 
     return; 
@@ -2165,18 +2191,15 @@ function refreshBackdrop() {
       for (let r of intersects) {
         if (r.start < cursor) r.start = cursor;
         if (r.start >= r.end) continue;
-
         if (r.start > cursor) {
           html += escapeHtml(line.slice(cursor, r.start));
         }
-        
         let cls = '';
         if (r.type === 'search') {
           cls = (r.idx === srCurrentIdx) ? 'active' : '';
         } else if (r.type === 'spell') {
           cls = 'spell-error';
         }
-        
         html += `<mark class="${cls}">${escapeHtml(line.slice(r.start, r.end))}</mark>`;
         cursor = r.end;
       }
@@ -2198,13 +2221,8 @@ function refreshBackdrop() {
   }
 
   backdrop.innerHTML = lineHtml.join('');
-  
   backdrop.scrollTop = editor.scrollTop;
   backdrop.scrollLeft = editor.scrollLeft;
-  requestAnimationFrame(() => {
-    backdrop.scrollTop = editor.scrollTop;
-    backdrop.scrollLeft = editor.scrollLeft;
-  });
 }
 //#endregion
 
@@ -2281,11 +2299,9 @@ function toggleTaskList() {
   replaceSelectedLines(lines => {
     const nonEmpty = lines.filter(l => l.trim() !== '');
     if (nonEmpty.length <= 1) return lines.map(line => line.trim() === '' ? line : cycleSingleTaskLine(line));
-
     const states = nonEmpty.map(taskStateOf);
     const allOpen = states.every(s => s === 'open');
     const allDone = states.every(s => s === 'done');
-
     if (allOpen) {
       return lines.map(line => {
         if (line.trim() === '') return line;
@@ -2325,15 +2341,12 @@ let isComposing = false;
 
 srInput.addEventListener('compositionstart', () => { isComposing = true; });
 srInput.addEventListener('compositionend', () => { isComposing = false; performSearch(true); });
-srReplaceInput.addEventListener('compositionstart', () => { isComposing = true; });
-srReplaceInput.addEventListener('compositionend', () => { isComposing = false; });
 
 function openSearchPanel(mode) {
   closeMenus();
   srPanelOpen = true;
   srMode = mode;
   srPanel.classList.add('show');
-
   if (mode === 'find') {
     document.getElementById('tab-find').classList.add('active');
     document.getElementById('tab-replace').classList.remove('active');
@@ -2343,10 +2356,8 @@ function openSearchPanel(mode) {
     document.getElementById('tab-find').classList.remove('active');
     document.getElementById('sr-replace-area').style.display = 'block';
   }
-
   const selText = editor.value.slice(editor.selectionStart, editor.selectionEnd);
   if (selText && !selText.includes('\n')) srInput.value = selText;
-
   srInput.focus();
   srInput.select();
   performSearch(true);
@@ -2366,7 +2377,6 @@ document.getElementById('tab-replace').onclick = () => openSearchPanel('replace'
 document.getElementById('sr-close').onclick = closeSearchPanel;
 
 function escapeRegExp(string) { return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
-
 function buildRegex(isGlobal = true) {
   const query = srInput.value;
   if (!query) return null;
@@ -2390,21 +2400,16 @@ function performSearch(jumpToClosest = false) {
   srMatches = [];
   srError.style.display = 'none';
   const query = srInput.value;
-
   if (!query) { srCount.textContent = ''; srCurrentIdx = -1; refreshBackdrop(); return; }
-
   const regex = buildRegex(true);
   if (!regex) { srError.style.display = 'block'; srCount.textContent = ''; srCurrentIdx = -1; refreshBackdrop(); return; }
-
   const text = editor.value.replace(/\r/g, ''); 
   let match;
   while ((match = regex.exec(text)) !== null) {
     if (match.index === regex.lastIndex) regex.lastIndex++;
     srMatches.push({ start: match.index, end: match.index + match[0].length, text: match[0] });
   }
-
   if (srMatches.length === 0) { srCurrentIdx = -1; srCount.textContent = T.noMatches; refreshBackdrop(); return; }
-
   if (jumpToClosest) {
     const cursorPos = editor.selectionStart;
     srCurrentIdx = srMatches.findIndex(m => m.start >= cursorPos);
@@ -2422,22 +2427,12 @@ function highlightCurrentMatch() {
   if (srMatches.length === 0 || srCurrentIdx === -1) { refreshBackdrop(); return; }
   const m = srMatches[srCurrentIdx];
   if (isComposing) { setSearchCount(); refreshBackdrop(); return; }
-
   const activeEl = document.activeElement; 
   editor.focus();
   editor.setSelectionRange(m.start, m.end);
   if (activeEl && activeEl.closest('#sr-panel')) activeEl.focus();
   setSearchCount();
   refreshBackdrop(); 
-
-  requestAnimationFrame(() => {
-    const activeMark = backdrop.querySelector('mark.active');
-    if (activeMark) {
-      const targetTop = activeMark.offsetTop - (editor.clientHeight / 2) + (activeMark.clientHeight / 2);
-      editor.scrollTop = Math.max(0, targetTop);
-      backdrop.scrollTop = editor.scrollTop;
-    }
-  });
 }
 
 function navMatch(dir) {
@@ -2452,10 +2447,7 @@ document.getElementById('sr-next').onclick = () => navMatch(1);
 document.getElementById('sr-prev').onclick = () => navMatch(-1);
 
 [srInput, document.getElementById('sr-opt-regex'), document.getElementById('sr-opt-case'), document.getElementById('sr-opt-word')].forEach(el => {
-  el.addEventListener('input', (e) => {
-    if (e.isComposing || isComposing) return;
-    performSearch(true);
-  });
+  el.addEventListener('input', (e) => { if (e.isComposing || isComposing) return; performSearch(true); });
   el.addEventListener('change', () => performSearch(true));
 });
 
@@ -2512,23 +2504,14 @@ async function initDict() {
   isDictLoading = true;
   try {
     const [aff, dic] = await Promise.all([
-      fetch('https://cdn.jsdelivr.net/npm/typo-js@1.2.3/dictionaries/en_US/en_US.aff').then(r => {
-        if (!r.ok) throw new Error('AFF fetch failed');
-        return r.text();
-      }),
-      fetch('https://cdn.jsdelivr.net/npm/typo-js@1.2.3/dictionaries/en_US/en_US.dic').then(r => {
-        if (!r.ok) throw new Error('DIC fetch failed');
-        return r.text();
-      })
+      fetch('https://cdn.jsdelivr.net/npm/typo-js@1.2.3/dictionaries/en_US/en_US.aff').then(r => r.text()),
+      fetch('https://cdn.jsdelivr.net/npm/typo-js@1.2.3/dictionaries/en_US/en_US.dic').then(r => r.text())
     ]);
     typo = new Typo('en_US', aff, dic);
     dictReady = true;
     if (spellEnabled) runSpellCheck();
   } catch (e) {
-    console.error('Dict error:', e);
     set('sp-loading-text', T.dictFailed);
-    const spinner = document.querySelector('#spell-loading .spin-icon');
-    if(spinner) spinner.style.display = 'none';
   }
 }
 
@@ -2538,11 +2521,9 @@ function toggleSpell() {
   const entry = document.getElementById('m-spell-entry');
   const chk = document.getElementById('spell-check');
   const status = document.getElementById('spell-status');
-
   titleBtn.classList.toggle('active', spellEnabled);
   entry.classList.toggle('active', spellEnabled);
   chk.style.opacity = spellEnabled ? '1' : '0';
-
   if (spellEnabled) {
     status.textContent = T.spellOn;
     status.classList.add('on');
@@ -2588,19 +2569,14 @@ function doSpellCheck() {
   const list = document.getElementById('spell-list');
   const empty = document.getElementById('spell-empty');
   const loading = document.getElementById('spell-loading');
-  const footer = document.getElementById('spell-footer');
-
   panel.classList.add('show');
-
   if (!dictReady || !typo) {
     loading.classList.add('show');
     set('sp-loading-text', T.dictLoading);
     return;
   }
-
   currentSpellRun++;
   const thisRun = currentSpellRun;
-
   const text = editor.value.replace(/\r/g, ''); 
   const stripped = maskMarkdown(text);
   const wordRe = /\b([a-zA-Z]{2,}(?:'[a-zA-Z]+)?)\b/g;
@@ -2608,65 +2584,37 @@ function doSpellCheck() {
   const misspellings = [];
   const tempMatches = []; 
   let m;
-
   while ((m = wordRe.exec(stripped)) !== null) {
     const raw = m[1];
     const lower = raw.toLowerCase();
-    
     if (/[A-Z]/.test(raw.slice(1))) continue;
     if (/\d/.test(raw)) continue;
     if (ignoredWords.has(lower) || customDict.has(lower)) continue;
-
     const ok = typo.check(raw) || typo.check(raw.charAt(0).toUpperCase() + raw.slice(1));
     if (!ok) {
       tempMatches.push({ start: m.index, end: m.index + raw.length });
-      if (!seen.has(lower)) {
-        seen.add(lower);
-        misspellings.push({ word: raw, lower });
-      }
+      if (!seen.has(lower)) { seen.add(lower); misspellings.push({ word: raw, lower }); }
     }
   }
-
   spellMatches = tempMatches;
   refreshBackdrop();
-
   list.innerHTML = '';
   empty.style.display = 'none';
-  footer.style.display = 'none';
-
   if (misspellings.length === 0) {
     loading.classList.remove('show');
     empty.style.display = 'block';
     return;
   }
-
-  requestAnimationFrame(() => {
-    const firstError = backdrop.querySelector('mark.spell-error');
-    if (firstError) {
-      const targetTop = firstError.offsetTop - (editor.clientHeight / 2) + (firstError.clientHeight / 2);
-      editor.scrollTop = Math.max(0, targetTop);
-      backdrop.scrollTop = editor.scrollTop;
-    }
-  });
-
   loading.classList.add('show');
-  set('sp-loading-text', `${T.checking} (0/${misspellings.length})`);
-
   let i = 0;
   function processNext() {
     if (currentSpellRun !== thisRun || !spellEnabled) return;
-    if (i >= misspellings.length) {
-      loading.classList.remove('show');
-      footer.innerHTML = T.spellCount(misspellings.length).replace(/\d+/, n => `<span>${n}</span>`);
-      footer.style.display = 'block';
-      return;
-    }
+    if (i >= misspellings.length) { loading.classList.remove('show'); return; }
     const item = misspellings[i];
     let sugs = [];
     try { sugs = typo.suggest(item.word).slice(0, 5); } catch (e) {}
     renderSpellRow(item.word, item.lower, sugs);
     i++;
-    set('sp-loading-text', `${T.checking} (${i}/${misspellings.length})`);
     setTimeout(processNext, 5);
   }
   processNext();
@@ -2675,40 +2623,27 @@ function doSpellCheck() {
 function renderSpellRow(word, lower, sugs) {
   const list = document.getElementById('spell-list');
   const row = document.createElement('div');
-  row.className = 'spell-word';
-  row.id = 'sw-' + lower;
-
+  row.className = 'spell-word'; row.id = 'sw-' + lower;
   const topRow = document.createElement('div');
   topRow.className = 'spell-word-row';
-
   const wordSpan = document.createElement('span');
-  wordSpan.className = 'spell-word-text';
-  wordSpan.textContent = word;
-
+  wordSpan.className = 'spell-word-text'; wordSpan.textContent = word;
   const actions = document.createElement('div');
   actions.className = 'spell-actions';
-
   const ignBtn = document.createElement('button');
-  ignBtn.className = 'spell-btn';
-  ignBtn.textContent = T.spellIgnore;
+  ignBtn.className = 'spell-btn'; ignBtn.textContent = T.spellIgnore;
   ignBtn.onclick = () => { ignoredWords.add(lower); removeSpellRow(lower); runSpellCheck(); };
-
   const addBtn = document.createElement('button');
-  addBtn.className = 'spell-btn add';
-  addBtn.textContent = T.spellAdd;
+  addBtn.className = 'spell-btn add'; addBtn.textContent = T.spellAdd;
   addBtn.onclick = () => { customDict.add(lower); removeSpellRow(lower); runSpellCheck(); };
-
   actions.append(ignBtn, addBtn);
-  topRow.append(wordSpan, actions);
-  row.appendChild(topRow);
-
+  topRow.append(wordSpan, actions); row.appendChild(topRow);
   if (sugs.length > 0) {
     const sugDiv = document.createElement('div');
     sugDiv.className = 'spell-suggestions';
     sugs.forEach(sug => {
       const s = document.createElement('span');
-      s.className = 'spell-sug';
-      s.textContent = sug;
+      s.className = 'spell-sug'; s.textContent = sug;
       s.onclick = () => replaceWord(word, sug);
       sugDiv.appendChild(s);
     });
@@ -2720,10 +2655,6 @@ function renderSpellRow(word, lower, sugs) {
 function removeSpellRow(lower) {
   const el = document.getElementById('sw-' + lower);
   if (el) el.remove();
-  if (document.getElementById('spell-list').children.length === 0) {
-    document.getElementById('spell-empty').style.display = 'block';
-    document.getElementById('spell-footer').style.display = 'none';
-  }
 }
 
 function replaceWord(original, replacement) {
@@ -2732,11 +2663,9 @@ function replaceWord(original, replacement) {
   const re = new RegExp('\\b' + esc + '\\b', 'i');
   const m = re.exec(val);
   if (!m) return;
-
   const rep = m[0][0] === m[0][0].toUpperCase() && m[0][0] !== m[0][0].toLowerCase()
       ? replacement.charAt(0).toUpperCase() + replacement.slice(1)
       : replacement;
-
   editor.setSelectionRange(m.index, m.index + m[0].length);
   editor.focus();
   document.execCommand('insertText', false, rep);
@@ -2804,7 +2733,6 @@ function insertTable() {
 
 //#region [JS-13] WORD IMPORT (MAMMOTH + TURNDOWN)
 const WORD_MAX_BYTES = 10 * 1024 * 1024;
-
 function triggerWordImport() {
   closeMenus();
   if (isDirty && editor.value.trim() !== '' && editor.value !== T.defaultMd) {
@@ -2817,42 +2745,25 @@ document.getElementById('word-input').addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
   e.target.value = '';
-
   if (file.size > WORD_MAX_BYTES) { alert(T.errSize); return; }
-  if (!navigator.onLine && (!window.mammoth || !window.TurndownService)) { alert(T.errOffline); return; }
-
   try {
     showLoader(T.loadingWordLibs);
     const arrayBuffer = await file.arrayBuffer();
-
     showLoader(T.loadingWordParse);
     const sandboxResult = await convertWordInSandbox(arrayBuffer);
     const md = sandboxResult.markdown || '';
     const mammothMessages = Array.isArray(sandboxResult.messages) ? sandboxResult.messages : [];
-
     showLoader(T.loadingWordConvert);
     if (!md || !md.trim()) throw new Error('Converted markdown is empty.');
-
-    await saveToHistoryList(filenameInput.value, editor.value); // 変換前に今の状態を履歴へ
+    await saveToHistoryList(filenameInput.value, editor.value);
     editor.value = md;
     filenameInput.value = file.name.replace(/\.docx$/i, '.md');
     fileHandle = null;
-
-    update();
-    markDirty();
-    triggerAutoSave();
-    if (spellEnabled) runSpellCheck();
-
+    update(); markDirty(); triggerAutoSave();
     hideLoader();
     toast(mammothMessages.length > 0 ? T.warnMammoth : T.importSuccess);
   } catch (error) {
-    console.error('Word Import Error:', error);
-    hideLoader();
-    if (/cdn|load|script|library/i.test(String(error?.message || '')) || /Failed to fetch/i.test(String(error?.message || ''))) {
-      alert(T.errLibLoad);
-    } else {
-      alert(`${T.errImport}\n${error?.message || ''}`.trim());
-    }
+    hideLoader(); alert(`${T.errImport}\n${error?.message || ''}`.trim());
   }
 });
 
@@ -2867,193 +2778,33 @@ function getWordImportSandboxSrcdoc() {
       FORBID_ATTR: ['style','srcset','onerror','onclick','onload','onmouseover','onfocus'],
       KEEP_CONTENT: true
     });
-
-    function normalizeInlineText(str) {
-      return String(str || '').replace(/\u00a0/g, ' ').replace(/[ \t\r\n]+/g, ' ').trim();
-    }
-
+    function normalizeInlineText(str) { return String(str || '').replace(/\u00a0/g, ' ').replace(/[ \t\r\n]+/g, ' ').trim(); }
     function sanitizeWordHtml(html) {
       if (!self.DOMPurify) throw new Error('DOMPurify is unavailable in sandbox.');
       DOMPurify.addHook('afterSanitizeAttributes', (node) => {
         if (!node || !node.tagName) return;
         const tag = node.tagName.toLowerCase();
-        if (tag === 'a') {
-          const href = node.getAttribute('href') || '';
-          if (/^javascript:/i.test(href)) node.removeAttribute('href');
-        }
-        if (tag === 'img') {
-          node.removeAttribute('src');
-          node.removeAttribute('srcset');
-        }
+        if (tag === 'img') { node.removeAttribute('src'); node.removeAttribute('srcset'); }
       });
       return DOMPurify.sanitize(String(html || ''), WORD_SANITIZE_CONFIG);
     }
-
     function preprocessWordHtml(html, isJa) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
-      replaceTextboxesAndShapes(doc, isJa);
-      // replaceComplexTables(doc, isJa); // 表の再現性を保つために無効化
-      extractAndAppendFootnotes(doc, isJa);
-      normalizeImages(doc, isJa);
-      normalizeLinks(doc);
-      normalizeLineBreakHints(doc);
+      doc.querySelectorAll('div[class*="textbox"], div[class*="shape"]').forEach(node => {
+        const text = normalizeInlineText(node.textContent || '');
+        node.replaceWith(doc.createTextNode(text ? `\n\n[Textbox: ${text}]\n\n` : ''));
+      });
       return doc;
     }
-
-    function replaceTextboxesAndShapes(doc, isJa) {
-      const selectors = ['div[class*="textbox"]', 'div[class*="shape"]', 'v\\:textbox', 'w\\:txbxContent'];
-      doc.querySelectorAll(selectors.join(',')).forEach((node) => {
-        const text = normalizeInlineText(node.textContent || '');
-        const placeholder = text ? `\n\n[${isJa ? 'テキストボックス' : 'Textbox'}: ${text}]\n\n` : `\n\n[${isJa ? '図形またはテキストボックス' : 'Shape or textbox'}]\n\n`;
-        node.replaceWith(doc.createTextNode(placeholder));
-      });
-    }
-
-    function replaceComplexTables(doc, isJa) {
-      Array.from(doc.querySelectorAll('table')).forEach((table) => {
-        if (isComplexTable(table)) {
-          const replacement = tableToPlainText(table, isJa);
-          table.replaceWith(doc.createTextNode(`\n\n${replacement}\n\n`));
-        }
-      });
-    }
-
-    function isComplexTable(table) {
-      if (!table) return true;
-      if (table.querySelector('table')) return true;
-      if (table.querySelector('[rowspan], [colspan]')) return true;
-      const rows = Array.from(table.querySelectorAll('tr'));
-      if (rows.length === 0) return true;
-      const counts = rows.map((tr) => Array.from(tr.children).filter((el) => /^(TD|TH)$/i.test(el.tagName)).length);
-      if (new Set(counts).size !== 1) return true;
-      const cells = Array.from(table.querySelectorAll('th, td'));
-      for (const cell of cells) {
-        if (cell.querySelector('img, table')) return true;
-        if (cell.querySelectorAll('p, div, ul, ol, li, blockquote, h1, h2, h3, h4, h5, h6').length > 1) return true;
-        if (cell.querySelectorAll('br').length > 1) return true;
-        if (normalizeInlineText(cell.textContent || '').length > 200) return true;
-      }
-      return false;
-    }
-
-    function tableToPlainText(table, isJa) {
-      const rows = Array.from(table.querySelectorAll('tr'));
-      const lines = [`[${isJa ? '複雑な表をテキスト化' : 'Complex table flattened'}]`];
-      rows.forEach((tr, rowIndex) => {
-        const cells = Array.from(tr.children).filter((el) => /^(TD|TH)$/i.test(el.tagName));
-        const parts = cells.map((cell, colIndex) => {
-          const label = rowIndex === 0 && cell.tagName.toLowerCase() === 'th' ? `${isJa ? '見出し' : 'Header'}${colIndex + 1}` : `${isJa ? '列' : 'Col'}${colIndex + 1}`;
-          return `${label}: ${normalizeInlineText(cell.textContent || '') || '-'}`;
-        });
-        if (parts.length) lines.push(parts.join(' / '));
-      });
-      return lines.join('\n');
-    }
-
-    function extractAndAppendFootnotes(doc, isJa) {
-      const candidates = Array.from(doc.querySelectorAll('ol li[id*="footnote"], ol li[id*="note"], aside, section.footnotes li, div.footnotes li'));
-      if (!candidates.length) return;
-      const notes = [];
-      candidates.forEach((node, idx) => {
-        const text = normalizeInlineText(node.textContent || '');
-        if (text) notes.push(`${idx + 1}. ${text}`);
-        node.remove();
-      });
-      if (!notes.length) return;
-      const section = doc.createElement('section');
-      const h2 = doc.createElement('h2');
-      h2.textContent = isJa ? '注記' : 'Notes';
-      const p = doc.createElement('p');
-      p.innerHTML = notes.map((n) => n.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')).join('<br>');
-      section.appendChild(h2);
-      section.appendChild(p);
-      doc.body.appendChild(section);
-    }
-
-    function normalizeImages(doc, isJa) {
-      doc.querySelectorAll('img').forEach((img) => {
-        const alt = normalizeInlineText(img.getAttribute('alt') || '');
-        if (!alt) img.setAttribute('alt', isJa ? '画像' : 'Image');
-        img.removeAttribute('src');
-        img.removeAttribute('srcset');
-      });
-    }
-
-    function normalizeLinks(doc) {
-      doc.querySelectorAll('a').forEach((a) => {
-        const href = a.getAttribute('href') || '';
-        if (!href || /^#/.test(href)) return;
-        const txt = normalizeInlineText(a.textContent || '');
-        if (!txt) a.textContent = href;
-      });
-    }
-
-    function normalizeLineBreakHints(doc) {
-      const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
-      const textNodes = [];
-      while (walker.nextNode()) textNodes.push(walker.currentNode);
-      textNodes.forEach((node) => { node.textContent = node.textContent.replace(/[ \t]+\n/g, '\n'); });
-    }
-
-    function convertDomToMarkdown(doc, isJa) {
-      const turndownService = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced', bulletListMarker: '-', emDelimiter: '*', strongDelimiter: '**' });
-      if (self.turndownPluginGfm && self.turndownPluginGfm.gfm) turndownService.use(self.turndownPluginGfm.gfm);
-      turndownService.addRule('images', {
-        filter: 'img',
-        replacement: function (_content, node) {
-          const alt = normalizeInlineText(node.getAttribute('alt') || '');
-          const tag = isJa ? '画像' : 'Image';
-          return alt && alt !== tag ? `[${tag}: ${alt}]` : `[${tag}]`;
-        }
-      });
-      turndownService.addRule('lineBreak', { filter: 'br', replacement: function () { return '  \n'; } });
-      turndownService.addRule('headingsSpacing', {
-        filter: function (node) { return /^H[1-6]$/.test(node.nodeName); },
-        replacement: function (content, node) {
-          const hLevel = Number(node.nodeName.charAt(1));
-          const hashes = '#'.repeat(hLevel);
-          const text = normalizeInlineText(content || '');
-          return `\n\n${hashes} ${text}\n\n`;
-        }
-      });
-      turndownService.addRule('divAsBlock', { filter: 'div', replacement: function (content) { const txt = (content || '').trim(); return txt ? `\n\n${txt}\n\n` : '\n'; } });
-      return postProcessImportedMarkdown(turndownService.turndown(doc.body.innerHTML));
-    }
-
-    function postProcessImportedMarkdown(md) {
-      if (!md) return '';
-      let out = md.normalize('NFC').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-      out = out.replace(/[ \t]+$/gm, '');
-      out = out.replace(/\n{3,}/g, '\n\n');
-      out = out.replace(/^\s+|\s+$/g, '');
-      return out + '\n';
-    }
-
     async function convert(arrayBuffer, isJa) {
-      if (!self.mammoth || !self.TurndownService || !self.DOMPurify) throw new Error('Required Word import libraries are unavailable in sandbox.');
-      const mammothOptions = {
-        styleMap: [
-          "p[style-name='Heading 1'] => h1:fresh", "p[style-name='Heading 2'] => h2:fresh",
-          "p[style-name='Heading 3'] => h3:fresh", "p[style-name='Heading 4'] => h4:fresh",
-          "p[style-name='Heading 5'] => h5:fresh", "p[style-name='Heading 6'] => h6:fresh",
-          "p[style-name='見出し 1'] => h1:fresh", "p[style-name='見出し 2'] => h2:fresh",
-          "p[style-name='見出し 3'] => h3:fresh", "p[style-name='見出し 4'] => h4:fresh",
-          "p[style-name='見出し 5'] => h5:fresh", "p[style-name='見出し 6'] => h6:fresh"
-        ],
-        includeDefaultStyleMap: true,
-        convertImage: mammoth.images.imgElement((image) => {
-          const alt = image.altText || '';
-          const imgTag = isJa ? '画像' : 'Image';
-          return { src: '', alt: alt ? `${alt}` : imgTag };
-        })
-      };
-      const result = await mammoth.convertToHtml({ arrayBuffer }, mammothOptions);
+      const result = await mammoth.convertToHtml({ arrayBuffer });
       const safeHtml = sanitizeWordHtml(result.value || '');
       const doc = preprocessWordHtml(safeHtml, isJa);
-      return { markdown: convertDomToMarkdown(doc, isJa), messages: Array.isArray(result.messages) ? result.messages : [] };
+      const turndownService = new TurndownService({ headingStyle: 'atx', bulletListMarker: '-' });
+      const md = turndownService.turndown(doc.body.innerHTML);
+      return { markdown: md, messages: result.messages || [] };
     }
-
     window.addEventListener('message', async (event) => {
       const msg = event.data || {};
       if (msg.type !== 'MDWORKS_WORD_IMPORT_REQUEST') return;
@@ -3061,635 +2812,994 @@ function getWordImportSandboxSrcdoc() {
         const result = await convert(msg.arrayBuffer, !!msg.isJa);
         parent.postMessage({ type: 'MDWORKS_WORD_IMPORT_RESULT', id: msg.id, ok: true, ...result }, '*');
       } catch (err) {
-        parent.postMessage({ type: 'MDWORKS_WORD_IMPORT_RESULT', id: msg.id, ok: false, error: err?.message || String(err) }, '*');
+        parent.postMessage({ type: 'MDWORKS_WORD_IMPORT_RESULT', id: msg.id, ok: false, error: err?.message }, '*');
       }
     });
   };
-
-  return [
-    '<!doctype html><html><head><meta charset="utf-8"><title>MDWORKS Word Import Sandbox</title></head><body>',
-    '<script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js" crossorigin="anonymous"><\/script>',
-    '<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js" crossorigin="anonymous"><\/script>',
-    '<script src="https://cdn.jsdelivr.net/npm/turndown@7.1.3/lib/turndown.browser.umd.min.js" crossorigin="anonymous"><\/script>',
-    '<script src="https://cdn.jsdelivr.net/npm/turndown-plugin-gfm@1.0.2/dist/turndown-plugin-gfm.min.js" crossorigin="anonymous"><\/script>',
-    '<script>(', runner, ')();<\/script>',
-    '</body></html>'
-  ].join('');
+  return `<!doctype html><html><head><meta charset="utf-8"></head><body>
+    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"><\/script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"><\/script>
+    <script src="https://cdn.jsdelivr.net/npm/turndown@7.1.3/lib/turndown.browser.umd.min.js"><\/script>
+    <script>(${runner})();<\/script></body></html>`;
 }
 
 function convertWordInSandbox(arrayBuffer) {
   return new Promise((resolve, reject) => {
-    const id = `word-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const id = `word-${Date.now()}`;
     const iframe = document.createElement('iframe');
-    let settled = false;
-    let loaded = false;
-    let loadTimer = null;
-
-    function cleanup() {
-      clearTimeout(loadTimer);
-      window.removeEventListener('message', onMessage);
-      iframe.remove();
-    }
-
-    function finish(fn, value) {
-      if (settled) return;
-      settled = true;
-      cleanup();
-      fn(value);
-    }
-
-    function onMessage(event) {
-      if (event.source !== iframe.contentWindow) return;
-      const msg = event.data || {};
-      if (msg.type !== 'MDWORKS_WORD_IMPORT_RESULT' || msg.id !== id) return;
-      if (msg.ok) finish(resolve, { markdown: msg.markdown || '', messages: msg.messages || [] });
-      else finish(reject, new Error(msg.error || 'Sandboxed Word import failed.'));
-    }
-
-    window.addEventListener('message', onMessage);
     iframe.style.display = 'none';
-    iframe.setAttribute('aria-hidden', 'true');
     iframe.sandbox = 'allow-scripts';
     iframe.srcdoc = getWordImportSandboxSrcdoc();
-    iframe.addEventListener('load', () => {
-      if (loaded || settled) return;
-      loaded = true;
-      try {
-        iframe.contentWindow.postMessage({ type: 'MDWORKS_WORD_IMPORT_REQUEST', id, arrayBuffer, isJa }, '*', [arrayBuffer]);
-      } catch (err) {
-        finish(reject, err);
-      }
-    }, { once: true });
 
-    loadTimer = setTimeout(() => finish(reject, new Error('Sandboxed Word import timed out.')), WORD_IMPORT_SANDBOX_TIMEOUT_MS);
+    let loadTimer = setTimeout(() => {
+      window.removeEventListener('message', onMessage);
+      iframe.remove();
+      reject(new Error('Sandboxed Word import timed out.'));
+    }, WORD_IMPORT_SANDBOX_TIMEOUT_MS);
+
+    const onMessage = (event) => {
+      const msg = event.data || {};
+      if (msg.type === 'MDWORKS_WORD_IMPORT_RESULT' && msg.id === id) {
+        clearTimeout(loadTimer);
+        window.removeEventListener('message', onMessage);
+        iframe.remove();
+        if (msg.ok) resolve(msg); else reject(new Error(msg.error));
+      }
+    };
+    window.addEventListener('message', onMessage);
+    iframe.onload = () => iframe.contentWindow.postMessage({ type: 'MDWORKS_WORD_IMPORT_REQUEST', id, arrayBuffer, isJa }, '*');
     document.body.appendChild(iframe);
   });
 }
-
-
-const __scriptLoadCache = new Map();
-function loadScript(src) {
-  if (__scriptLoadCache.has(src)) return __scriptLoadCache.get(src);
-  const promise = new Promise((resolve, reject) => {
-    const existing = document.querySelector(`script[src="${src}"]`);
-    if (existing) {
-      if (existing.dataset.loaded === '1') { resolve(); return; }
-      existing.addEventListener('load', () => resolve(), { once: true });
-      existing.addEventListener('error', () => reject(new Error(`Failed to load: ${src}`)), { once: true });
-      return;
-    }
-    const script = document.createElement('script');
-    script.src = src;
-    script.async = true;
-    script.crossOrigin = 'anonymous';
-    script.onload = () => { script.dataset.loaded = '1'; resolve(); };
-    script.onerror = () => reject(new Error(`Failed to load: ${src}`));
-    document.head.appendChild(script);
-  });
-  __scriptLoadCache.set(src, promise);
-  return promise;
-}
-
-async function ensureWordImportLibraries() {
-  try {
-    await Promise.all([
-      loadScript('https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js'),
-      loadScript('https://cdn.jsdelivr.net/npm/turndown@7.1.3/lib/turndown.browser.umd.min.js'),
-      loadScript('https://cdn.jsdelivr.net/npm/turndown-plugin-gfm@1.0.2/dist/turndown-plugin-gfm.min.js')
-    ]);
-  } catch (err) { throw new Error(`Library load error: ${err?.message || err}`); }
-  if (!window.mammoth || !window.TurndownService) throw new Error('Required Word import libraries are unavailable.');
-}
-
-function preprocessWordHtml(html) {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-  replaceTextboxesAndShapes(doc);
-  // replaceComplexTables(doc); // 表の再現性を保つために無効化
-  extractAndAppendFootnotes(doc);
-  normalizeImages(doc);
-  normalizeLinks(doc);
-  normalizeLineBreakHints(doc);
-  return doc;
-}
-
-function replaceTextboxesAndShapes(doc) {
-  const selectors = ['div[class*="textbox"]', 'div[class*="shape"]', 'v\\:textbox', 'w\\:txbxContent'];
-  doc.querySelectorAll(selectors.join(',')).forEach((node) => {
-    const text = normalizeInlineText(node.textContent || '');
-    const placeholder = text ? `\n\n[${isJa ? 'テキストボックス' : 'Textbox'}: ${text}]\n\n` : `\n\n[${isJa ? '図形またはテキストボックス' : 'Shape or textbox'}]\n\n`;
-    node.replaceWith(doc.createTextNode(placeholder));
-  });
-}
-
-function replaceComplexTables(doc) {
-  Array.from(doc.querySelectorAll('table')).forEach((table) => {
-    if (isComplexTable(table)) {
-      const replacement = tableToPlainText(table);
-      table.replaceWith(doc.createTextNode(`\n\n${replacement}\n\n`));
-    }
-  });
-}
-
-function isComplexTable(table) {
-  if (!table) return true;
-  if (table.querySelector('table')) return true;
-  if (table.querySelector('[rowspan], [colspan]')) return true;
-  const rows = Array.from(table.querySelectorAll('tr'));
-  if (rows.length === 0) return true;
-  const counts = rows.map((tr) => Array.from(tr.children).filter((el) => /^(TD|TH)$/i.test(el.tagName)).length);
-  if (new Set(counts).size !== 1) return true;
-  const cells = Array.from(table.querySelectorAll('th, td'));
-  for (const cell of cells) {
-    if (cell.querySelector('img, table')) return true;
-    if (cell.querySelectorAll('p, div, ul, ol, li, blockquote, h1, h2, h3, h4, h5, h6').length > 1) return true;
-    if (cell.querySelectorAll('br').length > 1) return true;
-    if (normalizeInlineText(cell.textContent || '').length > 200) return true;
-  }
-  return false;
-}
-
-function tableToPlainText(table) {
-  const rows = Array.from(table.querySelectorAll('tr'));
-  const lines = [`[${isJa ? '複雑な表をテキスト化' : 'Complex table flattened'}]`];
-  rows.forEach((tr, rowIndex) => {
-    const cells = Array.from(tr.children).filter((el) => /^(TD|TH)$/i.test(el.tagName));
-    const parts = cells.map((cell, colIndex) => {
-      const label = rowIndex === 0 && cell.tagName.toLowerCase() === 'th' ? `${isJa ? '見出し' : 'Header'}${colIndex + 1}` : `${isJa ? '列' : 'Col'}${colIndex + 1}`;
-      return `${label}: ${normalizeInlineText(cell.textContent || '') || '-'}`;
-    });
-    if (parts.length) lines.push(parts.join(' / '));
-  });
-  return lines.join('\n');
-}
-
-function extractAndAppendFootnotes(doc) {
-  const candidates = Array.from(doc.querySelectorAll('ol li[id*="footnote"], ol li[id*="note"], aside, section.footnotes li, div.footnotes li'));
-  if (!candidates.length) return;
-  const notes = [];
-  candidates.forEach((node, idx) => {
-    const text = normalizeInlineText(node.textContent || '');
-    if (text) notes.push(`${idx + 1}. ${text}`);
-    node.remove();
-  });
-  if (!notes.length) return;
-  const section = doc.createElement('section');
-  section.innerHTML = `<h2>${isJa ? '注記' : 'Notes'}</h2><p>${notes.join('<br>')}</p>`;
-  doc.body.appendChild(section);
-}
-
-function normalizeImages(doc) {
-  doc.querySelectorAll('img').forEach((img) => {
-    const alt = normalizeInlineText(img.getAttribute('alt') || '');
-    if (!alt) img.setAttribute('alt', isJa ? '画像' : 'Image');
-    img.removeAttribute('src'); img.removeAttribute('srcset');
-  });
-}
-
-function normalizeLinks(doc) {
-  doc.querySelectorAll('a').forEach((a) => {
-    const href = a.getAttribute('href') || '';
-    if (!href || /^#/.test(href)) return;
-    const txt = normalizeInlineText(a.textContent || '');
-    if (!txt) a.textContent = href;
-  });
-}
-
-function normalizeLineBreakHints(doc) {
-  const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
-  const textNodes = [];
-  while (walker.nextNode()) textNodes.push(walker.currentNode);
-  textNodes.forEach((node) => { node.textContent = node.textContent.replace(/[ \t]+\n/g, '\n'); });
-}
-
-function convertDomToMarkdown(doc) {
-  const turndownService = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced', bulletListMarker: '-', emDelimiter: '*', strongDelimiter: '**' });
-  if (window.turndownPluginGfm && window.turndownPluginGfm.gfm) { turndownService.use(window.turndownPluginGfm.gfm); }
-  turndownService.addRule('images', {
-    filter: 'img',
-    replacement: function (_content, node) {
-      const alt = normalizeInlineText(node.getAttribute('alt') || '');
-      const tag = isJa ? '画像' : 'Image';
-      return alt && alt !== tag ? `[${tag}: ${alt}]` : `[${tag}]`;
-    }
-  });
-  turndownService.addRule('lineBreak', { filter: 'br', replacement: function () { return '  \n'; } });
-  turndownService.addRule('headingsSpacing', {
-    filter: function (node) { return /^H[1-6]$/.test(node.nodeName); },
-    replacement: function (content, node) {
-      const hLevel = Number(node.nodeName.charAt(1));
-      const hashes = '#'.repeat(hLevel);
-      const text = normalizeInlineText(content || '');
-      return `\n\n${hashes} ${text}\n\n`;
-    }
-  });
-  turndownService.addRule('divAsBlock', { filter: 'div', replacement: function (content) { const txt = (content || '').trim(); return txt ? `\n\n${txt}\n\n` : '\n'; } });
-
-  let md = turndownService.turndown(doc.body.innerHTML);
-  return postProcessImportedMarkdown(md);
-}
-
-function postProcessImportedMarkdown(md) {
-  if (!md) return '';
-  let out = md.normalize('NFC').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-  out = out.split('\n').map((line) => {
-    if (line.endsWith('  ')) return line.replace(/[ \t]+$/g, '  ');
-    return line.replace(/[ \t]+$/g, '');
-  }).join('\n');
-  out = out.replace(/\n{3,}/g, '\n\n');
-  out = out.replace(/^\s{0,3}#{1,6}\s*$/gm, '');
-  out = out.replace(/\n{3,}(\|)/g, '\n\n$1');
-  out = out.replace(/(\|[- :|]+\|)\n{3,}/g, '$1\n\n');
-  out = out.replace(/\n{3,}(\[画像[^\]]*\])/g, '\n\n$1');
-  out = out.replace(/(\[画像[^\]]*\])\n{3,}/g, '$1\n\n');
-  out = out.replace(/(  \n){3,}/g, '  \n  \n');
-  return out.trim() + '\n';
-}
-
-function normalizeInlineText(text) { return String(text || '').normalize('NFC').replace(/\s+/g, ' ').trim(); }
-function showLoader(msg) { set('loader-msg', msg); document.getElementById('global-loader').classList.add('show'); }
-function hideLoader() { document.getElementById('global-loader').classList.remove('show'); }
 //#endregion
 
 //#region [JS-14] FILE SYSTEM (OPEN / SAVE / STANDALONE)
+function isUserAbortError(err) {
+  return err && (err.name === 'AbortError' || err.code === 20);
+}
+
+function notifyFileSystemError(action, err) {
+  if (isUserAbortError(err)) return;
+  console.error(`${action} failed`, err);
+  alert(isJa ? `${action}に失敗しました。` : `${action} failed.`);
+}
+
 async function handleOpen() {
   closeMenus();
   if (!isMobile && window.showOpenFilePicker) {
     try {
       const [handle] = await window.showOpenFilePicker({
-        id: 'md-works-dir', 
-        types: [{ description: 'Markdown / Text', accept: { 'text/plain': ['.md', '.txt', '.markdown'] } }]
+        types: [{ description: 'Markdown', accept: { 'text/markdown': ['.md', '.txt'] } }]
       });
       fileHandle = handle;
       const file = await handle.getFile();
-      
-      saveToHistoryList(filenameInput.value, editor.value);
-      
+      await saveToHistoryList(filenameInput.value, editor.value);
       filenameInput.value = file.name;
-      const text = await file.text();
-      editor.value = text.normalize('NFC');
-      update();
-      markSaved();
-      triggerAutoSave();
-      if (spellEnabled) runSpellCheck();
+      editor.value = (await file.text()).normalize('NFC');
+      update(); markSaved(); triggerAutoSave();
       toast(T.opened(file.name));
-    } catch (e) {}
+    } catch (e) {
+      notifyFileSystemError(isJa ? 'ファイルを開く処理' : 'Open file', e);
+    }
   } else {
     document.getElementById('file-input').click();
   }
 }
 
+document.getElementById('file-input').addEventListener('change', async (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+
+  e.target.value = '';
+
+  try {
+    await saveToHistoryList(filenameInput.value, editor.value);
+
+    filenameInput.value = file.name;
+    editor.value = (await file.text()).normalize('NFC');
+    fileHandle = null;
+
+    update();
+    markSaved();
+    triggerAutoSave();
+
+    if (spellEnabled) runSpellCheck();
+
+    toast(T.opened(file.name));
+  } catch (err) {
+    console.error(err);
+    alert(isJa ? 'ファイルの読み込みに失敗しました。' : 'Failed to open file.');
+  }
+});
+
 async function handleSave(isSaveAs = false) {
   closeMenus();
-  saveToHistoryList(filenameInput.value, editor.value);
-  
+  await saveToHistoryList(filenameInput.value, editor.value);
   if (isMobile) {
     const filename = filenameInput.value.trim() || 'untitled.md';
-    const finalName = /\.(md|txt|markdown)$/i.test(filename) ? filename : filename + '.md';
-    const file = new File([editor.value], finalName, { type: 'text/plain' });
-    
+    const file = new File([editor.value], filename, { type: 'text/plain' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({ files: [file], title: finalName, text: 'Shared from MD Editor' });
-        markSaved(); toast(T.shared);
-      } catch (e) { console.warn('Share canceled', e); }
-    } else {
-      const txtName = finalName.replace(/\.(md|markdown)$/i, '.txt');
-      const txtFile = new File([editor.value], txtName, { type: 'text/plain' });
-      if (navigator.canShare && navigator.canShare({ files: [txtFile] })) {
-        try {
-          await navigator.share({ files: [txtFile], title: txtName, text: 'Shared from MD Editor' });
-          markSaved(); toast(T.shared); 
-        } catch (e) { console.warn('Share canceled', e); }
-      } else {
-        fallbackDownload();
-      }
-    }
+      try { await navigator.share({ files: [file], title: filename }); markSaved(); } catch (e) {}
+    } else fallbackDownload();
   } else {
     if (window.showSaveFilePicker) {
       try {
         if (!fileHandle || isSaveAs) {
-          fileHandle = await window.showSaveFilePicker({
-            id: 'md-works-dir',
-            suggestedName: filenameInput.value.trim() || 'untitled.md',
-            types: [{ description: 'Markdown', accept: { 'text/markdown': ['.md'] } }]
-          });
+          fileHandle = await window.showSaveFilePicker({ suggestedName: filenameInput.value });
         }
         const writable = await fileHandle.createWritable();
         await writable.write(editor.value);
         await writable.close();
         filenameInput.value = fileHandle.name;
-        markSaved(); triggerAutoSave(); toast(T.saved);
-      } catch (e) {}
-    } else {
-      if (isSaveAs) {
-        const newName = prompt(T.promptSaveAs, filenameInput.value.trim() || 'untitled.md');
-        if (newName) { filenameInput.value = newName; fallbackDownload(); }
-      } else { fallbackDownload(); }
-    }
+        markSaved(); toast(T.saved);
+      } catch (e) {
+        notifyFileSystemError(isJa ? 'ファイルの保存' : 'Save file', e);
+      }
+    } else fallbackDownload();
   }
 }
 
 function fallbackDownload() {
+  const filename = filenameInput.value.trim() || 'untitled.md';
   const blob = new Blob([editor.value], { type: 'text/markdown;charset=utf-8' });
-  let filename = filenameInput.value.trim() || 'untitled.md';
-  if (!/\.(md|txt|markdown)$/i.test(filename)) filename += '.md';
+  const url = URL.createObjectURL(blob);
+
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
+  a.href = url;
   a.download = filename;
   a.click();
-  URL.revokeObjectURL(a.href);
-  markSaved(); toast(T.downloaded);
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+  markSaved();
+  toast(T.downloaded);
 }
 
-function exportStandalone() {
-  closeMenus();
-  saveToHistoryList(filenameInput.value, editor.value);
-  
+function buildStandaloneHtmlForExport() {
   const clone = document.documentElement.cloneNode(true);
+
   clone.querySelectorAll('.open').forEach(el => el.classList.remove('open'));
   clone.querySelectorAll('.show').forEach(el => el.classList.remove('show'));
-  
+
   const previewEl = clone.querySelector('#preview');
   if (previewEl) previewEl.innerHTML = '';
+
   const backdropEl = clone.querySelector('#editor-backdrop');
   if (backdropEl) backdropEl.innerHTML = '';
+
   const editorEl = clone.querySelector('#editor');
-  if (editorEl) { editorEl.innerHTML = ''; editorEl.textContent = ''; editorEl.removeAttribute('value'); }
+  if (editorEl) {
+    editorEl.innerHTML = '';
+    editorEl.textContent = '';
+    editorEl.removeAttribute('value');
+  }
+
   const toastEl = clone.querySelector('#toast');
-  if (toastEl) { toastEl.className = ''; toastEl.innerHTML = ''; }
+  if (toastEl) {
+    toastEl.className = '';
+    toastEl.innerHTML = '';
+  }
+
   const spellList = clone.querySelector('#spell-list');
   if (spellList) spellList.innerHTML = '';
+
   const histList = clone.querySelector('#hist-list');
   if (histList) histList.innerHTML = '';
+
   const outlineList = clone.querySelector('#outline-list');
   if (outlineList) outlineList.innerHTML = '';
+
   const rnBody = clone.querySelector('#rn-body');
   if (rnBody) rnBody.innerHTML = '';
 
+  const loader = clone.querySelector('#global-loader');
+  if (loader) loader.classList.remove('show');
+
   const dataScript = clone.querySelector('#standalone-data');
   if (dataScript) {
-    const data = { filename: filenameInput.value.trim() || 'untitled.md', content: editor.value };
-    dataScript.textContent = JSON.stringify(data).replace(/</g, '\\u003c').replace(/>/g, '\\u003e');
+    const data = {
+      filename: filenameInput.value.trim() || 'untitled.md',
+      content: editor.value
+    };
+
+    dataScript.textContent = JSON.stringify(data)
+      .replace(/</g, '\\u003c')
+      .replace(/>/g, '\\u003e')
+      .replace(/&/g, '\\u0026');
   }
 
   const htmlStr = '<!DOCTYPE html>\n' + clone.outerHTML;
-  let baseName = filenameInput.value.replace(/\.[^/.]+$/, '') || 'document';
-  let outName = baseName + '.app.html';
+  const baseName = (filenameInput.value || 'document').replace(/\.[^/.]+$/, '') || 'document';
+
+  return {
+    htmlStr,
+    baseName,
+    appName: baseName + '.app.html',
+    privateAppName: baseName + '.private.app.html'
+  };
+}
+
+async function exportStandalone() {
+  closeMenus();
+  await saveToHistoryList(filenameInput.value, editor.value);
+
+  const { htmlStr, appName } = buildStandaloneHtmlForExport();
 
   if (isMobile) {
-    const file = new File([htmlStr], outName, { type: 'text/html' });
+    const file = new File([htmlStr], appName, { type: 'text/html' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      navigator.share({ files: [file], title: outName }).catch(e => console.warn('Share canceled', e));
-    } else { triggerDownload(htmlStr, outName, 'text/html'); }
-  } else { triggerDownload(htmlStr, outName, 'text/html'); toast(T.downloaded); }
+      navigator.share({ files: [file], title: appName }).catch(e => console.warn('Share canceled', e));
+    } else {
+      triggerDownload(htmlStr, appName, 'text/html');
+    }
+  } else {
+    triggerDownload(htmlStr, appName, 'text/html');
+    toast(T.downloaded);
+  }
+}
+
+function getPrivateAppPassphrase() {
+  const ok = confirm(
+    isJa
+      ? '暗号化Appとして保存します。\n\nパスフレーズを忘れると内容を復元できません。\nファイル破損に備えて、原本またはバックアップを安全な場所に保管してください。\n\n※復号後にブラウザ上で編集を続ける場合、ブラウザ内の一時保存はMD//WORKS本体の「Private Storage」等の設定に従います。より厳密に管理したい場合は、起動後にPrivate Storageも併用してください。'
+      : 'Save as Private App.\n\nIf you forget the passphrase, the content cannot be recovered. Keep an original or backup copy in a safe place.\n\nNote: Auto-saves after unlocking depend on the editor\'s normal Storage Settings. For extra security, enable Private Storage after unlocking.'
+  );
+  if (!ok) return null;
+
+  const p1 = prompt(
+    isJa
+      ? '暗号化App用のパスフレーズを入力してください。'
+      : 'Enter a passphrase for this Private App.'
+  ) || '';
+
+  if (!p1) return null;
+
+  const p2 = prompt(
+    isJa
+      ? '確認のため、もう一度パスフレーズを入力してください。'
+      : 'Enter the passphrase again to confirm.'
+  ) || '';
+
+  if (p1 !== p2) {
+    toast(isJa ? 'パスフレーズが一致しません' : 'Passphrases do not match');
+    return null;
+  }
+
+  if (p1.length < 10) {
+    const weakOk = confirm(
+      isJa
+        ? 'パスフレーズが短めです。続行しますか？\n\n業務用の機密文書では、10文字以上で推測されにくいものを推奨します。'
+        : 'The passphrase is short. Continue?\n\nFor confidential business documents, use a hard-to-guess passphrase of at least 10 characters.'
+    );
+    if (!weakOk) return null;
+  }
+
+  return p1;
+}
+
+async function derivePrivateAppKey(passphrase, saltBytes, iterations) {
+  const material = await crypto.subtle.importKey(
+    'raw',
+    enc.encode(passphrase),
+    'PBKDF2',
+    false,
+    ['deriveKey']
+  );
+
+  return crypto.subtle.deriveKey(
+    {
+      name: 'PBKDF2',
+      salt: saltBytes,
+      iterations,
+      hash: 'SHA-256'
+    },
+    material,
+    {
+      name: 'AES-GCM',
+      length: 256
+    },
+    false,
+    ['encrypt', 'decrypt']
+  );
+}
+
+async function encryptPrivateAppBox(plainText, passphrase, label) {
+  const iterations = 310000;
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+
+  const key = await derivePrivateAppKey(passphrase, salt, iterations);
+
+  const cipher = await crypto.subtle.encrypt(
+    {
+      name: 'AES-GCM',
+      iv
+    },
+    key,
+    enc.encode(plainText)
+  );
+
+  return {
+    v: 1,
+    label,
+    alg: 'AES-GCM',
+    kdf: 'PBKDF2',
+    hash: 'SHA-256',
+    iterations,
+    salt: bytesToB64(salt),
+    iv: bytesToB64(iv),
+    data: bytesToB64(new Uint8Array(cipher))
+  };
+}
+
+async function buildPrivateAppPayload(htmlStr, passphrase, meta) {
+  return {
+    v: 1,
+    type: 'mdworks-private-app',
+    app: 'MD//WORKS Pro Private App',
+    createdAt: new Date().toISOString(),
+    meta: {
+      filename: meta?.filename || 'document.private.app.html',
+      originalFilename: meta?.originalFilename || 'untitled.md',
+      note: 'The app body is encrypted. Only this loader is stored in plaintext.'
+    },
+    primary: await encryptPrivateAppBox(htmlStr, passphrase, 'primary'),
+    backup: await encryptPrivateAppBox(htmlStr, passphrase, 'backup')
+  };
+}
+
+async function exportPrivateStandalone() {
+  closeMenus();
+
+  if (!window.crypto || !crypto.subtle || !window.TextEncoder || !window.TextDecoder) {
+    alert(
+      isJa
+        ? 'このブラウザでは暗号化Appを作成できません。\nPC版のChromeまたはEdgeの最新版を推奨します。'
+        : 'This browser cannot create a Private App. Latest desktop Chrome or Edge is recommended.'
+    );
+    return;
+  }
+
+  const passphrase = getPrivateAppPassphrase();
+  if (!passphrase) return;
+
+  await saveToHistoryList(filenameInput.value, editor.value);
+
+  try {
+    showLoader(isJa ? '暗号化Appを作成中...' : 'Creating Private App...');
+
+    const { htmlStr, privateAppName } = buildStandaloneHtmlForExport();
+
+    const payload = await buildPrivateAppPayload(htmlStr, passphrase, {
+      filename: privateAppName,
+      originalFilename: filenameInput.value.trim() || 'untitled.md'
+    });
+
+    const loaderHtml = buildPrivateAppLoader(payload, privateAppName);
+
+    hideLoader();
+
+    if (isMobile) {
+      const file = new File([loaderHtml], privateAppName, { type: 'text/html' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({ files: [file], title: privateAppName }).catch(e => console.warn('Share canceled', e));
+      } else {
+        triggerDownload(loaderHtml, privateAppName, 'text/html');
+      }
+    } else {
+      triggerDownload(loaderHtml, privateAppName, 'text/html');
+      toast(isJa ? '暗号化Appを書き出しました' : 'Private App exported');
+    }
+  } catch (err) {
+    hideLoader();
+    console.error(err);
+    alert(
+      isJa
+        ? `暗号化Appの作成に失敗しました。\n${err?.message || err}`
+        : `Failed to create Private App.\n${err?.message || err}`
+    );
+  }
+}
+
+function escapeHtmlAttrText(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function buildPrivateAppLoader(payload, filename) {
+  const payloadJson = JSON.stringify(payload)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026');
+
+  const safeFilename = escapeHtmlAttrText(filename || 'document.private.app.html');
+
+  return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob: https://cdn.jsdelivr.net https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' blob: data: https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; connect-src 'self' https://cdn.jsdelivr.net; img-src 'self' data: blob:; object-src 'none'; base-uri 'none';">
+<title>${safeFilename}</title>
+<style>
+:root{
+  --bg:#090b11;
+  --panel:#111827;
+  --panel2:#182132;
+  --border:#2b3548;
+  --text:#eef2ff;
+  --text2:#aab5d1;
+  --text3:#7b879f;
+  --accent:#8f82ff;
+  --accent2:#d2cbff;
+  --danger:#f17786;
+  --warn:#ebb05b;
+  --success:#5ad7a0;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%;margin:0}
+body{
+  font-family:var(--sans);
+  color:var(--text);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(143,130,255,.18), transparent 30%),
+    linear-gradient(180deg,#0b0e15,#090b11);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.card{
+  width:min(760px,100%);
+  background:linear-gradient(180deg,rgba(24,31,45,.96),rgba(14,18,27,.98));
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:22px;
+  box-shadow:0 28px 80px rgba(0,0,0,.45);
+  overflow:hidden;
+}
+.head{padding:22px 24px;border-bottom:1px solid rgba(255,255,255,.08)}
+.kicker{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--accent2);
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+h1{font-size:22px;margin:0 0 8px}
+.sub{color:var(--text2);font-size:14px;line-height:1.7;margin:0}
+.body{padding:22px 24px 24px}
+.notice{
+  background:rgba(235,176,91,.08);
+  border:1px solid rgba(235,176,91,.22);
+  border-radius:16px;
+  padding:14px 16px;
+  color:var(--text2);
+  font-size:13px;
+  line-height:1.75;
+  margin-bottom:18px;
+}
+.notice strong{color:var(--warn)}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+.check{
+  padding:9px 10px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.035);
+  border-radius:12px;
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--text2);
+}
+.check.ok{color:var(--success)}
+.check.warn{color:var(--warn)}
+.check.bad{color:var(--danger)}
+.row{display:flex;gap:10px;margin-top:12px}
+input[type="password"]{
+  flex:1;
+  min-width:0;
+  height:44px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.04);
+  color:var(--text);
+  padding:0 14px;
+  outline:none;
+  font-size:15px;
+}
+input[type="password"]:focus{
+  border-color:rgba(143,130,255,.55);
+  box-shadow:0 0 0 4px rgba(143,130,255,.13);
+}
+button{
+  border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(180deg,rgba(143,130,255,.28),rgba(143,130,255,.12));
+  color:var(--accent2);
+  border-radius:14px;
+  padding:0 16px;
+  min-height:44px;
+  cursor:pointer;
+  font-weight:700;
+}
+button.secondary{background:rgba(255,255,255,.04);color:var(--text2)}
+button.danger{background:rgba(241,119,134,.10);color:#ffb8c0}
+button:hover{filter:brightness(1.08)}
+#error{color:var(--danger);font-size:13px;min-height:20px;margin-top:10px}
+#success{
+  display:none;
+  border-top:1px solid rgba(255,255,255,.08);
+  padding-top:18px;
+  margin-top:18px;
+}
+#success p{color:var(--text2);font-size:13px;line-height:1.7}
+#rescue{display:none;margin-top:18px}
+textarea{
+  width:100%;
+  min-height:260px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.10);
+  background:#070a10;
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:13px;
+  line-height:1.65;
+  padding:14px;
+  resize:vertical;
+}
+.small{color:var(--text3);font-size:12px;line-height:1.7;margin-top:14px}
+@media(max-width:700px){
+  .checks{grid-template-columns:1fr}
+  .row{flex-direction:column}
+  button{width:100%}
+}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="head">
+    <div class="kicker">MD//WORKS Pro Private App</div>
+    <h1>このファイルはパスフレーズで保護されています</h1>
+    <p class="sub">正しいパスフレーズを入力すると、ブラウザ上で復号され、MD//WORKS Editorを起動できます。</p>
+  </div>
+  <div class="body">
+    <div class="notice">
+      <strong>重要：</strong><br>
+      ・パスフレーズを忘れると内容を復元できません。<br>
+      ・ファイルが破損した場合、復号できないことがあります。原本またはバックアップを安全な場所に保管してください。<br>
+      ・復号後の本文は画面上およびブラウザのメモリ上に存在します。<br>
+      ・機密文書を扱う場合は、拡張機能を無効化したシークレットウィンドウ、または拡張機能を入れていない専用ブラウザプロファイルで開くことを推奨します。<br>
+      ・このPrivate Appは外部ライブラリを読み込む場合があります。完全オフライン環境では、エディタが起動しないことがあります。<br>
+      ・復号後にブラウザ上で編集を続ける場合、エディタ内の一時保存はMD//WORKS本体のStorage設定（Auto encrypted等）に従います。
+    </div>
+
+    <div class="checks" id="checks"></div>
+
+    <label for="passphrase" class="small">Passphrase</label>
+    <div class="row">
+      <input id="passphrase" type="password" autocomplete="current-password" placeholder="パスフレーズを入力">
+      <button id="unlock-btn">Unlock</button>
+    </div>
+    <div id="error"></div>
+
+    <div id="success">
+      <p>
+        復号に成功しました。通常は「エディタを起動」を選択してください。起動しない場合は「Blob起動」または「本文救出」を試してください。
+      </p>
+      <div class="row">
+        <button id="launch-btn">エディタを起動</button>
+        <button id="launch-blob-btn" class="secondary">Blob起動</button>
+        <button id="rescue-btn" class="secondary">本文救出</button>
+      </div>
+    </div>
+
+    <div id="rescue">
+      <p class="small">救出されたMarkdown本文です。必要に応じてコピーまたは保存してください。</p>
+      <textarea id="rescue-text" spellcheck="false"></textarea>
+      <div class="row">
+        <button id="copy-rescue-btn" class="secondary">コピー</button>
+        <button id="download-rescue-btn" class="secondary">.mdとして保存</button>
+      </div>
+    </div>
+
+    <p class="small">
+      推奨環境：PC版 Google Chrome / Microsoft Edge 最新版。Safari、iPhone/iPad、社内管理ブラウザでは動作しない場合があります。
+    </p>
+  </div>
+</div>
+
+<script>
+const PRIVATE_APP_PAYLOAD = ${payloadJson};
+let decryptedHtml = '';
+let rescueFilename = 'rescued.md';
+
+const $ = id => document.getElementById(id);
+
+function b64ToBytes(b64) {
+  const bin = atob(b64);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+
+function setError(msg) {
+  $('error').textContent = msg || '';
+}
+
+function setBusy(isBusy) {
+  $('unlock-btn').disabled = isBusy;
+  $('unlock-btn').textContent = isBusy ? 'Decrypting...' : 'Unlock';
+}
+
+function addCheck(label, state, detail) {
+  const div = document.createElement('div');
+  div.className = 'check ' + state;
+  div.textContent = label + ': ' + detail;
+  $('checks').appendChild(div);
+}
+
+function renderChecks() {
+  $('checks').innerHTML = '';
+
+  const hasCrypto = !!(window.crypto && crypto.subtle);
+  const hasTextApi = !!(window.TextEncoder && window.TextDecoder);
+  const isFile = location.protocol === 'file:';
+  const online = navigator.onLine;
+
+  addCheck('Web Crypto API', hasCrypto ? 'ok' : 'bad', hasCrypto ? 'OK' : 'Unavailable');
+  addCheck('TextEncoder / TextDecoder', hasTextApi ? 'ok' : 'bad', hasTextApi ? 'OK' : 'Unavailable');
+  addCheck('Open mode', isFile ? 'warn' : 'ok', isFile ? 'Local file' : location.protocol);
+  addCheck('Network', online ? 'ok' : 'warn', online ? 'Online' : 'Offline');
+
+  if (!hasCrypto || !hasTextApi) {
+    setError('このブラウザでは復号できません。PC版ChromeまたはEdgeの最新版で開いてください。');
+    $('unlock-btn').disabled = true;
+  }
+}
+
+async function deriveKey(passphrase, saltB64, iterations) {
+  const enc = new TextEncoder();
+  const material = await crypto.subtle.importKey(
+    'raw',
+    enc.encode(passphrase),
+    'PBKDF2',
+    false,
+    ['deriveKey']
+  );
+
+  return crypto.subtle.deriveKey(
+    {
+      name: 'PBKDF2',
+      salt: b64ToBytes(saltB64),
+      iterations,
+      hash: 'SHA-256'
+    },
+    material,
+    {
+      name: 'AES-GCM',
+      length: 256
+    },
+    false,
+    ['decrypt']
+  );
+}
+
+async function decryptBox(box, passphrase) {
+  const key = await deriveKey(passphrase, box.salt, box.iterations);
+  const plain = await crypto.subtle.decrypt(
+    {
+      name: 'AES-GCM',
+      iv: b64ToBytes(box.iv)
+    },
+    key,
+    b64ToBytes(box.data)
+  );
+  return new TextDecoder().decode(plain);
+}
+
+async function unlock() {
+  setError('');
+  $('success').style.display = 'none';
+  $('rescue').style.display = 'none';
+
+  const passphrase = $('passphrase').value || '';
+  if (!passphrase) {
+    setError('パスフレーズを入力してください。');
+    return;
+  }
+
+  setBusy(true);
+
+  const candidates = [
+    ['primary', PRIVATE_APP_PAYLOAD.primary],
+    ['backup', PRIVATE_APP_PAYLOAD.backup]
+  ];
+
+  const errors = [];
+
+  for (const [label, box] of candidates) {
+    if (!box) continue;
+    try {
+      decryptedHtml = await decryptBox(box, passphrase);
+      $('success').style.display = 'block';
+      setError(label === 'backup'
+        ? 'primaryの復号に失敗しましたが、backupから復号できました。ファイル破損に備えて新しいPrivate Appとして保存し直すことを推奨します。'
+        : ''
+      );
+      setBusy(false);
+      return;
+    } catch (err) {
+      errors.push(label + ': failed');
+    }
+  }
+
+  setBusy(false);
+  setError('復号に失敗しました。パスフレーズが違うか、ファイルが破損している可能性があります。' + (errors.length ? ' [' + errors.join(', ') + ']' : ''));
+}
+
+function launchApp() {
+  if (!decryptedHtml) return;
+  document.open();
+  document.write(decryptedHtml);
+  document.close();
+}
+
+function launchAppBlob() {
+  if (!decryptedHtml) return;
+  const blob = new Blob([decryptedHtml], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  location.href = url;
+}
+
+function rescueText() {
+  if (!decryptedHtml) return;
+
+  try {
+    const doc = new DOMParser().parseFromString(decryptedHtml, 'text/html');
+    const dataScript = doc.getElementById('standalone-data');
+
+    if (!dataScript) {
+      throw new Error('standalone-data not found');
+    }
+
+    const data = JSON.parse(dataScript.textContent || '{}');
+    const content = data.content || '';
+    rescueFilename = data.filename || PRIVATE_APP_PAYLOAD?.meta?.originalFilename || 'rescued.md';
+
+    if (!content) {
+      throw new Error('content is empty');
+    }
+
+    $('rescue-text').value = content;
+    $('rescue').style.display = 'block';
+  } catch (err) {
+    setError('本文救出に失敗しました: ' + (err?.message || err));
+  }
+}
+
+async function copyRescueText() {
+  const text = $('rescue-text').value || '';
+  if (!text) return;
+
+  try {
+    await navigator.clipboard.writeText(text);
+    setError('本文をクリップボードにコピーしました。');
+  } catch {
+    $('rescue-text').focus();
+    $('rescue-text').select();
+    document.execCommand('copy');
+    setError('本文を選択しました。コピーできない場合は手動でコピーしてください。');
+  }
+}
+
+function downloadRescueText() {
+  const text = $('rescue-text').value || '';
+  if (!text) return;
+
+  let name = rescueFilename || 'rescued.md';
+  if (!/\\.(md|txt|markdown)$/i.test(name)) name += '.md';
+
+  const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+$('unlock-btn').addEventListener('click', unlock);
+$('launch-btn').addEventListener('click', launchApp);
+$('launch-blob-btn').addEventListener('click', launchAppBlob);
+$('rescue-btn').addEventListener('click', rescueText);
+$('copy-rescue-btn').addEventListener('click', copyRescueText);
+$('download-rescue-btn').addEventListener('click', downloadRescueText);
+
+$('passphrase').addEventListener('keydown', e => {
+  if (e.key === 'Enter') unlock();
+});
+
+window.addEventListener('online', renderChecks);
+window.addEventListener('offline', renderChecks);
+
+renderChecks();
+<\/script>
+</body>
+</html>`;
 }
 
 function triggerDownload(content, filename, mimeType) {
   const blob = new Blob([content], { type: mimeType + ';charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
+  a.href = url;
   a.download = filename;
   a.click();
-  URL.revokeObjectURL(a.href);
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 //#endregion
 
 //#region [JS-15] OUTLINE, HISTORY & LINTER
 function toggleOutline() {
   outlineOpen = !outlineOpen;
-  const panel = document.getElementById('outline-panel');
-  const check = document.getElementById('outline-check');
-  const entry = document.getElementById('m-outline-entry');
-  panel.classList.toggle('show', outlineOpen);
-  check.style.opacity = outlineOpen ? '1' : '0';
-  entry.classList.toggle('active', outlineOpen);
-  if (outlineOpen) renderOutline();
-  closeMenus();
+  document.getElementById('outline-panel').classList.toggle('show', outlineOpen);
+  document.getElementById('outline-check').style.opacity = outlineOpen ? '1' : '0';
+  if (outlineOpen) renderOutline(); closeMenus();
 }
 
 function renderOutline() {
-  if (!outlineOpen) return;
-  const lines = editor.value.split('\n');
   const container = document.getElementById('outline-list');
   container.innerHTML = '';
-  
-  let found = false;
   let charOffset = 0;
-  lines.forEach(line => {
+  editor.value.split('\n').forEach(line => {
     const m = line.match(/^(#{1,6})\s+(.+)/);
     if (m) {
-      found = true;
-      const level = m[1].length;
       const div = document.createElement('div');
-      div.className = `ol-item ol-h${level}`;
-      div.textContent = m[2];
-      const targetOffset = charOffset;
-      div.onclick = () => jumpToOffset(targetOffset);
+      div.className = `ol-item ol-h${m[1].length}`; div.textContent = m[2];
+      const target = charOffset; div.onclick = () => jumpToOffset(target);
       container.appendChild(div);
     }
     charOffset += line.length + 1;
   });
-  if (!found) container.innerHTML = `<div style="padding:10px; color:var(--text3); font-size:12px;">${T.outlineEmpty}</div>`;
 }
 
 function jumpToOffset(offset) {
-  editor.focus();
-  editor.setSelectionRange(offset, offset);
-  const textBefore = editor.value.substring(0, offset);
-  const linesBefore = textBefore.split('\n').length;
-  requestAnimationFrame(() => {
-    const lineHeight = parseFloat(getComputedStyle(editor).lineHeight);
-    const paddingTop = parseFloat(getComputedStyle(editor).paddingTop);
-    const targetTop = (linesBefore - 1) * lineHeight + paddingTop - (editor.clientHeight / 3);
-    editor.scrollTop = Math.max(0, targetTop);
-    backdrop.scrollTop = editor.scrollTop;
-  });
+  editor.focus(); editor.setSelectionRange(offset, offset);
+  const targetTop = (editor.value.substring(0, offset).split('\n').length - 1) * 26;
+  editor.scrollTop = Math.max(0, targetTop - 100);
 }
 
 async function saveToHistoryList(filename, content) {
   if (!content || content.trim() === '' || content === T.defaultMd) return;
-  let hist = [];
-  try { hist = JSON.parse((await secureGetItem(HISTORY_KEY)) || '[]'); } catch (e) { hist = []; }
-  hist = hist.filter(h => h.filename !== filename);
-  hist.unshift({ filename, content, date: Date.now() });
-  if (hist.length > 10) hist.pop();
+  let hist = JSON.parse((await secureGetItem(HISTORY_KEY)) || '[]');
+  hist = [{ filename, content, date: Date.now() }, ...hist.filter(h => h.filename !== filename)].slice(0, 10);
   await secureSetItem(HISTORY_KEY, JSON.stringify(hist));
 }
 
 async function openHistory() {
   closeMenus();
-  let list = [];
-  try { list = JSON.parse((await secureGetItem(HISTORY_KEY)) || '[]'); } catch (e) { list = []; }
+  const hist = JSON.parse((await secureGetItem(HISTORY_KEY)) || '[]');
   const container = document.getElementById('hist-list');
   container.innerHTML = '';
-  
-  if (list.length === 0) {
-    container.innerHTML = `<div style="color:var(--text3); font-size:13px; padding:10px 0;">${T.historyEmpty}</div>`;
-  } else {
-    list.forEach(h => {
-      const div = document.createElement('div');
-      div.className = 'hist-item';
-      
-      const nameDiv = document.createElement('div');
-      nameDiv.className = 'hist-name';
-      nameDiv.textContent = h.filename;
-      
-      const dateDiv = document.createElement('div');
-      dateDiv.className = 'hist-date';
-      dateDiv.textContent = new Date(h.date).toLocaleString();
-      
-      div.appendChild(nameDiv);
-      div.appendChild(dateDiv);
-      
-      div.onclick = () => {
-        if (isDirty && editor.value !== T.defaultMd && !confirm(T.confirmNew)) return;
-        saveToHistoryList(filenameInput.value, editor.value);
-        editor.value = h.content;
-        filenameInput.value = h.filename;
-        fileHandle = null;
-        update();
-        markDirty();
-        closeHistory();
-      };
-      container.appendChild(div);
-    });
+  if (!hist.length) {
+    const empty = document.createElement('div');
+    empty.style.padding = '10px';
+    empty.textContent = T.historyEmpty;
+    container.appendChild(empty);
   }
+  hist.forEach(h => {
+    const div = document.createElement('div'); div.className = 'hist-item';
+    const name = document.createElement('div'); name.className = 'hist-name';
+    name.textContent = h.filename || 'untitled.md';
+    const date = document.createElement('div'); date.className = 'hist-date';
+    date.textContent = new Date(h.date).toLocaleString();
+    div.append(name, date);
+    div.onclick = () => { editor.value = h.content; filenameInput.value = h.filename; update(); closeHistory(); };
+    container.appendChild(div);
+  });
   document.getElementById('history-modal').classList.add('show');
 }
 function closeHistory() { document.getElementById('history-modal').classList.remove('show'); }
 
 function formatDoc() {
-  closeMenus();
-  let val = editor.value;
-  val = val.replace(/\n{3,}/g, '\n\n');
-  val = val.replace(/^(#{1,6})([^#\s\n])/gm, '$1 $2');
-  val = val.split('\n').map(line => line.endsWith('  ') ? line : line.trimEnd()).join('\n');
-  editor.value = val;
-  markDirty(); update(); toast(T.formatDone);
+  editor.value = editor.value.replace(/\n{3,}/g, '\n\n').split('\n').map(l => l.trimEnd()).join('\n');
+  update(); toast(T.formatDone);
 }
 //#endregion
 
-function toast(msg, duration = 1800) {
-  const toastEl = document.getElementById('toast');
-  if (!toastEl) return;
-  toastEl.textContent = msg;
-  toastEl.classList.add('show');
-  clearTimeout(toastEl._timer);
-  toastEl._timer = setTimeout(() => toastEl.classList.remove('show'), duration);
+function toast(msg) {
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function showLoader(msg) {
+  const loader = document.getElementById('global-loader');
+  const msgEl = document.getElementById('loader-msg');
+  if (msgEl) msgEl.textContent = msg || 'Loading...';
+  if (loader) loader.classList.add('show');
+}
+
+function hideLoader() {
+  const loader = document.getElementById('global-loader');
+  if (loader) loader.classList.remove('show');
 }
 
 //#region [JS-16] RELEASE NOTES LOGIC
-const CURRENT_VERSION = '1.1.2';
+const APP_VERSION = '1.5.3';
+const RELEASE_NOTES_STORAGE_KEY = 'mdworks_seen_release_notes_version';
 
-function checkReleaseNotes() {
-  const lastSeen = localStorage.getItem('md_editor_version');
-  if (lastSeen !== CURRENT_VERSION) showReleaseNotes();
+function maybeShowReleaseNotes() {
+  if (localStorage.getItem(RELEASE_NOTES_STORAGE_KEY) !== APP_VERSION) {
+    openReleaseNotesModal();
+  }
 }
 
-function showReleaseNotes() {
-  set('rn-title', T.rnTitle);
-  const body = document.getElementById('rn-body');
-  if (window.marked && window.DOMPurify) body.innerHTML = safeMarkdownHtml(T.rnContent);
-  else body.innerText = "Updated to " + CURRENT_VERSION;
+function openReleaseNotesModal() {
+  set('rn-title', T.releaseNotesTitle);
+  set('rn-close-btn', T.releaseNotesClose);
+  document.getElementById('rn-body').innerHTML = safeMarkdownHtml(`${T.releaseNotesIntro}
+
+${T.releaseNotesContent}`);
   document.getElementById('rn-modal').classList.add('show');
 }
 
 function closeRN() {
-  localStorage.setItem('md_editor_version', CURRENT_VERSION);
+  localStorage.setItem(RELEASE_NOTES_STORAGE_KEY, APP_VERSION);
   document.getElementById('rn-modal').classList.remove('show');
 }
 //#endregion
 
 //#region [JS-17] SHORTCUTS, EXPORTS & UTILS
 window.addEventListener('keydown', e => {
-  const meta = e.ctrlKey || e.metaKey;
-  if (e.key === 'Escape') {
-    if (document.body.classList.contains('zen-mode')) toggleZenMode();
-    if (srPanelOpen) { e.preventDefault(); closeSearchPanel(); }
-    if (document.getElementById('history-modal').classList.contains('show')) closeHistory();
-    if (document.getElementById('rn-modal').classList.contains('show')) closeRN();
+  const rnModal = document.getElementById('rn-modal');
+  if (e.key === 'Escape' && rnModal && rnModal.classList.contains('show')) {
+    e.preventDefault();
+    closeRN();
     return;
   }
-  if (meta && e.key.toLowerCase() === 'n') { e.preventDefault(); newFile(); }
-  if (meta && e.shiftKey && e.key.toLowerCase() === 's') { e.preventDefault(); handleSave(true); return; }
-  if (meta && !e.shiftKey && e.key.toLowerCase() === 's') { e.preventDefault(); handleSave(false); }
-  if (meta && e.key.toLowerCase() === 'o') { e.preventDefault(); handleOpen(); }
-  if (meta && e.key.toLowerCase() === 'f') { e.preventDefault(); openSearchPanel('find'); }
-  if (meta && e.key.toLowerCase() === 'h') { e.preventDefault(); openSearchPanel('replace'); }
-  if (meta && e.key.toLowerCase() === 'b') { e.preventDefault(); if (document.activeElement === editor && !isEditorComposing) wrap('**'); }
-  if (meta && e.key.toLowerCase() === 'i') { e.preventDefault(); if (document.activeElement === editor && !isEditorComposing) wrap('*'); }
-});
 
-window.addEventListener('beforeunload', (e) => {
-  if (isDirty && editor.value.trim() !== '' && editor.value !== T.defaultMd) { e.preventDefault(); e.returnValue = ''; }
+  const m = e.ctrlKey || e.metaKey;
+  if (e.key === 's' && m) { e.preventDefault(); handleSave(e.shiftKey); }
+  if (e.key === 'o' && m) { e.preventDefault(); handleOpen(); }
+  if (e.key === 'f' && m) { e.preventDefault(); openSearchPanel('find'); }
 });
 
 async function newFile() {
-  closeMenus();
-  if (isDirty && editor.value.trim() !== '' && editor.value !== T.defaultMd) {
-    if (!confirm(T.confirmNew)) return;
-  }
+  if (isDirty && !confirm(T.confirmNew)) return;
   await saveToHistoryList(filenameInput.value, editor.value);
   editor.value = T.defaultMd;
-  resetDocumentIdentity();
-  update();
-  markSaved();
+  filenameInput.value = 'untitled.md';
+  fileHandle = null;
+  update(); markSaved();
   await triggerAutoSave();
-  toast(T.newCreated);
 }
 
-// ▼ ファイルを閉じる処理（非同期[async/await]対応で安定化）
 async function closeFile() {
-  closeMenus();
-  if (isDirty && editor.value.trim() !== '' && editor.value !== T.defaultMd) {
-    if (!confirm(T.confirmClose)) return;
-  }
+  if (isDirty && !confirm(T.confirmClose)) return;
   await saveToHistoryList(filenameInput.value, editor.value);
   editor.value = '';
-  resetDocumentIdentity();
-  update(); 
-  markSaved(); 
-  await triggerAutoSave(); 
+  filenameInput.value = 'untitled.md';
+  fileHandle = null;
+  update(); markSaved();
+  secureRemoveItem(AUTOSAVE_TXT_KEY);
+  secureRemoveItem(AUTOSAVE_NAME_KEY);
   toast(T.closedToast);
 }
 
 async function execEdit(action) {
-  closeMenus(); editor.focus();
-  if (action === 'selectAll') { editor.select(); return; }
-  if (action === 'paste') {
-    try {
-      const text = await navigator.clipboard.readText();
-      handlePlainTextPaste(text);
-    } catch (err) { toast(T.errPaste); }
-    return;
-  }
-  document.execCommand(action);
-  if (action === 'cut' || action === 'undo' || action === 'redo') { markDirty(); triggerAutoSave(); }
+  editor.focus(); if (action === 'selectAll') editor.select(); else document.execCommand(action);
 }
 
 function exportHtml() {
-  closeMenus();
-  if (!window.marked || !window.DOMPurify) { alert(isJa ? 'セキュリティエラー' : 'Security Error'); return; }
-  const safeHtml = safeMarkdownHtml(editor.value);
-  const title = filenameInput.value.replace(/\.[^/.]+$/, '') || 'document';
-  const fullHtml = `<!DOCTYPE html>\n<html lang="${isJa ? 'ja' : 'en'}">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>${title}</title>\n<style>body{font-family:'Helvetica Neue',Arial,sans-serif;line-height:1.8;color:#333;max-width:800px;margin:0 auto;padding:40px 20px}h1,h2,h3,h4,h5,h6{font-family:sans-serif;font-weight:bold;margin-top:1.5em;margin-bottom:.5em}h1{border-bottom:2px solid #eee;padding-bottom:5px}h2{border-bottom:1px solid #eee;padding-bottom:5px}code{background-color:#f4f4f4;padding:2px 5px;border-radius:4px;font-family:monospace;font-size:.9em}pre{background-color:#f6f8fa;border-radius:6px;padding:16px;overflow-x:auto;border:1px solid #e1e4e8}pre code{background:none;border:none;padding:0}blockquote{border-left:4px solid #dfe2e5;margin:1em 0;padding-left:16px;color:#6a737d}table{border-collapse:collapse;width:100%;margin:1em 0}th,td{border:1px solid #dfe2e5;padding:8px 13px}th{background-color:#f6f8fa;font-weight:600}tr:nth-child(even){background-color:#fcfcfc}img{max-width:100%;height:auto}</style>\n</head>\n<body>\n${safeHtml}\n</body>\n</html>`;
-  if (isMobile) {
-    const file = new File([fullHtml], title + '.html', { type: 'text/html;charset=utf-8' });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) navigator.share({ files: [file], title: title + '.html' }).catch(() => {});
-    else triggerDownload(fullHtml, title + '.html', 'text/html');
-  } else {
-    triggerDownload(fullHtml, title + '.html', 'text/html'); toast(T.downloaded);
-  }
+  const html = `<html><body style="max-width:800px;margin:auto;padding:40px">${safeMarkdownHtml(editor.value)}</body></html>`;
+  triggerDownload(html, filenameInput.value.replace('.md', '.html'), 'text/html');
 }
 
-function exportPdf() {
-  closeMenus();
-  if (window.marked && window.DOMPurify) {
-    preview.innerHTML = safeMarkdownHtml(editor.value); decoratePreviewTasks();
-  }
-  setTimeout(() => window.print(), 100);
-}
+function exportPdf() { window.print(); }
 //#endregion
 </script>
 </body>
