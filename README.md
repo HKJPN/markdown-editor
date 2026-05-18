@@ -26,6 +26,25 @@ enabling encrypted single-file HTML documents using AES-GCM and local-only proce
 **A new way to write, protect, and carry your work — all in one file.**
 
 ---
+
+## ✨ Upcoming Features
+
+The next version of MD//WORKS will make everyday writing and navigation smoother, with improved search behavior, more accurate outline jumps, and better preview interactions.
+
+### Improvements
+
+- Search results will automatically scroll into view.
+- Outline navigation will jump more accurately to the selected section.
+
+### Added
+
+- Centralized Esc key handling for dialogs, menus, and UI states.
+- A new Help menu with an integrated documentation modal.
+- Ctrl+A / Cmd+A support in Preview mode.
+- Rich copy support from Preview.
+
+---
+
 # Features
 
 ### 📝 Word (.docx) Import
