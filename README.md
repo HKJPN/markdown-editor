@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.5.2 — Standalone Markdown Editor
+# 🚀 MD//WORKS v1.5.3 — Standalone Markdown Editor
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
 <img width="854" height="720" alt="1_5_2の画面cut" src="https://github.com/user-attachments/assets/17e1489b-cd58-42da-ab69-13293177e271" />
 
@@ -15,41 +15,9 @@ With its unique **Save as App** feature, MD//WORKS lets you carry not just your 
 Try it instantly in your browser.  
 
 ---
-## ✨ What’s New in v1.5.2
+## ✨ What’s New in v1.5.3
 
-We’re introducing a set of thoughtfully designed color themes, allowing you to tailor your workspace to your environment, mood, and workflow.
-
-#### Available Themes
-
-*   **🌙 Midnight (Default)**  
-    A refined dark theme designed for focus and clarity—perfect for developers and long writing sessions.
-
-*   **📄 Paper**  
-    A clean, bright interface that mimics real paper—ideal for drafting, reviewing, and print-oriented writing.
-
-*   **☕ Warm**  
-    A gentle sepia tone that reduces eye strain—crafted for extended sessions and late-night creativity.
-
-***
-
-### ⚡ Effortless Switching
-
-*   Access themes instantly from the **\[View] menu → Theme section**
-*   Switch with a single click—no disruptions to your workflow
-
-***
-
-### 🧠 Smart Persistence
-
-Your preferred theme is automatically saved in your browser, so every time you return, MD//WORKS looks exactly the way you like it.
-
-Even better, this design is **fully isolated**—your preferences will **never interfere with standalone exported files**, ensuring portability and consistency across environments.
-
-***
-
-## **Upcoming feature**
-
-The next version of MD//WORKS will include **Private App export**,  
+ **Private App export**,  
 enabling encrypted single-file HTML documents using AES-GCM and local-only processing.
 
 - AES-GCM 256-bit encryption 
