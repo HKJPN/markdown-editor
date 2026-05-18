@@ -1410,6 +1410,12 @@ let customDict = new Set();
 let ignoredWords = new Set();
 let isDirty = false;
 let isDraggingSplitter = false;
+let fileHandle = null;
+
+function resetDocumentIdentity(filename = 'untitled.md') {
+  filenameInput.value = filename;
+  fileHandle = null;
+}
 
 editor.placeholder = T.placeholder;
 editor.value = T.defaultMd;
@@ -3626,8 +3632,7 @@ async function newFile() {
   }
   await saveToHistoryList(filenameInput.value, editor.value);
   editor.value = T.defaultMd;
-  filenameInput.value = 'untitled.md';
-  fileHandle = null;
+  resetDocumentIdentity();
   update();
   markSaved();
   await triggerAutoSave();
@@ -3642,8 +3647,7 @@ async function closeFile() {
   }
   await saveToHistoryList(filenameInput.value, editor.value);
   editor.value = '';
-  filenameInput.value = 'untitled.md';
-  fileHandle = null;
+  resetDocumentIdentity();
   update(); 
   markSaved(); 
   await triggerAutoSave(); 
