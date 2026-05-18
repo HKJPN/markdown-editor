@@ -1,7 +1,6 @@
 # 🚀 MD//WORKS v1.5.3 — Standalone Markdown Editor
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
-<img width="854" height="720" alt="1_5_2の画面cut" src="https://github.com/user-attachments/assets/17e1489b-cd58-42da-ab69-13293177e271" />
-
+<img width="1280" height="720" alt="スクリーンショット1_5_3" src="https://github.com/user-attachments/assets/8d936573-90bb-481d-a0b4-7d3db1f9f6f0" />
 
 ## **MD//WORKS** is the only editor that transforms your document into secure, portable application. No installation. No cloud. All you need is a browser but everything runs locally. Unlike tools like TiddlyWiki or ZIP archives, your document can be opened and edited anywhere.
 Write Markdown, preview it live, import Word documents, recover previous drafts, and even save the entire editor together with your document as a single portable HTML app.
