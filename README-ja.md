@@ -1,6 +1,6 @@
 # 🚀 MD//WORKS v1.5.3 — スタンドアロン Markdown エディタ
 **Languages:** [🇺🇸 English](README.md) or [🇯🇵 日本語](README-ja.md)
-<img width="854" height="720" alt="1_5_2の画面cut" src="https://github.com/user-attachments/assets/a0f2425e-395e-4de3-9d4d-9fcf2fb91006" />
+<img width="1280" height="720" alt="スクリーンショット1_5_3j" src="https://github.com/user-attachments/assets/94fbd58e-b740-40e8-ac12-77eb96eba73c" />
 
 **インストール不要。設定不要。すぐ書ける。HTMLアプリですが、全てはローカル処理されます。他のツールと異なり、文書を安全に保持しつつ、どのような環境でも編集可能とする機能が搭載されています。**
 
