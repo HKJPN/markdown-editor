@@ -1,7 +1,7 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
-## 2026-05-18 -V1.5.3
+## 2026-05-18 -v1.5.3
 
 ### v1.5.3 - Save as Private App
 
@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 - AES-GCM 256-bit encryption
 - PBKDF2 key derivation (310,000 iterations)
 
-## 2026-05-18 - Hotfix
+## 2026-05-18 - Hotfix v1.5.2
 
 ### Fixed
 
