@@ -10,8 +10,9 @@ With its unique **Save as App** feature, MD//WORKS lets you carry not just your 
 # 🚀 Live Demo
 
 👉 **https://hkjpn.github.io/markdown-editor/**
-
 Try it instantly in your browser.  
+- [Quick Start English](docs/quick-start.md)
+- [Security / Privacy](SECURITY.md)
 
 ---
 ## ✨ What’s New in v1.5.3
