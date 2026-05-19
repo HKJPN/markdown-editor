@@ -18,9 +18,8 @@ Try it instantly in your browser.
 ---
 ## ✨ What’s New in v1.5.3
 
- **Private App export**,  
-enabling encrypted single-file HTML documents using AES-GCM and local-only processing.
-
+ **Private App export** generates encrypted, single‑file HTML documents using AES‑GCM and ensures that all encryption and processing happen locally.
+ 
 - AES-GCM 256-bit encryption 
 - PBKDF2 key derivation (310,000 iterations) 
 - Fully local encryption / no server required
