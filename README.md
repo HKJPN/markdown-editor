@@ -3,6 +3,7 @@
 <img width="1280" height="720" alt="スクリーンショット1_5_3" src="https://github.com/user-attachments/assets/8d936573-90bb-481d-a0b4-7d3db1f9f6f0" />
 
 ## **MD//WORKS** is the only editor that transforms your document into secure, portable application. No installation. No cloud. All you need is a browser but everything runs locally. Unlike tools like TiddlyWiki or ZIP archives, your document can be opened and edited anywhere.
+
 Write Markdown, preview it live, import Word documents, recover previous drafts, and even save the entire editor together with your document as a single portable HTML app.
 
 With its unique **Save as App** feature, MD//WORKS lets you carry not just your text — but your complete writing environment — anywhere.
