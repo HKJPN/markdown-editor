@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 
-## 2026-05-19 -v1.5.3　maintenance
+## 2026-05-19 -Hotfix v1.5.3
 
 Updated the external libraries used for Markdown preview, HTML sanitization, and Word import.
 
