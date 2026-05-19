@@ -13,6 +13,9 @@ Markdown の編集、ライブプレビュー、Word 文書の取り込み、履
 
 👉 **https://hkjpn.github.io/markdown-editor/**
 
+- [クイックスタート（はじめに）](docs/quick-start-ja.md)
+- [セキュリティとプライバシー](SECURITY.md)
+
 ---
 
 ## ✨ v1.5.3 の新機能
