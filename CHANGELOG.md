@@ -1,6 +1,19 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+
+
+## 2026-05-19 -v1.5.3　maintenance
+
+Updated the external libraries used for Markdown preview, HTML sanitization, and Word import.
+
+- Marked: 12.0.1 → 18.0.3
+- DOMPurify: 3.0.9 → 3.4.5
+- Mammoth: 1.8.0 → 1.11.0
+- Turndown: 7.1.3 → 7.2.4
+
+Also fixed the CDN path for the Marked 18 UMD bundle.
+
 ## 2026-05-18 -v1.5.3
 
 ### v1.5.3 - Save as Private App
