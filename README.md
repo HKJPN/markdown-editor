@@ -14,6 +14,7 @@ With its unique **Save as App** feature, MD//WORKS lets you carry not just your 
 
 Try it instantly in your browser.  
 - [Quick Start ](docs/quick-start.md)
+- [User Manual ](docs/manual.md)
 - [Security / Privacy](SECURITY.md)
 
 ---
