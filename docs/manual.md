@@ -1,0 +1,675 @@
+# MD//WORKS Editor User Manual
+
+MD//WORKS Editor is a Markdown editor that runs entirely from a single HTML file.  
+It supports drafting, Markdown editing, live preview, file saving, HTML/PDF export, and standalone HTML app export.
+
+Local draft data is protected so that it is not stored in plain text. For additional protection, you can also enable **Private Storage**.
+
+> **Important:** MD//WORKS Editor runs locally in your browser. To keep a document as a regular file, always save it as a `.md` file using **File > Save (Ctrl+S / ⌘S)**. **Auto encrypted** protects temporary drafts and history stored in the browser; it does not replace saving a Markdown file to your computer.
+
+## Image Annotations Used in This Manual
+
+This manual uses visual annotations to indicate important areas of the screen.  
+Red frames indicate where to click or select, blue frames indicate information to check, and circled numbers indicate the order of operations.
+
+## Shortcut Notation in This Manual
+
+This manual lists Windows / Linux and Mac shortcuts together.  
+Example: **Ctrl+S / ⌘S**
+
+When a shortcut includes Shift, the Mac notation uses **⇧**.  
+Example: **Ctrl+Shift+S / ⌘⇧S**
+
+Depending on your browser or operating system, some shortcuts may conflict with standard browser shortcuts. If a shortcut does not work as expected, use the menu bar instead.
+
+---
+
+## 1. Starting the App and Understanding the Screen Layout
+
+### 1-1. Starting the App
+
+Open the MD//WORKS Editor HTML file in your web browser to launch the app.  
+No installation is required; the editor runs directly in a supported browser.
+
+After the file opens, you can begin typing Markdown in the editor area.  
+If draft data from a previous session is available, you may be asked whether you want to restore it. Choose the restore option if you want to recover the previous draft.
+
+### 1-2. Supported Environments
+
+For best results, use the latest version of a modern desktop browser such as Google Chrome, Microsoft Edge, or Firefox.
+
+Some features, including file saving, printing, fullscreen mode, and Private App creation, may not work correctly in outdated browsers, restricted corporate environments, or browsers with strict security settings.
+
+Features related to creating or decrypting Private Apps depend on browser capabilities such as the Web Crypto API. If you encounter problems, try the latest desktop version of Chrome or Edge.
+
+### 1-3. Screen Layout
+
+
+* **① Menu Bar**  
+  Provides access to the File, Edit, View, and Help menus. Use it to create files, open files, save, export, switch views, and access help.
+
+* **② Title Bar**  
+  Displays the app name, file name, save status, and primary action buttons.  
+  You can quickly open files, save, toggle Preview, enter fullscreen mode, or enable Spell (EN).
+
+* **③ Toolbar**  
+  Lets you insert headings, bold text, italics, lists, tasks, quotes, code, links, and tables with a single click.  
+  This is useful even if you are not familiar with Markdown syntax.
+
+* **④ Editor Area**  
+  The main area for writing and editing text in Markdown format.  
+  Use this area to enter text, create headings and lists, and insert images.
+
+* **⑤ Preview Area**  
+  Renders your Markdown as formatted output.  
+  You can edit on the left while checking the rendered result on the right. Toggle the preview using the **Preview** button on the title bar or **View > Preview**.
+
+* **⑥ Status Bar**  
+  Displays the current line count, word count, character count, Spell (EN) status, and storage protection mode.  
+  Storage protection modes include **Auto encrypted** and passphrase-protected **Private Storage**.
+
+---
+
+## 2. Creating and Opening Files
+
+
+### 2-1. Creating a New File
+
+To create a new Markdown document, select **File > New (Ctrl+N / ⌘N)** from the menu bar.
+
+If you have unsaved work, save it before creating a new file.  
+Depending on the current state of the document, you may also be prompted to save the current content to History before proceeding.
+
+### 2-2. Opening an Existing File
+
+To continue editing a Markdown file saved on your computer, select **File > Open (Ctrl+O / ⌘O)** from the menu bar or click the **Open** button on the title bar.
+
+Supported text-based file types include `.md`, `.txt`, and `.markdown`.
+
+### 2-3. Importing Word Files
+
+You can import an existing Word document (`.docx`) and convert it to Markdown for editing.  
+Select **File > Import Word (.docx)** from the menu bar, then choose the Word file you want to import.
+
+The maximum file size is **10 MB**.
+
+> **Note:** Word import is designed to convert document structure into Markdown. Detailed layout elements such as fonts, margins, complex charts, footnotes, and intricate tables may not be reproduced exactly. After importing, review the result in the Preview area.
+
+> **Note:** Importing a Word file replaces the current draft. Save any important work with **File > Save (Ctrl+S / ⌘S)** before importing.
+
+---
+
+## 3. Entering Text
+
+
+
+Type your content in the **Editor Area**, located in the center or on the left side of the screen.  
+MD//WORKS Editor uses Markdown syntax for document creation.
+
+### 3-1. Basic Input Example
+
+```markdown
+# Heading 1
+
+This is the main text.
+
+## Heading 2
+
+- Bullet point
+- Bullet point
+
+You can also use **bold** and *italics*.
+```
+
+### 3-2. Inserting Images
+
+
+
+You can insert small local images by dragging and dropping them into the editor area.
+
+When inserted, the image is embedded as data within the Markdown document.  
+To protect local storage capacity, image insertion is subject to the following limits:
+
+| Item | Details |
+| --- | --- |
+| Maximum size | Under 200 KB |
+| Supported formats | PNG, JPEG, WebP, etc. |
+| Unsupported formats | SVG |
+
+For security reasons, SVG images are not supported. Convert SVG files to PNG, JPEG, or WebP before inserting them.
+
+### 3-3. Checking Input Status
+
+
+
+You can use MD//WORKS Editor for long drafts, technical notes, specifications, meeting minutes, and research notes.  
+The current line count, word count, and character count are shown in the status bar at the bottom of the screen.
+
+---
+
+## 4. Formatting Text
+
+
+You can format text either by typing Markdown syntax directly or by using the toolbar.
+
+The toolbar makes it easy to insert headings, bold text, lists, quotes, code blocks, links, and tables without memorizing Markdown syntax.
+
+### 4-1. Creating Headings
+
+
+
+Use the **H1 / H2 / H3** buttons on the toolbar to create headings.
+
+| Button | Description | Markdown example |
+| --- | --- | --- |
+| H1 | Heading 1 | `# Heading` |
+| H2 | Heading 2 | `## Heading` |
+| H3 | Heading 3 | `### Heading` |
+
+### 4-2. Applying Bold, Italics, and Strikethrough
+
+
+
+Select the text you want to format, then click the corresponding toolbar button.
+
+| Button | Description | Markdown example |
+| --- | --- | --- |
+| B | Bold | `**Bold**` |
+| I | Italics | `*Italics*` |
+| S | Strikethrough | `~~Strikethrough~~` |
+
+To format text as inline code, wrap it in backticks.
+
+Example: `code`
+
+### 4-3. Creating Lists, Tasks, and Quotes
+
+
+You can create bulleted lists, numbered lists, task checklists, and blockquotes.
+
+```markdown
+- Bullet point
+- Bullet point
+
+1. Numbered item
+2. Numbered item
+
+- [ ] Open task
+- [x] Completed task
+
+> Blockquote
+```
+
+### 4-4. Inserting Code, Links, and Tables
+
+
+
+Code blocks and tables are especially useful when writing technical notes or specifications.
+
+```markdown
+| Item | Details |
+|---|---|
+| File format | Markdown |
+| Extension | .md |
+```
+
+---
+
+## 5. Checking Your Document with Preview
+
+
+Use Preview to check how your Markdown will look when rendered.
+
+### 5-1. Toggling Preview
+
+To show or hide Preview, use either of the following methods:
+
+* Click the **Preview** button on the title bar.
+* Select **View > Preview** from the menu bar.
+
+When Preview is enabled, the preview pane appears on the right side of the screen.  
+Edits made in the Markdown editor on the left are reflected in the preview on the right.
+
+### 5-2. What You Can Check in Preview
+
+Preview lets you check the appearance of:
+
+* Headings
+* Bold, italics, and other text formatting
+* Bulleted and numbered lists
+* Checklists
+* Tables
+* Blockquotes
+* Code blocks
+* Images
+
+The Preview area is for checking the final appearance of the document.  
+Text editing is performed in the Editor Area on the left.
+
+---
+
+## 6. Saving Files
+
+
+
+You can save your document as a standard Markdown file.
+
+### 6-1. Saving as a Markdown File
+
+1. Click the **Save** button on the title bar.  
+   Alternatively, select **File > Save (Ctrl+S / ⌘S)** from the menu bar.
+2. Choose a destination folder if prompted.
+3. The document is saved as a Markdown file.
+
+You can also use the shortcut shown above.  
+To save the file under a different name, use **File > Save As (Ctrl+Shift+S / ⌘⇧S)**.
+
+### 6-2. Renaming the File
+
+
+
+Click the file name field in the title bar to rename the document.  
+For example, you can change `untitled.md` to `meeting-note.md` or `manual-draft.md`.
+
+### 6-3. Checking Save Status
+
+
+
+The title bar shows the current save status.
+
+| Indicator | Meaning |
+| --- | --- |
+| Saved | All changes have been saved |
+| Unsaved | The document contains unsaved changes |
+
+If you edit the document after saving, the status changes to **Unsaved**.  
+Always check this status before closing the app or ending your work session.
+
+### 6-4. Understanding Local Draft Protection
+
+MD//WORKS Editor protects browser-stored drafts and history with **Auto encrypted** so they are not saved locally in plain text.
+
+For stronger protection or to remove stored data, use the following features:
+
+* **Private Storage**: Adds passphrase-based protection to drafts and history stored in the current browser.
+* **Clear Local Data**: Available under **Storage Security** in the File menu. This removes all protected drafts and history stored in the browser.
+
+> **Important:** Auto encrypted and Private Storage protect browser-based drafts and history. They do not replace saving your document as a file. To keep your work permanently, save it as a `.md` file with **File > Save (Ctrl+S / ⌘S)**.
+
+### 6-5. Private Storage vs. Private App Export
+
+Both **Private Storage** and **Save as Private App** use passphrases, but they serve different purposes.
+
+| Feature | Purpose | Protected data |
+| --- | --- | --- |
+| Private Storage | Protects drafts and history stored in the current browser | Local browser data |
+| Save as Private App | Exports the current document as a passphrase-protected HTML file | The exported HTML file |
+
+If you forget the passphrase, the protected data cannot be recovered.  
+For important documents, keep a separate Markdown backup (`.md`) in a secure location.
+
+### 6-6. Restoring from History
+
+
+
+Select **File > History** to view saved draft states.  
+Use this feature if you accidentally delete content or want to return to an earlier draft.
+
+Running **Clear Local Data** also deletes History.  
+Do not rely on History as your only backup for important documents.
+
+---
+
+## 7. Exporting to HTML and PDF
+
+
+In addition to saving Markdown files, MD//WORKS Editor can export documents in several formats.
+
+### 7-1. Saving as a Standalone App
+
+
+Select **File > Save as App** to export the current draft as a standalone HTML file.
+
+This format combines the editor and your document into a single HTML file.  
+It is useful for carrying or sharing a self-contained editable document, even when no internet connection is available.
+
+### 7-2. Saving as a Private App
+
+
+
+Select **File > Save as Private App** to export the current document as a passphrase-protected standalone HTML file.
+
+Use this option for personal notes, confidential drafts, or documents that require additional protection.  
+If you forget the passphrase, the document cannot be recovered. Store the passphrase securely.
+
+### 7-3. Exporting as HTML
+
+
+
+Select **File > Export as HTML** to export the rendered Markdown as a static HTML file.
+
+Use this option when you want to view the formatted document in a browser or share it as a web page.
+
+### 7-4. Printing or Saving as PDF
+
+
+
+Select **File > Print / Save as PDF** to open the browser print dialog based on the rendered preview.  
+Choose **Save as PDF** as the destination to generate a PDF file.
+
+When creating PDFs for submission or distribution, always open the exported PDF and check for layout issues, missing tables, image problems, or awkward page breaks.
+
+### 7-5. Choosing an Export Format
+
+| Goal | Recommended action |
+| --- | --- |
+| Keep the document as Markdown | File > Save |
+| Carry the editor and document as one file | File > Save as App |
+| Export a protected HTML app | File > Save as Private App |
+| View or share as a web page | File > Export as HTML |
+| Print or submit formally | File > Print / Save as PDF |
+
+---
+
+## 8. Find and Replace
+
+
+
+MD//WORKS Editor can search for text and replace specific words or phrases across the document.  
+This is useful when editing long manuscripts, meeting minutes, specifications, or research notes.
+
+### 8-1. Finding Text
+
+
+
+To search within the document, select **Edit > Find (Ctrl+F / ⌘F)** from the menu bar.
+
+#### Steps
+
+1. Click **Edit** on the menu bar.
+2. Select **Find**.
+3. Enter the text you want to find.
+4. Matching text is highlighted in the editor.
+5. Use the **↑ / ↓** buttons to move between results.
+
+### 8-2. Replacing Text
+
+
+
+To replace text, select **Edit > Replace (Ctrl+H / ⌘H)**.
+
+#### Steps
+
+1. Select **Edit > Replace**.
+2. Enter the text you want to find in the upper field.
+3. Enter the replacement text in the lower field.
+4. Click **Replace** to replace one match at a time.
+5. Click **Replace All** to replace all matches at once.
+
+### 8-3. Using Search Options
+
+
+
+The Find and Replace panel provides the following options:
+
+| Option | Description |
+| --- | --- |
+| RegExp | Enables regular expression search |
+| Case Sensitive | Matches uppercase and lowercase letters exactly |
+| Whole Word | Matches complete words only |
+
+### 8-4. Formatting Markdown
+
+
+
+Select **Edit > Format Markdown** to clean up excessive blank lines and trailing spaces.  
+Running this before sharing, submitting, or exporting helps keep the document clean and consistent.
+
+---
+
+## 9. Changing View Settings
+
+
+
+The View menu lets you toggle Preview, Outline, Show Invisibles, Theme, Fullscreen, Spell (EN), and Zen Mode.
+
+### 9-1. Toggling Preview
+
+
+
+Select **View > Preview** to show or hide the preview pane.  
+You can also use the **Preview** button on the title bar.
+
+When Preview is enabled, the editor appears on the left and the preview appears on the right.  
+This allows you to edit while checking the rendered Markdown.
+
+### 9-2. Using Outline
+
+
+
+Select **View > Outline** to display a list of headings in the document.
+
+Outline extracts Markdown headings such as `#`, `##`, and `###`.  
+In long documents, click a heading to jump directly to that section. This makes it easier to review structure and navigate quickly.
+
+### 9-3. Showing Invisible Characters
+
+
+
+Select **View > Show Invisibles** to reveal characters that are normally hidden.
+
+Examples include:
+
+| Character | Use case |
+| --- | --- |
+| Full-width spaces | Checking accidental spaces or inconsistencies |
+| Tabs | Checking indentation |
+| Trailing spaces | Identifying causes of Markdown formatting issues |
+| Line breaks | Confirming paragraph and list spacing |
+
+In Markdown, spaces and line breaks can affect the rendered result.  
+This feature is useful when fine-tuning the document layout.
+
+### 9-4. Changing Themes
+
+
+
+Change the interface theme from the **View** menu.
+
+| Theme | Description |
+| --- | --- |
+| Midnight | Dark theme designed for focused editing |
+| Paper | Bright theme suitable for document writing and review |
+| Warm | Soft sepia theme for long-form writing |
+
+Choose a theme based on your working environment: **Paper** for reviewing, **Warm** for long writing sessions, and **Midnight** for focused editing.
+
+### 9-5. Fullscreen Mode
+
+
+
+Use **View > Fullscreen** or the fullscreen icon on the title bar to expand the browser to fullscreen mode.
+
+This is useful when you want a wider workspace or need to review the document before a presentation.
+
+### 9-6. Using Spell (EN)
+
+
+
+Enable the English spell checker with **View > Spell (EN)** or the **Spell (EN)** button on the title bar.
+
+When Spell (EN) is enabled, possible English spelling errors are detected. You can review suggestions, ignore words, or add words to the dictionary.
+
+This feature is intended for English text only and does not provide proofreading for other languages.
+
+### 9-7. Focusing with Zen Mode
+
+
+
+Select **View > Zen Mode** to hide menus, toolbars, and panels, creating a distraction-free writing environment.
+
+Zen Mode is useful for long drafting sessions, manuscript writing, and focused proofreading.  
+To exit, click the **✕** button in the upper-right corner of the screen.
+
+---
+
+## 10. Help and Keyboard Shortcuts
+
+
+
+The Help menu provides access to Quick Start, Keyboard Shortcuts, the GitHub page, and app information.  
+Because the help content is embedded in the app, it can be viewed offline.
+
+### 10-1. Quick Start
+
+
+
+Select **Help > Quick Start** for a brief overview of MD//WORKS Editor.
+
+Quick Start covers:
+
+* Entering Markdown
+* Using the toolbar for formatting
+* Previewing documents
+* Saving files
+* Exporting as a standalone app
+* Finding and replacing text
+* Formatting Markdown
+* Working offline
+
+### 10-2. Keyboard Shortcuts
+
+
+Select **Help > Keyboard Shortcuts** to view available shortcuts.
+
+Common shortcuts include:
+
+| Action | Shortcut |
+| --- | --- |
+| New File | Ctrl+N / ⌘N |
+| Open | Ctrl+O / ⌘O |
+| Save | Ctrl+S / ⌘S |
+| Save As | Ctrl+Shift+S / ⌘⇧S |
+| Undo | Ctrl+Z / ⌘Z |
+| Redo | Ctrl+Y / ⌘⇧Z |
+| Cut | Ctrl+X / ⌘X |
+| Copy | Ctrl+C / ⌘C |
+| Paste | Ctrl+V / ⌘V |
+| Select All | Ctrl+A / ⌘A |
+| Find | Ctrl+F / ⌘F |
+| Replace | Ctrl+H / ⌘H |
+| Close the front panel or modal | Esc |
+
+When the Preview area is selected, you can use **Ctrl+A / ⌘A** to select all preview content. Rich copy is also supported.
+
+### 10-3. GitHub / About MD//WORKS
+
+
+
+To view the source code or release notes, select **Help > GitHub**.  
+To check the app version and core concepts, select **Help > About MD//WORKS**.
+
+---
+
+## 11. Troubleshooting
+
+
+
+This section covers common issues and how to resolve them.
+
+### 11-1. I saved the document, but I cannot find the file
+
+First, check your browser’s default Downloads folder.  
+Saving and export operations follow your browser’s download settings. Also confirm that the name in the file name field matches the downloaded file.
+
+Remember that **Auto encrypted** only protects drafts and history stored in the browser. It does not create a `.md` file on your computer. To keep a regular file, use **File > Save (Ctrl+S / ⌘S)**.
+
+### 11-2. The title bar shows “Unsaved”
+
+
+
+**Unsaved** means the document has been modified since the last save.  
+Before ending your work session, save the document using the **Save** button or **File > Save (Ctrl+S / ⌘S)**.
+
+After the file is saved, the indicator returns to **Saved**.
+
+### 11-3. I cannot paste from the menu
+
+Browser security restrictions may block paste operations from custom menus.  
+If this happens, use the keyboard shortcut **Ctrl+V / ⌘V**.
+
+### 11-4. I cannot insert an image
+
+If drag-and-drop image insertion does not work, check the following:
+
+| Item to check | Solution |
+| --- | --- |
+| The image is too large | Compress it to under 200 KB |
+| The image is an SVG file | Convert it to PNG, JPEG, or WebP |
+| The file is not an image | Use a valid image file |
+
+To protect local storage capacity and improve security, MD//WORKS Editor does not accept images over 200 KB or SVG files.
+
+### 11-5. Preview is not displayed
+
+If Preview does not appear, make sure it is enabled by clicking the **Preview** button on the title bar or selecting **View > Preview**.
+
+On narrow screens, Preview may appear as a full-width pane or may be out of view.  
+When Preview is active, you can drag the central divider to adjust the width of the editor and preview panes.
+
+### 11-6. Search returns no results
+
+If search returns no results, check the search options, such as **Case Sensitive**, **Whole Word**, and **RegExp**.
+
+The issue may also be caused by full-width/half-width character differences or invisible spaces. Turn on **View > Show Invisibles** to inspect the text if necessary.
+
+### 11-7. “Invalid regular expression” appears
+
+
+
+When **RegExp** is enabled, your search input is interpreted as a regular expression.  
+If the syntax is invalid, an error appears.
+
+If you do not intend to use regular expressions, turn off **RegExp**.
+
+### 11-8. Spell (EN) is not working
+
+Spell (EN) is designed for English text only and does not proofread other languages.
+
+Make sure Spell (EN) is enabled and that the document contains English text.  
+Depending on your network environment, the dictionary data may take a few seconds to load.
+
+### 11-9. I forgot my Private Storage passphrase
+
+If you forget your Private Storage passphrase, drafts and history protected by Private Storage cannot be recovered.
+
+For important documents, do not rely solely on Private Storage. Save a separate Markdown file (`.md`) to your computer.
+
+### 11-10. I forgot my Private App passphrase
+
+HTML files created with **File > Save as Private App** cannot be decrypted without the correct passphrase.
+
+If the passphrase is forgotten, the document cannot be recovered.  
+Before exporting a Private App, save the original Markdown document securely on your computer.
+
+### 11-11. My Standalone HTML app does not open correctly
+
+If a Standalone App or Private App does not open correctly, check the following:
+
+| Item to check | Solution |
+| --- | --- |
+| Browser is outdated | Open the file with the latest version of Chrome, Edge, or Firefox |
+| Private App passphrase is incorrect | Enter the correct passphrase |
+| File is corrupted | Export the file again from the original source |
+| Corporate device restrictions are blocking it | Try another browser or a non-restricted device |
+
+Creating and decrypting Private Apps works best in the latest desktop versions of Google Chrome or Microsoft Edge.
+
+### 11-12. PDF export does not work correctly
+
+PDF export (**File > Print / Save as PDF**) relies on the browser’s print function.  
+Make sure the print destination is set to **Save as PDF**, and check the paper size and margins.
+
+For submission-ready PDFs, always open the generated file and confirm that the layout is correct.
+
+---
