@@ -3838,32 +3838,7 @@ function exportHtml() {
 
 function exportPdf() {
   closeMenus();
-  const wasPreviewOpen = previewOpen;
-  if (!previewOpen) {
-    previewOpen = true;
-    previewWrap.classList.add('open');
-    mainContainer.classList.add('preview-on');
-  }
   renderPreview(true);
-
-  const cleanup = () => {
-    window.removeEventListener('afterprint', cleanup);
-    if (!wasPreviewOpen) {
-      previewOpen = false;
-      previewWrap.classList.remove('open');
-      mainContainer.classList.remove('preview-on');
-      previewWrap.style.width = '';
-      isPreviewActive = false;
-      const previewCheck = document.getElementById('preview-check');
-      const previewEntry = document.getElementById('m-preview-entry');
-      const previewBtn = document.getElementById('preview-toggle-btn');
-      if (previewCheck) previewCheck.style.opacity = '0';
-      if (previewEntry) previewEntry.classList.remove('active');
-      if (previewBtn) previewBtn.classList.remove('active');
-    }
-  };
-
-  window.addEventListener('afterprint', cleanup);
   requestAnimationFrame(() => window.print());
 }
 //#endregion
