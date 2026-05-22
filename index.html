@@ -866,11 +866,48 @@ body.theme-warm #toast{
   #outline-panel{right:10px; left:10px; width:auto; max-height:40vh;}
 }
 @media print{
-  #menubar,#titlebar,#toolbar,#statusbar,#editor-wrap,#splitter,#spell-panel,#toast,#sr-panel,#outline-panel,#history-modal,#rn-modal{display:none!important}
-  body{background:white!important}
-  #main-container{display:block!important;overflow:visible!important;height:auto!important}
-  #preview-wrap{width:100%!important;max-width:none!important;display:block!important;border:none!important;overflow:visible!important;background:white!important}
-  #preview{max-width:none!important;padding:0!important;color:black!important}
+  #menubar,#titlebar,#toolbar,#statusbar,#editor-wrap,#splitter,#spell-panel,#toast,#sr-panel,#outline-panel,#history-modal,#rn-modal,#doc-modal{display:none!important}
+  html,body{
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:visible!important;
+    background:white!important
+  }
+  body{display:block!important;color:black!important}
+  #main-container{
+    display:block!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:visible!important
+  }
+  #preview-wrap{
+    display:block!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:visible!important;
+    position:static!important;
+    border:none!important;
+    background:white!important;
+    box-shadow:none!important
+  }
+  #preview{
+    display:block!important;
+    width:auto!important;
+    max-width:none!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:visible!important;
+    padding:0!important;
+    color:black!important;
+    background:white!important
+  }
   #preview h1,#preview h2,#preview h3,#preview h4,#preview h5,#preview h6,#preview p,#preview li,#preview strong{color:black!important}
   #preview em{color:#333!important}
   #preview code{border:1px solid #ccc!important;color:black!important;background:transparent!important}
@@ -2108,8 +2145,8 @@ editor.addEventListener("drop", (e) => {
 //#endregion
 
 //#region [JS-07] PREVIEW RENDERING & DECORATION
-function renderPreview() {
-  if (!previewOpen || !window.marked) return;
+function renderPreview(force = false) {
+  if ((!force && !previewOpen) || !window.marked) return;
   if (window.DOMPurify) {
     preview.innerHTML = safeMarkdownHtml(editor.value);
     decoratePreviewTasks();
@@ -3799,7 +3836,36 @@ function exportHtml() {
   triggerDownload(html, filenameInput.value.replace('.md', '.html'), 'text/html');
 }
 
-function exportPdf() { window.print(); }
+function exportPdf() {
+  closeMenus();
+  const wasPreviewOpen = previewOpen;
+  if (!previewOpen) {
+    previewOpen = true;
+    previewWrap.classList.add('open');
+    mainContainer.classList.add('preview-on');
+  }
+  renderPreview(true);
+
+  const cleanup = () => {
+    window.removeEventListener('afterprint', cleanup);
+    if (!wasPreviewOpen) {
+      previewOpen = false;
+      previewWrap.classList.remove('open');
+      mainContainer.classList.remove('preview-on');
+      previewWrap.style.width = '';
+      isPreviewActive = false;
+      const previewCheck = document.getElementById('preview-check');
+      const previewEntry = document.getElementById('m-preview-entry');
+      const previewBtn = document.getElementById('preview-toggle-btn');
+      if (previewCheck) previewCheck.style.opacity = '0';
+      if (previewEntry) previewEntry.classList.remove('active');
+      if (previewBtn) previewBtn.classList.remove('active');
+    }
+  };
+
+  window.addEventListener('afterprint', cleanup);
+  requestAnimationFrame(() => window.print());
+}
 //#endregion
 </script>
 </body>
