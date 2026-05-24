@@ -276,7 +276,7 @@ For example, you can change `untitled.md` to `meeting-note.md` or `manual-draft.
 
 ### 6-3. Checking Save Status
 
-
+![Image: Saved / Unsaved indicator highlighted](<./images/SaveUndUnsavedStatus.jpg>)
 
 The title bar shows the current save status.
 
