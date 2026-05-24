@@ -73,6 +73,8 @@ Features related to creating or decrypting Private Apps depend on browser capabi
 
 ## 2. Creating and Opening Files
 
+![Image: File menu showing New (Ctrl+N / ⌘N), Open (Ctrl+O / ⌘O), and Import Word (.docx)](<./images/FileNewOpenWord-en.jpg>)
+
 
 ### 2-1. Creating a New File
 
