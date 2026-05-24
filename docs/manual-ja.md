@@ -272,7 +272,7 @@ Preview画面は、完成後の見た目を確認するための表示エリア�
 
 ### 6-3. 保存状態を確認する
 
-![Image: Saved / Unsaved indicator highlighted](<./images/SaveUndUnsaved.jpg>)
+![Image: Saved / Unsaved indicator highlighted](<./images/SaveUndUnsavedStatus.jpg>)
 
 タイトルバーには、現在の保存状態が表示されます。
 
