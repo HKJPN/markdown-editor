@@ -43,6 +43,7 @@ MD//WORKS Editor のHTMLファイルをブラウザで開くと、アプリが�
 
 ### 1-3. 画面構成
 
+![Image: Overall screen layout with numbers ① to ⑥ indicating each area](<./images/overall-screen-layout-ja.jpg>)
 
 * **① メニューバー**  
   ファイル、編集、表示、ヘルプの各メニューへアクセスします。ファイルの新規作成、保存、書き出し、表示切替、ヘルプ確認などを行います。
