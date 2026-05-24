@@ -72,6 +72,7 @@ MD//WORKS Editor のHTMLファイルをブラウザで開くと、アプリが�
 
 ## 2. ファイルを作成・開く
 
+![Image: ファイルを作成開くワードを開くメニュー](<./images/FilenewOpenWord-ja.jpg>)
 
 ### 2-1. 新規作成する
 
