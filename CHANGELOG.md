@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-05-25 -v1.5.4 - Usability and Navigation Improvements
+
+- **Centralized Esc key handling:** Unified the behavior of the Escape key for a more consistent user experience.
+- **Help menu & Documentation modal:** Added a new Help menu and an in-app documentation modal for easier access to guides.
+- **'Select All' in Preview:** You can now use `Ctrl+A` / `Cmd+A` within the preview screen.
+- **Improved navigation accuracy:** Enhanced the precision of automatic scrolling to search results and outline jumps.
+
 ## 2026-05-19 -Hotfix v1.5.3.2
 
 - Fixed an issue of PDF printing.
