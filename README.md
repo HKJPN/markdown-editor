@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.5.3 — Standalone Markdown Editor
+# 🚀 MD//WORKS v1.5.4 — Standalone Markdown Editor
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
 <img width="1280" height="720" alt="スクリーンショット1_5_3" src="https://github.com/user-attachments/assets/8d936573-90bb-481d-a0b4-7d3db1f9f6f0" />
 
@@ -18,38 +18,24 @@ Try it instantly in your browser.
 - [Security / Privacy](SECURITY.md)
 
 ---
-## ✨ What’s New in v1.5.3
+## ✨ What’s New in v1.5.4
 
-**Private App Export** lets you export your work as a single encrypted HTML file — processed entirely on your device.
-
-<details>
-<summary><strong>Security details</strong></summary>
-
-- AES‑256‑GCM encryption  
-- PBKDF2 key derivation (310,000 iterations)  
-- Fully local: no server required  
-
-</details>
-
-**A new way to write, protect, and carry your work — all in one file.**
-
+- **Centralized Esc key handling:** Unified the behavior of the Escape key for a more consistent user experience.
+- **Help menu & Documentation modal:** Added a new Help menu and an in-app documentation modal for easier access to guides.
+- **'Select All' in Preview:** You can now use `Ctrl+A` / `Cmd+A` within the preview screen.
+- **Rich text copying:** Added support for copying rich text directly from the preview.
+- **Improved navigation accuracy:** Enhanced the precision of automatic scrolling to search results and outline jumps.
 ---
 
 ## ✨ Upcoming Features
 
-The next version of MD//WORKS will make everyday writing and navigation smoother, with improved search behavior, more accurate outline jumps, and better preview interactions.
-
-### Improvements
-
-- Search results will automatically scroll into view.
-- Outline navigation will jump more accurately to the selected section.
-
-### Added
-
-- Centralized Esc key handling for dialogs, menus, and UI states.
-- A new Help menu with an integrated documentation modal.
-- Ctrl+A / Cmd+A support in Preview mode.
-- Rich copy support from Preview.
+- Add invisible character display for full-width spaces, tabs, trailing spaces, and line breaks.
+- Add Tab input, multi-line indentation, and Shift+Tab outdent support.
+- Add fullscreen controls and Zen Mode for more focused writing.
+- Improve title-bar button icons and active-state feedback.
+- Add small security hardening updates, including CSP improvements, safer Word import messaging, and SVG data URL restrictions.
+- Clarify\ Auto encrypted as protection against plain-text local storage, with Private Storage available for additional passphrase-based protection.
+- Expand the Keyboard Shortcuts help with Tab operations, document navigation, and selection shortcuts.
 
 ---
 
