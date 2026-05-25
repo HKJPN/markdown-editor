@@ -20,22 +20,22 @@ Try it instantly in your browser.
 ---
 ## ✨ What’s New in v1.5.4
 
-- **Centralized Esc key handling:** Unified the behavior of the Escape key for a more consistent user experience.
-- **Help menu & Documentation modal:** Added a new Help menu and an in-app documentation modal for easier access to guides.
-- **'Select All' in Preview:** You can now use `Ctrl+A` / `Cmd+A` within the preview screen.
-- **Rich text copying:** Added support for copying rich text directly from the preview.
-- **Improved navigation accuracy:** Enhanced the precision of automatic scrolling to search results and outline jumps.
----
+* **Centralized Esc key handling:** Unified the behavior of the Escape key for a more consistent user experience.
+* **Help menu & Documentation modal:** Added a new Help menu and an in-app documentation modal for easier access to guides.
+* **'Select All' in Preview:** You can now use `Ctrl+A` / `Cmd+A` within the preview screen.
+* **Rich text copying:** Added support for copying rich text directly from the preview.
+* **Improved navigation accuracy:** Enhanced the precision of automatic scrolling to search results and outline jumps.
 
 ## ✨ Upcoming Features
 
-- Add invisible character display for full-width spaces, tabs, trailing spaces, and line breaks.
-- Add Tab input, multi-line indentation, and Shift+Tab outdent support.
-- Add fullscreen controls and Zen Mode for more focused writing.
-- Improve title-bar button icons and active-state feedback.
-- Add small security hardening updates, including CSP improvements, safer Word import messaging, and SVG data URL restrictions.
-- Clarify\ Auto encrypted as protection against plain-text local storage, with Private Storage available for additional passphrase-based protection.
-- Expand the Keyboard Shortcuts help with Tab operations, document navigation, and selection shortcuts.
+* **Invisible character display:** Add display options for full-width spaces, tabs, trailing spaces, and line breaks.
+* **Advanced Tab controls:** Add Tab input, multi-line indentation, and `Shift+Tab` outdent support.
+* **Zen Mode & Fullscreen:** Add fullscreen controls and Zen Mode for a more focused writing experience.
+* **UI improvements:** Improve title-bar button icons and active-state visual feedback.
+* **Security hardening:** Add minor security updates, including CSP improvements, safer Word import messaging, and SVG data URL restrictions.
+* **Storage clarity:** Clarify that Auto Save is encrypted to protect against plain-text local storage extraction, while Private Storage remains available for additional passphrase-based protection.
+* **Expanded help:** Expand the Keyboard Shortcuts documentation to include Tab operations, document navigation, and text selection shortcuts.
+
 
 ---
 
