@@ -18,9 +18,9 @@
   })();
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/marked@18.0.3/lib/marked.umd.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.1/marked.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/encoding-japanese@2.0.0/encoding.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.5/dist/purify.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/typo-js@1.2.3/typo.js" crossorigin="anonymous"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -514,25 +514,43 @@ button,input,textarea{font:inherit}
 /* #endregion */
 
 /* #region [CSS-11] RELEASE NOTES MODAL (NEW) */
-#rn-modal {
+#rn-modal,
+#doc-modal {
   position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; display:none; align-items:center; justify-content:center; backdrop-filter:blur(4px);
 }
-#rn-modal.show { display:flex; }
-.rn-content {
+#rn-modal.show,
+#doc-modal.show { display:flex; }
+.rn-content,
+.doc-content {
   background:linear-gradient(180deg, rgba(29,35,49,.98), rgba(17,21,31,.98));
   border: 1px solid rgba(255,255,255,.085); border-radius: 18px; width: 600px; max-width:90%; max-height: 85vh; display:flex; flex-direction:column; box-shadow: var(--shadow-lg), var(--glow); overflow:hidden;
 }
-.rn-head { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid var(--border); background:rgba(0,0,0,0.2); }
-.rn-head h3 { font-size:15px; font-weight:700; color:var(--text); font-family:var(--sans); margin:0; }
-.rn-body { padding:20px; overflow-y:auto; font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--text2); }
-.rn-body h2 { color:var(--text); font-size:18px; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:6px;}
-.rn-body h3 { color:var(--accent2); font-size:15px; margin:16px 0 8px; }
-.rn-body ul { padding-left:20px; margin-bottom:12px; }
-.rn-body li { margin-bottom:6px; }
-.rn-body code { font-family:var(--mono); background:rgba(255,255,255,0.06); padding:2px 5px; border-radius:4px; font-size:0.9em; color:var(--accent2); }
-.rn-foot { padding:12px 20px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; background:rgba(0,0,0,0.2); }
-.rn-btn { background:var(--accent); color:#fff; border:none; padding:8px 24px; border-radius:8px; cursor:pointer; font-weight:600; font-family:var(--sans); transition:opacity 0.2s;}
-.rn-btn:hover { opacity:0.8; }
+.rn-head,
+.doc-head { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid var(--border); background:rgba(0,0,0,0.2); }
+.rn-head h3,
+.doc-head h3 { font-size:15px; font-weight:700; color:var(--text); font-family:var(--sans); margin:0; }
+.rn-body,
+.doc-body { padding:20px; overflow-y:auto; font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--text2); }
+.rn-body h2,
+.doc-body h2 { color:var(--text); font-size:18px; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:6px;}
+.rn-body h3,
+.doc-body h3 { color:var(--accent2); font-size:15px; margin:16px 0 8px; }
+.rn-body p,
+.doc-body p { margin-bottom:12px; }
+.rn-body ul,
+.doc-body ul { padding-left:20px; margin-bottom:12px; }
+.rn-body li,
+.doc-body li { margin-bottom:6px; }
+.rn-body a,
+.doc-body a { color:var(--accent2); }
+.rn-body code,
+.doc-body code { font-family:var(--mono); background:rgba(255,255,255,0.06); padding:2px 5px; border-radius:4px; font-size:0.9em; color:var(--accent2); }
+.rn-foot,
+.doc-foot { padding:12px 20px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; background:rgba(0,0,0,0.2); }
+.rn-btn,
+.doc-btn { background:var(--accent); color:#fff; border:none; padding:8px 24px; border-radius:8px; cursor:pointer; font-weight:600; font-family:var(--sans); transition:opacity 0.2s;}
+.rn-btn:hover,
+.doc-btn:hover { opacity:0.8; }
 /* #endregion */
 
 /* #region [CSS-12] THEME VARIANTS (PAPER / WARM)
@@ -630,12 +648,14 @@ body.theme-paper #spell-panel,
 body.theme-paper #outline-panel,
 body.theme-paper .hist-content,
 body.theme-paper .rn-content,
+body.theme-paper .doc-content,
 body.theme-warm .menu-dropdown,
 body.theme-warm #sr-panel,
 body.theme-warm #spell-panel,
 body.theme-warm #outline-panel,
 body.theme-warm .hist-content,
-body.theme-warm .rn-content{
+body.theme-warm .rn-content,
+body.theme-warm .doc-content{
   background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(245,247,251,.97));
   border-color:var(--border);
   box-shadow:var(--shadow-lg), var(--glow);
@@ -645,7 +665,8 @@ body.theme-warm #sr-panel,
 body.theme-warm #spell-panel,
 body.theme-warm #outline-panel,
 body.theme-warm .hist-content,
-body.theme-warm .rn-content{
+body.theme-warm .rn-content,
+body.theme-warm .doc-content{
   background:linear-gradient(180deg, rgba(255,248,236,.98), rgba(247,237,220,.97));
 }
 
@@ -867,25 +888,28 @@ body.theme-warm #toast{
 }
 @media print{
   #menubar,#titlebar,#toolbar,#statusbar,#editor-wrap,#splitter,#spell-panel,#toast,#sr-panel,#outline-panel,#history-modal,#rn-modal,#doc-modal{display:none!important}
-  html,body{
+  html,
+  body{
     height:auto!important;
     min-height:0!important;
     max-height:none!important;
     overflow:visible!important;
-    background:white!important
+    background:white!important;
   }
-  body{display:block!important;color:black!important}
+  body{
+    display:block!important;
+    color:black!important;
+  }
   #main-container{
     display:block!important;
     height:auto!important;
     min-height:0!important;
     max-height:none!important;
-    overflow:visible!important
+    overflow:visible!important;
   }
   #preview-wrap{
     display:block!important;
-    width:auto!important;
-    min-width:0!important;
+    width:100%!important;
     max-width:none!important;
     height:auto!important;
     min-height:0!important;
@@ -894,7 +918,7 @@ body.theme-warm #toast{
     position:static!important;
     border:none!important;
     background:white!important;
-    box-shadow:none!important
+    box-shadow:none!important;
   }
   #preview{
     display:block!important;
@@ -906,7 +930,7 @@ body.theme-warm #toast{
     overflow:visible!important;
     padding:0!important;
     color:black!important;
-    background:white!important
+    background:white!important;
   }
   #preview h1,#preview h2,#preview h3,#preview h4,#preview h5,#preview h6,#preview p,#preview li,#preview strong{color:black!important}
   #preview em{color:#333!important}
@@ -1070,6 +1094,26 @@ body.zen-mode #zen-exit-btn { display: flex; }
       </div>
     </div>
   </div>
+
+  <div class="menu-item">
+    <button class="menu-trigger" data-menu="help" id="t-help"></button>
+    <div class="menu-dropdown" id="dd-help">
+      <div class="menu-entry" onclick="showQuickStart()">
+        <span id="m-help-quick-start"></span>
+      </div>
+      <div class="menu-entry" onclick="showKeyboardShortcuts()">
+        <span id="m-help-keyboard-shortcuts"></span>
+      </div>
+      <div class="menu-sep-line"></div>
+      <div class="menu-entry" onclick="openGitHubRepo()">
+        <span id="m-help-github"></span>
+      </div>
+      <div class="menu-sep-line"></div>
+      <div class="menu-entry" onclick="showAboutMdworks()">
+        <span id="m-help-about"></span>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="titlebar">
@@ -1176,15 +1220,28 @@ body.zen-mode #zen-exit-btn { display: flex; }
   </div>
 </div>
 
-<div id="rn-modal">
+<div id="rn-modal" aria-hidden="true" data-state="closed" role="dialog" aria-modal="true" aria-labelledby="rn-title">
   <div class="rn-content">
     <div class="rn-head">
       <h3 id="rn-title"></h3>
-      <button onclick="closeRN()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;">✕</button>
+      <button class="rn-btn" style="padding:4px 10px" onclick="closeReleaseNotesModal()" aria-label="Close">✕</button>
     </div>
     <div id="rn-body" class="rn-body"></div>
     <div class="rn-foot">
-      <button id="rn-close-btn" class="rn-btn" onclick="closeRN()"></button>
+      <button id="rn-close-btn" class="rn-btn" onclick="closeReleaseNotesModal()"></button>
+    </div>
+  </div>
+</div>
+
+<div id="doc-modal" aria-hidden="true" data-state="closed" role="dialog" aria-modal="true" aria-labelledby="doc-title">
+  <div class="doc-content">
+    <div class="doc-head">
+      <h3 id="doc-title"></h3>
+      <button class="doc-btn" style="padding:4px 10px" onclick="closeDocModal()" aria-label="Close">✕</button>
+    </div>
+    <div id="doc-body" class="doc-body"></div>
+    <div class="doc-foot">
+      <button class="doc-btn" onclick="closeDocModal()">OK</button>
     </div>
   </div>
 </div>
@@ -1237,11 +1294,14 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
+const APP_VERSION = '1.5.4';
+const RELEASE_NOTES_STORAGE_KEY = 'mdworks_seen_release_notes_version';
 
 const T = {
   menuFile:    isJa ? 'ファイル' : 'File',
   menuView:    isJa ? '表示'     : 'View',
   menuEdit:    isJa ? '編集'     : 'Edit',
+  menuHelp:    isJa ? 'ヘルプ'   : 'Help',
   newFile:     isJa ? '新規作成' : 'New',
   closeMenu:   isJa ? '閉じる'   : 'Close',
   confirmClose:isJa ? '編集中の内容は失われます。ファイルを閉じますか？' : 'Unsaved changes will be lost. Close file?',
@@ -1272,6 +1332,11 @@ const T = {
   historyEmpty:isJa ? '履歴がありません' : 'No history found',
   formatDone:  isJa ? '整形を完了しました' : 'Formatting complete',
   outlineEmpty:isJa ? '見出しがありません' : 'No headings found',
+
+  quickStart:  isJa ? 'Quick Start' : 'Quick Start',
+  keyboardShortcuts: isJa ? 'Keyboard Shortcuts' : 'Keyboard Shortcuts',
+  github:      'GitHub',
+  aboutMdworks:isJa ? 'About MD//WORKS' : 'About MD//WORKS',
 
   download:    isJa ? 'ダウンロード' : 'Download',
   downloadAs:  isJa ? '名前を付けてDL' : 'Download As',
@@ -1359,26 +1424,152 @@ const T = {
     ? `# MD//WORKS エディタ\n\n**スタンドアロン保存**に対応した究極版です。\n\n## 主な機能\n\n- **アプリごと保存**: [ファイル] > [スタンドアロン保存] で、現在の原稿とエディタ本体を \`.app.html\` として1ファイルに書き出します。USB等で持ち運べます。\n- **暗号化保存**: ローカルの下書きと履歴は、Web Crypto API を用いてすべて暗号化保存されます。Private Storageをオンにするとパスワード保護も可能です。\n\n---\n\n*そのまま編集を開始してください。*\n`
     : `# MD//WORKS Editor\n\nThe ultimate edition featuring **Standalone Save**.\n\n## Key Features\n\n- **Save as App**: Go to [File] > [Save as App] to export your current text and this entire editor into a single \`.app.html\` file for easy portability.\n- **Encrypted Storage**: Drafts and history are securely encrypted via Web Crypto API. You can also enforce a password using Private Storage.\n\n---\n\n*Start editing!*\n`,
   
-  releaseNotesTitle: isJa ? 'v1.5.3 の新機能' : "What's New in v1.5.3",
+  quickStartDoc: isJa ? `
+## Quick Start
+
+MD//WORKS は、1つのHTMLで動くMarkdownエディタです。下書き、プレビュー、保存、スタンドアロン書き出しを同じ画面で行えます。
+
+### 1. 書き始める
+* 中央のエディタにMarkdownを入力します。
+* 見出し、リスト、引用、コード、表はツールバーからも挿入できます。
+* 画像は小さなローカル画像をドラッグ＆ドロップできます。
+
+### 2. プレビューする
+* **View > Preview** またはタイトルバーの **Preview** で表示を切り替えます。
+* Markdownは安全のためサニタイズされたHTMLとして表示されます。
+
+### 3. 保存する
+* **File > Save** でMarkdownファイルとして保存します。
+* **File > Save as App** で、現在の原稿を含んだスタンドアロンHTMLを書き出せます。
+* **Private Storage** を使うと、ローカルの下書きと履歴をパスフレーズで保護できます。
+
+### 4. 探す・整える
+* **Edit > Find** / **Replace** で検索と置換を行います。
+* **Edit > Format Markdown** で余分な空行や行末スペースを整えます。
+
+### 5. オフラインで使う
+* スタンドアロンHTMLはネットワークがなくても開けます。
+* このヘルプ本文はアプリ内に埋め込まれているため、外部ドキュメントの取得は行いません。
+` : `
+## Quick Start
+
+MD//WORKS is a single-file Markdown editor for drafting, previewing, saving, and exporting standalone documents.
+
+### 1. Start writing
+* Type Markdown in the central editor.
+* Use the toolbar to insert headings, lists, quotes, code blocks, links, tables, and rules.
+* Drop small local images into the editor when you want embedded assets.
+
+### 2. Preview safely
+* Toggle **View > Preview** or the title-bar **Preview** button.
+* Markdown is rendered as sanitized HTML before it is shown.
+
+### 3. Save your work
+* Use **File > Save** to save a Markdown file.
+* Use **File > Save as App** to export a standalone HTML file containing the current draft and editor.
+* Enable **Private Storage** when you want passphrase-protected local drafts and history.
+
+### 4. Find and tidy
+* Use **Edit > Find** / **Replace** for search and replacement.
+* Use **Edit > Format Markdown** to clean excess blank lines and trailing spaces.
+
+### 5. Work offline
+* Standalone HTML exports can open without a network connection.
+* This help content is embedded in the app and never fetched from an external document.
+`,
+  keyboardShortcutsDoc: isJa ? `
+## Keyboard Shortcuts
+
+### File
+* **Ctrl+N**: 新規作成
+* **Ctrl+O**: 開く
+* **Ctrl+S**: 保存
+* **Ctrl+Shift+S**: 名前を付けて保存
+
+### Edit
+* **Ctrl+Z**: 元に戻す
+* **Ctrl+Y**: やり直し
+* **Ctrl+X**: 切り取り
+* **Ctrl+C**: コピー
+* **Ctrl+V**: 貼り付け
+* **Ctrl+A**: エディタの内容をすべて選択
+* **Ctrl+F**: 検索
+* **Ctrl+H**: 置換
+
+### UI
+* **Esc**: 最前面のパネルまたはモーダルだけを閉じる
+` : `
+## Keyboard Shortcuts
+
+### File
+* **Ctrl+N**: New file
+* **Ctrl+O**: Open
+* **Ctrl+S**: Save
+* **Ctrl+Shift+S**: Save As
+
+### Edit
+* **Ctrl+Z**: Undo
+* **Ctrl+Y**: Redo
+* **Ctrl+X**: Cut
+* **Ctrl+C**: Copy
+* **Ctrl+V**: Paste
+* **Ctrl+A**: Select all text in the editor
+* **Ctrl+F**: Find
+* **Ctrl+H**: Replace
+
+### UI
+* **Esc**: Close only the frontmost panel or modal
+`,
+  aboutDoc: isJa ? `
+## About MD//WORKS
+
+MD//WORKS は、Markdown原稿を安全に書き、プレビューし、持ち運べる形で保存するためのエディタです。
+
+### 重点
+* **Standalone first**: エディタ本体と原稿を1つのHTMLとして書き出せます。
+* **Privacy aware**: 下書きと履歴はローカル環境に保存され、Private Storageで追加保護できます。
+* **Offline ready**: 主要なヘルプと文書表示は外部fetchなしで利用できます。
+
+### Version
+* MD//WORKS v1.5.4
+` : `
+## About MD//WORKS
+
+MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable standalone exports.
+
+### Focus
+* **Standalone first**: Export the editor and the current draft as a single HTML file.
+* **Privacy aware**: Drafts and history stay local, with optional Private Storage protection.
+* **Offline ready**: Core help and documentation views work without external fetches.
+
+### Version
+* MD//WORKS v1.5.4
+`,
+
+  releaseNotesTitle: isJa ? 'v1.5.4 の新機能' : "What's New in v1.5.4",
   releaseNotesIntro: isJa ? '今回の主な改善内容です。' : 'Here are the main improvements in this release.',
   releaseNotesClose: isJa ? '閉じる' : 'Close',
   releaseNotesContent: isJa ? `
-## v1.5.3 - Save as Private App
+## v1.5.4 - 操作性とナビゲーションの改善
 
-- 現在のMD//WORKS Editorを、自分専用のプライベートHTMLアプリとして保存できるようになりました。
-- インストール不要・サーバー不要で、ブラウザだけで開ける1ファイルアプリとして持ち運べます。
-- File > New / File > Close 後に、以前のファイルへ誤って上書き保存される可能性がある問題を修正しました。
+* Escキー操作を一元管理しました。
+* Helpメニューとドキュメントモーダルを追加しました。
+* プレビュー画面で Ctrl+A / Cmd+A が使えるようになりました。
+* プレビューからのリッチコピーに対応しました。
+* 検索結果への自動スクロールとアウトラインジャンプの精度を改善しました。
 ` : `
-## v1.5.3 - Save as Private App
+## v1.5.4 - Usability and Navigation Improvements
 
-- You can now save the current MD//WORKS Editor as a private, self-contained HTML app.
-- The exported app opens directly in a browser, with no installation or server required.
-- Fixed an issue that could cause Save after File > New or File > Close to overwrite the previously opened file.
+- Added centralized Esc key handling.
+- Added a Help menu and documentation modal.
+- Added Ctrl+A / Cmd+A support in Preview mode.
+- Added rich copy support from Preview.
+- Improved automatic scrolling to search results and outline navigation accuracy.
 `
 };
 
 const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-set('t-file', T.menuFile); set('t-view', T.menuView); set('t-edit', T.menuEdit);
+set('t-file', T.menuFile); set('t-view', T.menuView); set('t-edit', T.menuEdit); set('t-help', T.menuHelp);
 set('m-new', T.newFile);
 set('m-close', T.closeMenu);
 set('m-open', T.open);
@@ -1399,6 +1590,10 @@ set('m-theme-label', T.themeLabel);
 set('m-theme-midnight', T.themeMidnight);
 set('m-theme-paper', T.themePaper);
 set('m-theme-warm', T.themeWarm);
+set('m-help-quick-start', T.quickStart);
+set('m-help-keyboard-shortcuts', T.keyboardShortcuts);
+set('m-help-github', T.github);
+set('m-help-about', T.aboutMdworks);
 
 set('m-find', T.findMenu); set('m-replace', T.replaceMenu);
 set('m-export-html', T.exportHtml); set('m-export-pdf', T.exportPdf);
@@ -1448,6 +1643,7 @@ let customDict = new Set();
 let ignoredWords = new Set();
 let isDirty = false;
 let isDraggingSplitter = false;
+let isPreviewActive = false;
 
 editor.placeholder = T.placeholder;
 editor.value = T.defaultMd;
@@ -1786,8 +1982,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   update();
   if (!isDirty) markSaved();
   
-  maybeShowReleaseNotes(); // バージョンアップ時にリリースノートを表示
   renderThemeMenuChecks();
+  maybeShowReleaseNotes(); // 起動時の復元・初期描画後に、このバージョン未表示なら表示
 });
 //#endregion
 
@@ -1945,10 +2141,152 @@ function togglePreview() {
   document.getElementById('preview-check').style.opacity = previewOpen ? '1' : '0';
   document.getElementById('m-preview-entry').classList.toggle('active', previewOpen);
   document.getElementById('preview-toggle-btn').classList.toggle('active', previewOpen);
-  if (!previewOpen) previewWrap.style.width = '';
+  if (!previewOpen) {
+    previewWrap.style.width = '';
+    isPreviewActive = false;
+  }
   if (previewOpen) renderPreview();
   closeMenus();
 }
+
+
+function activatePreviewArea() {
+  if (!previewOpen) return;
+  isPreviewActive = true;
+}
+
+previewWrap.addEventListener('mousedown', activatePreviewArea);
+previewWrap.addEventListener('touchstart', activatePreviewArea, { passive: true });
+document.addEventListener('mousedown', e => {
+  if (!previewWrap.contains(e.target)) isPreviewActive = false;
+});
+document.addEventListener('touchstart', e => {
+  if (!previewWrap.contains(e.target)) isPreviewActive = false;
+}, { passive: true });
+editor.addEventListener('focus', () => { isPreviewActive = false; });
+
+function isEditableSelectionTarget(target) {
+  if (!(target instanceof Element)) return false;
+  return Boolean(target.closest('input, textarea, [contenteditable]:not([contenteditable="false"])'));
+}
+
+function selectPreviewContents() {
+  const selection = window.getSelection();
+  if (!selection) return;
+  const range = document.createRange();
+  range.selectNodeContents(preview);
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
+
+function isNodeInsidePreview(node) {
+  if (!node) return false;
+  const element = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+  return Boolean(element && preview.contains(element));
+}
+
+function isPreviewSelection(selection) {
+  if (!previewOpen || !selection || selection.rangeCount === 0 || selection.isCollapsed) return false;
+  const range = selection.getRangeAt(0);
+  return isNodeInsidePreview(range.startContainer)
+    && isNodeInsidePreview(range.endContainer)
+    && isNodeInsidePreview(range.commonAncestorContainer);
+}
+
+function replaceClipboardTaskCheckboxes(container) {
+  container.querySelectorAll('input[type="checkbox"]').forEach(input => {
+    const checked = input.checked
+      || input.hasAttribute('checked')
+      || input.getAttribute('aria-checked') === 'true';
+    input.replaceWith(document.createTextNode(checked ? '☑ ' : '☐ '));
+  });
+}
+
+function cleanPreviewClipboardHtml(container) {
+  replaceClipboardTaskCheckboxes(container);
+  container.querySelectorAll('button, textarea, select, input, svg, [hidden], [aria-hidden="true"]').forEach(node => node.remove());
+
+  const allowedAttrs = new Set(['href', 'title', 'alt', 'src', 'colspan', 'rowspan', 'align']);
+  const allowedTags = new Set(['H1','H2','H3','H4','H5','H6','P','BR','HR','STRONG','B','EM','I','S','DEL','CODE','PRE','BLOCKQUOTE','UL','OL','LI','TABLE','THEAD','TBODY','TFOOT','TR','TH','TD','A','IMG','SPAN','SUP','SUB']);
+  container.querySelectorAll('*').forEach(el => {
+    if (!allowedTags.has(el.tagName)) {
+      el.replaceWith(...Array.from(el.childNodes));
+      return;
+    }
+    Array.from(el.attributes).forEach(attr => {
+      if (!allowedAttrs.has(attr.name.toLowerCase())) el.removeAttribute(attr.name);
+    });
+    if (el.tagName === 'A') {
+      const href = el.getAttribute('href') || '';
+      if (/^javascript:/i.test(href)) el.removeAttribute('href');
+      el.style.color = '#0645ad';
+      el.style.textDecoration = 'underline';
+    }
+    if (el.tagName === 'IMG') {
+      el.style.maxWidth = '100%';
+      el.style.height = 'auto';
+    }
+    if (el.tagName === 'PRE') {
+      el.style.whiteSpace = 'pre-wrap';
+      el.style.background = '#f5f5f5';
+      el.style.color = '#000';
+      el.style.fontFamily = 'monospace';
+      el.style.padding = '12px';
+      el.style.border = '1px solid #ddd';
+    }
+    if (el.tagName === 'CODE') {
+      el.style.fontFamily = 'monospace';
+      el.style.background = '#f5f5f5';
+      el.style.color = '#000';
+    }
+    if (el.tagName === 'BLOCKQUOTE') {
+      el.style.borderLeft = '4px solid #999';
+      el.style.margin = '1em 0';
+      el.style.padding = '0.2em 1em';
+      el.style.color = '#000';
+      el.style.background = '#fff';
+    }
+    if (el.tagName === 'TABLE') {
+      el.style.borderCollapse = 'collapse';
+      el.style.border = '1px solid black';
+      el.style.width = '100%';
+    }
+    if (el.tagName === 'TH' || el.tagName === 'TD') {
+      el.style.border = '1px solid black';
+      el.style.padding = '4px 6px';
+      el.style.verticalAlign = 'top';
+      el.style.color = '#000';
+      el.style.background = '#fff';
+    }
+    if (el.tagName === 'TH') {
+      el.style.fontWeight = 'bold';
+      el.style.background = '#f2f2f2';
+    }
+  });
+}
+
+function buildPreviewClipboardPayload(selection) {
+  const range = selection.getRangeAt(0);
+  const container = document.createElement('div');
+  container.appendChild(range.cloneContents());
+  cleanPreviewClipboardHtml(container);
+  const plainText = (container.innerText || container.textContent || '').replace(/\n{3,}/g, '\n\n').trim();
+  const html = `<div style="color: #000; background: #fff; font-family: sans-serif;">${container.innerHTML}</div>`;
+  return { html, plainText };
+}
+
+function handlePreviewCopy(e) {
+  const selection = window.getSelection();
+  if (!isPreviewSelection(selection) || !e.clipboardData) return;
+  const payload = buildPreviewClipboardPayload(selection);
+  e.preventDefault();
+  e.clipboardData.setData('text/html', payload.html);
+  e.clipboardData.setData('text/plain', payload.plainText);
+}
+
+document.addEventListener('copy', handlePreviewCopy);
+
 
 splitter.addEventListener('mousedown', () => {
   if (!previewOpen) return;
@@ -2035,6 +2373,11 @@ editor.addEventListener('scroll', () => {
     }
   }
 });
+
+function scrollToY(targetY, screenRatio) {
+  const ratio = Math.min(1, Math.max(0, Number(screenRatio) || 0));
+  editor.scrollTop = Math.max(0, targetY - (editor.clientHeight * ratio));
+}
 
 let suppressInputHandling = false;
 
@@ -2464,12 +2807,20 @@ function highlightCurrentMatch() {
   if (srMatches.length === 0 || srCurrentIdx === -1) { refreshBackdrop(); return; }
   const m = srMatches[srCurrentIdx];
   if (isComposing) { setSearchCount(); refreshBackdrop(); return; }
-  const activeEl = document.activeElement; 
+  const activeEl = document.activeElement;
+  const shouldRestoreSearchFocus = activeEl && activeEl.closest('#sr-panel');
+
   editor.focus();
   editor.setSelectionRange(m.start, m.end);
-  if (activeEl && activeEl.closest('#sr-panel')) activeEl.focus();
+  if (shouldRestoreSearchFocus) activeEl.focus();
   setSearchCount();
-  refreshBackdrop(); 
+  refreshBackdrop();
+
+  requestAnimationFrame(() => {
+    const activeMark = backdrop.querySelector('mark.active');
+    if (activeMark) scrollToY(activeMark.offsetTop, 0.4);
+    if (shouldRestoreSearchFocus && document.contains(activeEl)) activeEl.focus();
+  });
 }
 
 function navMatch(dir) {
@@ -2490,7 +2841,6 @@ document.getElementById('sr-prev').onclick = () => navMatch(-1);
 
 srPanel.addEventListener('keydown', e => {
   if (e.isComposing) return;
-  if (e.key === 'Escape') { e.preventDefault(); closeSearchPanel(); }
   if (e.key === 'Enter') { e.preventDefault(); navMatch(e.shiftKey ? -1 : 1); }
 });
 
@@ -2854,9 +3204,9 @@ function getWordImportSandboxSrcdoc() {
     });
   };
   return `<!doctype html><html><head><meta charset="utf-8"></head><body>
-    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.11.0/mammoth.browser.min.js"><\/script>
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.5/dist/purify.min.js"><\/script>
-    <script src="https://cdn.jsdelivr.net/npm/turndown@7.2.4/lib/turndown.browser.umd.min.js"><\/script>
+    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"><\/script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"><\/script>
+    <script src="https://cdn.jsdelivr.net/npm/turndown@7.1.3/lib/turndown.browser.umd.min.js"><\/script>
     <script>(${runner})();<\/script></body></html>`;
 }
 
@@ -3028,6 +3378,23 @@ function buildStandaloneHtmlForExport() {
 
   const rnBody = clone.querySelector('#rn-body');
   if (rnBody) rnBody.innerHTML = '';
+
+  const docBody = clone.querySelector('#doc-body');
+  if (docBody) docBody.innerHTML = '';
+
+  const rnModal = clone.querySelector('#rn-modal');
+  if (rnModal) {
+    rnModal.classList.remove('show');
+    rnModal.setAttribute('aria-hidden', 'true');
+    rnModal.setAttribute('data-state', 'closed');
+  }
+
+  const docModal = clone.querySelector('#doc-modal');
+  if (docModal) {
+    docModal.classList.remove('show');
+    docModal.setAttribute('aria-hidden', 'true');
+    docModal.setAttribute('data-state', 'closed');
+  }
 
   const loader = clone.querySelector('#global-loader');
   if (loader) loader.classList.remove('show');
@@ -3705,9 +4072,14 @@ function renderOutline() {
 }
 
 function jumpToOffset(offset) {
-  editor.focus(); editor.setSelectionRange(offset, offset);
-  const targetTop = (editor.value.substring(0, offset).split('\n').length - 1) * 26;
-  editor.scrollTop = Math.max(0, targetTop - 100);
+  editor.focus();
+  editor.setSelectionRange(offset, offset);
+  const lineIndex = editor.value.substring(0, offset).split('\n').length - 1;
+  refreshBackdrop();
+  requestAnimationFrame(() => {
+    const lineEl = backdrop.children[lineIndex];
+    if (lineEl) scrollToY(lineEl.offsetTop, 0.5);
+  });
 }
 
 async function saveToHistoryList(filename, content) {
@@ -3765,12 +4137,102 @@ function hideLoader() {
   if (loader) loader.classList.remove('show');
 }
 
+//#region [JS-16] HELP DOC MODAL LOGIC
+const GITHUB_REPOSITORY_URL = 'https://github.com/mdworks-dev/mdworks-dev';
+let docModalReturnFocus = null;
+
+function setDocModalState(isOpen) {
+  const modal = document.getElementById('doc-modal');
+  if (!modal) return;
+  modal.classList.toggle('show', isOpen);
+  modal.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+  modal.setAttribute('data-state', isOpen ? 'open' : 'closed');
+}
+
+function fallbackDocMarkdownHtml(markdown) {
+  const lines = String(markdown || '').split('\n');
+  let html = '';
+  let inList = false;
+
+  const closeList = () => { if (inList) { html += '</ul>'; inList = false; } };
+  const inline = text => escapeHtml(text)
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+  lines.forEach(line => {
+    const heading = line.match(/^(#{2,3})\s+(.+)$/);
+    const item = line.match(/^\*\s+(.+)$/);
+
+    if (heading) {
+      closeList();
+      html += `<h${heading[1].length}>${inline(heading[2])}</h${heading[1].length}>`;
+    } else if (item) {
+      if (!inList) { html += '<ul>'; inList = true; }
+      html += `<li>${inline(item[1])}</li>`;
+    } else if (line.trim()) {
+      closeList();
+      html += `<p>${inline(line)}</p>`;
+    } else {
+      closeList();
+    }
+  });
+
+  closeList();
+  return html;
+}
+
+function renderDocMarkdown(markdown) {
+  const html = safeMarkdownHtml(markdown);
+  return html || fallbackDocMarkdownHtml(markdown);
+}
+
+function openDocModal(title, markdown) {
+  const active = document.activeElement;
+  docModalReturnFocus = active && typeof active.focus === 'function' ? active : null;
+
+  closeMenus();
+  set('doc-title', title);
+  document.getElementById('doc-body').innerHTML = renderDocMarkdown(markdown);
+  setDocModalState(true);
+
+  const closeButton = document.querySelector('#doc-modal .doc-head .doc-btn');
+  if (closeButton) closeButton.focus({ preventScroll: true });
+}
+
+function closeDocModal() {
+  const returnFocus = docModalReturnFocus;
+  setDocModalState(false);
+  docModalReturnFocus = null;
+
+  if (returnFocus && document.contains(returnFocus)) {
+    try { returnFocus.focus({ preventScroll: true }); }
+    catch (e) { returnFocus.focus(); }
+  }
+}
+
+function showQuickStart() { openDocModal(T.quickStart, T.quickStartDoc); }
+function showKeyboardShortcuts() { openDocModal(T.keyboardShortcuts, T.keyboardShortcutsDoc); }
+function showAboutMdworks() { openDocModal(T.aboutMdworks, T.aboutDoc); }
+
+function openGitHubRepo() {
+  closeMenus();
+  const opened = window.open(GITHUB_REPOSITORY_URL, '_blank', 'noopener,noreferrer');
+  if (opened) opened.opener = null;
+}
+//#endregion
+
 //#region [JS-16] RELEASE NOTES LOGIC
-const APP_VERSION = '1.5.3';
-const RELEASE_NOTES_STORAGE_KEY = 'mdworks_seen_release_notes_version';
+function setReleaseNotesModalState(isOpen) {
+  const modal = document.getElementById('rn-modal');
+  if (!modal) return;
+  modal.classList.toggle('show', isOpen);
+  modal.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+  modal.setAttribute('data-state', isOpen ? 'open' : 'closed');
+}
 
 function maybeShowReleaseNotes() {
-  if (localStorage.getItem(RELEASE_NOTES_STORAGE_KEY) !== APP_VERSION) {
+  const seenVersion = localStorage.getItem(RELEASE_NOTES_STORAGE_KEY);
+  if (seenVersion !== APP_VERSION) {
     openReleaseNotesModal();
   }
 }
@@ -3778,50 +4240,122 @@ function maybeShowReleaseNotes() {
 function openReleaseNotesModal() {
   set('rn-title', T.releaseNotesTitle);
   set('rn-close-btn', T.releaseNotesClose);
-  document.getElementById('rn-body').innerHTML = safeMarkdownHtml(`${T.releaseNotesIntro}
+  document.getElementById('rn-body').innerHTML = renderDocMarkdown(`${T.releaseNotesIntro}
 
 ${T.releaseNotesContent}`);
-  document.getElementById('rn-modal').classList.add('show');
+  setReleaseNotesModalState(true);
+
+  const closeButton = document.querySelector('#rn-modal .rn-foot .rn-btn');
+  if (closeButton) closeButton.focus({ preventScroll: true });
 }
 
-function closeRN() {
+function closeReleaseNotesModal() {
   localStorage.setItem(RELEASE_NOTES_STORAGE_KEY, APP_VERSION);
-  document.getElementById('rn-modal').classList.remove('show');
+  setReleaseNotesModalState(false);
 }
+
+function closeRN() { closeReleaseNotesModal(); }
 //#endregion
 
 //#region [JS-17] SHORTCUTS, EXPORTS & UTILS
+function isElementVisibleByClass(selector, className = 'show') {
+  const el = document.querySelector(selector);
+  return !!el && el.classList.contains(className);
+}
+
+function closeOutlinePanel() {
+  outlineOpen = false;
+  document.getElementById('outline-panel').classList.remove('show');
+  document.getElementById('outline-check').style.opacity = '0';
+}
+
+const closableUiRegistry = [
+  {
+    name: 'doc-modal',
+    priority: 110,
+    isOpen: () => isElementVisibleByClass('#doc-modal'),
+    close: closeDocModal
+  },
+  {
+    name: 'release-notes-modal',
+    priority: 100,
+    isOpen: () => isElementVisibleByClass('#rn-modal'),
+    close: closeRN
+  },
+  {
+    name: 'history-modal',
+    priority: 90,
+    isOpen: () => isElementVisibleByClass('#history-modal'),
+    close: closeHistory
+  },
+  {
+    name: 'search-replace-panel',
+    priority: 80,
+    isOpen: () => isElementVisibleByClass('#sr-panel'),
+    close: closeSearchPanel
+  },
+  {
+    name: 'menu-dropdown',
+    priority: 70,
+    isOpen: () => !!document.querySelector('.menu-dropdown.open'),
+    close: closeMenus
+  },
+  {
+    name: 'spell-check-panel',
+    priority: 60,
+    isOpen: () => isElementVisibleByClass('#spell-panel'),
+    close: closeSpellPanel
+  },
+  {
+    name: 'outline-panel',
+    priority: 50,
+    isOpen: () => isElementVisibleByClass('#outline-panel'),
+    close: closeOutlinePanel
+  }
+].sort((a, b) => b.priority - a.priority);
+
+function handleGlobalEscape(e) {
+  if (e.key !== 'Escape' || e.isComposing || e.keyCode === 229) return;
+
+  const targetUi = closableUiRegistry.find(ui => ui.isOpen());
+  if (!targetUi) return;
+
+  targetUi.close();
+  e.preventDefault();
+  e.stopPropagation();
+}
+
+document.addEventListener('keydown', handleGlobalEscape);
+
 window.addEventListener('keydown', e => {
-  const rnModal = document.getElementById('rn-modal');
-  if (e.key === 'Escape' && rnModal && rnModal.classList.contains('show')) {
+  const m = e.ctrlKey || e.metaKey;
+  const key = e.key.toLowerCase();
+  if (key === 'a' && m && previewOpen && isPreviewActive && !isEditableSelectionTarget(e.target)) {
     e.preventDefault();
-    closeRN();
+    selectPreviewContents();
     return;
   }
-
-  const m = e.ctrlKey || e.metaKey;
-  if (e.key === 's' && m) { e.preventDefault(); handleSave(e.shiftKey); }
-  if (e.key === 'o' && m) { e.preventDefault(); handleOpen(); }
-  if (e.key === 'f' && m) { e.preventDefault(); openSearchPanel('find'); }
+  if (key === 's' && m) { e.preventDefault(); handleSave(e.shiftKey); }
+  if (key === 'o' && m) { e.preventDefault(); handleOpen(); }
+  if (key === 'f' && m) { e.preventDefault(); openSearchPanel('find'); }
 });
+
+function resetDocumentIdentity(filename = 'untitled.md') {
+  filenameInput.value = filename;
+  fileHandle = null;
+}
 
 async function newFile() {
   if (isDirty && !confirm(T.confirmNew)) return;
   await saveToHistoryList(filenameInput.value, editor.value);
-  editor.value = T.defaultMd;
-  filenameInput.value = 'untitled.md';
-  fileHandle = null;
-  update(); markSaved();
+  editor.value = T.defaultMd; resetDocumentIdentity(); update(); markSaved();
   await triggerAutoSave();
 }
 
 async function closeFile() {
   if (isDirty && !confirm(T.confirmClose)) return;
   await saveToHistoryList(filenameInput.value, editor.value);
-  editor.value = '';
-  filenameInput.value = 'untitled.md';
-  fileHandle = null;
-  update(); markSaved();
+  editor.value = ''; resetDocumentIdentity(); update(); markSaved();
   secureRemoveItem(AUTOSAVE_TXT_KEY);
   secureRemoveItem(AUTOSAVE_NAME_KEY);
   toast(T.closedToast);
@@ -3836,10 +4370,33 @@ function exportHtml() {
   triggerDownload(html, filenameInput.value.replace('.md', '.html'), 'text/html');
 }
 
-function exportPdf() {
+function preparePrintPreview() {
   closeMenus();
   renderPreview(true);
-  requestAnimationFrame(() => window.print());
+}
+
+function exportPdf() {
+  preparePrintPreview();
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => window.print());
+  });
+}
+
+window.addEventListener('beforeprint', () => {
+  preparePrintPreview();
+});
+
+if (window.matchMedia) {
+  const printMedia = window.matchMedia('print');
+  const handlePrintMediaChange = event => {
+    if (event.matches) preparePrintPreview();
+  };
+
+  if (typeof printMedia.addEventListener === 'function') {
+    printMedia.addEventListener('change', handlePrintMediaChange);
+  } else if (typeof printMedia.addListener === 'function') {
+    printMedia.addListener(handlePrintMediaChange);
+  }
 }
 //#endregion
 </script>
