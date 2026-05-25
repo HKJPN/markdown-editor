@@ -18,7 +18,7 @@ MD//WORKS is designed to minimize unnecessary network communication and server- 
 Users handling highly sensitive, confidential, regulated, or legally privileged documents should review the source code, dependency list, and security posture before use.
 
 ## Release File Hashes (Checksums)
-To ensure security and file integrity, all official releases starting from v1.5.4 include **SHA-256 hash values** in the release notes. You can verify that your downloaded ZIP file has not been tampered with by using standard OS commands (such as `Get-FileHash` in Windows PowerShell).
+To ensure security and file integrity, all official releases starting from v1.5.4 include **SHA-256 hash values** in the release notes. You can verify that your downloaded index.html file has not been tampered with by using standard OS commands (such as `Get-FileHash` in Windows PowerShell).
 
 ## Reporting a Vulnerability
 
@@ -52,7 +52,7 @@ MD//WORKSは、不要なネットワーク通信やサーバー側のリスク�
 高度な機密情報、規制対象となる情報、法的秘匿特権の対象となる文書などを扱う場合は、利用前にソースコード、依存ライブラリ一覧、および本ソフトウェアのセキュリティ上の特性を確認してください。
 
 ## リリースファイルのハッシュ値（チェックサム）について
-セキュリティとファイルの安全性を確保するため、v1.5.4以降のすべての正式リリースにおいて、リリースノートにZIPファイルの **SHA-256ハッシュ値** を明記しています。ダウンロードしたファイルが改ざんされていないことを確認したい場合は、OSの標準コマンド（WindowsのPowerShellにおける `Get-FileHash` など）を使用して検証いただけます。
+セキュリティとファイルの安全性を確保するため、v1.5.4以降のすべての正式リリースにおいて、リリースノートにindex.htmlファイルの **SHA-256ハッシュ値** を明記しています。ダウンロードしたファイルが改ざんされていないことを確認したい場合は、OSの標準コマンド（WindowsのPowerShellにおける `Get-FileHash` など）を使用して検証いただけます。
 
 ## 脆弱性の報告
 
