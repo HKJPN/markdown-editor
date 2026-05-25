@@ -17,6 +17,9 @@ MD//WORKS is designed to minimize unnecessary network communication and server- 
 
 Users handling highly sensitive, confidential, regulated, or legally privileged documents should review the source code, dependency list, and security posture before use.
 
+## Release File Hashes (Checksums)
+To ensure security and file integrity, all official releases starting from v1.5.4 include **SHA-256 hash values** in the release notes. You can verify that your downloaded ZIP file has not been tampered with by using standard OS commands (such as `Get-FileHash` in Windows PowerShell).
+
 ## Reporting a Vulnerability
 
 If you find issues or potential weaknesses, please report them via GitHub Issues or contact us privately if needed. We will do our best to address it as an open-source community effort.
