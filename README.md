@@ -26,6 +26,9 @@ Try it instantly in your browser.
 * **Rich text copying:** Added support for copying rich text directly from the preview.
 * **Improved navigation accuracy:** Enhanced the precision of automatic scrolling to search results and outline jumps.
 
+### **🔒 Release File Hashes (Checksums)**
+To ensure security and file integrity, all official releases starting from v1.5.4 include **SHA-256 hash values** in the release notes. You can verify that your downloaded ZIP file has not been tampered with by using standard OS commands (such as `Get-FileHash` in Windows PowerShell).
+
 ## ✨ Upcoming Features
 
 * **Invisible character display:** Add display options for full-width spaces, tabs, trailing spaces, and line breaks.
