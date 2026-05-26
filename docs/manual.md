@@ -321,6 +321,22 @@ Use this feature if you accidentally delete content or want to return to an earl
 Running **Clear Local Data** also deletes History.  
 Do not rely on History as your only backup for important documents.
 
+### 6-7. Saving behavior depends on your browser
+
+MD//WORKS Editor is designed to work across a wide range of environments, including Windows, macOS, iPadOS, Android, ChromeOS, and Linux. The behavior for saving and **overwriting files** varies depending on your device and browser combination. This is due to browser-specific security specifications (File System Access API support).
+
+| OS / Platform | Chrome / Edge (Chromium-based) | Firefox | Safari |
+| --- | --- | --- | --- |
+| **Windows** | True **"Overwrite Save" is supported** after selecting the initial save location. | ⚠️Overwrite not supported. Saves as a new downloaded file every time. | — |
+| **macOS** | True **"Overwrite Save" is supported** after selecting the initial save location. | ⚠️Overwrite not supported. Saves as a new downloaded file every time. | ⚠️Overwrite not supported. Saves as a new downloaded file every time. |
+| **iOS / iPadOS** | (Due to OS restrictions, applies to all browsers) Overwrite not supported. Saves via the Share menu each time. | Same as left | Same as left |
+| **Chromebook** | True **"Overwrite Save" is supported** after selecting the initial save location. | — | — |
+| **Linux** | True **"Overwrite Save" is supported** after selecting the initial save location. | Overwrite not supported. Saves as a new downloaded file every time. | — |
+
+> **⚠️ Note for Firefox / Safari / Mobile Users**
+> Due to browser security restrictions, direct overwriting of local files is not supported. Each time you click save, the file will be downloaded as a new copy (e.g., filename(1).md). While this allows you to keep a history of all your saved versions, we recommend using Chrome or Edge if you prefer standard overwrite saving.
+ 
+
 ---
 
 ## 7. Exporting to HTML and PDF
