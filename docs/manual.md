@@ -38,7 +38,7 @@ If draft data from a previous session is available, you may be asked whether you
 
 For best results, use the latest version of a modern desktop browser such as Google Chrome, Microsoft Edge, or Firefox.
 
-Some features, including file saving, printing, fullscreen mode, and Private App creation, may not work correctly in outdated browsers, restricted corporate environments, or browsers with strict security settings.
+Some features, including file saving, printing, fullscreen mode, and Private App creation, may not work correctly in outdated browsers, restricted corporate environments, or browsers with strict security settings. Learn more about [save behavior by OS and browser](#save-behavior).
 
 Features related to creating or decrypting Private Apps depend on browser capabilities such as the Web Crypto API. If you encounter problems, try the latest desktop version of Chrome or Edge.
 
@@ -321,6 +321,7 @@ Use this feature if you accidentally delete content or want to return to an earl
 Running **Clear Local Data** also deletes History.  
 Do not rely on History as your only backup for important documents.
 
+<a id="save-behavior"></a>
 ### 6-7. Saving behavior depends on your browser
 
 MD//WORKS Editor is designed to work across a wide range of environments, including Windows, macOS, iPadOS, Android, ChromeOS, and Linux. The behavior for saving and **overwriting files** varies depending on your device and browser combination. This is due to browser-specific security specifications (File System Access API support).
