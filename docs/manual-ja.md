@@ -498,7 +498,7 @@ Markdownでは、スペースや改行の位置が表示結果に影響するこ
 | Warm | 長文執筆向けの目にやさしいテーマ |
 
 文書作成やレビュー時は **Paper**、長時間の執筆時は **Warm**、集中して編集したいときは **Midnight** など、用途に応じて切り替えできます。
-![Image: Theame](<./images/Theame.jpg>)
+![Image: Theame](<./images/theame.jpg>)
 
 ### 9-5. フルスクリーン表示にする
 
