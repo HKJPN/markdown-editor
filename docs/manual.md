@@ -504,6 +504,8 @@ Change the interface theme from the **View** menu.
 
 Choose a theme based on your working environment: **Paper** for reviewing, **Warm** for long writing sessions, and **Midnight** for focused editing.
 
+![Image: Theame](<./images/theame.jpg>)
+
 ### 9-5. Fullscreen Mode
 
 
