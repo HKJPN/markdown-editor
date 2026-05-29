@@ -68,6 +68,11 @@ MD//WORKS is fully open-source—no exceptions. Although it runs in the browser 
 
 Don’t take our word for it—review the code yourself. If you find issues or potential weaknesses, please report them via Issues or contact us privately if needed.
 
+**For Privacy-Conscious Users:**
+
+* **When leveraging AI:** If you use built-in browser AI assistants (like Gemini in Chrome or Copilot in Edge) for proofreading or summarization, your text is processed according to the respective provider's privacy policies. When handling highly sensitive or confidential information, please ensure the AI side panel is closed or disable the browser's page-context access.
+* **For maximum privacy:** By using browsers without native AI integrations, such as **Firefox** or **Brave**, MD//WORKS acts as a 100% secure, offline-capable editor, completely eliminating any risk of unintended external data sharing.
+
 ---
 
 ### 📦 Save as App — Your Document, Your Editor, One File
