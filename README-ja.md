@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.5.4 — AIアシスタントとシームレスにつながるスタンドアロン Markdown エディタ
+# 🚀 MD//WORKS v1.5.4 — AIアシスタントとシームレスなスタンドアロン Markdown エディタ
 **Languages:** [🇺🇸 English](README.md) or [🇯🇵 日本語](README-ja.md)
 <img width="1280" height="720" alt="スクリーンショット1_5_3j" src="https://github.com/user-attachments/assets/94fbd58e-b740-40e8-ac12-77eb96eba73c" />
 
