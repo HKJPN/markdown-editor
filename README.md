@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.5.4 — AI-friendly standalone Markdown Editor
+# 🚀 MD//WORKS v1.5.4 —Standalone Markdown Editor for AI-assisted writing
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
 <img width="1280" height="720" alt="スクリーンショット1_5_3" src="https://github.com/user-attachments/assets/8d936573-90bb-481d-a0b4-7d3db1f9f6f0" />
 
