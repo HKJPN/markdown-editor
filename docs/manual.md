@@ -644,8 +644,6 @@ When using browser-based AI assistants, the text displayed in or shared from MD/
 
 If you do not want Gemini in Chrome to access your document, do not share the MD//WORKS tab with Gemini, disable tab sharing in Chrome/Gemini settings, or use a browser where Gemini integration is not active.
 
-For everyday proofreading, summarization, terminology checks, and structure review, Gemini Flash is usually sufficient. Use Gemini Pro or other higher-capability models only when you need deeper reasoning or very long-context analysis.
-
 ### 11-4. Differences in Behavior Depending on the AI Assistant
 
 The following comparison is based on our actual testing within MD//WORKS. Please note that the behavior of AI assistants may change depending on browser versions, updates to the AI services, account settings, and organizational policies.
