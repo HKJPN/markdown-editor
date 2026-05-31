@@ -603,9 +603,9 @@ AI機能はMD//WORKS本体に内蔵されているものではありませんが
 1. **Google アカウントにログインする**
    Chromeブラウザで、Google アカウントにログインしていることを確認します。
 
-2. **Geminiを起動する**
-   ![Image: Geminiに相談ボタン](<images/Bgemni.png>)
+2. **Geminiを起動する**   
    ブラウザのサイドパネルやツールバーにあるGeminiボタン、または「Geminiに相談」から起動します。
+    ![Image: Geminiに相談ボタン](<images/Bgemni.png>)
 
 > 注意：Gemini in Chromeの利用可否や表示方法は、Chromeのバージョン、Googleアカウント、地域、プラン、組織の管理設定によって異なる場合があります。
 
