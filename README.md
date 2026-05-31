@@ -2,7 +2,7 @@
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
 <img width="1280" height="720" alt="スクリーンショット1_5_3" src="https://github.com/user-attachments/assets/8d936573-90bb-481d-a0b4-7d3db1f9f6f0" />
 
-## MD//WORKS is the only editor that transforms your document into a secure, portable application. No installation. No cloud. All you need is a browser, yet everything runs entirely locally. Unlike tools like TiddlyWiki or ZIP archives, your document can be opened and edited anywhere effortlessly. Plus, MD//WORKS pairs perfectly with browser-based AI assistants like Gemini in Chrome. Just ask the AI to "proofread this text" or "translate it" without the hassle of copy-pasting.
+### MD//WORKS is the only editor that transforms your document into a secure, portable application. No installation. No cloud. All you need is a browser, yet everything runs entirely locally. Unlike tools like TiddlyWiki or ZIP archives, your document can be opened and edited anywhere effortlessly. Plus, MD//WORKS pairs perfectly with browser-based AI assistants like Gemini in Chrome. Just ask the AI to "proofread this text" or "translate it" without the hassle of copy-pasting.
 
 For more information, see ["11. AI-Assisted Writing" in the manual](docs/manual.md#11-ai-assisted-writing).
 
