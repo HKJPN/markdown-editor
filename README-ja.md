@@ -2,7 +2,7 @@
 **Languages:** [🇺🇸 English](README.md) or [🇯🇵 日本語](README-ja.md)
 <img width="1280" height="720" alt="スクリーンショット1_5_3j" src="https://github.com/user-attachments/assets/94fbd58e-b740-40e8-ac12-77eb96eba73c" />
 
-**MD//WORKSは、インストールもクラウドも不要なエディタです。ブラウザさえあれば、手元のパソコンだけで「安全に持ち運べるアプリ」のように文章を管理できます。複雑なツール（ZIPやTiddlyWikiなど）と違って、どんな環境でも簡単に開いて編集が可能。さらに、ChromeのGeminiなどのAIと連携すれば、面倒なコピペなしで「文章の校正」や「翻訳」をAIにそのままお願いできます。** 詳しくは、[マニュアルの「11. AI支援執筆」](https://github.com/HKJPN/markdown-editor/blob/main/docs/manual-ja.md#11-ai%E6%94%AF%E6%8F%B4%E5%9F%B7%E7%AD%86--)をご覧ください。
+**MD//WORKSは、インストールもクラウドも不要なエディタです。ブラウザさえあれば、手元のパソコンだけで「安全に持ち運べるアプリ」のように文章を管理できます。複雑なツール（ZIPやTiddlyWikiなど）と違って、どんな環境でも簡単に開いて編集が可能。さらに、ChromeのGeminiなどのAIと連携すれば、面倒なコピペなしで「文章の校正」や「翻訳」をAIにそのまま指示できます。** AI活用の詳細は、[マニュアルの「11. AI支援執筆」](https://github.com/HKJPN/markdown-editor/blob/main/docs/manual-ja.md#11-ai%E6%94%AF%E6%8F%B4%E5%9F%B7%E7%AD%86--)をご覧ください。
 
 # 🚀 インストール不要で即実行可能
 
