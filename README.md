@@ -4,7 +4,8 @@
 
 ### **MD//WORKS** is the only editor that transforms your document into secure, portable application. No installation. No cloud. All you need is a browser but everything runs locally. Unlike tools like TiddlyWiki or ZIP archives, your document can be opened and edited anywhere. Plus, MD//WORKS pairs perfectly with browser-based AI assistants like Gemini in Chrome. Just ask the AI to "proofread this text" or "translate it" without the hassle of copy-pasting.
 
-For details on how to use AI writing support, please see ["11. AI-Assisted Writing" in the manual](docs/manual.md#11-ai-assisted-writing).
+For more information, see [“11. AI-Assisted Writing” in the manual](docs/manual.md#11-ai-assisted-writing).
+
 
 # 🚀 Live Demo
 
