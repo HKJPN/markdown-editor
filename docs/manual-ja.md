@@ -588,7 +588,7 @@ Preview画面を選択した状態でも、Ctrl+A / ⌘A によるPreview内容�
 
 ---
 
-## 11. AI支援執筆
+## 11. AI支援執筆 ![Image: Geminiに相談ボタン](<images/Bgemni.png>) ![Image: copilotボタン](<images/Bcopilot.png>)
 
 MD//WORKSは、単なるテキスト入力・編集だけでなく、Chrome GeminiなどのブラウザAIと組み合わせてより活用することができます。
 
@@ -645,7 +645,7 @@ Chrome Geminiに文書内容を共有したくない場合は、MD//WORKSのタ�
 
 以下は、MD//WORKS上で実際に試した範囲での比較です。AIアシスタントの挙動は、ブラウザのバージョン、AI側の仕様変更、アカウント設定、組織ポリシーによって変わる可能性があります。
 
-| 観点 | Copilot in Edge | Gemini in Chrome |
+| 観点 | Copilot in Edge![Image: Geminiに相談ボタン](<images/Bgemni.png>) | Gemini in Chrome![Image: Geminiに相談ボタン](<images/Bgemni.png>)  |
 | --- | --- | --- |
 | エディタ連携の体感 | △ テキスト全体を読み取れない場合あり | ◎ MD//WORKS上では比較的スムーズに解析可能 |
 | 設計傾向 | 安全性・社内ポリシー重視 | 柔軟性・ブラウザAI連携重視 |
