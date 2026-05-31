@@ -593,20 +593,94 @@ To check the app version and core concepts, select **Help > About MD//WORKS**.
 
 ---
 
-## 11. Troubleshooting
+## 11. AI-Assisted Writing
+
+MD//WORKS is not limited to simple text entry and editing. When used together with browser-based AI assistants such as Gemini in Chrome, it can support proofreading, summarization, terminology checks, translation, and structure review while you write in Markdown.
+
+AI functionality is not built into MD//WORKS itself. Instead, MD//WORKS works naturally with browser AI assistants, allowing you to ask for help in everyday language while viewing and editing your Markdown document. This can be useful for routine tasks such as correcting inconsistent terminology and translating text, as well as more advanced tasks such as reviewing the structure of an academic paper, explaining code, or organizing reference notes.
+
+This helps reduce the cognitive load of writing and allows you to focus more on creative and analytical work. This section covers setup instructions, specific use cases, and important considerations when using browser AI for different purposes.
+
+### 11-1. Preparing for AI-Assisted Writing
+
+If you want to use browser AI with MD//WORKS, Gemini in Chrome is a convenient option. In supported environments, you can get started with the following steps:
+
+1. **Sign in to your Google Account**
+   Make sure you are signed in to your Google account in Chrome.
+
+2. **Open Gemini**
+   Open Gemini from the browser side panel, toolbar button, or the “Ask Gemini” option.
+
+> Note: Availability and behavior may vary depending on your Chrome version, Google account, region, subscription plan, and organization settings.
+
+### 11-2. Use Cases
+For everyday writing, using a lightweight model (such as Gemini Flash) delivers faster suggestions and helps you stay focused on writing. We recommend keeping the model set to Flash by default, and selectively switching to a more advanced model (such as Gemini Pro) only when you need deeper comparison or verification—for example, when reviewing the overall structure of a long document, or checking subtle differences in nuance between Japanese and English.Switch to a more advanced model, such as Gemini Pro, only when you need deeper comparison or verification—for example, when reviewing the overall structure of a long document, or checking subtle differences in nuance between Japanese and English.
+
+Below are some practical prompt examples.
+
+#### For Papers, Articles, and Technical Documents
+
+* List inconsistent terminology or wording that should be standardized across the document.
+* Create a brief 300-character-style summary of the entire document.
+* Point out unnatural expressions in the selected range and revise them in a more academic and objective tone.
+* Point out any grammatical errors in the selected English text.
+* For sections A through D, would the structure be clearer if section C were moved to the end?
+* Extract only the section headings from this document.
+* Review the order of the sections and suggest a clearer structure.
+* Organize the reference notes and check whether they support the claims in the text.
+
+#### For Basic Coding Support
+
+* Create a regular expression pattern to replace all half-width parentheses with full-width parentheses in this document.
+* Convert the experimental process described in the selected text into a Mermaid flowchart.
+* Add explanatory comments to each line of the selected Python code.
+* Explain the likely cause of the error produced by the selected R code and suggest a fix.
+* Explain what this JavaScript function does in beginner-friendly language.
+* Turn the following specification into a clear implementation prompt for Codex.
+
+### 11-3. Notes on Using Browser AI
+
+When using browser-based AI assistants, the text displayed in or shared from MD//WORKS may be processed by that AI service. Please be careful when working with confidential, personal, or internal documents.
+
+If you do not want Gemini in Chrome to access your document, do not share the MD//WORKS tab with Gemini, disable tab sharing in Chrome/Gemini settings, or use a browser where Gemini integration is not active.
+
+For everyday proofreading, summarization, terminology checks, and structure review, Gemini Flash is usually sufficient. Use Gemini Pro or other higher-capability models only when you need deeper reasoning or very long-context analysis.
+
+### 11-4. Differences in Behavior Depending on the AI Assistant
+
+The following comparison is based on our actual testing within MD//WORKS. Please note that the behavior of AI assistants may change depending on browser versions, updates to the AI services, account settings, and organizational policies.
+
+| Aspect | Copilot in Edge | Gemini in Chrome |
+| --- | --- | --- |
+| Integration Experience | Limited (May occasionally fail to read the entire text) | Excellent (Parses smoothly within MD//WORKS) |
+| Design Focus | Security & Corporate Policy | Flexibility & Seamless AI Integration |
+| Text Recognition Scope | Tends to focus on currently displayed or selected text | In our tests, easily recognizes the entire document despite complex DOM structures |
+| Shadow DOM Compatibility | May fail to recognize text | In our tests, relatively successful at recognizing text within Shadow DOM layouts |
+| Security & Enterprise Use | Often easier to align with Microsoft 365 and admin policies | Depends on Google Account, Workspace settings, and org policies |
+| Analysis for Developers | Limited (More stable when selecting a specific target range) | Excellent (Highly effective for code explanations and structure reviews) |
+
+#### For those who prioritize seamless integration
+Based on testing in MD//WORKS, "Gemini in Chrome" operates smoothly with the editor's layout. It is highly effective for tasks such as proofreading the entire document, summarizing, checking terminology consistency, and reviewing structure. This is highly recommended for users who want to actively utilize the writing support features.
+
+#### For those who prioritize security and corporate policies
+"Copilot in Edge" is a suitable option when compatibility with organizational use and data protection policies is a top priority. It is well-suited for writing support tasks that target only the currently displayed content. However, it may occasionally fail to read the entire text, resulting in more situations where you need to copy and paste manually.
+
+---
+
+## 12. Troubleshooting
 
 
 
 This section covers common issues and how to resolve them.
 
-### 11-1. I saved the document, but I cannot find the file
+### 12-1. I saved the document, but I cannot find the file
 
 First, check your browser’s default Downloads folder.  
 Saving and export operations follow your browser’s download settings. Also confirm that the name in the file name field matches the downloaded file.
 
 Remember that **Auto encrypted** only protects drafts and history stored in the browser. It does not create a `.md` file on your computer. To keep a regular file, use **File > Save (Ctrl+S / ⌘S)**.
 
-### 11-2. The title bar shows “Unsaved”
+### 12-2. The title bar shows “Unsaved”
 
 
 
@@ -615,12 +689,12 @@ Before ending your work session, save the document using the **Save** button or 
 
 After the file is saved, the indicator returns to **Saved**.
 
-### 11-3. I cannot paste from the menu
+### 12-3. I cannot paste from the menu
 
 Browser security restrictions may block paste operations from custom menus.  
 If this happens, use the keyboard shortcut **Ctrl+V / ⌘V**.
 
-### 11-4. I cannot insert an image
+### 12-4. I cannot insert an image
 
 If drag-and-drop image insertion does not work, check the following:
 
@@ -632,20 +706,20 @@ If drag-and-drop image insertion does not work, check the following:
 
 To protect local storage capacity and improve security, MD//WORKS Editor does not accept images over 200 KB or SVG files.
 
-### 11-5. Preview is not displayed
+### 12-5. Preview is not displayed
 
 If Preview does not appear, make sure it is enabled by clicking the **Preview** button on the title bar or selecting **View > Preview**.
 
 On narrow screens, Preview may appear as a full-width pane or may be out of view.  
 When Preview is active, you can drag the central divider to adjust the width of the editor and preview panes.
 
-### 11-6. Search returns no results
+### 12-6. Search returns no results
 
 If search returns no results, check the search options, such as **Case Sensitive**, **Whole Word**, and **RegExp**.
 
 The issue may also be caused by full-width/half-width character differences or invisible spaces. Turn on **View > Show Invisibles** to inspect the text if necessary.
 
-### 11-7. “Invalid regular expression” appears
+### 12-7. “Invalid regular expression” appears
 
 
 
@@ -654,27 +728,27 @@ If the syntax is invalid, an error appears.
 
 If you do not intend to use regular expressions, turn off **RegExp**.
 
-### 11-8. Spell (EN) is not working
+### 12-8. Spell (EN) is not working
 
 Spell (EN) is designed for English text only and does not proofread other languages.
 
 Make sure Spell (EN) is enabled and that the document contains English text.  
 Depending on your network environment, the dictionary data may take a few seconds to load.
 
-### 11-9. I forgot my Private Storage passphrase
+### 12-9. I forgot my Private Storage passphrase
 
 If you forget your Private Storage passphrase, drafts and history protected by Private Storage cannot be recovered.
 
 For important documents, do not rely solely on Private Storage. Save a separate Markdown file (`.md`) to your computer.
 
-### 11-10. I forgot my Private App passphrase
+### 12-10. I forgot my Private App passphrase
 
 HTML files created with **File > Save as Private App** cannot be decrypted without the correct passphrase.
 
 If the passphrase is forgotten, the document cannot be recovered.  
 Before exporting a Private App, save the original Markdown document securely on your computer.
 
-### 11-11. My Standalone HTML app does not open correctly
+### 12-11. My Standalone HTML app does not open correctly
 
 If a Standalone App or Private App does not open correctly, check the following:
 
@@ -687,7 +761,7 @@ If a Standalone App or Private App does not open correctly, check the following:
 
 Creating and decrypting Private Apps works best in the latest desktop versions of Google Chrome or Microsoft Edge.
 
-### 11-12. PDF export does not work correctly
+### 12-12. PDF export does not work correctly
 
 PDF export (**File > Print / Save as PDF**) relies on the browser’s print function.  
 Make sure the print destination is set to **Save as PDF**, and check the paper size and margins.
