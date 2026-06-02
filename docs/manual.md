@@ -648,20 +648,20 @@ If you do not want Gemini in Chrome to access your document, do not share the MD
 
 The following comparison is based on our actual testing within MD//WORKS. Please note that the behavior of AI assistants may change depending on browser versions, updates to the AI services, account settings, and organizational policies.
 
-| Aspect | Copilot in Edge | Gemini in Chrome |
-| --- | --- | --- |
-| Integration Experience | Limited (May occasionally fail to read the entire text) | Excellent (Parses smoothly within MD//WORKS) |
-| Design Focus | Security & Corporate Policy | Flexibility & Seamless AI Integration |
-| Text Recognition Scope | Tends to focus on currently displayed or selected text | In our tests, easily recognizes the entire document despite complex DOM structures |
-| Shadow DOM Compatibility | May fail to recognize text | In our tests, relatively successful at recognizing text within Shadow DOM layouts |
-| Security & Enterprise Use | Often easier to align with Microsoft 365 and admin policies | Depends on Google Account, Workspace settings, and org policies |
-| Analysis for Developers | Limited (More stable when selecting a specific target range) | Excellent (Highly effective for code explanations and structure reviews) |
+| Criteria |  Copilot in Edge | Gemini in Chrome |　Firefox AI controls![Image: FirefoxAIcontorls](<images/FirefoxAIcontorls.png>) |
+| --- | --- | --- | --- |
+| **MD//WORKS Integration** | ⚠️ Unstable (limited to visible area) | ✅ Smooth full-text parsing | ✅ Smooth (same as Gemini) |
+| **Text Recognition** | Focuses on visible/selected text | Recognizes full text in complex DOM | Good (AI scope is controllable) |
+| **Design Philosophy** | MS 365 & policy focused | Flexible AI chat focused | ✨ Safety & user control focused |
+| **Security & Org Use** | Best for MS 365 environments | Depends on Google Workspace | ✨ **Block AI** (Full restriction) / **Local LLMs**|
+| **Dev Analysis** | ⚠️ Stable if manually selected | ✅ Great for Code & Markdown | ✅ Great for Code & Markdown  |
+| **Best Use Cases** | Strict MS 365 organizations | Writing & proofreading with AI | Fully blocking or toggling AI |
 
-#### For those who prioritize seamless integration
+#### For those who prioritize seamless integration and ease of setup
 Based on testing in MD//WORKS, "Gemini in Chrome" operates smoothly with the editor's layout. It is highly effective for tasks such as proofreading the entire document, summarizing, checking terminology consistency, and reviewing structure. This is highly recommended for users who want to actively utilize the writing support features.
 
 #### For those who prioritize security and corporate policies
-"Copilot in Edge" is a suitable option when compatibility with organizational use and data protection policies is a top priority. It is well-suited for writing support tasks that target only the currently displayed content. However, it may occasionally fail to read the entire text, resulting in more situations where you need to copy and paste manually.
+"Copilot in Edge and Firefox" is a suitable option when compatibility with organizational use and data protection policies is a top priority. 
 
 ---
 
