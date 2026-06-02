@@ -767,4 +767,55 @@ Make sure the print destination is set to **Save as PDF**, and check the paper s
 For submission-ready PDFs, always open the generated file and confirm that the layout is correct.
 
 ---
+
+<div id="appendix-firefox-llm"></div>
+
+# Appendix
+
+## Appendix 1: How to Use a Local LLM with Firefox's AI Chat Feature
+
+This section explains the steps to connect Firefox with a local LLM server running on your PC, allowing you to summarize and chat with web pages entirely within a secure, local environment.
+
+---
+
+### 1. Launching the Local LLM Server (Preparation)
+
+First, start the server (interface) to run the LLM locally on your PC.
+
+* **Tools Required:**
+  * [llama.cpp](https://github.com/ggml-org/llama.cpp) (Download the pre-built binary matching your operating system)
+* **Model Required:**
+  * Model files in **GGUF format**, such as `gpt-oss-20b` or `GPT-OSS Swallow`.
+* **Example Launch Command:**
+  * Open your terminal (or Command Prompt) and run the following command to start the server on port `8080`:
+
+```bash
+llama-server --model /path/to/your-model.gguf --port 8080
+
+```
+
+> 💡 **Note:** Adjust the launch options (such as GPU offloading via `-ngl`) as needed based on your hardware capabilities and desired processing speed.
+
+---
+
+### 2. Configuring Advanced Settings in Firefox
+
+After starting the server, modify Firefox's advanced settings so it can securely recognize your local LLM server (localhost).
+
+1. Type **`about:config`** in the Firefox address bar and press Enter.
+2. If a warning screen appears, click **"Accept the Risk and Continue"**.
+3. Type **`browser.ml.chat.hideLocalhost`** in the search bar at the top.
+4. The default value is set to `true` (hidden). Click the toggle button on the right (or double-click the row) to change it to **`false`** (visible).
+
+---
+
+### 3. Basic Usage
+
+Once the configuration is complete, you can start using your local LLM.
+
+1. Open the "AI Chatbot" panel from the Firefox **sidebar**.
+2. **"localhost"** will now appear under the chat provider options. Select it and click "Continue."
+3. Click the **"Summarize page"** button at the bottom left of the chat window. The content of your active web page will be sent to your local LLM, and a summary will be generated automatically.
+
+---
 Google, Google Chrome, and Gemini are trademarks of Google LLC.
