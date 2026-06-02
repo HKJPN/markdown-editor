@@ -808,3 +808,4 @@ llama-server --model /path/to/your-model.gguf --port 8080
 
 ---
 ※ Google、Google Chrome、および Gemini は、Google LLC の商標です。
+※ その他、記載されている会社名、製品名、サービス名などは、各社の商標または登録商標です。
