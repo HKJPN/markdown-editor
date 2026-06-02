@@ -818,4 +818,4 @@ Once the configuration is complete, you can start using your local LLM.
 3. Click the **"Summarize page"** button at the bottom left of the chat window. The content of your active web page will be sent to your local LLM, and a summary will be generated automatically.
 
 ---
-Google, Google Chrome, and Gemini are trademarks of Google LLC.
+Google, Google Chrome, and Gemini are trademarks of Google LLC. All other company, product, and service names mentioned are trademarks or registered trademarks of their respective owne.
