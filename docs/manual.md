@@ -611,6 +611,8 @@ While various browser-based AIs are available, the easiest option is using Gemin
 
 > Note: Availability and behavior may vary depending on your Chrome version, Google account, region, subscription plan, and organization settings.
 
+Combining it with the latest features in **Firefox**, you can build a **fully local AI environment** that summarizes web pages and proofreads text entirely within your PC—without transmitting any data over the internet. For detailed setup instructions, please refer to **["Appendix 1: How to Use a Local LLM with Firefox's AI Chat Feature"](#appendix-firefox-llm)**.
+
 ### 11-2. Use Cases
 For everyday writing, using a lightweight model (such as Gemini Flash) delivers faster suggestions and helps you stay focused on writing. We recommend keeping the model set to Flash by default, and selectively switching to a more advanced model (such as Gemini Pro) only when you need deeper comparison or verification—for example, when reviewing the overall structure of a long document, or checking subtle differences in nuance between Japanese and English.Switch to a more advanced model, such as Gemini Pro, only when you need deeper comparison or verification—for example, when reviewing the overall structure of a long document, or checking subtle differences in nuance between Japanese and English.
 
