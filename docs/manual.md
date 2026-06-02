@@ -601,7 +601,7 @@ This helps reduce the cognitive load of writing and allows you to focus more on 
 
 ### 11-1. Preparing for AI-Assisted Writing
 
-If you want to use browser AI with MD//WORKS, Gemini in Chrome is a convenient option. In supported environments, you can get started with the following steps:
+While various browser-based AIs are available, the easiest option is using Gemini in Chrome within Google Chrome. You can get started by following the steps below.
 
 1. **Sign in to your Google Account**
    Make sure you are signed in to your Google account in Chrome.
