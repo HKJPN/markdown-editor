@@ -613,7 +613,7 @@ AI機能はMD//WORKS本体に内蔵されているものではありませんが
 > 注意：Gemini in Chromeの利用可否や表示方法は、Chromeのバージョン、Googleアカウント、地域、プラン、組織の管理設定によって異なる場合があります。
 
 #### 11-1-2. Brave Browser: Leoの利用
-1. ログインは不要です。Braveブラウザのアドレスバー右端のAIチャットマーク![Image: LeoImage](<images/Leoimage.png>)または「・・・」メニュー内のAIチャットマーク![Image: LeoImage](<images/Leoimage.png>)でAIサイドバーが開きます。
+1. ログインは不要です。Braveブラウザのアドレスバー右端のAIチャットマーク![Image: LeoImage](<images/Leoimage.png>)または「...」メニュー内のAIチャットマーク![Image: LeoImage](<images/Leoimage.png>)でAIサイドバーが開きます。
 2. MD//WORKSを開いた状態で、校正や要約を依頼します。全体ではなく選択した部分を対象とすることもできます。コピーペストせずにカーソルで選択だけで対象の限定が可能です。
 
 >特徴：Googleアカウント不要で、プライバシー保した利用が可能です。特にiPadを含むモバイル環境でも、PC版とほぼ同等のDOM解析精度で動作することが確認されており、複雑なページ構造や粗雑なHTML構造でも安定してテキストを読み取ることができます。
