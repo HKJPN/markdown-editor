@@ -682,7 +682,7 @@ The following comparison is based on our own testing with MD//WORKS. The behavio
 
 | Item | Copilot in Edge  | Gemini in Chrome | Brave Browser / Leo  | Firefox AI Controls ) |
 | :--- | :--- | :--- | :--- | :--- |
-| **AI integration with MD//WORKS** | 🚫 Mainly copy-and-paste based, even when the sidebar is available | ✅ Can analyze the overall document structure or selected areas | ✅ Can analyze the overall document structure or selected areas | 🚫 Mainly copy-and-paste based, even when the sidebar is available |
+| **AI integration with MD//WORKS** | 🚫 Mainly copy-and-paste based, even when the sidebar is available | ✅ **Can analyze the overall document structure or selected areas** | ✅ **Can analyze the overall document structure or selected areas** | 🚫 Mainly copy-and-paste based, even when the sidebar is available |
 | **AI support on iPad** | 🚫 Not available | 🚫 Not available | ✅ **Available** | 🚫 Not available |
 | **Model selection** | 🚫 Not available | 🚫 Not available | ✅ **Available** | ✅ Available when using a local or configurable AI setup |
 | **Design focus** | Microsoft 365 integration and organizational control | Flexible AI interaction and convenience | Privacy, user control, and model choice | Safety, user control, and AI blocking |
