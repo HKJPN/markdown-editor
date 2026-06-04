@@ -682,12 +682,12 @@ The following comparison is based on our own testing with MD//WORKS. The behavio
 
 | Item | Copilot in Edge  | Gemini in Chrome | Brave Browser / Leo  | Firefox AI Controls ) |
 | :--- | :--- | :--- | :--- | :--- |
-| **AI integration with MD//WORKS** | 🚫 Mainly copy-and-paste based, even when the sidebar is available | ✅ Can analyze the overall document structure or selected areas | ✅ Can analyze the overall document structure or selected areas | 🚫 Mainly copy-and-paste based |
-| **AI support on iPad** | 🚫 Not available in our testing | 🚫 Not available in our testing | ✅ Available in our testing | 🚫 Not available in our testing |
-| **Model selection** | 🚫 Not available | 🚫 Not available | ✅ Available | ✅ Available when using a local or configurable AI setup |
+| **AI integration with MD//WORKS** | 🚫 Mainly copy-and-paste based, even when the sidebar is available | ✅ Can analyze the overall document structure or selected areas | ✅ Can analyze the overall document structure or selected areas | 🚫 Mainly copy-and-paste based, even when the sidebar is available |
+| **AI support on iPad** | 🚫 Not available | 🚫 Not available | ✅ **Available** | 🚫 Not available |
+| **Model selection** | 🚫 Not available | 🚫 Not available | ✅ **Available** | ✅ Available when using a local or configurable AI setup |
 | **Design focus** | Microsoft 365 integration and organizational control | Flexible AI interaction and convenience | Privacy, user control, and model choice | Safety, user control, and AI blocking |
-| **Security / privacy orientation** | Best suited for managed Microsoft 365 environments | Depends on Google Workspace and account settings | Minimizes unnecessary data sharing and offers privacy-oriented controls | Can block AI access; local LLM usage is also possible |
-| **Recommended use** | Organizations that prioritize Microsoft 365 governance | Writing, proofreading, and review using powerful AI models | Writing, proofreading, mobile use, and model selection | Users who want strict AI control, AI blocking, or a fully local AI option |
+| **Security / privacy orientation** | Best suited for managed Microsoft 365 environments | Depends on Google Workspace and account settings | Minimizes unnecessary data sharing and offers privacy-oriented controls | Can **block AI** access; **local LLM** usage is also possible |
+| **Recommended use** | Organizations that prioritize **Microsoft 365 governance** | Writing, proofreading, and review using **powerful AI models** | Writing, proofreading, **mobile use**, and **model selection** | Users who want **strict AI control**, AI blocking, or a fully local AI option |
 
 ### For Users Who Want a Smooth and Easy AI Writing Environment
 
