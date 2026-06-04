@@ -591,16 +591,6 @@ To check the app version and core concepts, select **Help > About MD//WORKS**.
 
 ---
 
-## 11. AI-Assisted Writing
-
-MD//WORKS is not limited to simple text entry and editing. When used together with browser-based AI assistants such as Gemini in Chrome, it can support proofreading, summarization, terminology checks, translation, and structure review while you write in Markdown.
-
-AI functionality is not built into MD//WORKS itself. Instead, MD//WORKS works naturally with browser AI assistants, allowing you to ask for help in everyday language while viewing and editing your Markdown document. This can be useful for routine tasks such as correcting inconsistent terminology and translating text, as well as more advanced tasks such as reviewing the structure of an academic paper, explaining code, or organizing reference notes.
-
-This helps reduce the cognitive load of writing and allows you to focus more on creative and analytical work. This section covers setup instructions, specific use cases, and important considerations when using browser AI for different purposes.
-
----
-
 ## 11. AI-Assisted Writing 
 
 MD//WORKS is not only a plain text and Markdown editor. It can also be used together with browser-based AI assistants, such as Gemini in Chrome and Leo in Brave, to support a wider range of writing tasks.
