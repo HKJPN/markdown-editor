@@ -588,7 +588,7 @@ Preview画面を選択した状態でも、Ctrl+A / ⌘A によるPreview内容�
 
 ---
 
-## 11. AI支援執筆 ![Image: Geminiに相談ボタン](<images/Bgemni.png>) ![Image: copilotボタン](<images/Bcopilot.png>)
+## 11. AI支援執筆 ![Image: Geminiに相談ボタン](<images/Bgemni.png>) ![Image: LeoImage](<images/Leoimage.png>)
 
 MD//WORKSは、単なるテキスト入力・編集だけでなく、Chrome GeminiなどのブラウザAIと組み合わせてより活用することができます。
 
@@ -600,7 +600,7 @@ AI機能はMD//WORKS本体に内蔵されているものではありませんが
 
 各種ブラウザAIを使うことができます。Google ChromeでGeminiとBrave Browserを利用する方法について、それぞれの使い始め手順を記載します。
 
-#### 11-1-1. Google Chrome: Geminiの利用
+#### 11-1-1. Google Chrome: Geminiの利用![Image: Geminiに相談ボタン](<images/Bgemni.png>) 
 1. **Google アカウントにログインする**
    Chromeブラウザで、Google アカウントにログインしていることを確認します。
 
@@ -612,7 +612,7 @@ AI機能はMD//WORKS本体に内蔵されているものではありませんが
 
 > 注意：Gemini in Chromeの利用可否や表示方法は、Chromeのバージョン、Googleアカウント、地域、プラン、組織の管理設定によって異なる場合があります。
 
-#### 11-1-2. Brave Browser: Leoの利用
+#### 11-1-2. Brave Browser: Leoの利用![Image: LeoImage](<images/Leoimage.png>)
 1. ログインは不要です。Braveブラウザのアドレスバー右端のAIチャットマークまたは「・・・」メニュー内のAIチャットマークでAIサイドバーが開きます。
 2. MD//WORKSを開いた状態で、校正や要約を依頼します。全体ではなく選択した部分を対象とすることもできます。コピーペストせずにカーソルで選択だけで対象の限定が可能です。
 
