@@ -599,69 +599,101 @@ AI functionality is not built into MD//WORKS itself. Instead, MD//WORKS works na
 
 This helps reduce the cognitive load of writing and allows you to focus more on creative and analytical work. This section covers setup instructions, specific use cases, and important considerations when using browser AI for different purposes.
 
-### 11-1. Preparing for AI-Assisted Writing
+---
 
-While various browser-based AIs are available, the easiest option is using Gemini in Chrome within Google Chrome. You can get started by following the steps below.
+## 11. AI-Assisted Writing 
 
-1. **Sign in to your Google Account**
-   Make sure you are signed in to your Google account in Chrome.
+MD//WORKS is not only a plain text and Markdown editor. It can also be used together with browser-based AI assistants, such as Gemini in Chrome and Leo in Brave, to support a wider range of writing tasks.
 
-2. **Open Gemini**
-   Open Gemini from the browser side panel, toolbar button, or the “Ask Gemini” option.
+AI features are not built directly into MD//WORKS itself. However, when used alongside a browser AI assistant, MD//WORKS can help with routine tasks such as proofreading, translation, checking terminology consistency, and correcting inconsistent wording. It can also be useful for more structural tasks, such as reviewing the organization of a Markdown document, explaining code, or organizing reference notes while writing.
 
-> Note: Availability and behavior may vary depending on your Chrome version, Google account, region, subscription plan, and organization settings.
+By offloading these supporting tasks to AI, you can reduce the cognitive burden of writing and focus more on the creative and substantive aspects of your work. This chapter explains how to prepare your browser AI environment, how to use it effectively, and what to keep in mind when using AI assistants with MD//WORKS.
 
-Combining it with the latest features in **Firefox**, you can build a **fully local AI environment** that summarizes web pages and proofreads text entirely within your PC—without transmitting any data over the internet. For detailed setup instructions, please refer to **["Appendix 1: How to Use a Local LLM with Firefox's AI Chat Feature"](#appendix-firefox-llm)**.
+### 11-1. Preparing to Use AI Writing Assistance
 
-### 11-2. Use Cases
-For everyday writing, using a lightweight model (such as Gemini Flash) delivers faster suggestions and helps you stay focused on writing. We recommend keeping the model set to Flash by default, and selectively switching to a more advanced model (such as Gemini Pro) only when you need deeper comparison or verification—for example, when reviewing the overall structure of a long document, or checking subtle differences in nuance between Japanese and English.Switch to a more advanced model, such as Gemini Pro, only when you need deeper comparison or verification—for example, when reviewing the overall structure of a long document, or checking subtle differences in nuance between Japanese and English.
+MD//WORKS can be used with several browser-based AI assistants. This section explains the basic setup for using Gemini in Google Chrome and Leo in Brave Browser.
 
-Below are some practical prompt examples.
+#### 11-1-1. Google Chrome: Using Gemini
+
+1. **Sign in to your Google Account**  
+   Make sure you are signed in to your Google Account in Chrome.
+
+2. **Open Gemini**  
+   Launch Gemini from the browser side panel, the toolbar button, or the “Ask Gemini” option.
+
+3. **Ask Gemini to review or summarize your document**  
+   With MD//WORKS open, you can ask Gemini to proofread, summarize, translate, or review your document. You can work with the entire document, or select only a specific section. In many cases, simply selecting text with the cursor is enough to limit the scope of the AI request, without copying and pasting the text manually.
+
+> Note: The availability and behavior of Gemini in Chrome may vary depending on your Chrome version, Google Account, region, plan, and organizational settings.
+
+#### 11-1-2. Brave Browser: Using Leo
+
+1. **Open Leo from Brave Browser**  
+   No login is required. Click the AI chat icon on the right side of the address bar, or open it from the “…” menu.
+
+2. **Ask Leo to review or summarize your document**  
+   With MD//WORKS open, you can ask Leo to proofread, summarize, translate, or review the current document. You can also select a specific section and ask Leo to work only on that part. As with Gemini, this can often be done by selecting the relevant text directly, without manual copy and paste.
+
+> In our testing, Leo worked smoothly with MD//WORKS, including on mobile environments such as iPad. It was able to read the page structure with a level of accuracy close to the desktop version, even when the HTML structure was relatively complex or imperfect. Brave may therefore be a useful option when you want AI assistance without relying on a Google account, or when you want a more privacy-oriented browser environment.
+
+#### 11-1-3. Local AI
+
+In **Firefox**, it is also possible to build a fully local AI environment that summarizes web pages or proofreads text **without sending data over the internet**. For details, see **[Appendix 1: Using a Local LLM with Firefox AI Chat](#appendix-firefox-llm)**.
+
+### 11-2. Example Use Cases
+
+For everyday proofreading, summarizing, terminology checks, and basic structural reviews, a lightweight model is often more practical than a high-end model. It usually responds faster and allows you to stay focused on writing.
+
+For regular writing tasks, it is recommended to use a lightweight model such as Gemini Flash by default, and switch to a frontier model only when more advanced review is needed. Examples include reviewing the structure of a long document, comparing subtle differences between Japanese and English wording, or checking whether a technical explanation is clear and accurate.
+
+Below are some example prompts.
 
 #### For Papers, Articles, and Technical Documents
 
-* List inconsistent terminology or wording that should be standardized across the document.
-* Create a brief 300-character-style summary of the entire document.
-* Point out unnatural expressions in the selected range and revise them in a more academic and objective tone.
-* Point out any grammatical errors in the selected English text.
-* For sections A through D, would the structure be clearer if section C were moved to the end?
-* Extract only the section headings from this document.
-* Review the order of the sections and suggest a clearer structure.
-* Organize the reference notes and check whether they support the claims in the text.
+* Identify inconsistent terminology or wording in this document.
+* Summarize the entire document in about 300 Japanese characters.
+* Review the selected section and rewrite any unnatural expressions in a more academic and objective tone.
+* Check the selected English text for grammar mistakes.
+* Extract only the headings from this chapter.
+* Would the structure be clearer if Section C were moved after Section D?
+* Review the order of the chapters and suggest a more readable structure.
+* Organize these reference notes and check whether each source supports the corresponding claim in the main text.
 
-#### For Basic Coding Support
+#### For Simple Coding Support
 
-* Create a regular expression pattern to replace all half-width parentheses with full-width parentheses in this document.
+* Create a regular expression pattern to replace all half-width parentheses in this document with full-width Japanese parentheses.
 * Convert the experimental process described in the selected text into a Mermaid flowchart.
 * Add explanatory comments to each line of the selected Python code.
-* Explain the likely cause of the error produced by the selected R code and suggest a fix.
-* Explain what this JavaScript function does in beginner-friendly language.
-* Turn the following specification into a clear implementation prompt for Codex.
+* Explain the cause of the error in this R code and suggest how to fix it.
+* Explain what this JavaScript function does in a way that a beginner can understand.
+* Rewrite the following specifications as an implementation prompt for Codex.
 
-### 11-3. Notes on Using Browser AI
+### 11-3. Important Notes When Using Browser AI
 
-When using browser-based AI assistants, the text displayed in or shared from MD//WORKS may be processed by that AI service. Please be careful when working with confidential, personal, or internal documents.
+When you use a browser-based AI assistant, the entire visible document or the selected area may be processed by the AI service. If you are working with confidential information, personal data, or internal company documents, always check what information is being shared and how your browser or organization manages AI access.
 
-If you do not want Gemini in Chrome to access your document, do not share the MD//WORKS tab with Gemini, disable tab sharing in Chrome/Gemini settings, or use a browser where Gemini integration is not active.
+For documents that should not be shared with AI services, consider using a browser or environment where AI access can be disabled or strictly controlled.
 
-### 11-4. Differences in Behavior Depending on the AI Assistant
+If you do not want Gemini in Chrome to access the content of your MD//WORKS tab, avoid sharing that tab with Gemini, or use a browser such as Firefox where AI access can be blocked or more tightly controlled.
 
-The following comparison is based on our actual testing within MD//WORKS. Please note that the behavior of AI assistants may change depending on browser versions, updates to the AI services, account settings, and organizational policies.
+### 11-4. Differences Between Browser AI Assistants
 
-| Criteria |  Copilot in Edge | Gemini in Chrome |　Firefox AI controls![Image: FirefoxAIcontorls](<images/FirefoxAIcontorls.png>) |
-| --- | --- | --- | --- |
-| **MD//WORKS Integration** | ⚠️ Unstable (limited to visible area) | ✅ Smooth full-text parsing | ✅ Smooth (same as Gemini) |
-| **Text Recognition** | Focuses on visible/selected text | Recognizes full text in complex DOM | Good (AI scope is controllable) |
-| **Design Philosophy** | MS 365 & policy focused | Flexible AI chat focused | ✨ Safety & user control focused |
-| **Security & Org Use** | Best for MS 365 environments | Depends on Google Workspace | ✨ **Block AI** (Full restriction) / **Local LLMs**|
-| **Dev Analysis** | ⚠️ Stable if manually selected | ✅ Great for Code & Markdown | ✅ Great for Code & Markdown  |
-| **Best Use Cases** | Strict MS 365 organizations | Writing & proofreading with AI | Fully blocking or toggling AI |
+The following comparison is based on our own testing with MD//WORKS. The behavior of each AI assistant may change depending on the browser version, AI service updates, account settings, subscription plan, and organizational policy.
 
-#### For those who prioritize seamless integration and ease of setup
-Based on testing in MD//WORKS, "Gemini in Chrome" operates smoothly with the editor's layout. It is highly effective for tasks such as proofreading the entire document, summarizing, checking terminology consistency, and reviewing structure. This is highly recommended for users who want to actively utilize the writing support features.
+| Item | Copilot in Edge  | Gemini in Chrome | Brave Browser / Leo  | Firefox AI Controls ) |
+| :--- | :--- | :--- | :--- | :--- |
+| **AI integration with MD//WORKS** | 🚫 Mainly copy-and-paste based, even when the sidebar is available | ✅ Can analyze the overall document structure or selected areas | ✅ Can analyze the overall document structure or selected areas | 🚫 Mainly copy-and-paste based |
+| **AI support on iPad** | 🚫 Not available in our testing | 🚫 Not available in our testing | ✅ Available in our testing | 🚫 Not available in our testing |
+| **Model selection** | 🚫 Not available | 🚫 Not available | ✅ Available | ✅ Available when using a local or configurable AI setup |
+| **Design focus** | Microsoft 365 integration and organizational control | Flexible AI interaction and convenience | Privacy, user control, and model choice | Safety, user control, and AI blocking |
+| **Security / privacy orientation** | Best suited for managed Microsoft 365 environments | Depends on Google Workspace and account settings | Minimizes unnecessary data sharing and offers privacy-oriented controls | Can block AI access; local LLM usage is also possible |
+| **Recommended use** | Organizations that prioritize Microsoft 365 governance | Writing, proofreading, and review using powerful AI models | Writing, proofreading, mobile use, and model selection | Users who want strict AI control, AI blocking, or a fully local AI option |
 
-#### For those who prioritize security and corporate policies
-"Copilot in Edge and Firefox" is a suitable option when compatibility with organizational use and data protection policies is a top priority. 
+### For Users Who Want a Smooth and Easy AI Writing Environment
+
+In our testing with MD//WORKS, both Gemini in Chrome and Leo in Brave worked smoothly with the editor’s page structure. They were useful for proofreading an entire document, summarizing text, checking terminology consistency, reviewing document structure, and rewriting selected sections.
+
+If you want to actively use AI assistance throughout the writing process, Gemini in Chrome and Brave Leo are currently the easiest options to start with. Gemini is convenient when you want access to Google’s AI ecosystem, while Brave Leo is especially useful when you want model selection, mobile support, and a more privacy-oriented browser environment.
 
 ---
 
