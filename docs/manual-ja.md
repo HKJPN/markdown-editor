@@ -655,7 +655,7 @@ Chrome Geminiに文書内容を共有したくない場合は、MD//WORKSのタ�
 
 以下は、MD//WORKS上で実際に試した範囲での比較です。AIアシスタントの挙動は、ブラウザのバージョン、AI側の仕様変更、アカウント設定、組織ポリシーによって変わる可能性があります。
 
-| 観点 | Copilot in Edge ![Image: copilotボタン](<images/Bcopilot.png>)| Gemini in Chrome ![Image: Geminiに相談ボタン](<images/Bcopilot.png>)| Brave Browser (Leo)![Image: LeoImage](<images/Leoimage.jpg>)  | Firefox AI controls![Image: FirefoxAIcontorls](<images/FirefoxAIcontorls.png>) |
+| 観点 | Copilot in Edge ![Image: copilotボタン](<images/Bcopilot.png>)| Gemini in Chrome ![Image: Geminiに相談ボタン](<images/Bcopilot.png>)| Brave Browser (Leo)![Image: LeoImage](<images/Leoimage.png>)  | Firefox AI controls![Image: FirefoxAIcontorls](<images/FirefoxAIcontorls.png>) |
 | :--- | :--- | :--- | :--- | :--- |
 | **MD//WORKSとのAI連携** | 🚫 サイドバーが表示にされるもののコピーペースト主体 | ✅ 文構造全体又は選択領域の解析可能　 | ✅　文構造全体又は選択領域の解析可能 | 🚫 サイドバーが表示にされるもののコピーペースト主体 |
 | **iPadでのAI対応** |  🚫不可 |  🚫 不可 | **✅ 可**  |  🚫 不可 |
