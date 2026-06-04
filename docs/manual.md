@@ -688,6 +688,7 @@ If your organization requires strict adherence to data protection policies, Copi
 
 ### For Strict Security and Corporate Policies
 If your organization requires strict adherence to data protection policies, Copilot in Edge or Firefox are your best options for a secure and compliant workflow.
+
 ---
 
 ## 12. Troubleshooting
