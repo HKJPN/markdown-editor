@@ -2,7 +2,7 @@
 
 MD//WORKS Editor is a Markdown editor that runs entirely from a single HTML file.  
 It supports drafting, Markdown editing, live preview, file saving, HTML/PDF export, and standalone HTML app export.
-
+1
 Local draft data is protected so that it is not stored in plain text. For additional protection, you can also enable **Private Storage**.
 
 > **Important:** MD//WORKS Editor runs locally in your browser. To keep a document as a regular file, always save it as a `.md` file using **File > Save (Ctrl+S / ⌘S)**. **Auto encrypted** protects temporary drafts and history stored in the browser; it does not replace saving a Markdown file to your computer.
@@ -675,16 +675,19 @@ The following comparison is based on our own testing with MD//WORKS. The behavio
 | **AI integration with MD//WORKS** | 🚫 Mainly copy-and-paste based, even when the sidebar is available | ✅ **Can analyze the overall document structure or selected areas** | ✅ **Can analyze the overall document structure or selected areas** | 🚫 Mainly copy-and-paste based, even when the sidebar is available |
 | **AI support on iPad** | 🚫 Not available | 🚫 Not available | ✅ **Available** | 🚫 Not available |
 | **Model selection** | 🚫 Not available | 🚫 Not available (Limited to Pro and Flash) | ✅ **Available** | ✅ Available when using a local or configurable AI setup |
-| **Design focus** | Microsoft 365 integration and organizational control | Flexible AI interaction and convenience | Privacy, user control, and model choice | Safety, user control, and AI blocking |
+| **Multi-Tab Recognition** | 🚫 Unsupported | 🚫 Unsupported |  **✅ Supported** | 🚫 Unsupported |
 | **Security / privacy orientation** | Best suited for managed Microsoft 365 environments | Depends on Google Workspace and account settings | Minimizes unnecessary data sharing and offers privacy-oriented controls | Can **block AI** access; **local LLM** usage is also possible |
 | **Recommended use** | Organizations that prioritize **Microsoft 365 governance** | Writing, proofreading, and review using **powerful AI models** | Writing, proofreading, **mobile use**, and **model selection** | Users who want **strict AI control**, AI blocking, or a fully local AI option |
 
 ### For Users Who Want a Smooth and Easy AI Writing Environment
+Our testing confirms that MD//WORKS features high compatibility and seamless performance with Google Chrome’s Gemini and Brave’s Leo, thanks to its well-optimized interface structure. You can leverage these assistants for a wide range of tasks, including full-document proofreading, summarization, consistency checks, structural reviews, and targeted rewriting of selected text.
 
-In our testing with MD//WORKS, both Gemini in Chrome and Leo in Brave worked smoothly with the editor’s page structure. They were useful for proofreading an entire document, summarizing text, checking terminology consistency, reviewing document structure, and rewriting selected sections.
+Furthermore, Brave (Leo) offers powerful multi-tab context recognition. This enables advanced workflows directly within the editor's sidebar, such as automatically generating a spec comparison table from multiple product tabs or cross-referencing and citing information from multiple open research PDFs.
+### For Strict Security and Corporate Policies
+If your organization requires strict adherence to data protection policies, Copilot in Edge or Firefox are your best options for a secure and compliant workflow.
 
-If you want to actively use AI assistance throughout the writing process, Gemini in Chrome and Brave Leo are currently the easiest options to start with. Gemini is convenient when you want access to Google’s AI ecosystem, while Brave Leo is especially useful when you want model selection, mobile support, and a more privacy-oriented browser environment.
-
+### For Strict Security and Corporate Policies
+If your organization requires strict adherence to data protection policies, Copilot in Edge or Firefox are your best options for a secure and compliant workflow.
 ---
 
 ## 12. Troubleshooting
