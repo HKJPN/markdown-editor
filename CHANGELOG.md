@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+##2026-06-05 -v1.5.5- Writing Comfort and File Handling Improvements
+
+- **Invisible characters can now be shown.
+- **Tab editing has been improved.
+- **Fullscreen  mode has been added.  
+- **File handling has been improved.
+- **Storage protection and safety have been improved. 
+
 ## 2026-05-25 -v1.5.4 - Usability and Navigation Improvements
 
 - **Centralized Esc key handling:** Unified the behavior of the Escape key for a more consistent user experience.
