@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-##2026-06-05 -v1.5.5- Writing Comfort and File Handling Improvements
+## 2026-06-05 -v1.5.5- Writing Comfort and File Handling Improvements
 
 - **Invisible characters can now be shown.
 - **Tab editing has been improved.
