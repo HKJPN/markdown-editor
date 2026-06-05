@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdn.jsdelivr.net; img-src 'self' data: blob:;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdn.jsdelivr.net; img-src 'self' data: blob:; object-src 'none'; base-uri 'none';">
 
 <title>MD//WORKS Editor</title>
 
@@ -18,9 +18,9 @@
   })();
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/marked@12.0.1/marked.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@18.0.3/lib/marked.umd.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/encoding-japanese@2.0.0/encoding.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.5/dist/purify.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/typo-js@1.2.3/typo.js" crossorigin="anonymous"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -127,6 +127,9 @@ button,input,textarea{font:inherit}
   border-radius:16px;padding:6px;
   box-shadow:var(--shadow-lg), var(--glow);
   z-index:200;
+  max-height:calc(100vh - 72px);
+  overflow-y:auto;
+  overscroll-behavior:contain;
 }
 .menu-dropdown.open{display:block}
 .menu-entry{
@@ -138,10 +141,31 @@ button,input,textarea{font:inherit}
   background:linear-gradient(90deg, rgba(143,130,255,.13), rgba(143,130,255,.04));
   color:var(--text);
 }
-.menu-entry.active{color:var(--accent2)}
+.menu-entry.active{
+  background:linear-gradient(90deg, rgba(143,130,255,.16), rgba(143,130,255,.05));
+  color:var(--accent2)
+}
 .menu-entry.active .menu-check{opacity:1}
 .menu-check{opacity:0;color:var(--accent2);font-size:11px;transition:opacity .1s}
 .menu-shortcut{font-family:var(--mono);font-size:11px;color:var(--text3)}
+.menu-label-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.menu-icon {
+  width: 1.2em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text3);
+  font-size: 13px;
+  line-height: 1;
+}
+.menu-entry:hover .menu-icon,
+.menu-entry.active .menu-icon {
+  color: var(--accent2);
+}
 .menu-sep-line{height:1px;background:var(--border);margin:5px 0}
 .menu-section-label{
   padding:7px 10px 4px;
@@ -182,6 +206,8 @@ button,input,textarea{font:inherit}
 }
 .title-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .title-btn{
+  position:relative;
+  display:inline-flex;align-items:center;justify-content:center;gap:5px;
   border:1px solid rgba(255,255,255,.09);
   background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.018));
   color:var(--text2);font-size:12px;font-weight:600;
@@ -198,8 +224,47 @@ button,input,textarea{font:inherit}
   box-shadow:0 8px 22px rgba(143,130,255,.16), var(--glow);
 }
 .title-btn.active{
-  background:linear-gradient(180deg, rgba(143,130,255,.2), rgba(143,130,255,.09));
-  border-color:rgba(143,130,255,.32);color:var(--accent2);
+  background:linear-gradient(180deg, rgba(143,130,255,.24), rgba(143,130,255,.10));
+  border-color:rgba(143,130,255,.58);
+  color:var(--accent2);
+  box-shadow:
+    inset 0 2px 8px rgba(0,0,0,.30),
+    0 0 0 1px rgba(210,203,255,.10) inset,
+    0 0 14px rgba(143,130,255,.12);
+  transform:translateY(1px);
+}
+.title-btn.active::after{
+  content:"";
+  position:absolute;
+  right:7px;
+  bottom:5px;
+  width:5px;
+  height:5px;
+  border-radius:999px;
+  background:var(--accent2);
+  box-shadow:0 0 8px rgba(210,203,255,.7);
+}
+.title-btn.primary.active{
+  background:linear-gradient(180deg, rgba(90,215,160,.24), rgba(90,215,160,.09));
+  border-color:rgba(90,215,160,.50);
+  color:var(--success);
+  box-shadow:
+    inset 0 2px 8px rgba(0,0,0,.30),
+    0 0 0 1px rgba(90,215,160,.10) inset,
+    0 0 14px rgba(90,215,160,.12);
+  transform:translateY(1px);
+}
+.title-btn.primary.active::after{
+  background:var(--success);
+  box-shadow:0 0 8px rgba(90,215,160,.65);
+}
+
+.title-btn.icon-only{
+  min-width:38px;
+  padding-left:10px;
+  padding-right:10px;
+  font-size:15px;
+  line-height:1;
 }
 .save-state{
   font-family:var(--mono);font-size:11px;color:var(--success);
@@ -293,6 +358,51 @@ button,input,textarea{font:inherit}
   border-bottom: 2px dashed rgba(241, 119, 134, 0.8);
   border-radius: 2px;
   box-shadow: none;
+}
+
+#editor-backdrop .invis{
+  position:relative;
+  color:transparent;
+}
+#editor-backdrop .invis::after{
+  pointer-events:none;
+  user-select:none;
+  color:var(--text3);
+  opacity:.55;
+  position:absolute;
+  left:0;
+  top:0;
+}
+#editor-backdrop .invis-zenkaku::after{content:'□'}
+#editor-backdrop .invis-tab{
+  background:rgba(107,120,151,.10);
+  border-radius:3px;
+}
+#editor-backdrop .invis-tab::after{
+  content:'→';
+  left:.12em;
+  opacity:.75;
+}
+#editor-backdrop .invis-eol-space::after{content:'·'}
+#editor-backdrop .invis-nl{
+  display:inline-block;
+  width:0;
+  height:1em;
+  line-height:1;
+  position:relative;
+  vertical-align:baseline;
+  overflow:visible;
+}
+#editor-backdrop .invis-nl::after{
+  content:'↵';
+  pointer-events:none;
+  user-select:none;
+  color:var(--text3);
+  opacity:.55;
+  position:absolute;
+  left:.15em;
+  top:0;
+  line-height:1;
 }
 
 #editor{
@@ -752,6 +862,28 @@ body.theme-warm .title-btn.primary{
   box-shadow:0 8px 18px rgba(183,121,31,.10), var(--glow);
 }
 
+body.theme-paper .title-btn.active,
+body.theme-warm .title-btn.active {
+  background: linear-gradient(180deg, rgba(109,93,252,.18), rgba(109,93,252,.07));
+  border-color: rgba(109,93,252,.42);
+  color: var(--accent2);
+  box-shadow:
+    inset 0 2px 7px rgba(30,41,59,.12),
+    0 0 0 1px rgba(109,93,252,.10) inset;
+  transform: translateY(1px);
+}
+
+body.theme-paper .title-btn.primary.active,
+body.theme-warm .title-btn.primary.active {
+  background: linear-gradient(180deg, rgba(21,128,61,.16), rgba(21,128,61,.06));
+  border-color: rgba(21,128,61,.38);
+  color: var(--success);
+  box-shadow:
+    inset 0 2px 7px rgba(30,41,59,.12),
+    0 0 0 1px rgba(21,128,61,.10) inset;
+  transform: translateY(1px);
+}
+
 body.theme-paper .menu-trigger,
 body.theme-paper .menu-entry,
 body.theme-paper .tool-btn,
@@ -887,29 +1019,26 @@ body.theme-warm #toast{
   #outline-panel{right:10px; left:10px; width:auto; max-height:40vh;}
 }
 @media print{
-  #menubar,#titlebar,#toolbar,#statusbar,#editor-wrap,#splitter,#spell-panel,#toast,#sr-panel,#outline-panel,#history-modal,#rn-modal,#doc-modal{display:none!important}
-  html,
-  body{
+  html,body{
     height:auto!important;
     min-height:0!important;
     max-height:none!important;
     overflow:visible!important;
-    background:white!important;
+    background:#fff!important;
   }
-  body{
-    display:block!important;
-    color:black!important;
-  }
+  #menubar,#titlebar,#toolbar,#statusbar,#editor-wrap,#splitter,#spell-panel,#toast,#sr-panel,#outline-panel,#history-modal,#rn-modal,#doc-modal{display:none!important}
+  body{display:block!important;color:#000!important}
   #main-container{
     display:block!important;
     height:auto!important;
     min-height:0!important;
     max-height:none!important;
-    overflow:visible!important;
+    overflow:visible!important
   }
   #preview-wrap{
     display:block!important;
-    width:100%!important;
+    width:auto!important;
+    min-width:0!important;
     max-width:none!important;
     height:auto!important;
     min-height:0!important;
@@ -917,8 +1046,8 @@ body.theme-warm #toast{
     overflow:visible!important;
     position:static!important;
     border:none!important;
-    background:white!important;
-    box-shadow:none!important;
+    background:#fff!important;
+    box-shadow:none!important
   }
   #preview{
     display:block!important;
@@ -929,8 +1058,8 @@ body.theme-warm #toast{
     max-height:none!important;
     overflow:visible!important;
     padding:0!important;
-    color:black!important;
-    background:white!important;
+    color:#000!important;
+    background:#fff!important
   }
   #preview h1,#preview h2,#preview h3,#preview h4,#preview h5,#preview h6,#preview p,#preview li,#preview strong{color:black!important}
   #preview em{color:#333!important}
@@ -1007,7 +1136,7 @@ body.zen-mode #zen-exit-btn { display: flex; }
         <span>Private Storage</span><span class="menu-check" id="private-check">✓</span>
       </div>
       <div class="menu-entry" onclick="clearProtectedStorage()">
-        <span style="color:var(--danger)">ローカル保存データ削除</span>
+        <span id="m-clear-local-data" style="color:var(--danger)"></span>
       </div>
       <div class="menu-sep-line"></div>
 
@@ -1074,6 +1203,9 @@ body.zen-mode #zen-exit-btn { display: flex; }
       <div class="menu-entry" id="m-outline-entry" onclick="toggleOutline()">
         <span id="m-outline-label"></span><span class="menu-check" id="outline-check">✓</span>
       </div>
+      <div class="menu-entry" id="m-invis-entry" onclick="toggleInvisibles()">
+        <span id="m-invis-label"></span><span class="menu-check" id="invis-check">✓</span>
+      </div>
       <div class="menu-sep-line"></div>
       <div class="menu-section-label" id="m-theme-label"></div>
       <div class="menu-entry" id="theme-midnight-entry" onclick="setTheme('midnight')">
@@ -1086,11 +1218,18 @@ body.zen-mode #zen-exit-btn { display: flex; }
         <span id="m-theme-warm"></span><span class="menu-check" id="theme-warm-check">✓</span>
       </div>
       <div class="menu-sep-line"></div>
+      <div class="menu-entry" id="m-fullscreen-entry" onclick="toggleFullscreen()">
+        <span class="menu-label-with-icon">
+          <span class="menu-icon" aria-hidden="true">⛶</span>
+          <span id="m-fullscreen-label"></span>
+        </span>
+        <span class="menu-check" id="fullscreen-check">✓</span>
+      </div>
       <div class="menu-entry" id="m-spell-entry" onclick="toggleSpell()">
         <span id="m-spell-label"></span><span class="menu-check" id="spell-check">✓</span>
       </div>
       <div class="menu-entry" id="m-zen-entry" onclick="toggleZenMode()">
-        <span>Zenモード (集中モード)</span><span class="menu-check" id="zen-check">✓</span>
+        <span id="m-zen-label"></span><span class="menu-check" id="zen-check">✓</span>
       </div>
     </div>
   </div>
@@ -1127,6 +1266,7 @@ body.zen-mode #zen-exit-btn { display: flex; }
     <button class="title-btn" onclick="handleOpen()" id="open-btn">Open</button>
     <button class="title-btn primary" onclick="handleSave(false)" id="save-btn">Save</button>
     <button class="title-btn" onclick="togglePreview()" id="preview-toggle-btn">Preview</button>
+    <button class="title-btn icon-only" onclick="toggleFullscreen()" id="fullscreen-toggle-title-btn" title="Fullscreen" aria-label="Fullscreen">⛶</button>
     <button class="title-btn" onclick="toggleSpell()" id="spell-toggle-title-btn">Spell</button>
   </div>
 
@@ -1263,7 +1403,7 @@ body.zen-mode #zen-exit-btn { display: flex; }
   <div id="spell-footer"></div>
 </div>
 
-<button id="zen-exit-btn" onclick="toggleZenMode()" title="Zenモード解除">✕</button>
+<button id="zen-exit-btn" onclick="toggleZenMode()" title="">✕</button>
 <script id="standalone-data" type="application/json">{}</script>
 
 <script>
@@ -1294,7 +1434,7 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
-const APP_VERSION = '1.5.4';
+const APP_VERSION = '1.5.5';
 const RELEASE_NOTES_STORAGE_KEY = 'mdworks_seen_release_notes_version';
 
 const T = {
@@ -1310,8 +1450,13 @@ const T = {
   openWord:    isJa ? 'Wordファイルを開く (.docx)' : 'Import Word (.docx)',
   save:        isJa ? '保存'     : 'Save',
   saveAs:      isJa ? '名前を付けて保存' : 'Save As',
-  saveAsApp:   isJa ? 'スタンドアロン保存' : 'Save as App',
-  saveAsPrivateApp: isJa ? '暗号化Appとして保存' : 'Save as Private App',
+  saveAsApp:   isJa ? 'Appとして書き出し' : 'Export as App',
+  saveAsPrivateApp: isJa ? 'Private Appとして書き出し' : 'Export as Private App',
+  clearLocalData: isJa ? 'ローカル保存データ削除' : 'Clear Local Saved Data',
+  confirmClearLocalData: isJa
+    ? '保護された下書き・履歴を完全に削除しますか？\n現在のエディタ内容は画面上には残ります。'
+    : 'Delete protected local drafts and history?\nThe current editor content will remain on screen.',
+  localDataCleared: isJa ? 'ローカル保存データを削除しました' : 'Local saved data has been cleared',
   
   undo:        isJa ? '元に戻す' : 'Undo',
   redo:        isJa ? 'やり直し' : 'Redo',
@@ -1322,6 +1467,10 @@ const T = {
   errPaste:    isJa ? 'メニューからの貼り付けはブロックされました。Ctrl+V を使用してください。' : 'Pasting from menu is blocked. Please use Ctrl+V.',
 
   menuOutline: isJa ? 'アウトライン表示' : 'Outline',
+  menuInvisibles: isJa ? '不可視文字を表示' : 'Show Invisibles',
+  menuFullscreen: isJa ? '全画面表示' : 'Fullscreen',
+  menuZenMode: isJa ? 'Zenモード（集中モード）' : 'Zen Mode (Focus Mode)',
+  zenExitTitle: isJa ? 'Zenモード解除' : 'Exit Zen Mode',
   menuHistory: isJa ? '作業履歴' : 'History',
   menuFormat:  isJa ? 'Markdownを整形' : 'Format Markdown',
   themeLabel:  isJa ? 'テーマ' : 'Theme',
@@ -1332,6 +1481,8 @@ const T = {
   historyEmpty:isJa ? '履歴がありません' : 'No history found',
   formatDone:  isJa ? '整形を完了しました' : 'Formatting complete',
   outlineEmpty:isJa ? '見出しがありません' : 'No headings found',
+  fullscreenUnavailable: isJa ? 'このブラウザでは全画面表示を利用できません' : 'Fullscreen is not available in this browser',
+  fullscreenFailed: isJa ? '全画面表示の切り替えに失敗しました' : 'Failed to toggle fullscreen',
 
   quickStart:  isJa ? 'Quick Start' : 'Quick Start',
   keyboardShortcuts: isJa ? 'Keyboard Shortcuts' : 'Keyboard Shortcuts',
@@ -1410,6 +1561,7 @@ const T = {
   unsaved:     isJa ? 'Unsaved' : 'Unsaved',
   opened:      isJa ? f => `「${f}」を開きました` : f => `Opened "${f}"`,
   shared:      isJa ? '共有しました' : 'Shared successfully',
+  fullscreenUnsupported: isJa ? 'このブラウザではフルスクリーンに対応していません' : 'Fullscreen is not supported in this browser',
   sLines:      isJa ? '行'   : 'Lines',
   sWords:      isJa ? '単語' : 'Words',
   sChars:      isJa ? '文字' : 'Chars',
@@ -1421,8 +1573,8 @@ const T = {
     ? 'ここにMarkdownを入力、または画像をドロップ (上限200KB)...'
     : 'Start writing Markdown here, or drop an image (max 200KB)...',
   defaultMd: isJa
-    ? `# MD//WORKS エディタ\n\n**スタンドアロン保存**に対応した究極版です。\n\n## 主な機能\n\n- **アプリごと保存**: [ファイル] > [スタンドアロン保存] で、現在の原稿とエディタ本体を \`.app.html\` として1ファイルに書き出します。USB等で持ち運べます。\n- **暗号化保存**: ローカルの下書きと履歴は、Web Crypto API を用いてすべて暗号化保存されます。Private Storageをオンにするとパスワード保護も可能です。\n\n---\n\n*そのまま編集を開始してください。*\n`
-    : `# MD//WORKS Editor\n\nThe ultimate edition featuring **Standalone Save**.\n\n## Key Features\n\n- **Save as App**: Go to [File] > [Save as App] to export your current text and this entire editor into a single \`.app.html\` file for easy portability.\n- **Encrypted Storage**: Drafts and history are securely encrypted via Web Crypto API. You can also enforce a password using Private Storage.\n\n---\n\n*Start editing!*\n`,
+    ? `# MD//WORKS エディタ\n\n**スタンドアロン書き出し**に対応した究極版です。\n\n## 主な機能\n\n- **Appとして書き出し**: [ファイル] > [Appとして書き出し] で、現在の原稿とエディタ本体を \`.app.html\` として1ファイルに書き出します。USB等で持ち運べます。\n- **ローカル保存の保護**: Auto encrypted では、ローカルの下書きと履歴を平文のまま保存しないようにします。さらに保護したい場合は、Private Storage によるパスフレーズ保護を利用できます。\n\n---\n\n*そのまま編集を開始してください。*\n`
+    : `# MD//WORKS Editor\n\nThe ultimate edition featuring **Standalone Export**.\n\n## Key Features\n\n- **Export as App**: Go to [File] > [Export as App] to export your current text and this entire editor into a single \`.app.html\` file for easy portability.\n- **Protected local storage**: Auto encrypted helps avoid storing local drafts and history as plain text. For stronger local protection, you can enable passphrase-based Private Storage.\n\n---\n\n*Start editing!*\n`,
   
   quickStartDoc: isJa ? `
 ## Quick Start
@@ -1440,8 +1592,9 @@ MD//WORKS は、1つのHTMLで動くMarkdownエディタです。下書き、プ
 
 ### 3. 保存する
 * **File > Save** でMarkdownファイルとして保存します。
-* **File > Save as App** で、現在の原稿を含んだスタンドアロンHTMLを書き出せます。
-* **Private Storage** を使うと、ローカルの下書きと履歴をパスフレーズで保護できます。
+* **File > Export as App** で、現在の原稿を含んだスタンドアロンHTMLを書き出せます。
+* Auto encrypted では、ローカルの下書きと履歴を平文のまま保存しないようにします。
+* **Private Storage** を使うと、ローカルの下書きと履歴にパスフレーズによる追加保護をかけられます。
 
 ### 4. 探す・整える
 * **Edit > Find** / **Replace** で検索と置換を行います。
@@ -1466,8 +1619,9 @@ MD//WORKS is a single-file Markdown editor for drafting, previewing, saving, and
 
 ### 3. Save your work
 * Use **File > Save** to save a Markdown file.
-* Use **File > Save as App** to export a standalone HTML file containing the current draft and editor.
-* Enable **Private Storage** when you want passphrase-protected local drafts and history.
+* Use **File > Export as App** to export a standalone HTML file containing the current draft and editor.
+* **Auto encrypted** helps avoid storing local drafts and history as plain text.
+* Enable **Private Storage** when you want passphrase-based protection for local drafts and history.
 
 ### 4. Find and tidy
 * Use **Edit > Find** / **Replace** for search and replacement.
@@ -1496,6 +1650,22 @@ MD//WORKS is a single-file Markdown editor for drafting, previewing, saving, and
 * **Ctrl+F**: 検索
 * **Ctrl+H**: 置換
 
+### Tab操作
+* **Tab**: カーソル位置にタブを挿入。範囲選択中は選択行をインデント
+* **Shift+Tab**: 現在行または選択行をアウトデント
+
+### 文書内の移動
+* **Home / End**: 行頭 / 行末へ移動
+* **Ctrl+Home / Ctrl+End**: 文書の先頭 / 末尾へ移動
+* **Page Up / Page Down**: 画面単位で上下に移動
+
+### テキスト選択
+* **Shift+← / Shift+→**: 1文字ずつ選択
+* **Ctrl+Shift+← / Ctrl+Shift+→**: 単語単位で選択
+* **Shift+↑ / Shift+↓**: 行をまたいで選択
+* **Shift+Home / Shift+End**: カーソル位置から行頭 / 行末まで選択
+* **Ctrl+Shift+Home / Ctrl+Shift+End**: カーソル位置から文書の先頭 / 末尾まで選択
+
 ### UI
 * **Esc**: 最前面のパネルまたはモーダルだけを閉じる
 ` : `
@@ -1517,6 +1687,22 @@ MD//WORKS is a single-file Markdown editor for drafting, previewing, saving, and
 * **Ctrl+F**: Find
 * **Ctrl+H**: Replace
 
+### Tab Operations
+* **Tab**: Insert a tab at the cursor position. When text is selected, indent the selected lines
+* **Shift+Tab**: Outdent the current line or selected lines
+
+### Document Navigation
+* **Home / End**: Move to the beginning / end of the current line
+* **Ctrl+Home / Ctrl+End**: Move to the beginning / end of the document
+* **Page Up / Page Down**: Move up or down by one screen
+
+### Text Selection
+* **Shift+← / Shift+→**: Select text one character at a time
+* **Ctrl+Shift+← / Ctrl+Shift+→**: Select text one word at a time
+* **Shift+↑ / Shift+↓**: Extend the selection across lines
+* **Shift+Home / Shift+End**: Select from the cursor to the beginning / end of the current line
+* **Ctrl+Shift+Home / Ctrl+Shift+End**: Select from the cursor to the beginning / end of the document
+
 ### UI
 * **Esc**: Close only the frontmost panel or modal
 `,
@@ -1527,11 +1713,11 @@ MD//WORKS は、Markdown原稿を安全に書き、プレビューし、持ち�
 
 ### 重点
 * **Standalone first**: エディタ本体と原稿を1つのHTMLとして書き出せます。
-* **Privacy aware**: 下書きと履歴はローカル環境に保存され、Private Storageで追加保護できます。
+* **Privacy aware**: 下書きと履歴はローカル環境に保存されます。Auto encrypted は平文保存を避けるための基本保護で、Private Storage によりパスフレーズ保護を追加できます。
 * **Offline ready**: 主要なヘルプと文書表示は外部fetchなしで利用できます。
 
 ### Version
-* MD//WORKS v1.5.4
+* MD//WORKS v1.5.5
 ` : `
 ## About MD//WORKS
 
@@ -1539,33 +1725,53 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
 
 ### Focus
 * **Standalone first**: Export the editor and the current draft as a single HTML file.
-* **Privacy aware**: Drafts and history stay local, with optional Private Storage protection.
+* **Privacy aware**: Drafts and history stay local. Auto encrypted helps avoid plain-text local storage, and Private Storage adds optional passphrase-based protection.
 * **Offline ready**: Core help and documentation views work without external fetches.
 
 ### Version
-* MD//WORKS v1.5.4
+* MD//WORKS v1.5.5
 `,
 
-  releaseNotesTitle: isJa ? 'v1.5.4 の新機能' : "What's New in v1.5.4",
+  releaseNotesTitle: isJa ? 'v1.5.5 の新機能' : "What's New in v1.5.5",
   releaseNotesIntro: isJa ? '今回の主な改善内容です。' : 'Here are the main improvements in this release.',
   releaseNotesClose: isJa ? '閉じる' : 'Close',
   releaseNotesContent: isJa ? `
-## v1.5.4 - 操作性とナビゲーションの改善
 
-* Escキー操作を一元管理しました。
-* Helpメニューとドキュメントモーダルを追加しました。
-* プレビュー画面で Ctrl+A / Cmd+A が使えるようになりました。
-* プレビューからのリッチコピーに対応しました。
-* 検索結果への自動スクロールとアウトラインジャンプの精度を改善しました。
-` : `
-## v1.5.4 - Usability and Navigation Improvements
+## v1.5.5 - Writing Comfort and File Handling Improvements
 
-- Added centralized Esc key handling.
-- Added a Help menu and documentation modal.
-- Added Ctrl+A / Cmd+A support in Preview mode.
-- Added rich copy support from Preview.
-- Improved automatic scrolling to search results and outline navigation accuracy.
-`
+* **不可視文字の表示に対応しました。**
+  全角スペース、タブ、行末スペース、改行を画面上で確認できるようになりました。日本語文書やMarkdown原稿の表記ゆれ・余分な空白の確認に便利です。
+
+* **Tab操作を強化しました。**
+  Tab入力、複数行インデント、Shift+Tabによるアウトデントに対応し、リストやコード、引用ブロックの編集がしやすくなりました。
+
+* **Zen Modeと全画面表示を追加しました。**
+  画面上の要素を減らして、文章作成に集中しやすい表示に切り替えられるようになりました。
+
+* **ファイル操作を改善しました。**
+  New / Close後にOpenする場合も、前回使用したフォルダを開きやすくしました。また、日本語ファイル名で保存する際に .md が正しく付かない場合がある問題を修正しました。
+
+* **保存データ保護と安全性を改善しました。**
+  Auto Saveのローカル保存は平文のまま残らないよう保護されます。さらに保護したい場合は、引き続きPrivate Storageでパスフレーズ保護を利用できます。あわせて、Word取り込みや画像処理まわりの安全性も見直しました。
+  `:`
+
+## v1.5.5 - Writing Comfort and File Handling Improvements
+
+* **Invisible characters can now be shown.**
+  Full-width spaces, tabs, trailing spaces, and line breaks can now be displayed in the editor, making it easier to clean up Markdown drafts and Japanese documents.
+
+* **Tab editing has been improved.**
+  You can now insert tabs, indent multiple selected lines, and outdent lines with Shift+Tab. This makes lists, code blocks, and quoted sections easier to edit.
+
+* **Zen Mode and Fullscreen have been added.**
+  You can switch to a cleaner writing environment with fewer on-screen distractions.
+
+* **File handling has been improved.**
+  After using New or Close, Open can more easily return to the previously used folder. An issue where .md could be lost when saving Japanese filenames has also been fixed.
+
+* **Storage protection and safety have been improved.**
+  Local Auto Save data is protected against plain-text storage extraction. Private Storage remains available when you want additional passphrase-based protection. Word import and image handling have also received minor safety improvements.
+  `
 };
 
 const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
@@ -1576,6 +1782,7 @@ set('m-open', T.open);
 set('m-open-word', T.openWord);
 set('m-save-as-app', T.saveAsApp);
 set('m-save-as-private-app', T.saveAsPrivateApp);
+set('m-clear-local-data', T.clearLocalData);
 
 set('m-undo', T.undo); set('m-redo', T.redo);
 set('m-cut', T.cut); set('m-copy', T.copy); set('m-paste', T.paste);
@@ -1584,12 +1791,20 @@ set('m-select-all', T.selectAll);
 set('m-history', T.menuHistory);
 set('m-format', T.menuFormat);
 set('m-outline-label', T.menuOutline);
+set('m-invis-label', T.menuInvisibles);
+set('m-fullscreen-label', T.menuFullscreen);
+set('m-zen-label', T.menuZenMode);
 set('op-title', T.menuOutline);
 set('hist-title', T.menuHistory);
 set('m-theme-label', T.themeLabel);
 set('m-theme-midnight', T.themeMidnight);
 set('m-theme-paper', T.themePaper);
 set('m-theme-warm', T.themeWarm);
+const zenExitBtn = document.getElementById('zen-exit-btn');
+if (zenExitBtn) {
+  zenExitBtn.title = T.zenExitTitle;
+  zenExitBtn.setAttribute('aria-label', T.zenExitTitle);
+}
 set('m-help-quick-start', T.quickStart);
 set('m-help-keyboard-shortcuts', T.keyboardShortcuts);
 set('m-help-github', T.github);
@@ -1597,7 +1812,7 @@ set('m-help-about', T.aboutMdworks);
 
 set('m-find', T.findMenu); set('m-replace', T.replaceMenu);
 set('m-export-html', T.exportHtml); set('m-export-pdf', T.exportPdf);
-set('m-preview-label', T.preview); set('m-spell-label', T.spellCheck);
+set('m-preview-label', T.preview); set('m-fullscreen-label', T.menuFullscreen); set('m-spell-label', T.spellCheck);
 set('m-bold', T.bold); set('m-italic', T.italic);
 set('tb-list-btn', '─ ' + T.tbList); set('tb-olist-btn', '1. ' + T.tbOList);
 set('tb-task', T.tbTask); set('tb-quote', T.tbQuote); set('tb-code', T.tbCode);
@@ -1608,22 +1823,71 @@ set('tab-find', T.findTab); set('tab-replace', T.replaceTab);
 set('sr-lbl-regex', T.regexLbl); set('sr-lbl-case', T.caseLbl); set('sr-lbl-word', T.wordLbl);
 set('sr-btn-replace', T.replaceBtn); set('sr-btn-replace-all', T.replaceAllBtn); set('sr-error', T.invalidRegex);
 set('open-btn', T.open); set('preview-toggle-btn', T.preview); set('spell-toggle-title-btn', T.spellCheck);
+function updateTitleActionLabels() {
+  const openBtn = document.getElementById('open-btn');
+  const saveBtn = document.getElementById('save-btn');
+  const previewBtn = document.getElementById('preview-toggle-btn');
+  const fullscreenBtn = document.getElementById('fullscreen-toggle-title-btn');
+  const spellBtn = document.getElementById('spell-toggle-title-btn');
+
+  if (openBtn) {
+    openBtn.textContent = `📂 ${T.open}`;
+    openBtn.title = T.open;
+    openBtn.setAttribute('aria-label', T.open);
+  }
+
+  if (saveBtn) {
+    let icon = '💾';
+    let text = T.save;
+
+    if (isMobile) {
+      icon = '📤';
+      text = T.share;
+    } else if (!window.showSaveFilePicker) {
+      icon = '⬇️';
+      text = T.download;
+    }
+
+    saveBtn.textContent = `${icon} ${text}`;
+    saveBtn.title = text;
+    saveBtn.setAttribute('aria-label', text);
+  }
+
+  if (previewBtn) {
+    previewBtn.textContent = T.preview;
+    previewBtn.title = T.preview;
+    previewBtn.setAttribute('aria-label', T.preview);
+  }
+
+  if (fullscreenBtn) {
+    fullscreenBtn.textContent = '⛶';
+    fullscreenBtn.title = T.menuFullscreen;
+    fullscreenBtn.setAttribute('aria-label', T.menuFullscreen);
+  }
+
+  if (spellBtn) {
+    const text = T.spellCheck || 'Spell (EN)';
+    spellBtn.textContent = text;
+    spellBtn.title = text;
+    spellBtn.setAttribute('aria-label', text);
+  }
+}
+
 document.getElementById('sr-search-input').placeholder = T.findHolder;
 document.getElementById('sr-replace-input').placeholder = T.replaceHolder;
 
 if (isMobile) {
-  set('save-btn', T.share);
   set('m-save', T.share);
   document.getElementById('menu-save-as').style.display = 'none';
 } else if (!window.showSaveFilePicker) {
-  set('save-btn', T.download);
   set('m-save', T.download);
   set('m-save-as', T.downloadAs);
 } else {
-  set('save-btn', T.save);
   set('m-save', T.save);
   set('m-save-as', T.saveAs);
 }
+
+updateTitleActionLabels();
 //#endregion
 
 //#region [JS-02] DOM REFERENCES & STATE VARIABLES
@@ -1636,9 +1900,16 @@ const mainContainer = document.getElementById('main-container');
 const splitter = document.getElementById('splitter');
 const inlineSaveState = document.getElementById('inline-save-state');
 
+const INVISIBLES_STORAGE_KEY = 'mdworks_show_invisibles';
+
+function getStoredShowInvisibles() {
+  try { return localStorage.getItem(INVISIBLES_STORAGE_KEY) === '1'; } catch (e) { return false; }
+}
+
 let previewOpen = false;
 let outlineOpen = false;
 let spellEnabled = false;
+let showInvisibles = getStoredShowInvisibles();
 let customDict = new Set();
 let ignoredWords = new Set();
 let isDirty = false;
@@ -1654,8 +1925,10 @@ const segmenter = typeof Intl.Segmenter !== 'undefined'
 
 const THEME_STORAGE_KEY = 'mdworks_theme_mode';
 const THEME_LIST = ['midnight', 'paper', 'warm'];
+const MDWORKS_PICKER_ID = 'mdworks-open-markdown';
 let currentTheme = 'midnight';
 let fileHandle = null;
+let lastPickerStartHandle = null;
 //#endregion
 
 //#region [JS-03] SECURE STORAGE & ENCRYPTION LOGIC
@@ -1681,7 +1954,7 @@ const WORD_SANITIZE_CONFIG = Object.freeze({
 function isSafeLocalOrDataImage(src) {
   if (!src) return false;
   const value = String(src).trim();
-  if (/^data:image\/(png|gif|jpeg|jpg|webp|svg\+xml);base64,/i.test(value)) return true;
+  if (/^data:image\/(png|gif|jpeg|jpg|webp);base64,/i.test(value)) return true;
   if (/^(?:\.\.?\/|\/|#|\?)/.test(value)) return true;
   return !/^[a-z][a-z0-9+.-]*:/i.test(value);
 }
@@ -1983,6 +2256,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!isDirty) markSaved();
   
   renderThemeMenuChecks();
+  renderInvisiblesMenuCheck();
+  renderFullscreenMenuCheck();
   maybeShowReleaseNotes(); // 起動時の復元・初期描画後に、このバージョン未表示なら表示
 });
 //#endregion
@@ -1998,9 +2273,110 @@ document.querySelectorAll('.menu-trigger').forEach(btn => {
   });
 });
 document.addEventListener('click', closeMenus);
+document.addEventListener('fullscreenchange', renderFullscreenMenuCheck);
+document.addEventListener('webkitfullscreenchange', renderFullscreenMenuCheck);
 function closeMenus() {
   document.querySelectorAll('.menu-dropdown').forEach(d => d.classList.remove('open'));
   document.querySelectorAll('.menu-trigger').forEach(b => b.classList.remove('open'));
+}
+
+function renderInvisiblesMenuCheck() {
+  const entry = document.getElementById('m-invis-entry');
+  const check = document.getElementById('invis-check');
+  if (entry) entry.classList.toggle('active', showInvisibles);
+  if (check) check.style.opacity = showInvisibles ? '1' : '0';
+}
+
+function toggleInvisibles() {
+  showInvisibles = !showInvisibles;
+  try { localStorage.setItem(INVISIBLES_STORAGE_KEY, showInvisibles ? '1' : '0'); } catch (e) { console.warn('Invisibles setting save failed', e); }
+  renderInvisiblesMenuCheck();
+  refreshBackdrop();
+  closeMenus();
+}
+
+function getFullscreenElement() {
+  return document.fullscreenElement || document.webkitFullscreenElement || null;
+}
+
+function isFullscreenSupported() {
+  const el = document.documentElement;
+  return Boolean(
+    document.fullscreenEnabled ||
+    document.webkitFullscreenEnabled ||
+    el.requestFullscreen ||
+    el.webkitRequestFullscreen
+  );
+}
+
+function renderFullscreenMenuCheck() {
+  const isFs = !!getFullscreenElement();
+  const entry = document.getElementById('m-fullscreen-entry');
+  const check = document.getElementById('fullscreen-check');
+  const titleBtn = document.getElementById('fullscreen-toggle-title-btn');
+
+  if (entry) {
+    entry.classList.toggle('active', isFs);
+    entry.setAttribute('aria-pressed', isFs ? 'true' : 'false');
+  }
+  if (check) check.style.opacity = isFs ? '1' : '0';
+  if (titleBtn) {
+    titleBtn.classList.toggle('active', isFs);
+    titleBtn.setAttribute('aria-pressed', isFs ? 'true' : 'false');
+  }
+}
+
+async function enterFullscreen() {
+  const target = document.documentElement;
+
+  if (target.requestFullscreen) {
+    await target.requestFullscreen();
+    return;
+  }
+
+  if (target.webkitRequestFullscreen) {
+    target.webkitRequestFullscreen();
+    return;
+  }
+
+  throw new Error('Fullscreen API is not available');
+}
+
+async function exitFullscreenMode() {
+  if (document.exitFullscreen) {
+    await document.exitFullscreen();
+    return;
+  }
+
+  if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+    return;
+  }
+
+  throw new Error('Exit fullscreen API is not available');
+}
+
+async function toggleFullscreen() {
+  closeMenus();
+
+  if (!isFullscreenSupported()) {
+    toast(T.fullscreenUnavailable);
+    renderFullscreenMenuCheck();
+    return;
+  }
+
+  try {
+    if (getFullscreenElement()) {
+      await exitFullscreenMode();
+    } else {
+      await enterFullscreen();
+    }
+  } catch (err) {
+    console.warn('Fullscreen toggle failed', err);
+    toast(T.fullscreenFailed);
+  } finally {
+    renderFullscreenMenuCheck();
+  }
 }
 
 function toggleZenMode() {
@@ -2127,11 +2503,11 @@ async function togglePrivateStorage() {
 
 async function clearProtectedStorage() {
   closeMenus();
-  const ok = confirm("保護された下書き・履歴を完全に削除しますか？\n現在のエディタ内容は画面上には残ります。");
+  const ok = confirm(T.confirmClearLocalData);
   if (!ok) return;
   [AUTOSAVE_TXT_KEY, AUTOSAVE_NAME_KEY, HISTORY_KEY, LEGACY_TEXT_KEY, LEGACY_NAME_KEY].forEach((k) => localStorage.removeItem(k));
   historyCache = [];
-  toast("ローカル保存データを削除しました");
+  toast(T.localDataCleared);
 }
 
 function togglePreview() {
@@ -2140,7 +2516,11 @@ function togglePreview() {
   mainContainer.classList.toggle('preview-on', previewOpen);
   document.getElementById('preview-check').style.opacity = previewOpen ? '1' : '0';
   document.getElementById('m-preview-entry').classList.toggle('active', previewOpen);
-  document.getElementById('preview-toggle-btn').classList.toggle('active', previewOpen);
+  const previewBtn = document.getElementById('preview-toggle-btn');
+  if (previewBtn) {
+    previewBtn.classList.toggle('active', previewOpen);
+    previewBtn.setAttribute('aria-pressed', previewOpen ? 'true' : 'false');
+  }
   if (!previewOpen) {
     previewWrap.style.width = '';
     isPreviewActive = false;
@@ -2148,6 +2528,8 @@ function togglePreview() {
   if (previewOpen) renderPreview();
   closeMenus();
 }
+
+renderFullscreenMenuCheck();
 
 
 function activatePreviewArea() {
@@ -2332,6 +2714,12 @@ function markDirty() {
   inlineSaveState.textContent = T.unsaved;
   inlineSaveState.style.color = 'var(--warn)';
   inlineSaveState.style.borderColor = 'rgba(232,168,74,.25)';
+
+  const saveBtn = document.getElementById('save-btn');
+  if (saveBtn) {
+    saveBtn.classList.remove('active');
+    saveBtn.setAttribute('aria-pressed', 'false');
+  }
 }
 
 function markSaved() {
@@ -2339,6 +2727,12 @@ function markSaved() {
   inlineSaveState.textContent = T.saved;
   inlineSaveState.style.color = 'var(--success)';
   inlineSaveState.style.borderColor = 'rgba(78,203,143,.28)';
+
+  const saveBtn = document.getElementById('save-btn');
+  if (saveBtn) {
+    saveBtn.classList.add('active');
+    saveBtn.setAttribute('aria-pressed', 'true');
+  }
 }
 
 function update() {
@@ -2357,6 +2751,91 @@ function update() {
 let isEditorComposing = false;
 editor.addEventListener('compositionstart', () => { isEditorComposing = true; });
 editor.addEventListener('compositionend', () => { isEditorComposing = false; });
+
+function refreshAfterEditorTabChange() {
+  update();
+  markDirty();
+  if (spellEnabled) runSpellCheck();
+  if (srPanelOpen) performSearch(false);
+  clearTimeout(autoSaveTimeout);
+  autoSaveTimeout = setTimeout(triggerAutoSave, 1500);
+}
+
+function getSelectedLineRange() {
+  const value = editor.value;
+  const selectionStart = editor.selectionStart;
+  const selectionEnd = editor.selectionEnd;
+  const lineStart = value.lastIndexOf('\n', Math.max(0, selectionStart - 1)) + 1;
+  let lineEnd;
+
+  if (selectionEnd > selectionStart && value[selectionEnd - 1] === '\n') {
+    lineEnd = selectionEnd - 1;
+  } else {
+    lineEnd = value.indexOf('\n', selectionEnd);
+    if (lineEnd === -1) lineEnd = value.length;
+  }
+
+  return { value, selectionStart, selectionEnd, lineStart, lineEnd };
+}
+
+function indentSelectedLines() {
+  const { value, lineStart, lineEnd } = getSelectedLineRange();
+  const block = value.slice(lineStart, lineEnd);
+  const nextBlock = block.split('\n').map(line => `\t${line}`).join('\n');
+  editor.value = value.slice(0, lineStart) + nextBlock + value.slice(lineEnd);
+  editor.setSelectionRange(lineStart, lineStart + nextBlock.length);
+}
+
+function countOutdentChars(line) {
+  if (line.startsWith('\t')) return 1;
+  const spaces = line.match(/^ {1,2}/);
+  return spaces ? spaces[0].length : 0;
+}
+
+function outdentLine(line) {
+  return line.slice(countOutdentChars(line));
+}
+
+function outdentSelectedLines() {
+  const { value, selectionStart, selectionEnd, lineStart, lineEnd } = getSelectedLineRange();
+  const block = value.slice(lineStart, lineEnd);
+  const nextBlock = block.split('\n').map(outdentLine).join('\n');
+  editor.value = value.slice(0, lineStart) + nextBlock + value.slice(lineEnd);
+
+  if (selectionStart === selectionEnd) {
+    const removedBeforeCursor = Math.min(countOutdentChars(block), Math.max(0, selectionStart - lineStart));
+    const nextCursor = selectionStart - removedBeforeCursor;
+    editor.setSelectionRange(nextCursor, nextCursor);
+  } else {
+    editor.setSelectionRange(lineStart, lineStart + nextBlock.length);
+  }
+}
+
+function indentOrInsertTab() {
+  const { selectionStart, selectionEnd } = editor;
+  if (selectionStart === selectionEnd) {
+    editor.setRangeText('\t', selectionStart, selectionEnd, 'end');
+    return;
+  }
+
+  indentSelectedLines();
+}
+
+function handleEditorTabKey(e) {
+  if (e.key !== 'Tab' || e.isComposing || e.keyCode === 229 || isEditorComposing) return;
+
+  e.preventDefault();
+
+  if (e.shiftKey) {
+    outdentSelectedLines();
+  } else {
+    indentOrInsertTab();
+  }
+
+  refreshAfterEditorTabChange();
+}
+
+editor.addEventListener('keydown', handleEditorTabKey);
 
 editor.addEventListener('scroll', () => {
   backdrop.scrollTop = editor.scrollTop;
@@ -2474,6 +2953,10 @@ editor.addEventListener("drop", (e) => {
   e.preventDefault();
   const file = e.dataTransfer.files && e.dataTransfer.files[0];
   if (!file || !file.type.startsWith("image/")) return;
+  if (file.type === "image/svg+xml") {
+    alert(isJa ? "SVG画像は安全上の理由により挿入できません。" : "SVG images cannot be inserted for security reasons.");
+    return;
+  }
   if (file.size > 200 * 1024) { 
     alert("画像が大きすぎます。ローカル保存容量を保護するため、200KB以下の画像のみ挿入できます。"); 
     return; 
@@ -2489,7 +2972,7 @@ editor.addEventListener("drop", (e) => {
 
 //#region [JS-07] PREVIEW RENDERING & DECORATION
 function renderPreview(force = false) {
-  if ((!force && !previewOpen) || !window.marked) return;
+  if ((!previewOpen && !force) || !window.marked) return;
   if (window.DOMPurify) {
     preview.innerHTML = safeMarkdownHtml(editor.value);
     decoratePreviewTasks();
@@ -2514,6 +2997,35 @@ function escapeHtml(text) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
+}
+
+function invisSpan(cls, text) {
+  return `<span class="invis ${cls}">${escapeHtml(text)}</span>`;
+}
+
+function decorateInvisibles(text, options = {}) {
+  if (!showInvisibles || !text) return escapeHtml(text);
+  const startOffset = options.startOffset || 0;
+  const lineTrailingStart = Number.isFinite(options.lineTrailingStart) ? options.lineTrailingStart : Infinity;
+  let html = '';
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    const absoluteOffset = startOffset + i;
+    if (ch === '　') {
+      html += invisSpan('invis-zenkaku', ch);
+    } else if (ch === '\t') {
+      html += invisSpan('invis-tab', ch);
+    } else if (ch === ' ' && absoluteOffset >= lineTrailingStart) {
+      html += invisSpan('invis-eol-space', ch);
+    } else {
+      html += escapeHtml(ch);
+    }
+  }
+  return html;
+}
+
+function renderBackdropTextChunk(line, start, end, lineTrailingStart) {
+  return decorateInvisibles(line.slice(start, end), { startOffset: start, lineTrailingStart });
 }
 
 function getTaskLineKind(line) {
@@ -2541,6 +3053,9 @@ function refreshBackdrop() {
     const lineStart = globalPos;
     const lineEnd = globalPos + line.length;
     const taskKind = getTaskLineKind(line);
+    const trailingSpaces = (line.match(/ *$/) || [''])[0].length;
+    const lineTrailingStart = trailingSpaces > 0 ? line.length - trailingSpaces : Infinity;
+    const hasFollowingNewline = i < lines.length - 1;
 
     let html = '';
     let cursor = 0;
@@ -2572,7 +3087,7 @@ function refreshBackdrop() {
         if (r.start < cursor) r.start = cursor;
         if (r.start >= r.end) continue;
         if (r.start > cursor) {
-          html += escapeHtml(line.slice(cursor, r.start));
+          html += renderBackdropTextChunk(line, cursor, r.start, lineTrailingStart);
         }
         let cls = '';
         if (r.type === 'search') {
@@ -2580,15 +3095,18 @@ function refreshBackdrop() {
         } else if (r.type === 'spell') {
           cls = 'spell-error';
         }
-        html += `<mark class="${cls}">${escapeHtml(line.slice(r.start, r.end))}</mark>`;
+        html += `<mark class="${cls}">${renderBackdropTextChunk(line, r.start, r.end, lineTrailingStart)}</mark>`;
         cursor = r.end;
       }
     }
 
     if (cursor < line.length) {
-      html += escapeHtml(line.slice(cursor));
+      html += renderBackdropTextChunk(line, cursor, line.length, lineTrailingStart);
     }
 
+    if (showInvisibles && hasFollowingNewline) {
+      html += '<span class="invis invis-nl" aria-hidden="true"></span>';
+    }
     if (!html) html = '&#8203;';
 
     const classes = ['editor-line'];
@@ -2908,9 +3426,15 @@ function toggleSpell() {
   const entry = document.getElementById('m-spell-entry');
   const chk = document.getElementById('spell-check');
   const status = document.getElementById('spell-status');
-  titleBtn.classList.toggle('active', spellEnabled);
-  entry.classList.toggle('active', spellEnabled);
-  chk.style.opacity = spellEnabled ? '1' : '0';
+  if (titleBtn) {
+    titleBtn.classList.toggle('active', spellEnabled);
+    titleBtn.setAttribute('aria-pressed', spellEnabled ? 'true' : 'false');
+  }
+  if (entry) {
+    entry.classList.toggle('active', spellEnabled);
+    entry.setAttribute('aria-pressed', spellEnabled ? 'true' : 'false');
+  }
+  if (chk) chk.style.opacity = spellEnabled ? '1' : '0';
   if (spellEnabled) {
     status.textContent = T.spellOn;
     status.classList.add('on');
@@ -3204,15 +3728,15 @@ function getWordImportSandboxSrcdoc() {
     });
   };
   return `<!doctype html><html><head><meta charset="utf-8"></head><body>
-    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"><\/script>
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"><\/script>
-    <script src="https://cdn.jsdelivr.net/npm/turndown@7.1.3/lib/turndown.browser.umd.min.js"><\/script>
+    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.11.0/mammoth.browser.min.js"><\/script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.5/dist/purify.min.js"><\/script>
+    <script src="https://cdn.jsdelivr.net/npm/turndown@7.2.4/lib/turndown.browser.umd.min.js"><\/script>
     <script>(${runner})();<\/script></body></html>`;
 }
 
 function convertWordInSandbox(arrayBuffer) {
   return new Promise((resolve, reject) => {
-    const id = `word-${Date.now()}`;
+    const id = `word-${window.crypto?.randomUUID ? crypto.randomUUID() : Date.now()}`;
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';
     iframe.sandbox = 'allow-scripts';
@@ -3225,6 +3749,8 @@ function convertWordInSandbox(arrayBuffer) {
     }, WORD_IMPORT_SANDBOX_TIMEOUT_MS);
 
     const onMessage = (event) => {
+      if (event.source !== iframe.contentWindow) return;
+
       const msg = event.data || {};
       if (msg.type === 'MDWORKS_WORD_IMPORT_RESULT' && msg.id === id) {
         clearTimeout(loadTimer);
@@ -3255,10 +3781,18 @@ async function handleOpen() {
   closeMenus();
   if (!isMobile && window.showOpenFilePicker) {
     try {
-      const [handle] = await window.showOpenFilePicker({
+      const openOptions = {
+        id: MDWORKS_PICKER_ID,
         types: [{ description: 'Markdown', accept: { 'text/markdown': ['.md', '.txt'] } }]
-      });
+      };
+      const startHandle = lastPickerStartHandle || fileHandle;
+      if (startHandle) {
+        openOptions.startIn = startHandle;
+      }
+
+      const [handle] = await window.showOpenFilePicker(openOptions);
       fileHandle = handle;
+      lastPickerStartHandle = handle;
       const file = await handle.getFile();
       await saveToHistoryList(filenameInput.value, editor.value);
       filenameInput.value = file.name;
@@ -3299,20 +3833,51 @@ document.getElementById('file-input').addEventListener('change', async (e) => {
   }
 });
 
+function ensureMarkdownFilename(name) {
+  const fallback = 'untitled.md';
+  const value = String(name || '').trim().normalize('NFC');
+  if (!value) return fallback;
+  if (/\.(md|markdown|txt)$/i.test(value)) return value;
+  return `${value}.md`;
+}
+
 async function handleSave(isSaveAs = false) {
   closeMenus();
   await saveToHistoryList(filenameInput.value, editor.value);
+  const saveFilename = ensureMarkdownFilename(filenameInput.value);
   if (isMobile) {
-    const filename = filenameInput.value.trim() || 'untitled.md';
-    const file = new File([editor.value], filename, { type: 'text/plain' });
+    const filename = saveFilename;
+    const file = new File([editor.value], filename, { type: 'text/markdown' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try { await navigator.share({ files: [file], title: filename }); markSaved(); } catch (e) {}
+      try { await navigator.share({ files: [file], title: filename }); filenameInput.value = filename; markSaved(); } catch (e) {}
     } else fallbackDownload();
   } else {
     if (window.showSaveFilePicker) {
       try {
         if (!fileHandle || isSaveAs) {
-          fileHandle = await window.showSaveFilePicker({ suggestedName: filenameInput.value });
+          const saveOptions = {
+            id: MDWORKS_PICKER_ID,
+            suggestedName: saveFilename,
+            types: [
+              {
+                description: 'Markdown files',
+                accept: {
+                  'text/markdown': ['.md', '.markdown'],
+                  'text/plain': ['.txt']
+                }
+              }
+            ],
+            excludeAcceptAllOption: true
+          };
+          const startHandle = lastPickerStartHandle || fileHandle;
+          if (startHandle) {
+            saveOptions.startIn = startHandle;
+          }
+
+          fileHandle = await window.showSaveFilePicker(saveOptions);
+        }
+        if (fileHandle) {
+          lastPickerStartHandle = fileHandle;
         }
         const writable = await fileHandle.createWritable();
         await writable.write(editor.value);
@@ -3327,7 +3892,8 @@ async function handleSave(isSaveAs = false) {
 }
 
 function fallbackDownload() {
-  const filename = filenameInput.value.trim() || 'untitled.md';
+  const filename = ensureMarkdownFilename(filenameInput.value);
+  filenameInput.value = filename;
   const blob = new Blob([editor.value], { type: 'text/markdown;charset=utf-8' });
   const url = URL.createObjectURL(blob);
 
@@ -3445,8 +4011,8 @@ async function exportStandalone() {
 function getPrivateAppPassphrase() {
   const ok = confirm(
     isJa
-      ? '暗号化Appとして保存します。\n\nパスフレーズを忘れると内容を復元できません。\nファイル破損に備えて、原本またはバックアップを安全な場所に保管してください。\n\n※復号後にブラウザ上で編集を続ける場合、ブラウザ内の一時保存はMD//WORKS本体の「Private Storage」等の設定に従います。より厳密に管理したい場合は、起動後にPrivate Storageも併用してください。'
-      : 'Save as Private App.\n\nIf you forget the passphrase, the content cannot be recovered. Keep an original or backup copy in a safe place.\n\nNote: Auto-saves after unlocking depend on the editor\'s normal Storage Settings. For extra security, enable Private Storage after unlocking.'
+      ? 'Private Appとして書き出します。\n\nパスフレーズを忘れると内容を復元できません。\nファイル破損に備えて、原本またはバックアップを安全な場所に保管してください。\n\n※復号後にブラウザ上で編集を続ける場合、ブラウザ内の一時保存はMD//WORKS本体の「Private Storage」等の設定に従います。より厳密に管理したい場合は、起動後にPrivate Storageも併用してください。'
+      : 'Export as Private App.\n\nIf you forget the passphrase, the content cannot be recovered. Keep an original or backup copy in a safe place.\n\nNote: Auto-saves after unlocking depend on the editor\'s normal Storage Settings. For extra security, enable Private Storage after unlocking.'
   );
   if (!ok) return null;
 
@@ -3930,7 +4496,7 @@ async function unlock() {
       decryptedHtml = await decryptBox(box, passphrase);
       $('success').style.display = 'block';
       setError(label === 'backup'
-        ? 'primaryの復号に失敗しましたが、backupから復号できました。ファイル破損に備えて新しいPrivate Appとして保存し直すことを推奨します。'
+        ? 'primaryの復号に失敗しましたが、backupから復号できました。ファイル破損に備えて新しいPrivate Appとして書き出し直すことを推奨します。'
         : ''
       );
       setBusy(false);
@@ -4138,7 +4704,7 @@ function hideLoader() {
 }
 
 //#region [JS-16] HELP DOC MODAL LOGIC
-const GITHUB_REPOSITORY_URL = 'https://github.com/mdworks-dev/mdworks-dev';
+const GITHUB_REPOSITORY_URL = 'https://github.com/HKJPN/markdown-editor';
 let docModalReturnFocus = null;
 
 function setDocModalState(isOpen) {
@@ -4370,33 +4936,72 @@ function exportHtml() {
   triggerDownload(html, filenameInput.value.replace('.md', '.html'), 'text/html');
 }
 
+let printPrepState = null;
+
 function preparePrintPreview() {
-  closeMenus();
+  if (printPrepState) return;
+
+  printPrepState = {
+    wasPreviewOpen: previewOpen,
+    prevWidth: previewWrap.style.width,
+    wasPreviewActive: isPreviewActive,
+    previewCheckOpacity: document.getElementById('preview-check')?.style.opacity || '',
+    previewEntryActive: document.getElementById('m-preview-entry')?.classList.contains('active') || false,
+    previewBtnActive: document.getElementById('preview-toggle-btn')?.classList.contains('active') || false,
+    previewBtnPressed: document.getElementById('preview-toggle-btn')?.getAttribute('aria-pressed') || 'false'
+  };
+
+  if (!previewOpen) {
+    previewOpen = true;
+    previewWrap.classList.add('open');
+    mainContainer.classList.add('preview-on');
+  }
+
   renderPreview(true);
 }
 
-function exportPdf() {
-  preparePrintPreview();
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => window.print());
-  });
+function cleanupPrintPreview() {
+  if (!printPrepState) return;
+
+  const {
+    wasPreviewOpen,
+    prevWidth,
+    wasPreviewActive,
+    previewCheckOpacity,
+    previewEntryActive,
+    previewBtnActive,
+    previewBtnPressed
+  } = printPrepState;
+
+  if (!wasPreviewOpen) {
+    previewOpen = false;
+    previewWrap.classList.remove('open');
+    mainContainer.classList.remove('preview-on');
+    previewWrap.style.width = prevWidth || '';
+    isPreviewActive = wasPreviewActive;
+
+    const previewCheck = document.getElementById('preview-check');
+    const previewEntry = document.getElementById('m-preview-entry');
+    const previewBtn = document.getElementById('preview-toggle-btn');
+
+    if (previewCheck) previewCheck.style.opacity = previewCheckOpacity;
+    if (previewEntry) previewEntry.classList.toggle('active', previewEntryActive);
+    if (previewBtn) {
+      previewBtn.classList.toggle('active', previewBtnActive);
+      previewBtn.setAttribute('aria-pressed', previewBtnPressed);
+    }
+  }
+
+  printPrepState = null;
 }
 
-window.addEventListener('beforeprint', () => {
+window.addEventListener('beforeprint', preparePrintPreview);
+window.addEventListener('afterprint', cleanupPrintPreview);
+
+function exportPdf() {
+  closeMenus();
   preparePrintPreview();
-});
-
-if (window.matchMedia) {
-  const printMedia = window.matchMedia('print');
-  const handlePrintMediaChange = event => {
-    if (event.matches) preparePrintPreview();
-  };
-
-  if (typeof printMedia.addEventListener === 'function') {
-    printMedia.addEventListener('change', handlePrintMediaChange);
-  } else if (typeof printMedia.addListener === 'function') {
-    printMedia.addListener(handlePrintMediaChange);
-  }
+  requestAnimationFrame(() => window.print());
 }
 //#endregion
 </script>
