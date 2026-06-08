@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.5.4 — AIアシスタント融合スタンドアロン Markdown エディタ
+# 🚀 MD//WORKS v1.5.5 — AIアシスタント融合スタンドアロン Markdown エディタ
 **Languages:** [🇺🇸 English](README.md) or [🇯🇵 日本語](README-ja.md)
 <img width="871" height="720" alt="1_5_5rayoutj" src="https://github.com/user-attachments/assets/af7f44e9-eca5-41a3-b20f-de452e2f4472" />
 
