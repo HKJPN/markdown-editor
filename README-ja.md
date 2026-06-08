@@ -1,6 +1,6 @@
 # 🚀 MD//WORKS v1.5.4 — AIアシスタント融合スタンドアロン Markdown エディタ
 **Languages:** [🇺🇸 English](README.md) or [🇯🇵 日本語](README-ja.md)
-<img width="1280" height="720" alt="スクリーンショット1_5_3j" src="https://github.com/user-attachments/assets/94fbd58e-b740-40e8-ac12-77eb96eba73c" />
+<img width="871" height="720" alt="1_5_5rayoutj" src="https://github.com/user-attachments/assets/af7f44e9-eca5-41a3-b20f-de452e2f4472" />
 
 **MD//WORKS**は、インストールもクラウドも不要なエディタです。ブラウザさえあれば、手元のパソコンだけで「安全に持ち運べるアプリ」のように文章を管理できます。もちろん、すべてローカルで処理されます。さらに、**高度なブラウザAI連携**により**AIサイドバー**も活用できます。**「文章の校正」や「翻訳」** をAIにコピペなしで指示し、秒速で完了可能です。特にBrave Leoと併用すれば、WindowsはもちろんiPad環境においても **「複数タブの横断認識・情報集約」** （商品比較や論文の複数引用など）がシームレスに行えます。これはMS Word等でも不可能な機能です。
 
