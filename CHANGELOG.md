@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 - Invisible characters can now be shown.
 - Tab editing has been improved.
 - Fullscreen  mode has been added.  
-- ile handling has been improved.
+- File handling has been improved.
 - Storage protection and safety have been improved. 
 
 ## 2026-05-25 -v1.5.4 - Usability and Navigation Improvements
