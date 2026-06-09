@@ -463,6 +463,21 @@ button,input,textarea{font:inherit}
 #preview th{ background:rgba(255,255,255,.045);font-weight:500;color:var(--accent2) }
 #preview tr:nth-child(even) td{ background:rgba(255,255,255,.02) }
 #preview img{ max-width:100%;border-radius:6px;border:1px solid var(--border) }
+#preview sup,
+#preview sub {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+#preview sup {
+  bottom: 0.5em;
+}
+
+#preview sub {
+  top: 0.25em;
+}
 
 #preview li.task-open-item, #preview li.task-done-item{ list-style:none; display:flex; align-items:flex-start; gap:.72em; margin:.28em 0; padding:.42em .58em .42em .48em; border-radius:10px; transition:background-color .16s ease, opacity .16s ease, color .16s ease; }
 #preview li.task-open-item:hover, #preview li.task-done-item:hover{ background:rgba(255,255,255,.032); }
@@ -1952,7 +1967,7 @@ function syncFilenameInputState() {
 //#region [JS-03] SECURE STORAGE & ENCRYPTION LOGIC
 // DOMPurify Hooks
 const MARKDOWN_SANITIZE_CONFIG = Object.freeze({
-  ALLOWED_TAGS: ['h1','h2','h3','h4','h5','h6','p','br','hr','strong','b','em','i','s','del','code','pre','blockquote','ul','ol','li','table','thead','tbody','tr','th','td','a','img','input'],
+  ALLOWED_TAGS: ['h1','h2','h3','h4','h5','h6','p','br','hr','strong','b','em','i','s','del','code','pre','blockquote','ul','ol','li','table','thead','tbody','tr','th','td','a','img','input','sup','sub'],
   ALLOWED_ATTR: ['href','title','target','rel','alt','src','class','type','checked','disabled','aria-checked','colspan','rowspan','align'],
   ALLOW_DATA_ATTR: false,
   FORBID_TAGS: ['script','style','iframe','object','embed','form','meta','link','base','svg','math'],
