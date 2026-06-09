@@ -14,26 +14,24 @@ Try it instantly in your browser.
 - [Security / Privacy](SECURITY.md)
 
 ---
-## ✨ What’s New in v1.5.4
+## ✨ What’s New in v1.5.5
 
-* **Centralized Esc key handling:** Unified the behavior of the Escape key for a more consistent user experience.
-* **Help menu & Documentation modal:** Added a new Help menu and an in-app documentation modal for easier access to guides.
-* **'Select All' in Preview:** You can now use `Ctrl+A` / `Cmd+A` within the preview screen.
-* **Rich text copying:** Added support for copying rich text directly from the preview.
-* **Improved navigation accuracy:** Enhanced the precision of automatic scrolling to search results and outline jumps.
+* **Invisible characters can now be shown.**
+  Full-width spaces, tabs, trailing spaces, and line breaks can now be displayed in the editor, making it easier to clean up Markdown drafts and Japanese documents.
+* **Tab editing has been improved.**
+  You can now insert tabs, indent multiple selected lines, and outdent lines with Shift+Tab. This makes lists, code blocks, and quoted sections easier to edit.
+* **Zen Mode and Fullscreen have been added.**
+  You can switch to a cleaner writing environment with fewer on-screen distractions.
+* **File handling has been improved.**
+  After using New or Close, Open can more easily return to the previously used folder. An issue where .md could be lost when saving Japanese filenames has also been fixed.
+* **Storage protection and safety have been improved.**
+  Local Auto Save data is protected against plain-text storage extraction. Private Storage remains available when you want additional passphrase-based protection. Word import and image handling have also received minor safety improvements.
 
 ### **🔒 Release File Hashes (Checksums)**
 To ensure security and file integrity, all official releases starting from v1.5.4 include **SHA-256 hash values** in the release notes. You can verify that your downloaded file has not been tampered with by using standard OS commands (such as `Get-FileHash` in Windows PowerShell).
 
 ## ✨ Upcoming Features
 
-* **Invisible character display:** Add display options for full-width spaces, tabs, trailing spaces, and line breaks.
-* **Advanced Tab controls:** Add Tab input, multi-line indentation, and `Shift+Tab` outdent support.
-* **Zen Mode & Fullscreen:** Add fullscreen controls and Zen Mode for a more focused writing experience.
-* **UI improvements:** Improve title-bar button icons and active-state visual feedback.
-* **Security hardening:** Add minor security updates, including CSP improvements, safer Word import messaging, and SVG data URL restrictions.
-* **Storage clarity:** Clarify that Auto Save is encrypted to protect against plain-text local storage extraction, while Private Storage remains available for additional passphrase-based protection.
-* **Expanded help:** Expand the Keyboard Shortcuts documentation to include Tab operations, document navigation, and text selection shortcuts.
 
 
 ---
