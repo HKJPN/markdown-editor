@@ -669,10 +669,9 @@ MD//WORKS環境下での検証において、ChromeのGeminiおよびBraveのLeo
 
 Copilot in EdgeやFirefoxは、組織利用やデータ保護ポリシーとの相性を重視する場合に選択肢となります。
 
-### 11-5. AIサイドバーとフルスクリーン時の挙動
+### 11-5.  AIサイドバーと全画面表示時の挙動
 
-AIサイドバーを使う場合、全画面表示が画面を広く使えて便利ｄす。お使いのブラウザによってはMD//WORKSからの全画面表示よりも、ブラウザ標準の全画面表示を使うと安定する場合があります。詳細は巻末２をご覧ください。
-
+AIサイドバーを併用する場合、画面を広く使える全画面表示が便利です。  お使いのブラウザによっては、MD//WORKS内の「Full Screen」ボタンよりも、ブラウザ標準の全画面表示を使用した方が安定して利用できる場合があります。詳しくは、[付録2：全画面表示の挙動とブラウザ互換性](#appendix-2-fullscreen-browser-compatibility)をご覧ください。
 ---
 
 ## 12. よくあるトラブル
@@ -816,6 +815,7 @@ llama-server --model /path/to/your-model.gguf --port 8080
 
 ---
 
+<a id="appendix-2-fullscreen-browser-compatibility"></a>
 ## 付録 2: 全画面表示の挙動とブラウザ互換性
 
 ### Brave、Edge、Firefoxにおける現在の制限
