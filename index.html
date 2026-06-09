@@ -204,6 +204,14 @@ button,input,textarea{font:inherit}
   border-color:rgba(143,130,255,.5);color:var(--text);
   box-shadow:0 0 0 4px rgba(143,130,255,.11), var(--glow);
 }
+#filename-display.locked{
+  cursor:default;
+  color:var(--text3);
+}
+#filename-display.locked:focus{
+  border-color:rgba(255,255,255,.085);
+  box-shadow:var(--glow);
+}
 .title-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .title-btn{
   position:relative;
@@ -1929,6 +1937,16 @@ const MDWORKS_PICKER_ID = 'mdworks-open-markdown';
 let currentTheme = 'midnight';
 let fileHandle = null;
 let lastPickerStartHandle = null;
+
+function syncFilenameInputState() {
+  const locked = !!fileHandle && !isMobile && !!window.showSaveFilePicker;
+  filenameInput.readOnly = locked;
+  filenameInput.classList.toggle('locked', locked);
+  filenameInput.title = locked
+    ? (isJa ? '開いているファイルの名前はここでは変更できません。名前を変える場合は Save As を使用してください。' : 'The name of an opened file cannot be changed here. Use Save As to rename it.')
+    : '';
+  filenameInput.setAttribute('aria-readonly', locked ? 'true' : 'false');
+}
 //#endregion
 
 //#region [JS-03] SECURE STORAGE & ENCRYPTION LOGIC
@@ -2258,6 +2276,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderThemeMenuChecks();
   renderInvisiblesMenuCheck();
   renderFullscreenMenuCheck();
+  syncFilenameInputState();
   maybeShowReleaseNotes(); // 起動時の復元・初期描画後に、このバージョン未表示なら表示
 });
 //#endregion
@@ -2937,6 +2956,10 @@ editor.addEventListener('input', () => {
 });
 
 filenameInput.addEventListener('input', () => {
+  if (filenameInput.readOnly) {
+    filenameInput.value = fileHandle?.name || filenameInput.value;
+    return;
+  }
   markDirty();
   clearTimeout(autoSaveTimeout);
   autoSaveTimeout = setTimeout(triggerAutoSave, 800);
@@ -3670,6 +3693,7 @@ document.getElementById('word-input').addEventListener('change', async (e) => {
     editor.value = md;
     filenameInput.value = file.name.replace(/\.docx$/i, '.md');
     fileHandle = null;
+    syncFilenameInputState();
     update(); markDirty(); triggerAutoSave();
     hideLoader();
     toast(mammothMessages.length > 0 ? T.warnMammoth : T.importSuccess);
@@ -3792,6 +3816,7 @@ async function handleOpen() {
 
       const [handle] = await window.showOpenFilePicker(openOptions);
       fileHandle = handle;
+      syncFilenameInputState();
       lastPickerStartHandle = handle;
       const file = await handle.getFile();
       await saveToHistoryList(filenameInput.value, editor.value);
@@ -3819,6 +3844,7 @@ document.getElementById('file-input').addEventListener('change', async (e) => {
     filenameInput.value = file.name;
     editor.value = (await file.text()).normalize('NFC');
     fileHandle = null;
+    syncFilenameInputState();
 
     update();
     markSaved();
@@ -3875,8 +3901,10 @@ async function handleSave(isSaveAs = false) {
           }
 
           fileHandle = await window.showSaveFilePicker(saveOptions);
+          syncFilenameInputState();
         }
         if (fileHandle) {
+          syncFilenameInputState();
           lastPickerStartHandle = fileHandle;
         }
         const writable = await fileHandle.createWritable();
@@ -3906,6 +3934,7 @@ function fallbackDownload() {
 
   markSaved();
   toast(T.downloaded);
+  syncFilenameInputState();
 }
 
 function buildStandaloneHtmlForExport() {
@@ -4909,6 +4938,7 @@ window.addEventListener('keydown', e => {
 function resetDocumentIdentity(filename = 'untitled.md') {
   filenameInput.value = filename;
   fileHandle = null;
+  syncFilenameInputState();
 }
 
 async function newFile() {
