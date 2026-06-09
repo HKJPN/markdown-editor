@@ -2292,8 +2292,13 @@ document.querySelectorAll('.menu-trigger').forEach(btn => {
   });
 });
 document.addEventListener('click', closeMenus);
-document.addEventListener('fullscreenchange', renderFullscreenMenuCheck);
-document.addEventListener('webkitfullscreenchange', renderFullscreenMenuCheck);
+document.addEventListener('fullscreenchange', scheduleLayoutResync);
+document.addEventListener('webkitfullscreenchange', scheduleLayoutResync);
+let resizeResyncTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeResyncTimer);
+  resizeResyncTimer = setTimeout(scheduleLayoutResync, 100);
+});
 function closeMenus() {
   document.querySelectorAll('.menu-dropdown').forEach(d => d.classList.remove('open'));
   document.querySelectorAll('.menu-trigger').forEach(b => b.classList.remove('open'));
@@ -2345,6 +2350,18 @@ function renderFullscreenMenuCheck() {
   }
 }
 
+function resyncLayout() {
+  renderFullscreenMenuCheck();
+  refreshBackdrop();
+  if (previewOpen) renderPreview();
+  if (outlineOpen) renderOutline();
+}
+
+function scheduleLayoutResync() {
+  requestAnimationFrame(resyncLayout);
+  setTimeout(resyncLayout, 100);
+}
+
 async function enterFullscreen() {
   const target = document.documentElement;
 
@@ -2394,7 +2411,7 @@ async function toggleFullscreen() {
     console.warn('Fullscreen toggle failed', err);
     toast(T.fullscreenFailed);
   } finally {
-    renderFullscreenMenuCheck();
+    scheduleLayoutResync();
   }
 }
 
