@@ -686,10 +686,7 @@ If your organization requires strict adherence to data protection policies, Copi
 
 ### 11-5. AI Sidebar and Full-Screen Mode Behavior
 
-When using the AI sidebar, switching to full-screen mode is highly recommended to maximize your workspace.
-However, depending on your browser, you may experience better stability by using your browser's native full-screen shortcut rather than the "Full Screen" button within MD//WORKS.
-
-For more details, please refer to [Appendix 2: Full-Screen Behavior and Browser Compatibility] (#appendix-2-fullscreen-browser-compatibility) at the end of this guide.
+When using the AI sidebar, switching to full-screen mode is highly recommended to maximize your workspace. However, depending on your browser, you may experience better stability by using your browser's native full-screen shortcut rather than the "Full Screen" button within MD//WORKS. For more details, please refer to [Appendix 2: Full-Screen Behavior and Browser Compatibility](#appendix-2-fullscreen-browser-compatibility).
 
 ---
 
