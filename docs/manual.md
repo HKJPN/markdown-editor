@@ -684,6 +684,13 @@ Our testing confirms that MD//WORKS features high compatibility and seamless per
 ### For Strict Security and Corporate Policies
 If your organization requires strict adherence to data protection policies, Copilot in Edge or Firefox are your best options for a secure and compliant workflow.
 
+### 11-5. AI Sidebar and Full-Screen Mode Behavior
+
+When using the AI sidebar, switching to full-screen mode is highly recommended to maximize your workspace.
+However, depending on your browser, you may experience better stability by using your browser's native full-screen shortcut rather than the "Full Screen" button within MD//WORKS.
+
+For more details, please refer to [Appendix 2: Full-Screen Behavior and Browser Compatibility] (#appendix-2-fullscreen-browser-compatibility) at the end of this guide.
+
 ---
 
 ## 12. Troubleshooting
@@ -839,6 +846,7 @@ Once the configuration is complete, you can start using your local LLM.
 3. Click the **"Summarize page"** button at the bottom left of the chat window. The content of your active web page will be sent to your local LLM, and a summary will be generated automatically.
 
 ---
+<a id="appendix-2-fullscreen-browser-compatibility"></a>
 
 ## Appendix 2: Full-Screen Behavior & Browser Compatibility**
 **Current Limitation on Brave, Edge, and Firefox**
