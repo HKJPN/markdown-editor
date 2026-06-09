@@ -32,7 +32,9 @@ To ensure security and file integrity, all official releases starting from v1.5.
 
 ## ✨ Upcoming Features
 
-
+* **Improved paste stability:** We plan to refine the paste handling logic to make pasting large blocks of text more stable and reliable.
+* **Automatic table of contents:** We plan to add a feature that can automatically generate a table of contents.
+* **Viewer-only mode:** We plan to add distribution-oriented modes, including a read-only mode and a password-protected mode.
 
 ---
 
