@@ -67,7 +67,7 @@ Don’t take our word for it—review the code yourself. If you find issues or p
 **For Privacy-Conscious Users:**
 
 * **When leveraging AI:** If you use built-in browser AI assistants (like Gemini in Chrome or Brave Leo) for proofreading or summarization, your text is processed according to the respective provider's privacy policies. When handling highly sensitive or confidential information, please ensure the AI side panel is closed or disable the browser's page-context access.
-* **For maximum privacy:** By using browsers without native AI integrations, such as **Firefox** or **Brave**, MD//WORKS acts as a 100% secure, offline-capable editor, completely eliminating any risk of unintended external data sharing. See ["11. AI-Assisted Writing" in the manual](docs/manual.md#11-ai-assisted-writing) for more detail.
+* **For maximum privacy:** By using browsers without native AI integrations such as **Firefox**, MD//WORKS acts as a 100% secure, offline-capable editor, completely eliminating any risk of unintended external data sharing. See ["11. AI-Assisted Writing" in the manual](docs/manual.md#11-ai-assisted-writing) for more detail.
 
 ---
 
