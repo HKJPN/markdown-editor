@@ -826,7 +826,7 @@ llama-server --model /path/to/your-model.gguf --port 8080
   サイドバーを表示したまま使用したい場合は、アプリ内の「Full Screen」ボタンではなく、ブラウザ標準の全画面表示を使用してください。
 
   * **Windows**: `F11`
-  * **macOS**: `Control + Command + F`
+  * **macOS**: `Control + ⌘ + F`
 
   この方法では、サイドバーを含むブラウザUIを表示したまま利用できます。
 
