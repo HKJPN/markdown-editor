@@ -41,7 +41,7 @@ Some complex layouts may be simplified during conversion.
 
 ## 6. Standalone Save
 
-By using Save as App, you can save the current document and the editor together as a single HTML file.
+By using Export as App, you can save the current document and the editor together as a single HTML file.
 
 ## 7. FAQ
 
@@ -49,7 +49,7 @@ By using Save as App, you can save the current document and the editor together 
 No. MD//WORKS runs in your browser.
 
 ### Is my data uploaded to the cloud?
-No. All editing and saving operations are completed inside your browser.
+No. All editing and saving operations are completed within your browser. Your documents are not uploaded to the cloud.
 
 ### Which browsers are recommended?
-Chrome or Edge for PC/Mac is recommended. Other browsers are also supported where possible, with available features automatically detected and enabled.
+MD//WORKS has been tested on Chrome, Brave, Firefox, Safari, and Edge. The editor automatically detects the browser environment and adjusts available features accordingly. For AI-assisted writing on desktop, Chrome and Brave are recommended. On iPad, the standard Safari browser does not support AI-assisted writing in this workflow, but this can be enabled by using Brave.
