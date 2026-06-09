@@ -847,7 +847,7 @@ When the app's "Full Screen" button is activated, the **AI Sidebar (Leo)** and o
 *   **Cause**: This is due to the standard **Web Fullscreen API** behavior, where the browser hides its UI layer (address bar, tabs, sidebars) to maximize the content area. On these browsers, the AI Sidebar is implemented as part of this UI layer.
 *   **Workaround**: To keep the sidebar visible, please use the **browser's native full-screen mode** instead of the app's button:
     *   **Windows**: Press `F11`
-    *   **macOS**: Press `Control + Command + F`
+    *   **macOS**: Press `Control + ⌘ + F`
     *   *In this mode, the browser UI (including the sidebar) remains visible.*
 
 **Note on Chrome (Gemini) Behavior**
