@@ -839,4 +839,22 @@ Once the configuration is complete, you can start using your local LLM.
 3. Click the **"Summarize page"** button at the bottom left of the chat window. The content of your active web page will be sent to your local LLM, and a summary will be generated automatically.
 
 ---
+
+## Appendix 2: Full-Screen Behavior & Browser Compatibility**
+**Current Limitation on Brave, Edge, and Firefox**
+When the app's "Full Screen" button is activated, the **AI Sidebar (Leo)** and other browser UI elements are hidden on **Brave, Microsoft Edge, and Firefox**.
+
+*   **Cause**: This is due to the standard **Web Fullscreen API** behavior, where the browser hides its UI layer (address bar, tabs, sidebars) to maximize the content area. On these browsers, the AI Sidebar is implemented as part of this UI layer.
+*   **Workaround**: To keep the sidebar visible, please use the **browser's native full-screen mode** instead of the app's button:
+    *   **Windows**: Press `F11`
+    *   **macOS**: Press `Control + Command + F`
+    *   *In this mode, the browser UI (including the sidebar) remains visible.*
+
+**Note on Chrome (Gemini) Behavior**
+Currently, **Google Chrome (with the Gemini sidebar)** behaves differently: even when the app enters full-screen mode, the sidebar remains visible. This suggests that Chrome's implementation of the sidebar differs from the standard UI layer used by Brave, Edge, and Firefox.
+
+**Future Work**
+We are monitoring browser updates. If the behavior on Brave, Edge, or Firefox changes to match Chrome's implementation in the future, this workaround may no longer be necessary.
+
+---
 Google, Google Chrome, and Gemini are trademarks of Google LLC. All other company, product, and service names mentioned are trademarks or registered trademarks of their respective owne.
