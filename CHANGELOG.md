@@ -1,6 +1,10 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project will be documented in this file
+
+## 2026-06-10 -v1.5.5.1 
+
+- Fixed file handling issues.
 
 ## 2026-06-05 -v1.5.5- Writing Comfort and File Handling Improvements
 
