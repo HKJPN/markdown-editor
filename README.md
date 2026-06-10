@@ -223,7 +223,7 @@ MD//WORKS automatically detects your browser language and switches the interface
 
 ## 💻 Supported Environments
 
-MD//WORKS runs in modern browsers such as Chrome, Edge, Firefox and Safari.
+MD//WORKS runs in modern browsers such as Chrome, Edge, Brave, Firefox and Safari.
 
 No installation required. Just open the HTML file and start writing.
 
