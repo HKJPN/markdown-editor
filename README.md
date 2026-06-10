@@ -322,5 +322,4 @@ MD//WORKS is intentionally simpler:
 
 ## 📄 License
 
-MIT License
-You are free to host MD//WORKS on your own website under the MIT License. However, for security and performance reasons, we strongly recommend keeping your deployment updated to the latest version.
+MIT License. You are also free to host MD//WORKS on your own website under the MIT License. However, for security and performance reasons, we strongly recommend keeping your deployment updated to the latest version.
