@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.5.5 —Standalone Markdown Editor for AI-assisted writing
+# 🚀 MD//WORKS v1.5.5 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
 <img width="869" height="720" alt="1_5_5rayoute" src="https://github.com/user-attachments/assets/5200e876-6cfc-4071-8a3e-d92a96c4ef2d" />
 
