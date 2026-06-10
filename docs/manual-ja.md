@@ -667,7 +667,7 @@ MD//WORKS環境下での検証において、ChromeのGeminiおよびBraveのLeo
 
 ### セキュリティや社内規定を最重視する方
 
-Copilot in EdgeやFirefoxは、組織利用やデータ保護ポリシーとの相性を重視する場合に選択肢となります。
+ Gemini in Chromeの場合Workspace契約において保護対象となります。完全ローカルでの処理ではFirefox + ローカルLLMが有力な選択肢となります。CopilotはIntune/DLP連携が前提となる管理が可能です。
 
 ### 11-5.  AIサイドバーと全画面表示時の挙動
 
