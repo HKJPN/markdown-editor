@@ -321,7 +321,6 @@ MD//WORKS is intentionally simpler:
 ---
 
 ## 📄 License
-## 📄 License
 
 **MIT License**
 
