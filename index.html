@@ -1517,8 +1517,8 @@ const T = {
   share:       isJa ? '共有 (Share)' : 'Share',
   exportHtml:  isJa ? 'HTMLとしてエクスポート' : 'Export as HTML',
   exportPdf:   isJa ? '印刷 / PDF保存' : 'Print / Save as PDF',
-  confirmNew:  isJa ? '現在の内容を履歴に保存して、新規ファイルを作成しますか？' : 'Save the current draft to history and create a new file?',
-  newCreated: isJa ? '新規ファイルを作成しました' : 'New file created',
+  confirmNew:  isJa ? '現在の内容を履歴に保存して、空白の新規ファイルを作成しますか？' : 'Save the current draft to history and create a blank new file?',
+  newCreated: isJa ? '空白の新規ファイルを作成しました' : 'Blank new file created',
   processingPasteToast: isJa ? '大きなテキストを処理中...' : 'Processing large paste...',
   processingPasteStatus: isJa ? 'Processing paste...' : 'Processing paste...',
   pasteReadyStatus: isJa ? 'Ready' : 'Ready',
@@ -4976,8 +4976,10 @@ function resetDocumentIdentity(filename = 'untitled.md') {
 async function newFile() {
   if (isDirty && !confirm(T.confirmNew)) return;
   await saveToHistoryList(filenameInput.value, editor.value);
-  editor.value = T.defaultMd; resetDocumentIdentity(); update(); markSaved();
+  editor.value = ''; resetDocumentIdentity(); update(); markSaved();
   await triggerAutoSave();
+  editor.focus();
+  toast(T.newCreated);
 }
 
 async function closeFile() {
