@@ -36,7 +36,7 @@ MD//WORKS Editor のHTMLファイルをブラウザで開くと、アプリが�
 
 ### 1-2. 対応環境の目安
 
-最新版の Google Chrome、Microsoft Edge、Firefox などのモダンブラウザでの利用を推奨します。  
+最新版の Google Chrome、Brave, Microsoft Edge、Firefox などのモダンブラウザでの利用を推奨します。  
 古いブラウザ、社内制限のある端末、またはブラウザの設定によっては、保存、印刷、全画面表示、暗号化Appの作成など一部機能が利用できない場合があります。保存挙動のOSとブラウザによる違いは[こちら](#save-behavior)をご覧ください。
 
 暗号化Appを作成・復号する機能では、Web Crypto API などのブラウザ機能を使用します。うまく動作しない場合は、PC版のChromeまたはEdgeの最新版で確認してください。
