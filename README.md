@@ -2,7 +2,7 @@
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
 <img width="869" height="720" alt="1_5_5rayoute" src="https://github.com/user-attachments/assets/5200e876-6cfc-4071-8a3e-d92a96c4ef2d" />
 
-**MD//WORKS is the only editor that transforms your document into a secure, portable application. No installation. No cloud. All you need is a browser, yet everything runs entirely locally. Plus, **Supercharge Your Writing with Browser AI:** Seamlessly connect with Chrome Gemini or Brave Leo from the sidebar for instant **proofreading and translation**.  For more information, see ["11. AI-Assisted Writing" in the manual](docs/manual.md#11-ai-assisted-writing).
+**MD//WORKS is the only editor that transforms your document into a secure, portable application. No installation. No cloud. All you need is a browser, yet everything runs entirely locally. Plus, Seamless Browser **AI**: Connect with Chrome Gemini or Brave Leo via the sidebar. The **AI** reads your document **directly—no need to copy-paste** your text to give instructions!  For more information, see ["11. AI-Assisted Writing" in the manual](docs/manual.md#11-ai-assisted-writing).
 
 # 🚀 Live Demo
 
