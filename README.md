@@ -246,18 +246,18 @@ Your writing stays local unless you choose to export or share it.
 
 **MD//WORKS is not intended to replace IDEs, knowledge bases, or collaborative editing tools.** Instead, MD//WORKS targets a completely different area. It is a lightweight, portable Markdown editor dedicated to writing, protecting, restoring, and easily carrying your work.
 
-| *Feature* | *VS Code* | *Obsidian* | *Typora* | *MD//WORKS* |
-| --- | --- | --- | --- | --- |
-| True portability / Single-file app export | ❌ | △ | ❌ | ✅ |
-| Combines editor and document into one | ❌ | △ | ❌ | ✅ |
-| **Export as an encrypted single file** | ❌ | ❌ | ❌ | ✅ |
-| Local-only encryption / No server required | △ | △ | △ | ✅ |
-| Draft restoration / Safety during writing | △ | △ | ❌ | ✅ |
-| **AI-assisted writing** | △ <br>(Extension req.) | △ <br>(Plugin req.) | ❌<br> (Copy/paste only) | ✅ <br>(Built-in*) |
-| Usability offline / in restricted environments | △ | ○ | ○ | ✅ |
-| Variety of plugins / extensions | ✅✅✅ | ✅✅ | △ | ❌ |
+| Feature | VS Code | Obsidian | Typora | MD//WORKS |
+| :--- | :---: | :---: | :---: | :---: |
+| True portability / Single-file app export | - | Partial | - | ✅ |
+| Combines editor and document into one | - | Partial | - | ✅ |
+| **Export as an encrypted single file** | - | - | - | ✅ |
+| Local-only encryption / No server required | Partial | Partial | Partial | ✅ |
+| Draft restoration / Safety during writing | Partial | Partial | - | ✅ |
+| **AI-assisted writing** | via Extension | via Plugin | - (Copy/paste) | ✅ (Built-in[^1]) |
+| Usability offline / in restricted environments | Partial | ✅ | ✅ | ✅ |
+| Variety of plugins / extensions | Extensive | Rich | Limited | - |
 
-> \* **AI-assisted writing:** Integrates with your browser's standard AI sidebar. You can share selected text or the entire document with the AI without any copy-pasting. AI sharing can also be restricted via browser settings.
+[^1]: **AI-assisted writing:** Integrates with your browser's standard AI sidebar. You can share selected text or the entire document with the AI without any copy-pasting. AI sharing can also be restricted via browser settings.
 
 ### The MD//WORKS Philosophy
 
