@@ -318,6 +318,7 @@ For those workflows, tools like VS Code, Obsidian, Typora, or collaborative docu
 
 MD//WORKS is intentionally simpler:  
 **a focused Markdown writing workspace that can travel with your document.**
+
 ---
 
 ## 📄 License
