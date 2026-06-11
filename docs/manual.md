@@ -679,11 +679,16 @@ The following comparison is based on our own testing with MD//WORKS. The behavio
 | **Security / privacy orientation** | Best suited for managed Microsoft 365 environments | Depends on Google Workspace and account settings | Minimizes unnecessary data sharing and offers privacy-oriented controls | Can **block AI** access; **local LLM** usage is also possible |
 | **Recommended use** | Organizations that prioritize **Microsoft 365 governance** | Writing, proofreading, and review using **powerful AI models** | Writing, proofreading, **mobile use**, and **model selection** | Users who want **strict AI control**, AI blocking, or a fully local AI option |
 
-### For Users Who Want a Smooth and Easy AI Writing Environment
-Our testing confirms that MD//WORKS features high compatibility and seamless performance with Google Chrome’s Gemini and Brave’s Leo, thanks to its well-optimized interface structure. You can leverage these assistants for a wide range of tasks, including full-document proofreading, summarization, consistency checks, structural reviews, and targeted rewriting of selected text.
+#### For Users Who Want a Smooth and Easy AI Writing Environment
 
-### For Strict Security and Corporate Policies
-If your organization requires strict adherence to data protection policies, Copilot in Edge or Firefox are your best options for a secure and compliant workflow.
+Our testing confirms that MD//WORKS features high compatibility and seamless performance with Google Chrome’s Gemini and Brave’s Leo. Due to the differences in how they recognize context (Real-time Context Awareness), we recommend choosing the right tool for your specific task:
+
+* **Gemini in Chrome (for real-time assistance):** Updates instantly as you type or select text, making it ideal for targeted rewriting, fine-tuning expressions, and partial edits while you actively write.
+* **Leo in Brave Browser (for overall reviews):** Analyzes a snapshot of the document when the sidebar is opened. This makes it perfect for full-document proofreading, summarization, consistency checks, and structural reviews once a draft is complete. It also offers stable performance on mobile devices like iPads.
+
+#### For Strict Security and Corporate Policies
+
+If your organization requires strict adherence to data protection policies, Copilot in Edge is highly recommended for environments governed by Microsoft 365. Alternatively, Firefox offers the ability to completely block AI access or run a fully local LLM for maximum privacy.
 
 ### 11-5. AI Sidebar and Full-Screen Mode Behavior
 
