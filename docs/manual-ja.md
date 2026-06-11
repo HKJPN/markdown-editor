@@ -655,6 +655,7 @@ AI機能はMD//WORKS本体に内蔵されているものではありませんが
 | 観点 | Copilot in Edge ![Image: copilotボタン](<images/Bcopilot.png>)| Gemini in Chrome ![Image: Geminiに相談ボタン](<images/Bgemni.png>)| Brave Browser (Leo)![Image: LeoImage](<images/Leoimage.png>)  | Firefox AI controls![Image: FirefoxAIcontorls](<images/FirefoxAIcontorls.png>) |
 | :--- | :--- | :--- | :--- | :--- |
 | **MD//WORKSとのAI連携** | 🚫 サイドバーが表示にされるもののコピーペースト主体 | ✅ 文構造全体又は選択領域の解析可能　 | ✅　文構造全体又は選択領域の解析可能 | 🚫 サイドバーが表示にされるもののコピーペースト主体 |
+| **Real-time Context Awareness** | 🚫 限定的<br>手動トリガーが必要。パネルの更新や明示的な指示がない限り、文脈は更新されない | ✅ 完全なリアルタイム<br>DOM と選択範囲を直接監視。入力や選択が即座に反映される | ⚠️ スナップショットベース<br>開いた時点の状態をキャプチャ。再開きしない限り、継続的な入力には自動同期されない | 🚫 なし<br>コピー＆ペースト、または手動によるページ要約に依存|
 | **iPadでのAI対応** |  🚫不可 |  🚫 不可 | **✅ 可**  |  🚫 不可 |
 | **AIモデルの選択** |  🚫不可 |  🚫 不可 (ProとFlashの選択は可能)| **✅ 可**  |  **✅ 可**  |
 | **セキュリティ** | MS 365環境に最適 | Google Workspace設定に依存 | データ送信の最小化・ローカル優先 | Block AI（AIの強制禁止） /　**✅ローカルLLM可** |
