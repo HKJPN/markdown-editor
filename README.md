@@ -257,7 +257,7 @@ Your writing stays local unless you choose to export or share it.
 | Usability offline / in restricted environments | Partial | ✅ | ✅ | ✅ |
 | Variety of plugins / extensions | Extensive | Rich | Limited | - |
 
-/* **AI-assisted writing:** Integrates with your browser's standard AI sidebar. You can share selected text or the entire document with the AI without any copy-pasting. AI sharing can also be restricted via browser settings.
+\* **AI-assisted writing:** Integrates with your browser's standard AI sidebar. You can share selected text or the entire document with the AI without any copy-pasting. AI sharing can also be restricted via browser settings.
 
 ### The MD//WORKS Philosophy
 
