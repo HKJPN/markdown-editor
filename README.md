@@ -266,7 +266,7 @@ VS Code, Obsidian, and Typora are all excellent tools, but each serves a differe
 * **VS Code** is a powerful development environment.
 * **Obsidian** is a knowledge base designed for connecting and managing information.
 * **Typora** is a highly refined Markdown writing app.
-* **MD//WORKS** is designed with a different philosophy. It is a Markdown editor that offers **built-in AI-assisted writing** while allowing you to *protect* your work and **carry** it as a single file containing both the text and the editing environment.
+* **MD//WORKS** is designed with a different philosophy. It is a Markdown editor that offers **AI-assisted writing** while allowing you to **protect** your work and **carry it as a single file** containing both the text and the editing environment.
 
 
 **The goal is not to add more complexity, but to make important writing easier to move, archive, reopen, and protect — without depending on a cloud service.**
