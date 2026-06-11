@@ -250,7 +250,7 @@ Your writing stays local unless you choose to export or share it.
 | --- | --- | --- | --- | --- |
 | True portability / Single-file app export | ❌ | △ | ❌ | ✅ |
 | Combines editor and document into one | ❌ | △ | ❌ | ✅ |
-| Export as an encrypted single file | ❌ | ❌ | ❌ | ✅ |
+| **Export as an encrypted single file** | ❌ | ❌ | ❌ | ✅ |
 | Local-only encryption / No server required | △ | △ | △ | ✅ |
 | Draft restoration / Safety during writing | △ | △ | ❌ | ✅ |
 | **AI-assisted writing** | △ <br>(Extension req.) | △ <br>(Plugin req.) | ❌<br> (Copy/paste only) | ✅ <br>(Built-in*) |
