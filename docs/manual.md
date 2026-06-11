@@ -326,13 +326,13 @@ Do not rely on History as your only backup for important documents.
 
 MD//WORKS Editor is designed to work across a wide range of environments, including Windows, macOS, iPadOS, Android, ChromeOS, and Linux. The behavior for saving and **overwriting files** varies depending on your device and browser combination. This is due to browser-specific security specifications (File System Access API support).
 
-| OS / Platform | Chrome / Edge (Chromium-based) | Firefox | Safari |
-| --- | --- | --- | --- |
-| **Windows / Linux** | Once the initial save location is set, you can overwrite the file directly. | Direct overwrite is unavailable, but files can be downloaded with a version history number. | — |
-| **macOS** | Once the initial save location is set, you can overwrite the file directly. | Direct overwrite is unavailable, but files can be downloaded with a version history number. | Same as left |
-| **iPadOS** | Direct overwrite is unavailable, but you can save files to any folder with a version history number via the **"Files"** app. | Same as left | Same as left |
-| **Chromebook** | Once the initial save location is set, you can overwrite the file directly. | — | — |
-| **Android Tablet** | 🚫 Cannot download as .md. Change the extension to .txt to download. | Direct overwrite is unavailable, but files can be downloaded with a version history number. | — |
+| OS / Platform       | Chrome / Edge                                                                                               | Brave                                                                             | Firefox                                                                                   | Safari                     |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------- |
+| **Windows / Linux** | **Direct overwrite is supported** after the initial save.                                                   | Overwrite manually using **“Download As”** to **a folder of your choice**. | Downloads as a new file with a **numbered suffix**. | —                          |
+| **macOS**           | **Direct overwrite is supported** after the initial save.                                                   | Overwrite manually using **“Download As”** to **a folder of your choice** . | Downloads as a new file with a **numbered suffix**. | Same as **Firefox**.       |
+| **iPadOS**          | Direct overwrite is not available. Saves as a new file with a numbered suffix to **a folder of your choice** via the **Files app.**| Same as **Chrome / Edge**.                                                        | Same as **Chrome / Edge**.                                                                | Same as **Chrome / Edge**. |
+| **Chromebook**      | Direct overwrite is **supported** after the initial save.                                                   | Overwrite manually using **“Download As”** to **a folder of your choice**. | Downloads as a new file with a **numbered suffix**. | —                          |
+| **Android Tablet**  |🚫 `.md` downloads are not supported. Use the `.txt` extension instead.                                     | Direct overwrite is not available.Downloads as a new file with **a numbered suffix.** | Same as **Brave**.                                                                        | —                          |
 > **To Firefox, Safari, and Mobile Users:**
 > Due to browser security restrictions, direct overwrite saving to local files is unavailable. Each time you click the save button, the file will be downloaded with a version history number appended (e.g., `filename(1).md`). This allows you to keep track of previous save versions for the same file.
 
