@@ -242,31 +242,31 @@ Your writing stays local unless you choose to export or share it.
 
 ---
 
-## 🧭 How It Compares
+## 🧭 Differences from Other Editors
 
-**MD//WORKS is not trying to replace IDEs, knowledge bases, or collaborative writing platforms.**  
-It occupies a different space: a focused, portable Markdown editor for people who want to write, protect, recover, and carry their work with minimal friction.
+**MD//WORKS is not intended to replace IDEs, knowledge bases, or collaborative editing tools.** Instead, MD//WORKS targets a completely different area. It is a lightweight, portable Markdown editor dedicated to writing, protecting, restoring, and easily carrying your work.
 
-| Capability | VS Code | Obsidian | Typora | MD//WORKS |
-|---|---:|---:|---:|---:|
-| True portability / single-file app | ❌ | △ | ❌ | ✅ |
-| Editor + document bundled together | ❌ | △ | ❌ | ✅ |
-| Encrypted single-file export | ❌ | ❌ | ❌ | ✅ |
-| Local-only encryption / no server required | △ | △ | △ | ✅ |
-| Draft recovery & writing safety | △ | △ | ❌ | ✅ |
-| Distraction-free writing | △ | △ | ○ | ✅ |
-| Offline / restricted-environment usability | △ | ○ | ○ | ✅ |
-| Plugin & extension ecosystem | ✅✅✅ | ✅✅ | △ | ❌ |
+| *Feature* | *VS Code* | *Obsidian* | *Typora* | *MD//WORKS* |
+| --- | --- | --- | --- | --- |
+| True portability / Single-file app export | ❌ | △ | ❌ | ✅ |
+| Combines editor and document into one | ❌ | △ | ❌ | ✅ |
+| Export as an encrypted single file | ❌ | ❌ | ❌ | ✅ |
+| Local-only encryption / No server required | △ | △ | △ | ✅ |
+| Draft restoration / Safety during writing | △ | △ | ❌ | ✅ |
+| **AI-assisted writing** | △ <br>(Extension req.) | △ <br>(Plugin req.) | ❌<br> (Copy/paste only) | ✅ <br>(Built-in*) |
+| Usability offline / in restricted environments | △ | ○ | ○ | ✅ |
+| Variety of plugins / extensions | ✅✅✅ | ✅✅ | △ | ❌ |
 
-### What Makes MD//WORKS Different
+> \* **AI-assisted writing:** Integrates with your browser's standard AI sidebar. You can share selected text or the entire document with the AI without any copy-pasting. AI sharing can also be restricted via browser settings.
 
-VS Code, Obsidian, and Typora are excellent tools, but they are built around different assumptions.
+### The MD//WORKS Philosophy
 
-- **VS Code** is a powerful development environment.
-- **Obsidian** is a knowledge base and note-linking system.
-- **Typora** is a polished Markdown writing app.
-- **MD//WORKS** is designed around a different idea:  
-  **write, protect, and carry your work as a single self-contained file.**
+VS Code, Obsidian, and Typora are all excellent tools, but each serves a different primary purpose:
+
+* **VS Code** is a powerful development environment.
+* **Obsidian** is a knowledge base designed for connecting and managing information.
+* **Typora** is a highly refined Markdown writing app.
+* **MD//WORKS** is designed with a different philosophy. It is a Markdown editor that offers **built-in AI-assisted writing** while allowing you to *protect* your work and **carry** it as a single file containing both the text and the editing environment.
 
 With **Export as App** and **Private App export**, MD//WORKS turns a Markdown document into a portable HTML application.  
 The goal is not to add more complexity, but to make important writing easier to move, archive, reopen, and protect — without depending on a cloud service.
