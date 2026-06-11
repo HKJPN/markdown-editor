@@ -673,6 +673,7 @@ The following comparison is based on our own testing with MD//WORKS. The behavio
 | Item | Copilot in Edge  | Gemini in Chrome | Brave Browser / Leo  | Firefox AI Controls ) |
 | :--- | :--- | :--- | :--- | :--- |
 | **AI integration with MD//WORKS** | 🚫 Mainly copy-and-paste based, even when the sidebar is available | ✅ **Can analyze the overall document structure or selected areas** | ✅ **Can analyze the overall document structure or selected areas** | 🚫 Mainly copy-and-paste based, even when the sidebar is available |
+| **Real-time Context Awareness** | 🚫 **Limited**<br>*(Requires manual trigger; context updates only when panel is refreshed or explicitly instructed)* | ✅ **Full Real-time**<br>*(Directly monitors DOM & selection; updates instantly as you type or select)* | ⚠️ **Snapshot-based**<br>*(Captures state when opened; does not auto-sync with ongoing typing without reopening)* | 🚫 **None**<br>*(Relies on copy-paste or manual page summary)* |
 | **AI support on iPad** | 🚫 Not available | 🚫 Not available | ✅ **Available** | 🚫 Not available |
 | **Model selection** | 🚫 Not available | 🚫 Not available (Limited to Pro and Flash) | ✅ **Available** | ✅ Available when using a local or configurable AI setup |
 | **Security / privacy orientation** | Best suited for managed Microsoft 365 environments | Depends on Google Workspace and account settings | Minimizes unnecessary data sharing and offers privacy-oriented controls | Can **block AI** access; **local LLM** usage is also possible |
