@@ -223,8 +223,9 @@ MD//WORKS automatically detects your browser language and switches the interface
 
 ## 💻 Supported Environments
 
-MD//WORKS runs in modern browsers such as Chrome, Edge, Brave, Firefox and Safari. **No installation required.** Just open the HTML file and start writing. It is fully functional on desktop environments and has also been tested to work seamlessly on tablets like the iPad.
-
+- **Browsers:** Works on all modern browsers (Chrome, Edge, Brave, Firefox, Safari, etc.).
+- **Zero Installation:** Just open the HTML file in your browser and start typing.
+- **Cross-Device:** Fully supported on desktops and tested for compatibility on tablets including the iPad.
 ---
 
 ## 🔒 Safety & Reliability
