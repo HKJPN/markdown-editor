@@ -71,11 +71,11 @@ Don’t take our word for it—review the code yourself. If you find issues or p
 
 ---
 
-### 📦 Save as App — Your Document, Your Editor, One File
+### 📦 Export as App — Your Document, Your Editor, One File
 
 The signature feature of MD//WORKS.
 
-With **Save as App**, you can export your current document together with the full editor into a single `.app.html` file.
+With **Export as App**, you can export your current document together with the full editor into a single `.app.html` file.
 
 That file can be opened later in a browser — with your document already inside.
 
@@ -207,7 +207,7 @@ MD//WORKS supports practical export formats for everyday use.
 - Save as Markdown `.md`
 - Export styled HTML
 - Print or save as PDF
-- Save as standalone `.app.html`
+- Export as standalone `.app.html`
 
 ---
 
@@ -268,8 +268,9 @@ VS Code, Obsidian, and Typora are excellent tools, but they are built around dif
 - **MD//WORKS** is designed around a different idea:  
   **write, protect, and carry your work as a single self-contained file.**
 
-With **Save as App** and **Private App export**, MD//WORKS turns a Markdown document into a portable HTML application.  
+With **Export as App** and **Private App export**, MD//WORKS turns a Markdown document into a portable HTML application.  
 The goal is not to add more complexity, but to make important writing easier to move, archive, reopen, and protect — without depending on a cloud service.
+
 ---
 
 ## 🚫 What MD//WORKS Is Not
