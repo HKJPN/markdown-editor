@@ -36,7 +36,7 @@ If draft data from a previous session is available, you may be asked whether you
 
 ### 1-2. Supported Environments
 
-For best results, use the latest version of a modern desktop browser such as Google Chrome, Microsoft Edge, or Firefox.
+For best results, use the latest version of a modern desktop browser such as Chrome, Brave, Edge, Firefox or Safari.
 
 Some features, including file saving, printing, fullscreen mode, and Private App creation, may not work correctly in outdated browsers, restricted corporate environments, or browsers with strict security settings. Learn more about [save behavior by OS and browser](#save-behavior).
 
