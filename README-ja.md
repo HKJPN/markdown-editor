@@ -76,7 +76,7 @@ MD//WORKSは完全オープンソースです。HTMLアプリとしてブラウ�
 
 ---
 
-## 📦 Save as App — 文書とエディタをひとつのファイルに
+## 📦 Export as App — 文書とエディタをひとつのファイルに
 
 現在の文書とエディタ本体をまとめて `.app.html` として保存できます。
 
@@ -231,7 +231,7 @@ VS Code、Obsidian、Typoraはいずれも優れたツールですが、それ�
 - **MD//WORKS** は、別の考え方で設計されています。  
   **書いたものを、保護し、1つのファイルとして持ち運ぶためのMarkdownエディタ**です。
 
-**Save as App** と **Private App export** により、MD//WORKSはMarkdown文書を、持ち運び可能なHTMLアプリとして書き出せます。  
+**Export as App** と **Private App export** により、MD//WORKSはMarkdown文書を、持ち運び可能なHTMLアプリとして書き出せます。  
 目的は機能をむやみに増やすことではなく、大切な文章をより簡単に移動・保管・再編集・保護できるようにすることです。
 
 クラウドに依存せず、インストールも不要。  
