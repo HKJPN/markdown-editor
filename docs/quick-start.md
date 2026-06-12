@@ -34,16 +34,24 @@ Click the Preview button to check how your Markdown will be rendered.
 - Tables
 - Links
 
-## 5. Importing Word Files
+## 5.AI Writing Assistant
+Use your browser's built-in AI for writing support, such as proofreading and clarifying text. Follow the steps below for your browser:
+
+* **For Chrome:**
+Log in to your Google account and click the **Ask Gemini** button.
+* **For Brave:**
+No login required. Simply click the **Leo** icon in your browser.
+
+## 6. Importing Word Files
 
 You can import `.docx` files and convert them into Markdown format.  
 Some complex layouts may be simplified during conversion.
 
-## 6. Standalone Save
+## 7. Standalone Save
 
 By using Export as App, you can save the current document and the editor together as a single HTML file.
 
-## 7. FAQ
+## 8. FAQ
 
 ### Do I need to install anything?
 No. MD//WORKS runs in your browser.
