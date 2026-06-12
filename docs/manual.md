@@ -671,7 +671,7 @@ The following comparison is based on our own testing with MD//WORKS. The behavio
 | **Real-time Context Awareness** | 🚫 **Limited**<br>Requires manual trigger; context updates only when panel is refreshed or explicitly instructed | ✅ **Full Real-time**<br>Directly monitors DOM & selection; updates instantly as you type or select | ⚠️ **Snapshot-based**<br>Captures state when opened; does not auto-sync with ongoing typing without reopening | 🚫 **None**<br>Relies on copy-paste or manual page summary|
 | **AI support on iPad** | 🚫 Not available | 🚫 Not available | ✅ **Available** | 🚫 Not available |
 | **Model selection** | 🚫 Not available | 🚫 Not available (Limited to Pro and Flash) | ✅ **Available** | ✅ Available when using a local or configurable AI setup |
-| **Security / privacy orientation** | Best suited for managed Microsoft 365 environments | Depends on Google Workspace and account settings | Minimizes unnecessary data sharing and offers privacy-oriented controls | Can **block AI** access; **local LLM** usage is also possible |
+| **Security / privacy orientation** | Best suited for managed Microsoft 365 environments | Depends on Google Workspace and account settings | Minimizes unnecessary data sharing and offers privacy-oriented controls | ✅Can **block AI** access; **local LLM** usage is also possible |
 | **Recommended use** | Organizations that prioritize **Microsoft 365 governance** | Writing, proofreading, and review using **powerful AI models** | Writing, proofreading, **mobile use**, and **model selection** | Users who want **strict AI control**, AI blocking, or a fully local AI option |
 
 #### For Users Who Want a Smooth and Easy AI Writing Environment
