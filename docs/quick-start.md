@@ -57,7 +57,7 @@ By using Export as App, you can save the current document and the editor togethe
 No. MD//WORKS runs in your browser.
 
 ### Is my data uploaded to the cloud?
-No. All editing and saving operations are completed within your browser. Your documents are not uploaded to the cloud. See ["11. AI-Assisted Writing" in the manual](docs/manual.md#11-ai-assisted-writing) for more detail.
+No. All editing and saving operations are completed within your browser. Your documents are not uploaded to the cloud. See [the mmanual](https://github.com/HKJPN/markdown-editor/blob/main/docs/manual.md#11-ai-assisted-writing) for more detail.
 
 ### Which browsers are recommended?
 MD//WORKS has been tested on Chrome, Brave, Firefox, Safari, and Edge. The editor automatically detects the browser environment and adjusts available features accordingly. For AI-assisted writing on desktop, Chrome and Brave are recommended. On iPad, the standard Safari browser does not support AI-assisted writing in this workflow, but this can be enabled by using Brave.
