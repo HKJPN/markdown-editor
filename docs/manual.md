@@ -703,7 +703,7 @@ This section covers common issues and how to resolve them.
 
 ### 12-1. Pressing the Home / End keys in the editor does not move the cursor to the beginning or end of the document.
 
-A. In the editor, the Home / End keys are assigned to **move the cursor to the beginning or end of the current line** to allow for smoother text input and editing. (Note: In the Preview screen, they will move to the beginning or end of the entire document.)
+In the editor, the Home / End keys are assigned to **move the cursor to the beginning or end of the current line** to allow for smoother text input and editing. (Note: In the Preview screen, they will move to the beginning or end of the entire document.)
 
 To move to the beginning or end of the entire document, please use the following shortcuts:
 
