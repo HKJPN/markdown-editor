@@ -1,10 +1,6 @@
 # MD//WORKS Editor User Manual
 
-MD//WORKS Editor is a Markdown editor that runs entirely from a single HTML file.  
-It supports drafting, Markdown editing, live preview, file saving, HTML/PDF export, and standalone HTML app export.
- Local draft data is protected so that it is not stored in plain text. For additional protection, you can also enable **Private Storage**.
-
-> **Important:** MD//WORKS Editor runs locally in your browser. To keep a document as a regular file, always save it as a `.md` file using **File > Save (Ctrl+S / ⌘S)**. **Auto encrypted** protects temporary drafts and history stored in the browser; it does not replace saving a Markdown file to your computer.
+MD//WORKS Editor is a Markdown editor that runs entirely from a single HTML file.  It supports document creation, Markdown preview, file saving, exporting to HTML or PDF, saving as a standalone HTML file, and integration with browser-based AI tools.
 
 ## Image Annotations Used in This Manual
 
