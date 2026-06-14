@@ -119,7 +119,7 @@ MD//WORKS Editor uses Markdown syntax for document creation.
 
 ### 3-1. Basic Input Example
 
-```markdown
+
 # Heading 1
 
 This is the main text.
@@ -188,7 +188,7 @@ Example: `code`
 
 You can create bulleted lists, numbered lists, task checklists, and blockquotes.
 
-```markdown
+
 - Bullet point
 - Bullet point
 
