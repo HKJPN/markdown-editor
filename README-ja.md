@@ -11,7 +11,8 @@
 👉 **https://hkjpn.github.io/markdown-editor/**
 
 - [クイックスタート（はじめに）](docs/quick-start-ja.md)
-- [取扱説明書](docs/manual-ja.md)
+- [📖 取扱説明書(汎用)](docs/manual-ja.md)
+- [📱 iPad向け 取扱説明書](docs/ipad-manual-ja.md)
 - [セキュリティとプライバシー](SECURITY.md)
 
 ---
