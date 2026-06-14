@@ -164,3 +164,7 @@ print(f"Mean Survival: {mean_survival}%")
 ```
 **【プレビューでの表示】** 
 プレビュー画面では、Pythonの文法にしたがって、impoortのハイライト、ストリングス、コメントラインが色分けされて表示されます。
+
+## 6. 参照文献
+[1]:  Formatting Open Science: agilely creating multiple document formats for academic manuscripts with Pandoc Scholar – DOAJ 3   e112  2017 https://doaj.org/article/16dc67bf1add495684b798be1d82c099?utm_source=chatgpt.com
+[2]:  R Markdown: Integrating A Reproducible Analysis Tool into Introductory Statistics.  	arXiv:1402.1894 https://arxiv.org/abs/1402.1894  
