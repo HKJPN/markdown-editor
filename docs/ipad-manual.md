@@ -228,7 +228,7 @@ Code blocks and tables are especially useful when writing technical notes or spe
 
 ## 5. Checking Your Document with Preview
 
-Use Preview to check how your Markdown will look when rendered.
+The Preview feature allows you to see exactly how the text entered in the editor will be displayed. While most Markdown syntax is simple, checking complex elements like tables with the Preview feature helps prevent formatting errors.
 
 ### 5-1. Toggling Preview
 
