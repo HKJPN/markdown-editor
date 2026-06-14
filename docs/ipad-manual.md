@@ -190,6 +190,7 @@ Example: `code`
 
 You can create bulleted lists, numbered lists, task checklists, and blockquotes.
 
+```markdown
 
 - Bullet point
 - Bullet point
