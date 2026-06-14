@@ -319,7 +319,7 @@ MD//WORKS Editor is designed to work across various environments. The behavior f
 
 | OS / Platform | Safari | Firefox | Brave | Chrome / Edge |
 | ------------- | ------ | ------- | ----- | ------------- |
-| **macOS** | Same as **Firefox**. | Cannot overwrite directly.<br>Downloaded as a new file with a **numbered suffix**. | Can be **manually overwritten** using "Save As" to any folder. | **Direct overwrite** is available after the initial save. |
+| **macOS** | Cannot overwrite directly.<br>Downloaded as a new file with a **numbered suffix**.  | Same as **Safari**.| Can be **manually overwritten** using "Save As" to any folder. | **Direct overwrite** is available after the initial save. |
 | **iPadOS** | Cannot overwrite directly. Saved as a new file with a numbered suffix to **any folder** via the **Files app**. | | | |
 
 > 💡 **iPad File Management Tip (Pseudo-Overwrite Save)**
