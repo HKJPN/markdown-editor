@@ -181,5 +181,6 @@ The preview window automatically highlights keywords (`import`), strings, and co
 
 ## 6. Reference
 [1]:  Formatting Open Science: agilely creating multiple document formats for academic manuscripts with Pandoc Scholar – DOAJ 3   e112  2017 https://doaj.org/article/16dc67bf1add495684b798be1d82c099?utm_source=chatgpt.com
+
 [2]:  R Markdown: Integrating A Reproducible Analysis Tool into Introductory Statistics.  	arXiv:1402.1894 https://arxiv.org/abs/1402.1894  
 
