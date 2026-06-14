@@ -317,10 +317,10 @@ Do not rely on History as your only backup for important documents.
 
 MD//WORKS Editor is designed to work across various environments. The behavior for saving and **overwriting files** varies depending on your device and browser combination.
 
-| OS / Platform | Chrome / Edge | Brave | Firefox | Safari |
-| --- | --- | --- | --- | --- |
-| **macOS** | **Direct overwrite is supported** after the initial save. | Overwrite manually using **"Download As"** to **a folder of your choice**. | Downloads as a new file with a **numbered suffix**. | Same as **Firefox**. |
-| **iPadOS** | Direct overwrite is not supported. Saves as a new file with a numbered suffix to **a folder of your choice** via the **Files app.** | Same as **Chrome / Edge**. | Same as **Chrome / Edge**. | Same as **Chrome / Edge**. |
+| OS / Platform | Safari | Firefox | Brave | Chrome / Edge |
+| ------------- | ------ | ------- | ----- | ------------- |
+| **macOS** | Same as **Firefox**. | Cannot overwrite directly.<br>Downloaded as a new file with a **numbered suffix**. | Can be **manually overwritten** using "Save As" to any folder. | **Direct overwrite** is available after the initial save. |
+| **iPadOS** | Cannot overwrite directly. Saved as a new file with a numbered suffix to **any folder** via the **Files app**. | | | |
 
 > 💡 **iPad File Management Tip (Pseudo-Overwrite Save)**
 > Due to iPad system constraints, "direct overwrite" is not possible. Instead, a new file with a numbered suffix (1, 2, etc.) is created each time you save. For PC-like file management, we recommend the following:
