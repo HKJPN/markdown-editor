@@ -151,4 +151,5 @@ data = pd.read_csv("cell_data.csv")
 mean_survival = data['survival_rate'].mean()
 print(f"Mean Survival: {mean_survival}%")
 ```
-[プレビューでの表示] プレビュー画面では、Pythonの文法にしたがって、impoortのハイライト、ストリングス、コメントラインが色分けされて表示されます。
+**【プレビューでの表示】** 
+プレビュー画面では、Pythonの文法にしたがって、impoortのハイライト、ストリングス、コメントラインが色分けされて表示されます。
