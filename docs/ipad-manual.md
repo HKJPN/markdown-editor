@@ -188,7 +188,9 @@ Select the text you want to format, then click the corresponding toolbar button.
 To format text as inline code, wrap it in backticks.
 
 ```markdown
-Example: `code`
+Example1：<code>　code </code>
+Example2: `code`
+
 ```
 
 ### 4-3. Creating Lists, Tasks, and Quotes
