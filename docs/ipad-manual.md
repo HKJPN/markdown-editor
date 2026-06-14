@@ -186,7 +186,10 @@ Select the text you want to format, then click the corresponding toolbar button.
 | S | Strikethrough | `~~Strikethrough~~` |
 
 To format text as inline code, wrap it in backticks.
+
+```markdown
 Example: `code`
+```
 
 ### 4-3. Creating Lists, Tasks, and Quotes
 
