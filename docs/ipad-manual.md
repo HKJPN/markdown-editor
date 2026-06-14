@@ -119,7 +119,7 @@ MD//WORKS Editor uses Markdown syntax for document creation.
 
 ### 3-1. Basic Input Example
 
-Following are the basic input examples.
+Here is a basic Markdown example. Paste it into the editor to see how it renders in the preview pane.
 
 ```markdown
 # Heading 1
