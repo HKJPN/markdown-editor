@@ -188,7 +188,7 @@ Select the text you want to format, then click the corresponding toolbar button.
 To format text as inline code, wrap it in backticks.
 
 ```markdown
-Example1：<code>　code </code>
+Example1：<code>code</code>
 Example2: `code`
 
 ```
