@@ -1,0 +1,612 @@
+# MD//WORKS Editor User Manual (iPad)
+
+MD//WORKS Editor is a Markdown editor that runs entirely from a single HTML file. It supports document creation, Markdown preview, file saving, exporting to HTML or PDF, saving as a standalone HTML file, and integration with browser-based AI tools. On iPad, setting the theme to "Midnight" makes handwriting input with Apple Pencil even more comfortable. Also, by utilizing the "Files" app, you can save (share) files as safely and conveniently as on a Mac or PC.
+
+## Image Annotations Used in This Manual
+
+This manual uses visual annotations to indicate important areas of the screen.  
+Red frames indicate where to click or select, blue frames indicate information to check, and circled numbers indicate the order of operations.
+
+## Shortcut Notation in This Manual
+
+When a shortcut includes Shift, the Mac/iPad notation uses **⇧**.  
+Example: **⌘⇧S**
+
+Depending on your browser or iPadOS settings, some shortcuts may conflict with standard browser shortcuts. If a shortcut does not work as expected, use the menu bar instead.
+
+---
+
+## 1. Starting the App and Understanding the Screen Layout
+
+### 1-1. Starting the App
+
+No installation is required; you can launch the editor directly in your browser from the following site: 👉 [MD//WORKS Editor](https://hkjpn.github.io/markdown-editor/)
+You can also start it by opening a locally saved HTML file in your browser. (However, launching from the website above is recommended to ensure you are using the latest features and fixes.)
+
+After the file opens, you can begin typing Markdown in the editor area.  
+If draft data from a previous session is available, you may be asked whether you want to restore it. Choose the restore option if you want to recover the previous draft.
+
+> 💡 **iPad Tip:** Select "Add to Home Screen" from Safari's Share button (the square with an upward arrow) to add an icon to your home screen. From then on, you can launch it just like a regular app.
+
+### 1-2. Supported Environments
+
+MD//WORKS Editor works comfortably in the following iPad environments:
+
+* **Supported Devices (Guideline)**
+  * iPad (6th generation or later)
+  * iPad Pro (1st generation or later)
+  * iPad mini (5th generation or later)
+  * *Compatible with iPad Air and other models with equivalent or better performance.*
+
+* **Recommended Browsers**
+  * Safari, Chrome, Brave, Firefox
+  * *For security, please use an iPadOS with the latest security updates applied.*
+
+* **Supported Accessories (Optional)**
+  * Apple Pencil (or compatible stylus)
+  * External Keyboard (Magic Keyboard, etc.)
+  * Mouse or Trackpad
+
+### 1-3. Screen Layout
+
+![Image: Overall screen layout with numbers ① to ⑥ indicating each area](<./images/overall-screen-layout.jpg>)
+
+* **① Menu Bar** Provides access to the File, Edit, View, and Help menus. Use it to create files, open files, save (share), export, switch views, and access help.
+
+* **② Title Bar** Displays the app name, file name, save status, and primary action buttons.  
+  You can quickly open files, save, toggle Preview, enter fullscreen mode, or enable Spell (EN).
+
+* **③ Toolbar** Lets you insert headings, bold text, italics, lists, tasks, quotes, code, links, and tables with a single click.  
+  This is useful even if you are not familiar with Markdown syntax.
+
+* **④ Editor Area** The main area for writing and editing text in Markdown format.  
+  Use this area to enter text, create headings and lists, and insert images.
+
+* **⑤ Preview Area** Renders your Markdown as formatted output.  
+  You can edit on the left while checking the rendered result on the right. Toggle the preview using the **Preview** button on the title bar or **View > Preview**.
+
+* **⑥ Status Bar** Displays the current line count, word count, character count, Spell (EN) status, and storage protection mode.  
+  Storage protection modes include **Auto encrypted** and passphrase-protected **Private Storage**.
+
+> 💡 **When using Safari:** Tap the "aA" button on the left side of the browser's URL bar to adjust settings, such as hiding the toolbar for a wider screen or adjusting the page zoom level between 85% and 100%.
+
+---
+
+## 2. Creating and Opening Files
+
+![Image: File menu showing New (Ctrl+N / ⌘N), Open (Ctrl+O / ⌘O), and Import Word (.docx)](<./images/FileNewOpenWord-en.jpg>)
+
+### 2-1. Creating a New File
+
+To create a new Markdown document, select **File > New (⌘N)** from the menu bar.
+
+If you have unsaved work, save it before creating a new file.  
+Depending on the current state of the document, you may also be prompted to save the current content to History before proceeding.
+
+### 2-2. Opening an Existing File
+
+To resume editing an existing Markdown file (`.md`, `.txt`, `.markdown`, etc.), follow these steps:
+
+**① Action to open a file**
+Open the file selection screen using either of the following methods:
+* **From the menu bar:** Tap **File > Open** (Keyboard shortcut: `⌘O`)
+* **From the title bar:** Tap the **Open** button
+
+**② Select from the "Files" app**
+The standard iPad "Files" app will open; select your target file from here.
+
+> 💡 **Using Cloud Storage:** Because it integrates with the "Files" app, you can directly open files saved not only on your local iPad storage but also in cloud storage services like **iCloud Drive** or **OneDrive**.
+
+### 2-3. Importing Word Files
+
+You can import an existing Word document (`.docx`) and convert it to Markdown for editing.  
+Select **File > Import Word (.docx)** from the menu bar, then choose the Word file you want to import.
+
+The maximum file size is **10 MB**.
+
+> **Note:** Word import is designed to convert document structure into Markdown. Detailed layout elements such as fonts, margins, complex charts, footnotes, and intricate tables may not be reproduced exactly. After importing, review the result in the Preview area.
+
+> **Note:** Importing a Word file replaces the current draft. Save any important work with **File > Save (⌘S)** before importing.
+
+---
+
+## 3. Entering Text
+
+Type your content in the **Editor Area**, located in the center or on the left side of the screen.  
+MD//WORKS Editor uses Markdown syntax for document creation.
+
+> 💡 **Moving the cursor with the software keyboard:** Long-press the "Space" key on the iPad keyboard to turn the entire keyboard into a trackpad. You can then slide your finger to move the cursor quickly and accurately.
+
+### 3-1. Basic Input Example
+
+```markdown
+# Heading 1
+
+This is the main text.
+
+## Heading 2
+
+- Bullet point
+- Bullet point
+
+You can also use **bold** and *italics*.
+
+### 3-2. Inserting Images
+
+You can insert small local images by dragging and dropping them into the editor area. On iPad, it is highly convenient to use the Split View feature to open the "Photos" or "Files" app on one half of the screen, then long-press an image and drag-and-drop it directly into the editor area.
+
+When inserted, the image is embedded as data within the Markdown document.
+
+To protect local storage capacity, image insertion is subject to the following limits:
+
+| Item | Details |
+| --- | --- |
+| Maximum size | Under 200 KB |
+| Supported formats | PNG, JPEG, WebP, etc. |
+| Unsupported formats | SVG |
+
+For security reasons, SVG images are not supported. Convert SVG files to PNG, JPEG, or WebP before inserting them.
+
+### 3-3. Checking Input Status
+
+You can use MD//WORKS Editor for long drafts, technical notes, specifications, meeting minutes, and research notes.
+
+The current line count, word count, and character count are shown in the status bar at the bottom of the screen.
+
+---
+
+## 4. Formatting Text
+
+You can format text either by typing Markdown syntax directly or by using the toolbar.
+
+The toolbar makes it easy to insert headings, bold text, lists, quotes, code blocks, links, and tables without memorizing Markdown syntax.
+
+### 4-1. Creating Headings
+
+Use the **H1 / H2 / H3** buttons on the toolbar to create headings.
+
+| Button | Description | Markdown example |
+| --- | --- | --- |
+| H1 | Heading 1 | `# Heading` |
+| H2 | Heading 2 | `## Heading` |
+| H3 | Heading 3 | `### Heading` |
+
+### 4-2. Applying Bold, Italics, and Strikethrough
+
+Select the text you want to format, then click the corresponding toolbar button.
+
+| Button | Description | Markdown example |
+| --- | --- | --- |
+| B | Bold | `**Bold**` |
+| I | Italics | `*Italics*` |
+| S | Strikethrough | `~~Strikethrough~~` |
+
+To format text as inline code, wrap it in backticks.
+Example: `code`
+
+### 4-3. Creating Lists, Tasks, and Quotes
+
+You can create bulleted lists, numbered lists, task checklists, and blockquotes.
+
+```markdown
+- Bullet point
+- Bullet point
+
+1. Numbered item
+2. Numbered item
+
+- [ ] Open task
+- [x] Completed task
+
+> Blockquote
+
+```
+
+### 4-4. Inserting Code, Links, and Tables
+
+Code blocks and tables are especially useful when writing technical notes or specifications.
+
+```markdown
+| Item | Details |
+|---|---|
+| File format | Markdown |
+| Extension | .md |
+
+```
+
+---
+
+## 5. Checking Your Document with Preview
+
+Use Preview to check how your Markdown will look when rendered.
+
+### 5-1. Toggling Preview
+
+To show or hide Preview, use either of the following methods:
+
+* Click the **Preview** button on the title bar.
+* Select **View > Preview** from the menu bar.
+
+When Preview is enabled, the preview pane appears on the right side of the screen.
+
+Edits made in the Markdown editor on the left are reflected in the preview on the right.
+
+### 5-2. What You Can Check in Preview
+
+Preview lets you check the appearance of:
+
+* Headings
+* Bold, italics, and other text formatting
+* Bulleted and numbered lists
+* Checklists
+* Tables
+* Blockquotes
+* Code blocks
+* Images
+
+The Preview area is for checking the final appearance of the document.
+
+Text editing is performed in the Editor Area on the left.
+
+---
+
+## 6. Saving (Sharing) Files
+
+You can save your document as a standard Markdown file.
+
+### 6-1. Saving as a Markdown File
+
+1. Tap the **Share** button on the title bar.
+Alternatively, select **File > Share (⌘S)** from the menu bar.
+2. Choose a destination folder in the "Files" app if prompted.
+3. The document is saved as a Markdown file.
+
+### 6-2. Renaming the File and Changing Folders (Save As)
+
+Tap the file name field in the title bar to change the document name directly.
+For example, you can change `untitled.md` to `meeting-note.md` or `manual-draft.md`. Afterwards, when you perform a save (share) operation, you can specify the destination folder in the iPad's "Files" app. This allows you to save it as a new file in any location, working similarly to "Save As" on a PC or Mac.
+
+### 6-3. Checking Save Status
+
+The title bar shows the current save status.
+
+| Indicator | Meaning |
+| --- | --- |
+| Saved | All changes have been saved |
+| Unsaved | The document contains unsaved changes |
+
+If you edit the document after saving, the status changes to **Unsaved**.
+
+Always check this status before closing the app or ending your work session.
+
+### 6-4. Understanding Local Draft Protection
+
+MD//WORKS Editor protects browser-stored drafts and history with **Auto encrypted** so they are not saved locally in plain text.
+
+For stronger protection or to remove stored data, use the following features:
+
+* **Private Storage**: Adds passphrase-based protection to drafts and history stored in the current browser.
+* **Clear Local Data**: Available under **Storage Security** in the File menu. This removes all protected drafts and history stored in the browser.
+
+> **Important:** Auto encrypted and Private Storage protect browser-based drafts and history. They do not replace saving your document as a file. To keep your work permanently, save it as a `.md` file with **File > Save (⌘S)**. **On iPad, if you move to another app or the Home screen while editing, the browser may release memory, which can cause the Auto encrypted restoration to fail.**
+
+### 6-5. Private Storage vs. Private App Export
+
+Both **Private Storage** and **Save as Private App** use passphrases, but they serve different purposes.
+
+| Feature | Purpose | Protected data |
+| --- | --- | --- |
+| Private Storage | Protects drafts and history stored in the current browser | Local browser data |
+| Save as Private App | Exports the current document as a passphrase-protected HTML file | The exported HTML file |
+
+If you forget the passphrase, the protected data cannot be recovered.
+
+For important documents, keep a separate Markdown backup (`.md`) in a secure location.
+
+### 6-6. Restoring from History
+
+Select **File > History** to view saved draft states.
+
+Use this feature if you accidentally delete content or want to return to an earlier draft.
+
+Running **Clear Local Data** also deletes History.
+
+Do not rely on History as your only backup for important documents.
+
+### 6-7. Saving behavior depends on your OS and browser
+
+MD//WORKS Editor is designed to work across various environments. The behavior for saving and **overwriting files** varies depending on your device and browser combination.
+
+| OS / Platform | Chrome / Edge | Brave | Firefox | Safari |
+| --- | --- | --- | --- | --- |
+| **macOS** | **Direct overwrite is supported** after the initial save. | Overwrite manually using **"Download As"** to **a folder of your choice**. | Downloads as a new file with a **numbered suffix**. | Same as **Firefox**. |
+| **iPadOS** | Direct overwrite is not supported. Saves as a new file with a numbered suffix to **a folder of your choice** via the **Files app.** | Same as **Chrome / Edge**. | Same as **Chrome / Edge**. | Same as **Chrome / Edge**. |
+
+> 💡 **iPad File Management Tip (Pseudo-Overwrite Save)**
+> Due to iPad system constraints, "direct overwrite" is not possible. Instead, a new file with a numbered suffix (1, 2, etc.) is created each time you save. For PC-like file management, we recommend the following:
+> 1. Create a **new folder in the "Files" app** with the exact same name as the file you intend to create.
+> 2. Whenever you save (share) from the editor, always select that specific folder as your destination.
+> 
+> 
+> By doing this, all your editing history naturally accumulates in chronological (numbered) order inside one folder. Not only is it easy to spot the latest version, but this functions as a powerful backup that allows you to revert to past versions at any time.
+
+---
+
+## 7. Exporting to HTML and PDF
+
+In addition to saving Markdown files, MD//WORKS Editor can export documents in several formats.
+
+### 7-1. Saving as a Standalone App
+
+Select **File > Save as App** to export the current draft as a standalone HTML file.
+This format combines the editor and your document into a single HTML file. It is useful for carrying or sharing a self-contained editable document, even when no internet connection is available.
+
+### 7-2. Saving as a Private App
+
+Select **File > Save as Private App** to export the current document as a passphrase-protected standalone HTML file.
+Use this option for personal notes, confidential drafts, or documents that require additional protection. If you forget the passphrase, the document cannot be recovered. Store the passphrase securely.
+
+### 7-3. Exporting as HTML
+
+Select **File > Export as HTML** to export the rendered Markdown as a static HTML file.
+Use this option when you want to view the formatted document in a browser or share it as a web page.
+
+### 7-4. Printing or Saving as PDF
+
+Select **File > Print / Save as PDF** to open the browser print dialog based on the rendered preview. Choose **Save as PDF** as the destination to generate a PDF file.
+
+### 7-5. Choosing an Export Format
+
+| Goal | Recommended action |
+| --- | --- |
+| Keep the document as Markdown | File > Save |
+| Carry the editor and document as one file | File > Save as App |
+| Export a protected HTML app | File > Save as Private App |
+| View or share as a web page | File > Export as HTML |
+| Print or submit formally | File > Print / Save as PDF |
+
+---
+
+## 8. Find and Replace
+
+MD//WORKS Editor can search for text and replace specific words or phrases across the document.
+
+### 8-1. Finding Text
+
+To search within the document, select **Edit > Find (⌘F)** from the menu bar.
+
+1. Click **Edit** on the menu bar.
+2. Select **Find**.
+3. Enter the text you want to find.
+4. Matching text is highlighted in the editor.
+5. Use the **↑ / ↓** buttons to move between results.
+
+### 8-2. Replacing Text
+
+To replace text, select **Edit > Replace (⌘H)**.
+
+1. Select **Edit > Replace**.
+2. Enter the text you want to find in the upper field.
+3. Enter the replacement text in the lower field.
+4. Click **Replace** to replace one match at a time.
+5. Click **Replace All** to replace all matches at once.
+
+### 8-3. Using Search Options
+
+The Find and Replace panel provides the following options:
+
+| Option | Description |
+| --- | --- |
+| RegExp | Enables regular expression search |
+| Case Sensitive | Matches uppercase and lowercase letters exactly |
+| Whole Word | Matches complete words only |
+
+### 8-4. Formatting Markdown
+
+Select **Edit > Format Markdown** to clean up excessive blank lines and trailing spaces. Running this before sharing or exporting helps keep the document clean.
+
+---
+
+## 9. Changing View Settings
+
+The View menu lets you toggle Preview, Outline, Show Invisibles, Theme, Fullscreen, Spell (EN), and Zen Mode.
+
+### 9-1. Toggling Preview
+
+Select **View > Preview** to show or hide the preview pane. You can also use the **Preview** button on the title bar.
+
+### 9-2. Using Outline
+
+Select **View > Outline** to display a list of headings in the document. In long documents, click a heading to jump directly to that section.
+
+### 9-3. Showing Invisible Characters
+
+Select **View > Show Invisibles** to reveal characters that are normally hidden (like Full-width spaces, Tabs, Trailing spaces, and Line breaks).
+
+### 9-4. Changing Themes
+
+Change the interface theme from the **View** menu.
+
+| Theme | Description |
+| --- | --- |
+| Midnight | Dark theme designed for focused editing/developers |
+| Paper | Bright theme suitable for document writing and review |
+| Warm | Soft sepia theme for long-form writing |
+
+### 9-5. Fullscreen Mode
+
+Use **View > Fullscreen** or the fullscreen icon on the title bar to expand the browser to fullscreen mode.
+
+> 💡 **iPadOS Fullscreen Specification**
+> Due to browser security restrictions on iPad (Safari, etc.), **fullscreen mode is automatically canceled if the software keyboard appears on the screen.**
+> To write comfortably while maintaining fullscreen mode, we recommend:
+> * **Using Apple Pencil:** Handwriting input (Scribble) does not trigger the software keyboard, allowing you to stay in fullscreen.
+> * **Using an External Keyboard:** Typing via a hardware keyboard like the Magic Keyboard keeps the screen wide and uninterrupted.
+> 
+> 
+
+### 9-6. Using Spell (EN)
+
+Enable the English spell checker with **View > Spell (EN)** or the **Spell (EN)** button on the title bar. This feature is intended for English text only and does not provide proofreading for Japanese or other languages.
+
+### 9-7. Focusing with Zen Mode
+
+Select **View > Zen Mode** to hide menus, toolbars, and panels, creating a distraction-free writing environment.
+
+---
+
+## 10. Help and Keyboard Shortcuts
+
+The Help menu provides access to Quick Start, Keyboard Shortcuts, the GitHub page, and app information. Because the help content is embedded in the app, it can be viewed offline.
+
+### 10-1. Quick Start
+
+Select **Help > Quick Start** for a brief overview of MD//WORKS Editor.
+
+### 10-2. Keyboard Shortcuts
+
+Select **Help > Keyboard Shortcuts** to view available shortcuts.
+
+| Action | Shortcut |
+| --- | --- |
+| New File | ⌘N |
+| Open | ⌘O |
+| Save | ⌘S |
+| Save As | ⌘⇧S |
+| Undo | ⌘Z |
+| Redo | ⌘⇧Z |
+| Cut | ⌘X |
+| Copy | ⌘C |
+| Paste | ⌘V |
+| Select All | ⌘A |
+| Find | ⌘F |
+| Replace | ⌘H |
+| Close the front panel or modal | ⌘ + . or Esc |
+
+### 10-3. GitHub / About MD//WORKS
+
+To view the source code or release notes, select **Help > GitHub**. To check the app version and core concepts, select **Help > About MD//WORKS**.
+
+---
+
+## 11. AI-Assisted Writing
+
+MD//WORKS is not only a text and Markdown editor but can also be used alongside browser-based AI assistants to support your writing. While AI features are not built directly into the app, integrating tools like Leo in Brave Browser can drastically reduce the cognitive burden of routine proofreading, summarizing, and structure reviews.
+
+### 11-1. Preparing to Use AI Writing Assistance
+
+You can use various browser AI tools. For iPad users, we highly recommend using **Leo in Brave Browser**.
+
+#### 11-1-1. Brave Browser: Using Leo
+
+1. No login is required. Tap the AI chat icon in the "..." menu to open the Leo AI chat tab.
+2. Leo will analyze the content you were editing in MD//WORKS. You can limit the scope of the AI's analysis simply by selecting the text with your cursor, without needing to copy and paste.
+
+> **Feature:** You can use Leo without a Google account while maintaining privacy. It has been confirmed to perform on iPad and mobile environments with almost the same DOM parsing accuracy as the desktop versions, steadily reading text even through complex page structures.
+
+### 11-2. Example Use Cases
+
+For everyday proofreading, summarizing, terminology checks, and basic structural reviews, a lightweight model is often more practical than a high-end model. Switch to frontier models only when highly advanced analysis is required.
+
+#### For Papers, Articles, and Technical Documents
+
+* Identify inconsistent terminology or wording in this document.
+* Summarize the entire document in about 300 characters.
+* Review the selected section and rewrite any unnatural expressions in a more academic and objective tone.
+* Extract only the headings from this chapter.
+
+#### For Simple Coding Support
+
+* Create a regular expression pattern to replace all half-width parentheses in this document with full-width parentheses.
+* Convert the experimental process described in the selected text into a Mermaid flowchart.
+* Add explanatory comments to each line of the selected Python code.
+
+### 11-3. Important Notes When Using Browser AI
+
+When you use a browser-based AI assistant, the entire visible document or the selected area may be processed by the AI service. If you are working with confidential information or internal company documents, always check what information is being shared and how your browser manages AI access.
+
+### 11-4. Differences Between Browser AI Assistants
+
+The following comparison illustrates how different AI browsers interact with MD//WORKS across operating systems (Based on June 2026 data).
+
+| Item | Copilot in Edge | Gemini in Chrome | Brave Browser (Leo) | Firefox AI controls |
+| --- | --- | --- | --- | --- |
+| **AI integration with MD//WORKS** | 🚫 Mainly copy-and-paste based | ✅ **Analyzes document structure / selection** | ✅ **Analyzes document structure** | 🚫 Mainly copy-and-paste based |
+| **Real-time Context Awareness** | 🚫 **Limited** | ✅ **Full Real-time** | ⚠️ **Snapshot-based** | 🚫 **None** |
+| **AI support on iPad** | 🚫 Not available | 🚫 Not available | **✅ Available** | 🚫 Not available |
+| **Model selection** | 🚫 Not available | 🚫 Not available (Pro/Flash only) | **✅ Available** | **✅ Available** |
+| **Security / privacy** | Best for MS 365 environments | Depends on Google Workspace settings | Minimizes data sharing | Block AI |
+| **Recommended use** | Organizations utilizing **MS365** | Writing with **frontier models** | Proofreading, **mobile/iPad use**, model selection | Users who want **strict AI control** |
+
+#### For users looking for smooth mobile integration
+
+In our testing, **Leo in Brave Browser** provides the most seamless and effective experience for iPad users. Because it captures a snapshot of your document structure when opened, it is perfect for full-document proofreading, summarization, and consistency checks on your iPad.
+
+---
+
+## 12. Troubleshooting
+
+### 12-1. Pressing the ⌘ + ↑ / ⌘ + ↓ keys does not move the cursor
+
+In the editor, the Home/End equivalent keys are mapped to smoothly edit text. To move to the absolute beginning or end of the document on iPad, use:
+
+* **⌘ + ↑** – Go to the beginning of the document
+* **⌘ + ↓** – Go to the end of the document
+
+### 12-2. I saved the document, but I cannot find the file
+
+Check your browser’s default Downloads folder or the "Files" app destination you selected.
+
+Remember that **Auto encrypted** only protects drafts stored in the browser; it does not permanently create a `.md` file. Always use **File > Save (⌘S)**.
+
+### 12-3. The title bar shows “Unsaved”
+
+This means the document has been modified since the last save. Save the document before ending your session.
+
+### 12-4. I cannot paste from the menu
+
+Browser security restrictions may block paste operations from custom menus. Use the keyboard shortcut **⌘V**.
+
+### 12-5. I cannot insert an image
+
+Ensure the image is under 200 KB and is a PNG, JPEG, or WebP. SVG files and large files are restricted for security and storage reasons.
+
+### 12-6. Preview is not displayed
+
+Ensure Preview is toggled on. If the screen is narrow, use the central divider to adjust pane widths.
+
+### 12-7. Search returns no results
+
+Check search options like "Case Sensitive" or "Whole Word". Ensure there are no invisible spaces causing mismatches by toggling **View > Show Invisibles**.
+
+### 12-8. “Invalid regular expression” appears
+
+If you do not intend to use regular expressions, turn off the **RegExp** search option.
+
+### 12-9. Spell (EN) is not working
+
+Ensure the document contains English text. This feature is intended for English spelling only.
+
+### 12-10. I forgot my Private Storage passphrase
+
+Drafts protected by Private Storage cannot be recovered without the passphrase. Always keep manual `.md` backups.
+
+### 12-11. I forgot my Private App passphrase
+
+HTML files exported as Private Apps cannot be decrypted without the correct passphrase.
+
+### 12-12. My Standalone HTML app does not open correctly
+
+Ensure your browser is up-to-date and no corporate restrictions are blocking the file.
+
+### 12-13. PDF export does not work correctly
+
+Ensure your print destination is set to "Save as PDF". Always review the output file layout manually.
+
+---
+
+*Google, Google Chrome, and Gemini are trademarks of Google LLC. All other company, product, and service names mentioned are trademarks or registered trademarks of their respective owners.*
+
+```
+
+```
