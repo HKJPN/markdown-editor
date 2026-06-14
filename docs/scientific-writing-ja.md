@@ -142,7 +142,6 @@ RNA-Seqなどの解析スクリプトや、統計解析（RやPythonなど）の
 
 **【入力例】**
 
-```markdown
 ```python
 import pandas as pd
 import matplotlib.pyplot as plt
