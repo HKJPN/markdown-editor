@@ -10,7 +10,8 @@
 
 Try it instantly in your browser.  
 - [Quick Start ](docs/quick-start.md)
-- [User Manual ](docs/manual.md)
+- [📖 User Manual (General) ](docs/manual.md)
+- [📱 User Manual for iPad](docs/ipad-manual.md)
 - [Security / Privacy](SECURITY.md)
 
 ---
