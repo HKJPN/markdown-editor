@@ -121,7 +121,7 @@ MD//WORKS Editor uses Markdown syntax for document creation.
 
 ```markdown
 # Heading 1
-```markdown
+
 
 This is the main text.
 
@@ -131,6 +131,7 @@ This is the main text.
 - Bullet point
 
 You can also use **bold** and *italics*.
+```
 
 ### 3-2. Inserting Images
 
