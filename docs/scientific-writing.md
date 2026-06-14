@@ -1,8 +1,19 @@
 # Scientific Writing Guide with Markdown
 
-When writing academic papers or technical reports, word processors like Microsoft Word can often distract you with layout adjustments. Markdown allows you to completely separate "content structure" from "visual presentation," enabling you to immerse yourself in typing without interrupting your thought process.
+When drafting a paper or report, how much time do you lose to formatting? Adjusting figure placements, manually re-numbering references, or fixing broken fonts are tedious tasks that distract you from what truly matters: **your scientific insights.**
 
-This manual covers advanced syntax particularly useful for life sciences and technical writing, along with how to maximize your efficiency using the editor's **formatting toolbar**.
+Traditional word processors like Microsoft Word are designed around a WYSIWYG (What You See Is What You Get) philosophy, forcing you to manage the printed layout while you write. This constant context-switching inevitably breaks your concentration.
+
+The greatest advantage of Markdown is the **complete separation of "writing content" and "formatting layout".** Adopting this distraction-free writing style offers several transformative benefits:
+
+* **Maintain Your Flow State**
+There's no need to reach for the mouse or search through menus. Keep your hands on the keyboard and use simple, temporary tags to format as you go, allowing you to write at the speed of thought.
+* **Freedom from Manual Numbering**
+Whether you insert a new citation in the middle of a section or completely rearrange your paragraphs, the system automatically recalculates all footnote and reference numbers perfectly. Say goodbye to scrolling back and forth to check for broken sequences.
+* **Focus Purely on the "Scientific Story"**
+By offloading the layout work to the system, you can dedicate 100% of your cognitive energy to interpreting experimental data and building a logical narrative.
+
+This isn't just a change of tools; it's a **paradigm shift in your writing workflow** that will fundamentally boost your research productivity. This manual covers advanced syntax particularly useful for life sciences and technical writing, along with how to maximize your efficiency using the editor's **formatting toolbar**. Start by exploring the automatic numbering feature in "1. Footnotes" below, and experience the unparalleled immersion of stress-free writing.
 
 ---
 
