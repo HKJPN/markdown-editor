@@ -46,6 +46,8 @@ MD//WORKS Editor works comfortably in the following iPad environments:
   * Apple Pencil (or compatible stylus)
   * External Keyboard (Magic Keyboard, etc.)
   * Mouse or Trackpad
+ 
+  > 💡 **Enhance your workflow with multiple browsers**: To create a desktop-like environment on your iPad, try installing another browser like Brave or Chrome in addition to Safari. Using Split View, you can use one browser for research while writing in the editor on the other, or effortlessly edit two different documents side-by-side.
 
 ### 1-3. Screen Layout
 
