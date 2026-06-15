@@ -155,13 +155,7 @@ To protect local storage capacity, image insertion is subject to the following l
 
 For security reasons, SVG images are not supported. Convert SVG files to PNG, JPEG, or WebP before inserting them.
 
-### 3-3. Insert Text and URLs Directly
-You can also drag and drop text or web links right into your document.
-
-> 💡 **Streamline your research**: Use Split View to open a browser next to the editor. Simply long-press a URL or highlighted text, then drag and drop it into the editor. This bypasses copy-pasting, allowing you to scrap information intuitively.
-
-
-### 3-4. Checking Input Status
+### 3-3. Checking Input Status
 
 The current line count, word count, and character count are shown in the status bar at the bottom of the screen.
 
