@@ -445,6 +445,9 @@ Change the interface theme from the **View** menu.
 
 >💡 **Tip for Apple Pencil** : The dark "Midnight" theme works exceptionally well with the Scribble (handwriting input) feature. Since you can clearly see the exact moment the pen's stroke changes color on the screen, it is easy to grasp the timing of when your handwriting is converted into text, allowing you to write at a smooth and steady pace.
 
+![Image: Theame](<./images/theame.jpg>)
+
+
 ### 9-5. Fullscreen Mode
 
 Use **View > Fullscreen** or the fullscreen icon on the title bar to expand the browser to fullscreen mode.
