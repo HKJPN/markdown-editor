@@ -1,6 +1,6 @@
 # MD//WORKS Editor User Manual (iPad)
 
-MD//WORKS Editor is a Markdown editor that runs entirely from a single HTML file. It supports document creation, Markdown preview, file saving, exporting to HTML or PDF, saving as a standalone HTML file, and integration with browser-based AI tools. On iPad, setting the theme to "Midnight" makes handwriting input with Apple Pencil even more comfortable. Also, by utilizing the "Files" app, you can save (share) files as safely and conveniently as on a Mac or PC.
+MD//WORKS Editor is a Markdown editor that runs entirely from a single HTML file. It supports document creation, Markdown preview, file saving, exporting to HTML or PDF, saving as a standalone HTML file, and integration with browser-based AI tools. On iPad, setting the theme to "Midnight" makes handwriting input with Apple Pencil even more comfortable. Also, by utilizing the 'Files' app, file saving and sharing is as convenient as on a Mac or PC, and even safer due to the automatic backup history.
 
 ## Image Annotations Used in This Manual
 
