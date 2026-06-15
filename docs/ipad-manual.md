@@ -116,6 +116,8 @@ Type your content in the **Editor Area**, located in the center or on the left s
 MD//WORKS Editor uses Markdown syntax for document creation.
 
 > 💡 **Moving the cursor with the software keyboard:** Long-press the "Space" key on the iPad keyboard to turn the entire keyboard into a trackpad. You can then slide your finger to move the cursor quickly and accurately.
+>
+> 💡 **Use the floating keyboard for more space**: Pinch in on the keyboard with two fingers to make it float. You can move it anywhere, which is ideal for keeping the editor visible or swipe-typing while holding an Apple Pencil.
 
 ### 3-1. Basic Input Example
 
