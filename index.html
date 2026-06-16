@@ -204,11 +204,11 @@ button,input,textarea{font:inherit}
   border-color:rgba(143,130,255,.5);color:var(--text);
   box-shadow:0 0 0 4px rgba(143,130,255,.11), var(--glow);
 }
-#filename-display.locked{
+body #filename-display.locked{
   cursor:default;
   color:var(--text3);
 }
-#filename-display.locked:focus{
+body #filename-display.locked:focus{
   border-color:rgba(255,255,255,.085);
   box-shadow:var(--glow);
 }
@@ -465,19 +465,13 @@ button,input,textarea{font:inherit}
 #preview img{ max-width:100%;border-radius:6px;border:1px solid var(--border) }
 #preview sup,
 #preview sub {
-  font-size: 75%;
-  line-height: 0;
-  position: relative;
-  vertical-align: baseline;
+  font-size:75%;
+  line-height:0;
+  position:relative;
+  vertical-align:baseline;
 }
-
-#preview sup {
-  bottom: 0.5em;
-}
-
-#preview sub {
-  top: 0.25em;
-}
+#preview sup { bottom:.5em }
+#preview sub { top:.25em }
 
 #preview li.task-open-item, #preview li.task-done-item{ list-style:none; display:flex; align-items:flex-start; gap:.72em; margin:.28em 0; padding:.42em .58em .42em .48em; border-radius:10px; transition:background-color .16s ease, opacity .16s ease, color .16s ease; }
 #preview li.task-open-item:hover, #preview li.task-done-item:hover{ background:rgba(255,255,255,.032); }
@@ -1015,6 +1009,13 @@ body.theme-warm #toast{
 /* #endregion */
 
 /* #region [CSS-13] RESPONSIVE & PRINT STYLES */
+body.ipad-safari-fullscreen #menubar {
+  padding-left: max(
+    128px,
+    calc(env(safe-area-inset-left, 0px) + 112px)
+  );
+}
+
 @media (max-width: 1024px) {
   #menubar { height: 44px; padding: 0 10px; }
   .menu-trigger { padding: 0 16px; font-size: 14px; }
@@ -1206,6 +1207,9 @@ body.zen-mode #zen-exit-btn { display: flex; }
       <div class="menu-sep-line"></div>
       <div class="menu-entry" onclick="formatDoc()">
         <span id="m-format"></span>
+      </div>
+      <div class="menu-entry" onclick="insertOrUpdateToc()">
+        <span id="m-insert-toc"></span>
       </div>
       <div class="menu-sep-line"></div>
       <div class="menu-entry" onclick="closeMenus();ins('# ',true)">H1</div>
@@ -1453,11 +1457,13 @@ body.zen-mode #zen-exit-btn { display: flex; }
 
 //#region [JS-01] ENVIRONMENT & I18N (DICTIONARY)
 const isIPadOS = (navigator.platform === 'MacIntel' || /Macintosh/i.test(navigator.userAgent)) && navigator.maxTouchPoints > 1;
+const isSafari = /^((?!chrome|android|crios|fxios|edgios|opr|opera).)*safari/i.test(navigator.userAgent);
+const isIPadSafari = isIPadOS && isSafari;
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || isIPadOS || (navigator.maxTouchPoints > 0 && window.innerWidth <= 1024);
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
-const APP_VERSION = '1.5.5';
+const APP_VERSION = '1.5.6';
 const RELEASE_NOTES_STORAGE_KEY = 'mdworks_seen_release_notes_version';
 
 const T = {
@@ -1503,6 +1509,12 @@ const T = {
   themeChanged: isJa ? name => `テーマを ${name} に変更しました` : name => `Theme changed to ${name}`,
   historyEmpty:isJa ? '履歴がありません' : 'No history found',
   formatDone:  isJa ? '整形を完了しました' : 'Formatting complete',
+  insertToc:   isJa ? '目次を挿入' : 'Insert Table of Contents',
+  tocTitle:    isJa ? '目次' : 'Table of Contents',
+  tocUpdateConfirm: isJa ? '目次を最新の見出しで更新しますか？' : 'Update the table of contents?',
+  tocInserted: isJa ? '目次を挿入しました' : 'Table of contents inserted',
+  tocUpdated:  isJa ? '目次を更新しました' : 'Table of contents updated',
+  tocNoHeadings: isJa ? '目次にできる見出しがありません' : 'No headings found',
   outlineEmpty:isJa ? '見出しがありません' : 'No headings found',
   fullscreenUnavailable: isJa ? 'このブラウザでは全画面表示を利用できません' : 'Fullscreen is not available in this browser',
   fullscreenFailed: isJa ? '全画面表示の切り替えに失敗しました' : 'Failed to toggle fullscreen',
@@ -1521,6 +1533,8 @@ const T = {
   newCreated: isJa ? '空白の新規ファイルを作成しました' : 'Blank new file created',
   processingPasteToast: isJa ? '大きなテキストを処理中...' : 'Processing large paste...',
   processingPasteStatus: isJa ? 'Processing paste...' : 'Processing paste...',
+  processingTocToast: isJa ? '目次を作成中...' : 'Generating table of contents...',
+  processingTocStatus: isJa ? 'Generating TOC...' : 'Generating TOC...',
   pasteReadyStatus: isJa ? 'Ready' : 'Ready',
   promptSaveAs:isJa ? '新しいファイル名を入力してください:' : 'Enter new file name:',
   restorePrompt:isJa ? '前回の未保存データが見つかりました。復元しますか？\n(キャンセルすると破棄されます)' : 'Found unsaved changes from your last session. Restore them?\n(Cancel to discard)',
@@ -1740,7 +1754,7 @@ MD//WORKS は、Markdown原稿を安全に書き、プレビューし、持ち�
 * **Offline ready**: 主要なヘルプと文書表示は外部fetchなしで利用できます。
 
 ### Version
-* MD//WORKS v1.5.5
+* MD//WORKS v1.5.6
 ` : `
 ## About MD//WORKS
 
@@ -1752,49 +1766,37 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
 * **Offline ready**: Core help and documentation views work without external fetches.
 
 ### Version
-* MD//WORKS v1.5.5
+* MD//WORKS v1.5.6
 `,
 
-  releaseNotesTitle: isJa ? 'v1.5.5 の新機能' : "What's New in v1.5.5",
+  releaseNotesTitle: isJa ? 'v1.5.6 の新機能' : "What's New in v1.5.6",
   releaseNotesIntro: isJa ? '今回の主な改善内容です。' : 'Here are the main improvements in this release.',
   releaseNotesClose: isJa ? '閉じる' : 'Close',
   releaseNotesContent: isJa ? `
 
-## v1.5.5 - Writing Comfort and File Handling Improvements
+## v1.5.6 - TOC and Editing Stability Improvements
 
-* **不可視文字の表示に対応しました。**
-  全角スペース、タブ、行末スペース、改行を画面上で確認できるようになりました。日本語文書やMarkdown原稿の表記ゆれ・余分な空白の確認に便利です。
+* **目次（TOC）を作成できるようになりました。**
+  Editメニューの「目次を挿入」から、文書内の見出しをもとにリンク付きの目次を作成できます。すでに作成済みの目次は、見出しの変更後に更新できます。
 
-* **Tab操作を強化しました。**
-  Tab入力、複数行インデント、Shift+Tabによるアウトデントに対応し、リストやコード、引用ブロックの編集がしやすくなりました。
+* **ペースト動作を安定化しました。**
+  長い文章や大量のテキストを貼り付けた際の処理を見直し、画面の一時停止や表示の乱れが起こりにくくなるよう改善しました。
 
-* **Zen Modeと全画面表示を追加しました。**
-  画面上の要素を減らして、文章作成に集中しやすい表示に切り替えられるようになりました。
+* **iPad Safariの全画面表示を改善しました。**
+  全画面表示中にSafari側の解除ボタンとFileメニューが重なる問題を修正し、メニューを操作しやすくしました。
+`:`
 
-* **ファイル操作を改善しました。**
-  New / Close後にOpenする場合も、前回使用したフォルダを開きやすくしました。また、日本語ファイル名で保存する際に .md が正しく付かない場合がある問題を修正しました。
+## v1.5.6 - TOC and Editing Stability Improvements
 
-* **保存データ保護と安全性を改善しました。**
-  Auto Saveのローカル保存は平文のまま残らないよう保護されます。さらに保護したい場合は、引き続きPrivate Storageでパスフレーズ保護を利用できます。あわせて、Word取り込みや画像処理まわりの安全性も見直しました。
-  `:`
+* **Table of Contents generation has been added.**
+  You can now create a linked table of contents from the document headings by selecting “Insert Table of Contents” from the Edit menu. An existing table of contents can also be updated after the headings change.
 
-## v1.5.5 - Writing Comfort and File Handling Improvements
+* **Paste handling has been made more stable.**
+  Processing for long or large pasted text has been improved to reduce temporary freezing and visual disruption.
 
-* **Invisible characters can now be shown.**
-  Full-width spaces, tabs, trailing spaces, and line breaks can now be displayed in the editor, making it easier to clean up Markdown drafts and Japanese documents.
-
-* **Tab editing has been improved.**
-  You can now insert tabs, indent multiple selected lines, and outdent lines with Shift+Tab. This makes lists, code blocks, and quoted sections easier to edit.
-
-* **Zen Mode and Fullscreen have been added.**
-  You can switch to a cleaner writing environment with fewer on-screen distractions.
-
-* **File handling has been improved.**
-  After using New or Close, Open can more easily return to the previously used folder. An issue where .md could be lost when saving Japanese filenames has also been fixed.
-
-* **Storage protection and safety have been improved.**
-  Local Auto Save data is protected against plain-text storage extraction. Private Storage remains available when you want additional passphrase-based protection. Word import and image handling have also received minor safety improvements.
-  `
+* **Fullscreen display has been improved on iPad Safari.**
+  The menu layout has been adjusted to prevent Safari’s fullscreen exit control from covering the File menu.
+`
 };
 
 const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
@@ -1813,6 +1815,7 @@ set('m-select-all', T.selectAll);
 
 set('m-history', T.menuHistory);
 set('m-format', T.menuFormat);
+set('m-insert-toc', T.insertToc);
 set('m-outline-label', T.menuOutline);
 set('m-invis-label', T.menuInvisibles);
 set('m-fullscreen-label', T.menuFullscreen);
@@ -1958,7 +1961,9 @@ function syncFilenameInputState() {
   filenameInput.readOnly = locked;
   filenameInput.classList.toggle('locked', locked);
   filenameInput.title = locked
-    ? (isJa ? '開いているファイルの名前はここでは変更できません。名前を変える場合は Save As を使用してください。' : 'The name of an opened file cannot be changed here. Use Save As to rename it.')
+    ? (isJa
+      ? '開いているファイルの名前はここでは変更できません。名前を変える場合は Save As を使用してください。'
+      : 'The name of an opened file cannot be changed here. Use Save As to rename it.')
     : '';
   filenameInput.setAttribute('aria-readonly', locked ? 'true' : 'false');
 }
@@ -2001,7 +2006,10 @@ function setupDOMPurifyHooks() {
     if (tag === 'a') {
       const href = node.getAttribute('href') || '';
       if (/^javascript:/i.test(href)) node.removeAttribute('href');
-      if (node.hasAttribute('href')) {
+      if (node.hasAttribute('href') && href.startsWith('#')) {
+        node.removeAttribute('target');
+        node.removeAttribute('rel');
+      } else if (node.hasAttribute('href')) {
         node.setAttribute('target', '_blank');
         node.setAttribute('rel', 'noopener noreferrer nofollow');
       }
@@ -2026,9 +2034,20 @@ function sanitizeHtml(html, config = MARKDOWN_SANITIZE_CONFIG) {
   setupDOMPurifyHooks();
   return DOMPurify.sanitize(String(html || ''), config);
 }
+function addHeadingIds(html) {
+  const template = document.createElement('template');
+  template.innerHTML = String(html || '');
+  const used = Object.create(null);
+  template.content.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(heading => {
+    heading.id = slugifyHeading(heading.textContent, used);
+  });
+  return template.innerHTML;
+}
+
 function safeMarkdownHtml(markdownText) {
   if (!window.marked || !window.DOMPurify) return '';
-  return sanitizeHtml(marked.parse(String(markdownText || '')), MARKDOWN_SANITIZE_CONFIG);
+  const sanitized = sanitizeHtml(marked.parse(String(markdownText || '')), MARKDOWN_SANITIZE_CONFIG);
+  return addHeadingIds(sanitized);
 }
 
 // ----------------------------------------------------
@@ -2290,7 +2309,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   renderThemeMenuChecks();
   renderInvisiblesMenuCheck();
+  syncIPadSafariFullscreenClass();
   renderFullscreenMenuCheck();
+  setupLayoutResizeObserver();
   syncFilenameInputState();
   maybeShowReleaseNotes(); // 起動時の復元・初期描画後に、このバージョン未表示なら表示
 });
@@ -2307,13 +2328,13 @@ document.querySelectorAll('.menu-trigger').forEach(btn => {
   });
 });
 document.addEventListener('click', closeMenus);
-document.addEventListener('fullscreenchange', scheduleLayoutResync);
-document.addEventListener('webkitfullscreenchange', scheduleLayoutResync);
-let resizeResyncTimer = null;
-window.addEventListener('resize', () => {
-  clearTimeout(resizeResyncTimer);
-  resizeResyncTimer = setTimeout(scheduleLayoutResync, 100);
-});
+document.addEventListener('fullscreenchange', handleFullscreenLayoutChange);
+document.addEventListener('webkitfullscreenchange', handleFullscreenLayoutChange);
+let viewportRefreshTimer = null;
+let viewportRefreshRaf = null;
+let layoutObserver = null;
+let lastObservedMainSize = { width: 0, height: 0 };
+
 function closeMenus() {
   document.querySelectorAll('.menu-dropdown').forEach(d => d.classList.remove('open'));
   document.querySelectorAll('.menu-trigger').forEach(b => b.classList.remove('open'));
@@ -2348,6 +2369,11 @@ function isFullscreenSupported() {
   );
 }
 
+function syncIPadSafariFullscreenClass() {
+  const active = isIPadSafari && !!getFullscreenElement();
+  document.body.classList.toggle('ipad-safari-fullscreen', active);
+}
+
 function renderFullscreenMenuCheck() {
   const isFs = !!getFullscreenElement();
   const entry = document.getElementById('m-fullscreen-entry');
@@ -2365,17 +2391,94 @@ function renderFullscreenMenuCheck() {
   }
 }
 
-function resyncLayout() {
-  renderFullscreenMenuCheck();
-  refreshBackdrop();
-  if (previewOpen) renderPreview();
-  if (outlineOpen) renderOutline();
+function normalizePreviewWidth(reason = '') {
+  if (!previewOpen || !previewWrap || !mainContainer || isDraggingSplitter) return;
+
+  const containerRect = mainContainer.getBoundingClientRect();
+  const containerWidth = containerRect.width;
+  if (!Number.isFinite(containerWidth) || containerWidth <= 0) return;
+
+  if (window.innerWidth <= 760) {
+    if (previewWrap.style.width) previewWrap.style.width = '';
+    return;
+  }
+
+  const previewWidth = previewWrap.getBoundingClientRect().width;
+  if (!Number.isFinite(previewWidth) || previewWidth <= 0) return;
+
+  const tooWide = previewWidth > containerWidth * 0.78;
+  const tooNarrow = previewWidth < 280;
+  const editorTooNarrow = containerWidth - previewWidth < 220;
+
+  if (tooWide || tooNarrow || editorTooNarrow) {
+    previewWrap.style.width = '';
+  }
 }
 
-function scheduleLayoutResync() {
-  requestAnimationFrame(resyncLayout);
-  setTimeout(resyncLayout, 100);
+function refreshLayoutAfterViewportChange(reason = '') {
+  syncIPadSafariFullscreenClass();
+  renderFullscreenMenuCheck();
+  if (previewOpen) {
+    normalizePreviewWidth(reason);
+    renderPreview();
+  }
+  refreshBackdrop();
+  if (outlineOpen) renderOutline();
+  backdrop.scrollTop = editor.scrollTop;
+  backdrop.scrollLeft = editor.scrollLeft;
 }
+
+function scheduleViewportRefresh(reason = '') {
+  if (viewportRefreshRaf !== null) cancelAnimationFrame(viewportRefreshRaf);
+  viewportRefreshRaf = requestAnimationFrame(() => {
+    viewportRefreshRaf = null;
+    refreshLayoutAfterViewportChange(reason);
+  });
+
+  clearTimeout(viewportRefreshTimer);
+  viewportRefreshTimer = setTimeout(() => {
+    viewportRefreshTimer = null;
+    refreshLayoutAfterViewportChange(reason);
+  }, 120);
+}
+
+function setupLayoutResizeObserver() {
+  if (layoutObserver || !window.ResizeObserver || !mainContainer) return;
+
+  const initialRect = mainContainer.getBoundingClientRect();
+  lastObservedMainSize = {
+    width: Math.round(initialRect.width),
+    height: Math.round(initialRect.height)
+  };
+
+  layoutObserver = new ResizeObserver(entries => {
+    for (const entry of entries) {
+      if (entry.target !== mainContainer) continue;
+
+      const width = Math.round(entry.contentRect.width);
+      const height = Math.round(entry.contentRect.height);
+      if (
+        Math.abs(width - lastObservedMainSize.width) < 2 &&
+        Math.abs(height - lastObservedMainSize.height) < 2
+      ) {
+        continue;
+      }
+
+      lastObservedMainSize = { width, height };
+      scheduleViewportRefresh('observer');
+    }
+  });
+
+  layoutObserver.observe(mainContainer);
+}
+
+function handleFullscreenLayoutChange() {
+  scheduleViewportRefresh('fullscreen');
+}
+
+window.addEventListener('resize', () => {
+  scheduleViewportRefresh('resize');
+});
 
 async function enterFullscreen() {
   const target = document.documentElement;
@@ -2426,7 +2529,7 @@ async function toggleFullscreen() {
     console.warn('Fullscreen toggle failed', err);
     toast(T.fullscreenFailed);
   } finally {
-    scheduleLayoutResync();
+    scheduleViewportRefresh('fullscreen');
   }
 }
 
@@ -2577,6 +2680,7 @@ function togglePreview() {
     isPreviewActive = false;
   }
   if (previewOpen) renderPreview();
+  scheduleViewportRefresh('preview-toggle');
   closeMenus();
 }
 
@@ -2736,8 +2840,10 @@ window.addEventListener('mousemove', (e) => {
   previewWrap.style.width = `${nextWidth}px`;
 });
 window.addEventListener('mouseup', () => {
+  const didDrag = isDraggingSplitter;
   isDraggingSplitter = false;
   document.body.style.cursor = '';
+  if (didDrag) scheduleViewportRefresh('splitter-end');
 });
 
 /* Touch Support */
@@ -2755,8 +2861,14 @@ window.addEventListener('touchmove', (e) => {
   const nextWidth = Math.max(minWidth, Math.min(rightWidth, maxWidth));
   previewWrap.style.width = `${nextWidth}px`;
 });
-window.addEventListener('touchend', () => { isDraggingSplitter = false; });
-window.addEventListener('touchcancel', () => { isDraggingSplitter = false; });
+function finishTouchSplitterDrag() {
+  const didDrag = isDraggingSplitter;
+  isDraggingSplitter = false;
+  if (didDrag) scheduleViewportRefresh('splitter-end');
+}
+
+window.addEventListener('touchend', finishTouchSplitterDrag);
+window.addEventListener('touchcancel', finishTouchSplitterDrag);
 //#endregion
 
 //#region [JS-06] EDITOR EVENTS & STATS UPDATER (w/ Image Drag & Drop)
@@ -2909,16 +3021,53 @@ function scrollToY(targetY, screenRatio) {
   editor.scrollTop = Math.max(0, targetY - (editor.clientHeight * ratio));
 }
 
+const PASTE_SET_RANGE_TEXT_THRESHOLD = 10000;
 let suppressInputHandling = false;
+let pasteSuppressSeq = 0;
+let tocSuppressSeq = 0;
 
-function runWhenIdle(fn) {
+function shouldDeferPasteUpdate(pasteLength, nextLength) {
+  return (
+    pasteLength >= 2000 ||
+    nextLength >= 30000 ||
+    (previewOpen && nextLength >= 20000) ||
+    (showInvisibles && nextLength >= 20000) ||
+    ((spellEnabled || srPanelOpen) && nextLength >= 15000)
+  );
+}
+
+function shouldShowPasteLoader(pasteLength, nextLength) {
+  return (
+    pasteLength >= 10000 ||
+    nextLength >= 150000 ||
+    (spellEnabled && nextLength >= 50000) ||
+    (previewOpen && nextLength >= 100000)
+  );
+}
+
+function yieldToBrowserPaint() {
   return new Promise(resolve => {
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(() => setTimeout(resolve, 0));
+    } else {
+      setTimeout(resolve, 0);
+    }
+  });
+}
+
+function deferPasteTask(fn, preferIdle) {
+  return new Promise((resolve, reject) => {
     const run = () => {
-      try { fn(); }
-      finally { resolve(); }
+      try {
+        fn();
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
     };
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(run, { timeout: 220 });
+
+    if (preferIdle && typeof requestIdleCallback === 'function') {
+      requestIdleCallback(run, { timeout: 250 });
     } else {
       setTimeout(run, 0);
     }
@@ -2941,38 +3090,94 @@ function updateStatsOnly() {
   set('s-chars', text.replace(/[\n\r]/g, '').length);
 }
 
-async function runDeferredLargePasteUpdate() {
-  updateStatsOnly();
-  await runWhenIdle(() => renderPreview());
-  await runWhenIdle(() => refreshBackdrop());
-  if (outlineOpen) await runWhenIdle(() => renderOutline());
-  if (spellEnabled) await runWhenIdle(() => runSpellCheck());
-  if (srPanelOpen) await runWhenIdle(() => performSearch(false));
-}
-
 async function handlePlainTextPaste(text) {
   if (!text) return;
-  if (text.length > 10000) {
+
+  const normalizedText = String(text).normalize('NFC');
+  const pasteLength = normalizedText.length;
+  const start = editor.selectionStart;
+  const end = editor.selectionEnd;
+  const currentLength = editor.value.length;
+  const nextLength = currentLength - (end - start) + pasteLength;
+
+  const useSetRangeText = pasteLength >= PASTE_SET_RANGE_TEXT_THRESHOLD;
+  const deferUpdate = shouldDeferPasteUpdate(pasteLength, nextLength);
+  const showPasteLoader = shouldShowPasteLoader(pasteLength, nextLength);
+
+  if (showPasteLoader) {
     showLoader(T.processingPasteToast);
     setStatusBadge(T.processingPasteStatus);
-    await new Promise(resolve => setTimeout(resolve, 50));
-    suppressInputHandling = true;
+    await new Promise(resolve => setTimeout(resolve, 30));
+  }
+
+  const suppressSeq = ++pasteSuppressSeq;
+  suppressInputHandling = true;
+  const tasks = [];
+
+  try {
+    if (useSetRangeText) {
+      editor.setRangeText(normalizedText, start, end, 'end');
+    } else {
+      const insertTextSupported = document.queryCommandSupported &&
+        document.queryCommandSupported('insertText');
+
+      if (insertTextSupported) {
+        document.execCommand('insertText', false, normalizedText);
+      } else {
+        editor.setRangeText(normalizedText, start, end, 'end');
+      }
+    }
+
+    markDirty();
+    updateStatsOnly();
+
+    const preferIdle = deferUpdate || showPasteLoader;
+    tasks.push(deferPasteTask(() => refreshBackdrop(), preferIdle));
+
+    if (previewOpen) {
+      tasks.push(deferPasteTask(() => renderPreview(), preferIdle));
+    }
+
+    if (outlineOpen) {
+      tasks.push(deferPasteTask(() => renderOutline(), preferIdle));
+    }
+
+    if (srPanelOpen) {
+      tasks.push(deferPasteTask(() => performSearch(false), preferIdle));
+    }
+
+    if (spellEnabled) {
+      tasks.push(deferPasteTask(() => runSpellCheck(), preferIdle));
+    }
+
+    clearTimeout(autoSaveTimeout);
+    autoSaveTimeout = setTimeout(triggerAutoSave, 1500);
+  } finally {
+    // Some browsers dispatch execCommand's input event after the next task.
+    setTimeout(() => {
+      const release = () => {
+        if (suppressSeq === pasteSuppressSeq) {
+          suppressInputHandling = false;
+        }
+      };
+
+      if (typeof requestAnimationFrame === 'function') {
+        requestAnimationFrame(release);
+      } else {
+        release();
+      }
+    }, 50);
+  }
+
+  if (showPasteLoader) {
     try {
-      const start = editor.selectionStart;
-      const end = editor.selectionEnd;
-      editor.setRangeText(text, start, end, 'end');
-      markDirty();
-      await runDeferredLargePasteUpdate();
-      await triggerAutoSave();
+      await Promise.all(tasks);
     } finally {
-      suppressInputHandling = false;
       hideLoader();
       renderStorageBadge();
     }
   } else {
-    document.execCommand('insertText', false, text);
-    markDirty();
-    triggerAutoSave();
+    Promise.all(tasks).catch(error => console.warn('Deferred paste update failed', error));
   }
 }
 
@@ -2999,7 +3204,7 @@ filenameInput.addEventListener('input', () => {
 
 editor.addEventListener('paste', e => {
   e.preventDefault();
-  const text = (e.clipboardData || window.clipboardData).getData('text').normalize('NFC');
+  const text = (e.clipboardData || window.clipboardData)?.getData('text') || '';
   handlePlainTextPaste(text);
 });
 
@@ -3640,6 +3845,274 @@ function replaceWord(original, replacement) {
 }
 //#endregion
 
+const MDWORKS_TOC_START = '<!-- mdworks-toc:start -->';
+const MDWORKS_TOC_END = '<!-- mdworks-toc:end -->';
+const TOC_MAX_DEPTH = 3;
+const TOC_LOADER_TEXT_THRESHOLD = 15000;
+const TOC_LOADER_HEADING_THRESHOLD = 40;
+const TOC_LOADER_REPLACEMENT_THRESHOLD = 2500;
+
+function detectLineEnding(text) {
+  return String(text || '').includes('\r\n') ? '\r\n' : '\n';
+}
+
+function findTocBlockRange(text) {
+  const source = String(text || '');
+  const start = source.indexOf(MDWORKS_TOC_START);
+  if (start < 0) return null;
+  const endMarker = source.indexOf(MDWORKS_TOC_END, start + MDWORKS_TOC_START.length);
+  return {
+    start,
+    end: endMarker < 0 ? source.length : endMarker + MDWORKS_TOC_END.length
+  };
+}
+
+function maskRange(chars, start, end) {
+  for (let i = start; i < end; i++) {
+    if (chars[i] !== '\r' && chars[i] !== '\n') chars[i] = ' ';
+  }
+}
+
+function maskMarkdownForToc(text) {
+  const source = String(text || '');
+  const masked = source.split('');
+  const tocRange = findTocBlockRange(source);
+  if (tocRange) maskRange(masked, tocRange.start, tocRange.end);
+
+  let fence = null;
+  let offset = 0;
+  source.split(/\r?\n/).forEach(line => {
+    const lineEnd = offset + line.length;
+    const lineInToc = tocRange && offset < tocRange.end && lineEnd >= tocRange.start;
+    const candidate = line.replace(/^ {0,3}(?:> ?)* {0,3}/, '');
+    const marker = candidate.match(/^(`{3,}|~{3,})/);
+    if (lineInToc) {
+      maskRange(masked, offset, lineEnd);
+    } else if (fence) {
+      maskRange(masked, offset, lineEnd);
+      if (marker && marker[1][0] === fence.char && marker[1].length >= fence.length &&
+          candidate.slice(marker[1].length).trim() === '') {
+        fence = null;
+      }
+    } else if (marker) {
+      fence = { char: marker[1][0], length: marker[1].length };
+      maskRange(masked, offset, lineEnd);
+    }
+    offset = lineEnd + (source.slice(lineEnd, lineEnd + 2) === '\r\n' ? 2 : 1);
+  });
+
+  let commentStart = -1;
+  for (let i = 0; i < source.length; i++) {
+    if (commentStart < 0 && masked[i] !== ' ' && source.startsWith('<!--', i)) {
+      commentStart = i;
+      i += 3;
+    } else if (commentStart >= 0 && source.startsWith('-->', i)) {
+      maskRange(masked, commentStart, i + 3);
+      commentStart = -1;
+      i += 2;
+    }
+  }
+  if (commentStart >= 0) maskRange(masked, commentStart, source.length);
+  return masked.join('');
+}
+
+function stripInlineMarkdownForHeading(text) {
+  const container = document.createElement('div');
+  if (window.marked && window.DOMPurify) {
+    container.innerHTML = sanitizeHtml(marked.parseInline(String(text || '')), MARKDOWN_SANITIZE_CONFIG);
+    return (container.textContent || '').trim();
+  }
+  return String(text || '')
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/<[^>]+>/g, '')
+    .replace(/[*_`~]/g, '')
+    .replace(/\\([\\[\]])/g, '$1')
+    .trim();
+}
+
+function extractMarkdownHeadings(text, options = {}) {
+  const maxDepth = Math.min(6, Math.max(1, options.maxDepth || TOC_MAX_DEPTH));
+  const maskedLines = maskMarkdownForToc(text).split(/\r?\n/);
+  const sourceLines = String(text || '').split(/\r?\n/);
+  const headings = [];
+  maskedLines.forEach((line, index) => {
+    const match = line.match(/^ {0,3}(?:> ?)* {0,3}(#{1,6})(?!#)[ \t]+(.+)$/);
+    if (!match) return;
+    const level = match[1].length;
+    if (level > maxDepth) return;
+    const sourceMatch = sourceLines[index].match(/^ {0,3}(?:> ?)* {0,3}#{1,6}(?!#)[ \t]+(.+)$/);
+    if (!sourceMatch) return;
+    const raw = sourceMatch[1].replace(/[ \t]+#+[ \t]*$/, '').trim();
+    const title = stripInlineMarkdownForHeading(raw);
+    if (!title || title === '目次' || title === 'Table of Contents') return;
+    headings.push({ level, title });
+  });
+  return headings;
+}
+
+function slugifyHeading(text, used) {
+  const registry = used || Object.create(null);
+  let slug = String(text || '')
+    .replace(/<[^>]+>/g, '')
+    .replace(/[*_`~\[\]!\\]/g, '')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[!"#$%&'()*+,./:;<=>?@^`{|}~・、。]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+  if (!slug) slug = 'section';
+  const base = slug;
+  let suffix = 2;
+  while (registry[slug]) slug = `${base}-${suffix++}`;
+  registry[slug] = true;
+  return slug;
+}
+
+function escapeMarkdownLinkText(text) {
+  return String(text || '').replace(/([\[\]\\])/g, '\\$1');
+}
+
+function buildTocMarkdown(headings, lineEnding = '\n') {
+  const baseLevel = Math.min(...headings.map(heading => heading.level));
+  const used = Object.create(null);
+  const items = headings.map(heading => {
+    const indent = '  '.repeat(Math.max(0, heading.level - baseLevel));
+    const title = escapeMarkdownLinkText(heading.title);
+    const slug = slugifyHeading(heading.title, used);
+    return `${indent}- [${title}](#${slug})`;
+  });
+  return [
+    MDWORKS_TOC_START,
+    '',
+    `## ${T.tocTitle}`,
+    '',
+    ...items,
+    '',
+    MDWORKS_TOC_END
+  ].join(lineEnding);
+}
+
+function replaceEditorText(start, end, replacement) {
+  editor.focus();
+  editor.setSelectionRange(start, end);
+  const before = editor.value;
+  document.execCommand('insertText', false, replacement);
+  if (editor.value === before && (start !== end || replacement)) {
+    editor.setRangeText(replacement, start, end, 'end');
+  }
+}
+
+async function insertOrUpdateToc() {
+  closeMenus();
+  const text = editor.value;
+  const existing = findTocBlockRange(text);
+  if (existing && !confirm(T.tocUpdateConfirm)) return;
+
+  let tocLoaderVisible = false;
+  const showTocLoader = async () => {
+    if (tocLoaderVisible) return;
+    tocLoaderVisible = true;
+    showLoader(T.processingTocToast);
+    setStatusBadge(T.processingTocStatus);
+    await yieldToBrowserPaint();
+  };
+
+  try {
+    if (text.length >= TOC_LOADER_TEXT_THRESHOLD) {
+      await showTocLoader();
+    }
+
+    const headings = extractMarkdownHeadings(text, { maxDepth: TOC_MAX_DEPTH });
+    if (!headings.length) {
+      toast(T.tocNoHeadings);
+      return;
+    }
+
+    const lineEnding = detectLineEnding(text);
+    const toc = buildTocMarkdown(headings, lineEnding);
+    const isLargeToc = (
+      text.length >= TOC_LOADER_TEXT_THRESHOLD ||
+      headings.length >= TOC_LOADER_HEADING_THRESHOLD ||
+      toc.length >= TOC_LOADER_REPLACEMENT_THRESHOLD
+    );
+
+    if (isLargeToc) {
+      await showTocLoader();
+    }
+
+    let start;
+    let end;
+    let replacement = toc;
+    if (existing) {
+      start = existing.start;
+      end = existing.end;
+    } else {
+      start = editor.selectionStart;
+      end = editor.selectionEnd;
+      const needsLeadingBreak = start > 0 && !/[\r\n]$/.test(text.slice(0, start));
+      const needsTrailingBreak = end < text.length && !/^[\r\n]/.test(text.slice(end));
+      replacement = `${needsLeadingBreak ? lineEnding : ''}${toc}${needsTrailingBreak ? lineEnding : ''}`;
+    }
+
+    let suppressSeq = 0;
+    if (isLargeToc) {
+      suppressSeq = ++tocSuppressSeq;
+      suppressInputHandling = true;
+    }
+
+    try {
+      replaceEditorText(start, end, replacement);
+      const cursor = start + replacement.length;
+      editor.setSelectionRange(cursor, cursor);
+    } finally {
+      if (isLargeToc) {
+        // Some browsers dispatch execCommand's input event after the next task.
+        setTimeout(() => {
+          const release = () => {
+            if (suppressSeq === tocSuppressSeq) {
+              suppressInputHandling = false;
+            }
+          };
+
+          if (typeof requestAnimationFrame === 'function') {
+            requestAnimationFrame(release);
+          } else {
+            release();
+          }
+        }, 50);
+      }
+    }
+
+    markDirty();
+    updateStatsOnly();
+
+    const tasks = [];
+    tasks.push(deferPasteTask(() => refreshBackdrop(), isLargeToc));
+    if (previewOpen) tasks.push(deferPasteTask(() => renderPreview(), isLargeToc));
+    if (outlineOpen) tasks.push(deferPasteTask(() => renderOutline(), isLargeToc));
+    if (srPanelOpen) tasks.push(deferPasteTask(() => performSearch(false), isLargeToc));
+    if (spellEnabled) tasks.push(deferPasteTask(() => runSpellCheck(), isLargeToc));
+
+    clearTimeout(autoSaveTimeout);
+    autoSaveTimeout = setTimeout(triggerAutoSave, 1500);
+
+    if (isLargeToc) {
+      await Promise.all(tasks);
+    } else {
+      Promise.all(tasks).catch(error => console.warn('Deferred TOC update failed', error));
+    }
+
+    toast(existing ? T.tocUpdated : T.tocInserted);
+  } finally {
+    if (tocLoaderVisible) {
+      hideLoader();
+      renderStorageBadge();
+    }
+  }
+}
+
 //#region [JS-12] TEXT INSERTION HELPERS
 function getPos() { return { s: editor.selectionStart, e: editor.selectionEnd }; }
 function setRange(s, e) {
@@ -3936,8 +4409,8 @@ async function handleSave(isSaveAs = false) {
           syncFilenameInputState();
         }
         if (fileHandle) {
-          syncFilenameInputState();
           lastPickerStartHandle = fileHandle;
+          syncFilenameInputState();
         }
         const writable = await fileHandle.createWritable();
         await writable.write(editor.value);
@@ -4976,7 +5449,10 @@ function resetDocumentIdentity(filename = 'untitled.md') {
 async function newFile() {
   if (isDirty && !confirm(T.confirmNew)) return;
   await saveToHistoryList(filenameInput.value, editor.value);
-  editor.value = ''; resetDocumentIdentity(); update(); markSaved();
+  editor.value = '';
+  resetDocumentIdentity();
+  update();
+  markSaved();
   await triggerAutoSave();
   editor.focus();
   toast(T.newCreated);
