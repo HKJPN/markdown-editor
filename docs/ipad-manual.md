@@ -379,9 +379,8 @@ Select **File > Print / Save as PDF** to open the browser print dialog based on 
 
 ---
 
-## 8. Find and Replace
-
-MD//WORKS Editor can search for text and replace specific words or phrases across the document.
+## 8. Search, Replace, and Final Touches
+MD//WORKS Editor provides tools to search and replace text strings across your document, as well as an automatic table of contents generator. These features are highly useful when editing long drafts, meeting minutes, specifications, or research notes.
 
 ### 8-1. Finding Text
 
@@ -416,6 +415,26 @@ The Find and Replace panel provides the following options:
 ### 8-4. Formatting Markdown
 
 Select **Edit > Format Markdown** to clean up excessive blank lines and trailing spaces. Running this before sharing or exporting helps keep the document clean.
+
+## 8-5. Inserting a Table of Contents
+Selecting **Edit > Insert Table of Contents** automatically generates a clickable, linked table of contents based on the headings (`#` to `###` / H1 to H3) in your document.
+
+> 💡 **Tip: Choosing the Right Tool**
+> For navigating your document while editing in MD//WORKS, we recommend using the **Outline View** on the right side of the screen.
+> This "Insert Table of Contents" feature is designed for the **final polishing stage** of your document—such as right before handing a Markdown file over to someone else or exporting it to HTML/PDF.
+
+### Usage and Important Notes
+* **Inserting for the First Time**
+  Place your cursor exactly where you want the table of contents to appear (e.g., right after the document title or before the main body text) and then run the command.
+
+* **Updating the Table of Contents**
+  If a table of contents previously inserted by MD//WORKS already exists in the document, running the command will **automatically locate and update the existing table of contents with the latest heading structure**, regardless of where your cursor is placed (it will not create a duplicate).
+
+* **Manually Editing the Table of Contents**
+  The generated table of contents is inserted as regular text, so you can freely modify it. However, please note that if you run **Edit > Insert Table of Contents** again to refresh it, **any manual edits you made within the table of contents will be overwritten and reset** based on the latest headings. If you need to make manual fine-tunings, it is highly recommended to do so at the very end, just before exporting.
+
+> 📄 **Note on Links in Exported PDFs**
+> When saving your document as a PDF, the table of contents can still function as in-page clickable links depending on your viewing environment (this has been verified using the standard "Microsoft Print to PDF" feature on Windows). Since behavior may vary depending on the browser or PDF viewer used, we recommend testing the links once before distributing your file.
 
 ---
 
