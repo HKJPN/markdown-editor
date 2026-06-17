@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 - Added Table of Contents (TOC) generation.
 - Improved paste handling stability for large text.
 - Adjusted menu layout for iPad Safari fullscreen mode.
-- Add sup and sub tag support in markdown preview.
+- Added sup and sub tag support in markdown preview.
+- Added Scientific Writing Guide and iPad manual.
 
 ## 2026-06-05 -v1.5.5- Writing Comfort and File Handling Improvements
 
