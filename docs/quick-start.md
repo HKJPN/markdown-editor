@@ -25,6 +25,7 @@ Click the Preview button to check how your Markdown will be rendered.
 ## 4. Editing Features
 
 - Headings
+- Automatic Table of Contents
 - Bold and italic text
 - Bullet lists
 - Numbered lists
