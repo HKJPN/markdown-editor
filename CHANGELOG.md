@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2026-06-17 -v1.5.6-2017- TOC and Editing Stability Improvements
+## 2026-06-17 -v1.5.6- TOC and Editing Stability Improvements
 
 - Added Table of Contents (TOC) generation.
 - Improved paste handling stability for large text.
