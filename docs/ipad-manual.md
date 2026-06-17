@@ -546,17 +546,25 @@ For everyday proofreading, summarizing, terminology checks, and basic structural
 
 #### For Papers, Articles, and Technical Documents
 
-* Identify inconsistent terminology or wording in this document.
-* Summarize the entire document in about 300 characters.
-* Review the selected section and rewrite any unnatural expressions in a more academic and objective tone.
-* Extract only the headings from this chapter.
+* Review the entire document and list any inconsistent terminology or spelling variations that need fixing.
+* Summarize the entire document in about 300 words.
+* Review the specified section (e.g., `# Chapter 3`) for awkward phrasing and revise it into a more academic and objective tone.
+* Check the specified section (e.g., `# Section 3-1`) for any English grammatical errors.
+* Extract only the headings from the specified chapter.
+* Regarding sections `# A` through `# D`, would it be clearer if `# C` came last?
+* Review the order of the chapters and suggest a more readable structure.
+* Organize my reference notes and verify if they align with the claims made in the main text.
 
 #### For Simple Coding Support
 
-* Create a regular expression pattern to replace all half-width parentheses in this document with full-width parentheses.
-* Convert the experimental process described in the selected text into a Mermaid flowchart.
-* Add explanatory comments to each line of the selected Python code.
+* Create a regular expression pattern to batch-replace all half-width parentheses with full-width parentheses in this document.
+* Convert the experimental process described in the specified section (e.g., `# Chapter 3`) into a Mermaid flowchart.
+* Check the specified lines (e.g., `Lines 120-135`) or code block for any inconsistencies in the multilingual message `I18N`.
+* Identify the cause and suggest a fix for the error that occurs when running the R code block at the specified lines (e.g., `# Line 3000`).
+* Explain the processing logic of the specified JavaScript function so that even a beginner can understand it.
+* Organize the following specifications as an implementation prompt to be passed to Codex.
 
+ 
 ### 11-3. Important Notes When Using Browser AI
 
 When you use a browser-based AI assistant, the entire visible document or the selected area may be processed by the AI service. If you are working with confidential information or internal company documents, always check what information is being shared and how your browser manages AI access.
