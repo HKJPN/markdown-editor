@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-06-17 -v1.5.6-2026-06-17 -v1.5.6- TOC and Editing Stability Improvements
+
+- Added Table of Contents (TOC) generation.
+- Improved paste handling stability for large text.
+- Adjusted menu layout for iPad Safari fullscreen mode.
+- Add sup and sub tag support in markdown preview.
+
 ## 2026-06-05 -v1.5.5- Writing Comfort and File Handling Improvements
 
 - Invisible characters can now be shown.
