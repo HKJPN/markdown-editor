@@ -416,7 +416,7 @@ The Find and Replace panel provides the following options:
 
 Select **Edit > Format Markdown** to clean up excessive blank lines and trailing spaces. Running this before sharing or exporting helps keep the document clean.
 
-## 8-5. Inserting a Table of Contents
+### 8-5. Inserting a Table of Contents
 Selecting **Edit > Insert Table of Contents** automatically generates a clickable, linked table of contents based on the headings (`#` to `###` / H1 to H3) in your document.
 
 > 💡 **Tip: Choosing the Right Tool**
