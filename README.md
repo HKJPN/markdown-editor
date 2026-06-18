@@ -15,6 +15,8 @@ Try it instantly in your browser.
 - [Scientific Writing Guide](docs/scientific-writing.md)(Draft)
 - [Security / Privacy](SECURITY.md)
 
+
+You are also free to host MD//WORKS on your own website under the MIT License. However, for security and performance reasons, we strongly recommend keeping your deployment updated to the latest version.
 ---
 ## ✨ What’s New in v1.5.5
 
@@ -331,5 +333,3 @@ MD//WORKS is intentionally simpler:
 ## 📄 License
 
 **MIT License**
-
-You are also free to host MD//WORKS on your own website under the MIT License. However, for security and performance reasons, we strongly recommend keeping your deployment updated to the latest version.
