@@ -2,7 +2,8 @@
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
 <img width="869" height="720" alt="1_5_5rayoute" src="https://github.com/user-attachments/assets/5200e876-6cfc-4071-8a3e-d92a96c4ef2d" />
 
-**MD//WORKS is the only editor that transforms your document into a secure, portable application. No installation. No cloud. All you need is a browser, yet everything runs entirely locally. Plus, Seamless Browser **AI**: Connect with Chrome Gemini or Brave Leo via the sidebar. The **AI** reads your document **directly—no need to copy-paste** your text to give instructions!  For more information, see ["11. AI-Assisted Writing" in the manual](docs/manual.md#11-ai-assisted-writing).
+***100% Local, yet AI-Ready.**
+MD//WORKS itself is entirely local and cloud-free, ensuring your data never leaves your device. However, if you need AI assistance, it perfectly complements your browser's native AI sidebars (like Chrome Gemini or Brave Leo). You can leverage these built-in browser AIs to read your document directly without copy-pasting, while keeping the editor itself completely independent of external APIs.  For more information, see ["11. AI-Assisted Writing" in the manual](docs/manual.md#11-ai-assisted-writing).
 
 # 🚀 Live Demo
 
@@ -59,13 +60,11 @@ Ideal for turning Word drafts, manuals, reports, and meeting notes into clean Ma
 
 ### 📝 Full Transparency for Full Security
 
-MD//WORKS is fully open-source—no exceptions. Although it runs in the browser as an HTML app, your documents are processed locally on your device. Editing, saving, exporting, and encryption are performed in the browser, and your document data is not uploaded to a server.
+MD//WORKS is fully open-source—no exceptions. Although it runs in the browser as an HTML app, your documents are processed locally on your device. Editing, saving, exporting, and encryption are performed in the browser, and your document data is not uploaded to a server. The raw source code before building is managed locally/in another repo, but the distributed HTML is unminified enough to verify its safety.
 
 - No installation.
 - No account.
 - No analytics, no tracking. 
-
-Don’t take our word for it—review the code yourself. If you find issues or potential weaknesses, please report them via Issues or contact us privately if needed.
 
 **For Privacy-Conscious Users:**
 
@@ -256,7 +255,7 @@ Your writing stays local unless you choose to export or share it.
 | **Export as an encrypted single file** | - | - | - | ✅ |
 | Local-only encryption / No server required | Partial | Partial | Partial | ✅ |
 | Draft restoration / Safety during writing | Partial | Partial | - | ✅ |
-| **AI-assisted writing** | via Extension | via Plugin | - (Copy/paste) | ✅ (**Built-in** *) |
+| AI-assisted writing | via Extension | via Plugin | - (Copy/paste) | 🤝 Browser Integration* |
 | Usability offline / in restricted environments | Partial | ✅ | ✅ | ✅ |
 | Variety of plugins / extensions | Extensive | Rich | Limited | - |
 
