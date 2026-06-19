@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.5.5 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.5.6 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
 <img width="869" height="720" alt="1_5_5rayoute" src="https://github.com/user-attachments/assets/5200e876-6cfc-4071-8a3e-d92a96c4ef2d" />
 
@@ -19,34 +19,23 @@ Try it instantly in your browser.
 You are also free to host MD//WORKS on your own website under the MIT License. However, for security and performance reasons, we strongly recommend keeping your deployment updated to the latest version.
 
 ---
-## ✨ What’s New in v1.5.5
+## ✨ What’s New in v1.5.6
 
-* **Invisible characters can now be shown.**
-  Full-width spaces, tabs, trailing spaces, and line breaks can now be displayed in the editor, making it easier to clean up Markdown drafts and Japanese documents.
-* **Tab editing has been improved.**
-  You can now insert tabs, indent multiple selected lines, and outdent lines with Shift+Tab. This makes lists, code blocks, and quoted sections easier to edit.
-* **Zen Mode and Fullscreen have been added.**
-  You can switch to a cleaner writing environment with fewer on-screen distractions.
-* **File handling has been improved.**
-  After using New or Close, Open can more easily return to the previously used folder. An issue where .md could be lost when saving Japanese filenames has also been fixed.
-* **Storage protection and safety have been improved.**
-  Local Auto Save data is protected against plain-text storage extraction. Private Storage remains available when you want additional passphrase-based protection. Word import and image handling have also received minor safety improvements.
+* Added **automatic Table of Contents** (TOC) generation.
+* **Improved paste stability** when handling large amounts of text.
+* Adjusted the menu layout for fullscreen mode in **iPad** Safari.
+* Added **superscript (`<sup>`) and subscript (`<sub>`)support** in Markdown preview.
+* Added the **Scientific Writing Guide** and the **iPad User Guide**.
 
 ### **🔒 Release File Hashes (Checksums)**
-To ensure security and file integrity, all official releases starting from v1.5.4 include **SHA-256 hash values** in the release notes. You can verify that your downloaded file has not been tampered with by using standard OS commands (such as `Get-FileHash` in Windows PowerShell).
+To ensure security and   file integrity, all official releases starting from v1.5.4 include **SHA-256 hash values** in the release notes. You can verify that your downloaded file has not been tampered with by using standard OS commands (such as `Get-FileHash` in Windows PowerShell).
 
 ## ✨ Upcoming Features
 
-* **📱 User Manual for iPad**
-* **Scientific Writing Guide**
-* Fix iPadOS fullscreen UI overlap
-* **Improved paste stability:** We plan to refine the paste handling logic to make pasting large blocks of text more stable and reliable.
-* **Automatic table of contents:** We plan to add a feature that can automatically generate a table of contents.
 * **Viewer-only mode:** We plan to add distribution-oriented modes, including a read-only mode and a password-protected mode.
 * **Footnotes**: We plan to add support for footnotes, such as citations and references.
 * **Math Equations**: We plan to support complex mathematical formulas used in fields like mathematics and engineering.
 * **Update notification:** When a newer official release of MD//WORKS is available, a 💡 icon will appear in the menu bar and provide a link to the latest version.
-
 
 ---
 
