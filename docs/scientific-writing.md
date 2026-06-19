@@ -21,6 +21,8 @@ The core philosophy of Markdown is the separation of two distinct tasks:
 
 While drafting, you use simple symbols to indicate headings, emphasis, footnotes, tables, and code. The rendering engine then handles their visual presentation.
 
+> **Version note:** This guide describes features planned for MD//WORKS v1.5.7. The current stable release is v1.5.6. Footnote support will become available with the release of v1.5.7.
+
 ## Why Use Markdown for Scientific Documents?
 
 ### 1. Maintain Your Writing Flow
