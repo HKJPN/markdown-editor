@@ -21,6 +21,8 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 ---
 ## ✨ What’s New in v1.5.6
 
+This release introduces **automatic Table of Contents** generation, improves the **stability of large text pastes**, refines the **iPad** Safari fullscreen experience, and expands support for **scientific and technical writing**.
+
 * Added **automatic Table of Contents** (TOC) generation.
 * **Improved paste stability** when handling large amounts of text.
 * Adjusted the menu layout for fullscreen mode in **iPad** Safari.
