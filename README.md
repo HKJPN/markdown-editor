@@ -255,7 +255,7 @@ Your writing stays local unless you choose to export or share it.
 | **Export as an encrypted single file** | - | - | - | ✅ |
 | Local-only encryption / No server required | Partial | Partial | Partial | ✅ |
 | Draft restoration / Safety during writing | Partial | Partial | - | ✅ |
-| AI-assisted writing | via Extension | via Plugin | - (Copy/paste) | 🤝 Browser Integration* |
+| **AI-assisted writing** | via Extension | via Plugin | - (Copy/paste) | 🤝 Browser Integration* |
 | Usability offline / in restricted environments | Partial | ✅ | ✅ | ✅ |
 | Variety of plugins / extensions | Extensive | Rich | Limited | - |
 
