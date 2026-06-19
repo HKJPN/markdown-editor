@@ -27,7 +27,7 @@ MD//WORKSはMITライセンスの下、ご自身のウェブサイトで自由�
 * 大量のテキストを貼り付ける際の**安定性を改善**しました。
 * **iPad Safari**の全画面表示に合わせて、メニュー配置を調整しました。
 * Markdownプレビューで**上付き文字（`<sup>`）と下付き文字（`<sub>`）の表示に対応**しました。
-* 「Markdownによる**科学論文執筆ガイド**」(docs/scientific-writing-ja.md)と「**iPadユーザーガイド**」(docs/ipad-manual-ja.md)を追加しました。
+* [「Markdownによる**科学論文執筆ガイド**」](docs/scientific-writing-ja.md)と[「**iPadユーザーガイド**」](docs/ipad-manual-ja.md)を追加しました。
 
 
 ### 🔒 リリースファイルのハッシュ値（チェックサム）について**
