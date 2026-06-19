@@ -21,6 +21,8 @@ Markdownの核となる哲学は、以下の2つの作業を明確に分離す�
 
 執筆中は、シンプルな記号を使って見出し、強調、脚注、表、コードを指定します。視覚的な表示は、その後のレンダリングエンジンが処理します。
 
+> **Version note:** This guide describes features planned for MD//WORKS v1.5.7. The current stable release is v1.5.6. Footnote support will become available with the release of v1.5.7.
+
 ## なぜ科学文書にMarkdownを使用するのか？
 
 ### 1. 執筆のフローを維持できる
