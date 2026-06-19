@@ -45,6 +45,8 @@ To ensure security and file integrity, all official releases starting from v1.5.
 * **Viewer-only mode:** We plan to add distribution-oriented modes, including a read-only mode and a password-protected mode.
 * **Footnotes**: We plan to add support for footnotes, such as citations and references.
 * **Math Equations**: We plan to support complex mathematical formulas used in fields like mathematics and engineering.
+* **Update notification:** When a newer official release of MD//WORKS is available, a 💡 icon will appear in the menu bar and provide a link to the latest version.
+
 
 ---
 
