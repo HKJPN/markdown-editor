@@ -3,7 +3,7 @@
 <img width="869" height="720" alt="1_5_5rayoute" src="https://github.com/user-attachments/assets/5200e876-6cfc-4071-8a3e-d92a96c4ef2d" />
 
 ***100% Local, yet AI-Ready.**
-MD//WORKS itself is entirely local and cloud-free, ensuring your data never leaves your device. However, if you need AI assistance, it perfectly complements your browser's native AI sidebars (like Chrome Gemini or Brave Leo). You can leverage these built-in browser AIs to read your document directly without copy-pasting, while keeping the editor itself completely independent of external APIs.  For more information, see ["11. AI-Assisted Writing" in the manual](docs/manual.md#11-ai-assisted-writing).
+MD//WORKS itself is entirely local and cloud-free, **ensuring your data never leaves your device**. However, if you need AI assistance, it perfectly complements your browser's native AI sidebars. You can leverage these built-in browser AIs to read your document directly **without copy-pasting**, while keeping the editor itself completely independent of external APIs.  For more information, see ["11. AI-Assisted Writing" in the manual](docs/manual.md#11-ai-assisted-writing).
 
 # 🚀 Live Demo
 
