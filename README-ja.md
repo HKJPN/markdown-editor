@@ -28,7 +28,7 @@ MD//WORKSはMITライセンスの下、ご自身のウェブサイトで自由�
 * **iPad Safari**の全画面表示に合わせて、メニュー配置を調整しました。
 * Markdownプレビューで**上付き文字（`<sup>`）と下付き文字（`<sub>`）の表示に対応**しました。
 * [「Markdownによる**科学論文執筆ガイド**」](docs/scientific-writing-ja.md)と[「**iPadユーザーガイド**」](docs/ipad-manual-ja.md)を追加しました。
-* 💡[大量画像も秒でマークダウンファイルに変換するimage2md.pyを別途用意しました](https://github.com/HKJPN/images2md/tree/main)
+* 💡[大量画像も秒でマークダウンファイルに変換するimage2md.pyを別途用意しています](https://github.com/HKJPN/images2md/tree/main)
 
 
 ### 🔒 リリースファイルのハッシュ値（チェックサム）について**
