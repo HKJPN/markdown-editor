@@ -29,7 +29,7 @@ This release introduces **automatic Table of Contents** generation, improves the
 * Adjusted the menu layout for fullscreen mode in **iPad** Safari.
 * Added **superscript (`<sup>`) and subscript (`<sub>`)support** in Markdown preview.
 * Added the [**Scientific Writing Guide**](docs/scientific-writing.md) and the [**iPad User Guide**](docs/ipad-manual.md).
-* ** 💡[Need to convert bulk images instantly? Try our offline tool, images2md.](https://github.com/HKJPN/images2md/tree/main)**
+* 💡[Need to convert bulk images instantly? Try our offline tool, images2md.](https://github.com/HKJPN/images2md/tree/main)
 
 ### **🔒 Release File Hashes (Checksums)**
 To ensure security and   file integrity, all official releases starting from v1.5.4 include **SHA-256 hash values** in the release notes. You can verify that your downloaded file has not been tampered with by using standard OS commands (such as `Get-FileHash` in Windows PowerShell).
