@@ -1,382 +1,343 @@
-# A Guide to Using Markdown for Scientific Writing　v.1.5.7
+
+# A Guide to Markdown for Scientific Writing
 
 ## Abstract
 
-The primary advantage of using Markdown for scientific writing is that it allows you to focus on logical structure and content without being distracted by visual formatting.
+The primary advantage of using Markdown for scientific writing is that it allows you to focus on the logical structure and scientific content of your manuscript, without getting distracted by final layout and formatting.
 
-MD//WORKS v1.5.7 supports essential academic writing features, including footnotes, superscripts, subscripts, basic tables, code blocks, an Outline view, and automatic Table of Contents (TOC) generation. By combining these tools, you can efficiently draft research notes, technical reports, conference materials, and manuscripts in plain text.
+While Markdown itself is a lightweight markup language, many Markdown editors and conversion tools support extended features like footnotes, mathematical equations, tables, and code blocks. By combining Markdown with conversion tools like Pandoc, you can draft research notes, technical reports, conference materials, and manuscript drafts in plain text, and later export them to formats such as Word, PDF, HTML, or LaTeX.
 
-We recommend starting by outlining your document with headings and using temporary text labels for footnotes. Prioritize organizing your ideas and scientific narrative first; the final layout can be refined after the content and structure are established.
+An effective workflow involves outlining your document with headings first, organizing the flow of your objectives, results, and interpretations. Only after the content and logical structure are solidified should you worry about applying specific journal formatting or finalizing the layout.
+
+> **Important:** Some features—such as footnotes, tables, math equations, subscripts, and superscripts—are not part of the standard Markdown specification. They are extended syntax provided by specific editors or parsers. Consequently, the same Markdown file may render differently depending on the environment you use.
 
 ## Introduction
 
-Have you ever lost valuable time while writing a paper or report because a figure shifted out of place, footnote numbers had to be manually reordered, or paragraph formatting unexpectedly changed? These tasks have little to do with scientific reasoning itself.
+Have you ever lost valuable time during the writing process because a figure shifted, footnotes needed renumbering, or paragraph formatting unexpectedly changed? Most of these tasks have nothing to do with interpreting experimental results or building scientific arguments.
 
-Word processors such as Microsoft Word are excellent for WYSIWYG—“What You See Is What You Get”—editing and preparing documents for final submission or printing. However, frequent mouse operations and layout adjustments can interrupt your train of thought during the drafting process.
+Word processors like Microsoft Word are excellent for creating the final, submission-ready document, as they allow you to edit in a "What You See Is What You Get" (WYSIWYG) environment. However, frequently adjusting layouts or changing formatting with a mouse during the drafting stage can severely disrupt your writing flow.
 
-The core philosophy of Markdown is the separation of two distinct tasks:
+Writing in Markdown allows you to separate two distinct processes:
 
-* **Writing content and structuring the document**
-* **Adjusting the final visual layout**
+* **Drafting the content and building the document's logical structure.**
+* **Styling the final layout and formatting.**
 
-While drafting, you use simple symbols to indicate headings, emphasis, footnotes, tables, and code. The rendering engine then handles their visual presentation.
-
-> **Version note:** This guide describes features planned for MD//WORKS v1.5.7. The current stable release is v1.5.6. Footnote support will become available with the release of v1.5.7.
+While writing, you simply use basic text symbols to indicate headings, emphasis, quotes, footnotes, tables, and code. The visual rendering and final layout are handled later by the editor’s preview function or a conversion tool like Pandoc.
 
 ## Why Use Markdown for Scientific Documents?
 
 ### 1. Maintain Your Writing Flow
 
-You do not need to navigate complex menus to emphasize text or insert a footnote. You can keep your hands on the keyboard and record the structure of your document with only a few keystrokes.
+You can add headings, emphasize terms, and insert footnotes without navigating complex menus. Keeping your hands on the keyboard helps you maintain your train of thought.
 
 ### 2. Automate Footnote Numbering
 
-Even if you insert a new footnote in the middle of a paragraph or rearrange entire sections, footnote numbers are automatically reassigned according to their order of appearance in the text.
+In Markdown environments that support footnotes, you can insert new footnotes in the middle of a paragraph or rearrange entire sections, and the system will automatically renumber them sequentially based on their appearance in the text.
+*(Note: Footnote support is not universal. Verify that your specific editor or parser supports footnote syntax.)*
 
-### 3. Stay Focused on the Science
+### 3. Focus on Scientific Content
 
-By minimizing layout adjustments during drafting, you can devote more attention to interpreting experimental data, constructing logical arguments, and refining your discussion.
+By minimizing layout adjustments during drafting, you can direct your attention to the core tasks:
 
-Markdown does not necessarily replace final editing tools. An effective workflow is to build the content and structure in Markdown first, and then convert or export the finished document to the required format, such as Word, PDF, HTML, or LaTeX.
+* Interpreting experimental data
+* Verifying the alignment between hypotheses and results
+* Constructing logical arguments
+* Addressing limitations and alternative interpretations
+* Refining your discussion
 
----
+Markdown is not necessarily meant to replace Word or LaTeX as a final editing environment. A highly practical workflow is to draft the content and structure in Markdown, and then convert the finalized text into the Word, PDF, or LaTeX format required by your target journal.
+
+Because Markdown is saved as plain text, it is also highly compatible with version control systems like Git, making it easy to track changes.
 
 ## 1. Managing Citations and Annotations
 
-In scientific and technical writing, it is important to distinguish between quoted material and your own supplementary explanations. Markdown provides blockquotes and footnotes for these purposes.
+In scientific and technical writing, it is crucial to distinguish between direct quotes, bibliographic references, and author annotations.
+
+Markdown uses "blockquotes" for quoted text and "footnotes" to separate supplementary information from the main text. Note, however, that blockquotes themselves do not have built-in features for managing citation metadata (like author, title, DOI).
 
 ### 1-1. Blockquotes
 
-To quote external literature or a statement, type `>` at the beginning of the line.
+To display a quote from an external source, begin the line with a `>`.
 
-**Example:**
-
-```markdown
-> Markdown separates document structure from visual formatting.
-```
-
-For a multi-paragraph quotation, add `>` to the beginning of each quoted line.
+**Input:**
 
 ```markdown
-> Markdown separates document structure from visual formatting.
->
-> This approach can help authors focus on content and logical structure.
+> Markdown allows authors to separate document structure from visual layout.
+
 ```
 
-The source of the quotation should be provided immediately after the blockquote or in a footnote.
+**Output:**
+
+> Markdown allows authors to separate document structure from visual layout.
+
+For multi-paragraph quotes, add a `>` at the beginning of each line or paragraph.
+
+When quoting material in an academic context, ensure you provide the source immediately after the blockquote, in a footnote, or in the reference list.
 
 ### 1-2. Footnotes
 
-Footnotes allow citations, supplementary explanations, and drafting notes to be kept separate from the main flow of the text.
+In environments supporting footnotes, you can separate references, supplementary explanations, and drafting notes from the main text flow.
 
-Reference a footnote in the body of the document as follows:
+**Referencing a footnote in text:**
 
 ```markdown
-Specific transcription factors have been reported to be crucial in the cell reprogramming process.[^takahashi2006]
+Introducing specific transcription factors can induce pluripotency in somatic cells.[^takahashi2006]
+
 ```
 
-Then define the footnote content:
+**Defining the footnote:**
 
 ```markdown
 [^takahashi2006]: Takahashi K, Yamanaka S. Cell. 2006.
+
 ```
 
-### Flexible Placement of Footnote Definitions
+Typically, `[^label]` indicates the reference point in the text, and `[^label]:` defines the footnote content.
 
-A footnote definition such as `[^label]: ...` can be placed anywhere in the Markdown document, including immediately below the paragraph in which it is referenced.
+### 1-3. Using Meaningful Labels
 
-When the document is previewed or exported, the footnote definitions are collected and displayed as a numbered footnote list at the end of the document.
-
-### 1-3. Using Text Labels Instead of Numbers
-
-Footnote labels do not have to be numbers. You can use meaningful words or letters while drafting.
+Footnote labels do not have to be numbers. During drafting, you can use descriptive tags.
 
 ```markdown
-A novel screening method allows candidate compounds to be selected efficiently.[^screening_method]
+The new screening method efficiently isolated candidate compounds.[^screening_method]
 
-Further discussion is required here.[^memo]
+This result requires further discussion.[^discussion_memo]
 
-[^screening_method]: Describe the detailed screening protocol here.
-[^memo]: Add further discussion or references later.
+[^screening_method]: Add screening conditions and selection criteria here.
+[^discussion_memo]: Check related previous studies and add to the discussion.
+
 ```
 
-In the preview, labels such as `screening_method` and `memo` are converted into sequential numbers—1, 2, 3, and so on—according to their order of appearance in the text.
+When rendered, labels like `screening_method` will automatically be converted to sequential numbers (1, 2, 3...) based on their order in the document.
 
-This makes it possible to rearrange paragraphs without manually renumbering every footnote.
-
-> **Note:** MD//WORKS automatically numbers footnotes, but it is not a full citation-management system. For workflows requiring CSL formatting, BibTeX synchronization, or automatic journal-specific reference styles, consider using it together with tools such as Zotero, BibTeX, or Pandoc.
-
----
+> **Note:** Markdown's footnote feature is not a full reference management system. If you need to switch citation styles, manage DOIs, auto-generate bibliographies, or integrate with BibTeX/CSL, consider using tools like Zotero or Pandoc.
 
 ## 2. Inserting Images and Links
 
-Figures, diagrams, datasets, and external references are essential components of many scientific and technical documents.
-
 ### 2-1. Images and Figures
 
-To insert an experimental graph, diagram, chart, or other image, use an exclamation mark, alternative text in square brackets, and the image path in parentheses.
+To insert experimental graphs, microscopy images, or diagrams, use an exclamation mark `!`, square brackets `[]`, and parentheses `()`.
 
 ```markdown
-![Graph showing cell survival after 48 hours of treatment](./images/fig1_survival_rate.png)
+![Graph showing cell survival rate after 48 hours of treatment](./images/fig1_survival_rate.png)
+
 ```
 
-The text inside the square brackets is alternative text. It helps describe the image when the image cannot be displayed and also improves accessibility.
-
-Markdown itself does not provide a standardized figure-caption syntax. A simple caption can be written as ordinary text immediately below the image.
-
-```markdown
-![Graph showing cell survival after 48 hours of treatment](./images/fig1_survival_rate.png)
-
-**Figure 1.** Cell survival after 48 hours of treatment.
-```
+The text inside the square brackets is the "alt text" (alternative text). Instead of just writing "Graph" or "Figure 1", briefly describe what the image shows for accessibility.
 
 ### 2-2. Hyperlinks
 
-To link to an external dataset, online tool, or reference source, place the display text in square brackets and the URL in parentheses.
+For links to external databases, public datasets, or online tools, wrap the display text in square brackets and the URL in parentheses.
 
 ```markdown
-The raw dataset is available through [NCBI GEO](https://www.ncbi.nlm.nih.gov/geo/).
-```
+Raw data is available from the [NCBI Gene Expression Omnibus](https://www.ncbi.nlm.nih.gov/geo/).
 
----
+```
 
 ## 3. Scientific and Chemical Symbols
 
-Life sciences and chemistry frequently require subscripts and superscripts for chemical formulas, ion charges, units, exponents, and statistical notation.
+Life sciences, chemistry, and physics documents frequently require subscripts and superscripts for chemical formulas, charges, units, and exponents.
+*(Note: Subscript and superscript notations are extended features, popular in Pandoc Markdown, but not part of standard Markdown.)*
 
 ### 3-1. Subscripts
 
-Wrap the text to be displayed as a subscript in tildes (`~`).
+Wrap the text in tildes `~`.
 
 **Input:**
 
 ```markdown
 H~2~O, CO~2~, A~260~/A~280~
+
 ```
 
 **Output:**
-
 H₂O, CO₂, A₂₆₀/A₂₈₀
 
 ### 3-2. Superscripts
 
-Wrap the text to be displayed as a superscript in carets (`^`).
+Wrap the text in carets `^`.
 
 **Input:**
 
 ```markdown
-Ca^2+^, 10^6^ cells, cm^2^, p < 0.05^*^
+Ca^2+^, 10^6^ cells, cm^2^
+
+```
+
+**Output:**
+Ca²⁺, 10⁶ cells, cm²
+
+For complex fractions, integrals, matrices, or reaction equations, it is better to use LaTeX-formatted mathematical equations.
+
+## 4. Text Emphasis
+
+### 4-1. Italics
+
+Wrap the text in a single asterisk `*` or underscore `_`.
+
+```markdown
+*Escherichia coli*
+
+```
+
+**Output:** *Escherichia coli*
+
+*(Biological genus and species names are generally italicized. Check your target journal's specific nomenclature guidelines for gene and protein symbols.)*
+
+### 4-2. Bold
+
+Wrap the text in double asterisks ``.
+
+```markdown
+**Key findings**
+
+```
+
+**Output:** **Key findings**
+
+### 4-3. Inline Code
+
+Wrap file names, function names, or variables in single backticks ```.
+
+```markdown
+The analysis was performed using `main.py`.
+
+```
+
+## 5. Basic Data Tables
+
+Markdown tables are useful for summarizing experimental conditions or results.
+
+```markdown
+| Experimental Group | Conc. (µM) | Survival (%) | p-value | Sig. |
+| --- | ---: | ---: | ---: | :---: |
+| Control | 0.0 | 100.0 | — | — |
+| Treatment A | 10.5 | 82.4 | 0.083 | ns |
+| Treatment B | 50.0 | 45.1 | <0.001 | *** |
+
 ```
 
 **Output:**
 
-Ca²⁺, 10⁶ cells, cm², p < 0.05*
+| Experimental Group | Conc. (µM) | Survival (%) | p-value | Sig. |
+| --- | --- | --- | --- | --- |
+| Control | 0.0 | 100.0 | — | — |
+| Treatment A | 10.5 | 82.4 | 0.083 | ns |
+| Treatment B | 50.0 | 45.1 | <0.001 | *** |
 
-Superscript and subscript notation is best suited to relatively short expressions. Complex mathematical equations may require a dedicated LaTeX-rendering system.
-
----
-
-## 4. Text Emphasis
-
-Scientific writing often requires gene names, species names, important findings, filenames, functions, and variables to be visually distinguished.
-
-### 4-1. Italics
-
-Wrap text in single asterisks (`*`).
-
-```markdown
-*Escherichia coli*, *TP53*
-```
-
-Italics are commonly used for species names. Formatting conventions for gene and protein names differ by field and journal, so always confirm the relevant author guidelines.
-
-### 4-2. Bold
-
-Wrap text in double asterisks (`**`).
-
-```markdown
-**Significant findings**
-```
-
-Bold text is useful for emphasizing important findings or warnings, but excessive use can reduce readability.
-
-### 4-3. Inline Code
-
-Wrap filenames, functions, commands, or variables in single backticks.
-
-```markdown
-The analysis was performed using `main.py`, and the result was output using the `print()` function.
-```
-
----
-
-## 5. Creating Basic Data Tables
-
-Markdown tables are useful for comparing experimental conditions and summarizing analytical results.
-
-```markdown
-| Experimental Group | Concentration (µM) | Cell Viability (%) | Significance |
-| :--- | ---: | ---: | :---: |
-| Control | 0.0 | 100.0 | — |
-| Treatment A | 10.5 | 82.4 | N.S. |
-| Treatment B | 50.0 | 45.1 | **\*** |
-```
-
-### Alignment Control
-
-Use colons (`:`) in the separator row to control column alignment:
-
-* `:---` — left aligned
-* `---:` — right aligned
-* `:---:` — centered
-
-Right-aligning numerical data generally makes differences in decimal places and the number of digits easier to compare.
-
-MD//WORKS v1.5.7 supports standard Markdown tables. More advanced features, such as merged cells, multi-row headers, table captions, table-specific footnotes, and detailed column-width control, are being considered for future versions.
-
----
+Add a colon `:` to the separator line to align columns (left `:---`, right `---:`, center `:---:`). Standard Markdown tables are not suited for merged cells or complex annotations; use HTML or LaTeX for advanced tables.
 
 ## 6. Code Blocks for Technical Documents
 
-If your research involves RNA-Seq pipelines, statistical scripts, image analysis, or other computational workflows, you can document the relevant code directly in Markdown.
+If your research involves statistical analysis or data processing, you can record your scripts directly in the document. Wrap multiple lines of code in triple backticks and specify the language.
 
-Wrap multi-line code in triple backticks and specify the programming language after the opening backticks to enable syntax highlighting.
-
-````markdown
+```markdown
 ```python
 import pandas as pd
 
 data = pd.read_csv("cell_data.csv")
 mean_survival = data["survival_rate"].mean()
 
-print(f"Mean survival: {mean_survival}%")
-```
-````
-
-Common language identifiers include:
-
-```text
-python
-r
-bash
-javascript
-html
-css
-json
+print(f"Mean survival: {mean_survival:.1f}%")
 ```
 
-Language identifiers allow keywords, strings, numbers, and comments to be displayed in visually distinct styles.
+```
 
-When documenting code:
-
-* Do not include passwords or API keys.
-* Do not include confidential or personally identifiable data.
-* Record the software and library versions used.
-* Include important processing conditions and random seeds where reproducibility is required.
-* Store very long programs in separate source files and include only the most relevant portions in the document.
-
----
+Specifying a language (like `python`, `r`, `bash`) enables syntax highlighting in compatible editors.
 
 ## 7. Mathematical Equations
 
-MD//WORKS v1.5.7 supports basic scientific notation using superscripts and subscripts.
+In Markdown environments supporting MathJax, KaTeX, or Pandoc, you can render equations using LaTeX syntax.
+
+### Inline Math
+
+Wrap the equation in single dollar signs `$`.
 
 ```markdown
-E = mc^2^
+Mass-energy equivalence is expressed as $E = mc^2$.
+
 ```
 
-```markdown
-H~2~O
-```
+**Output:**
+Mass-energy equivalence is expressed as $E = mc^2$.
 
-Native LaTeX equation rendering using `$...$` for inline equations and `$$...$$` for display equations is being considered for v1.5.8 or a later release.
+### Display Math
 
-An example of LaTeX notation is shown below:
+For standalone equations on their own line, use double dollar signs `$$`.
 
-```markdown
+```latex
 $$
-f(x) =
+f(x)
+=
 \frac{1}{\sqrt{2\pi\sigma^2}}
 \exp\left(
 -\frac{(x-\mu)^2}{2\sigma^2}
 \right)
 $$
+
 ```
 
-In MD//WORKS v1.5.7, this syntax is not rendered as a formatted mathematical equation.
-
-If complex equations are required now, consider:
-
-* inserting equations as images;
-* using Pandoc for final conversion;
-* using a dedicated LaTeX environment; or
-* waiting for a future version with mathematical rendering support.
-
----
+This renders the probability density function of a normal distribution with mean $\mu$ and variance $\sigma^2$.
 
 ## 8. Example Writing Workflow
 
-1. **Create the skeleton**
-   Write only the main headings first, such as `# Abstract`, `## Methods`, and `## Results`.
-
-2. **List the main points**
-   Add bullet points below each heading to establish the intended logical flow.
-
-3. **Expand the points into prose**
-   Convert the bullet points into complete sentences without worrying about final formatting.
-
-4. **Use temporary footnote labels**
-   Add labels such as `[^find_paper_later]` so that you can continue writing without interrupting your train of thought.
-
-5. **Review the document structure**
-   Use the Outline view and automatic TOC to verify the hierarchy and logical sequence.
-
-6. **Prepare the final output**
-   Convert or export the completed Markdown document into the format required for submission, publication, or distribution.
+1. **Create the Skeleton:** Write only the main headings (e.g., Abstract, Introduction, Methods, Results, Discussion).
+2. **Bullet the Main Points:** Under each heading, list the results, rationale, and interpretations using bullet points.
+3. **Expand into Sentences:** Turn the bullet points into full paragraphs without worrying about fonts, margins, or exact figure placements.
+4. **Use Temporary Footnotes:** Leave descriptive labels (e.g., `[^find_reference]`) for missing citations or facts to verify later.
+5. **Organize Citations:** Finalize your bibliographic data manually or via a reference manager (Zotero, BibTeX).
+6. **Final Export:** Convert the Markdown document to Word, PDF, or LaTeX (e.g., via Pandoc) and perform a final visual check to ensure everything meets the journal's formatting guidelines.
 
 ---
 
-## 9. Features Available in MD//WORKS v1.5.7
+## Appendix: MD//WORKS Support Status and Version Info
+
+The writing methods described in this guide can be easily applied using **MD//WORKS**, our dedicated Markdown editor.
+
+### Current Stable Version: v1.5.6
+
+For compatibility, MD//WORKS v1.5.6 supports standard Markdown specifications as well as some representative extended syntax:
 
 * Headings
 * Bulleted and numbered lists
-* Bold and italic text
+* Bold and italics
 * Blockquotes
 * Links and images
+* Inline code and fenced code blocks
 * Basic Markdown tables
-* Inline code
-* Code blocks with syntax highlighting
-* Footnotes with automatic numbering
-* Superscripts and subscripts
-* Document Outline
-* Automatic Table of Contents
-* Viewer-based document distribution
+* Table of Contents (generated from headings)
 
-### Features Being Considered for Future Releases
+However, v1.5.6 does not yet natively preview all the extended syntax mentioned in this guide. While unsupported syntax (like subscripts/superscripts) can be written and saved as plain text, it may not render visually within the MD//WORKS preview pane.
 
-* LaTeX mathematical rendering
-* Advanced tables
-* Figure and table captions
-* Cross-references
-* Automatic numbering of figures, tables, and equations
-* BibTeX and CSL integration
+### Upcoming Version: v1.5.7
 
----
+To better support scientific and technical writing, v1.5.7 is scheduled to introduce:
 
-## 10. Conclusion
+* Footnote preview rendering
+* Automatic footnote numbering
+* Support for descriptive text labels in footnotes
+* Subscripts and superscripts
 
-The main advantage of using Markdown for scientific and technical writing is that it allows authors to concentrate on logical structure and scientific content without being repeatedly interrupted by formatting and layout adjustments.
+### Future Extensions Under Consideration
 
-MD//WORKS v1.5.7 provides practical support for footnotes, superscripts, subscripts, basic tables, code presentation, document outlines, and automatic TOC generation.
+Future updates, including a "Deep Editing Mode" for long-form writing, may explore:
 
-Together, these features provide a lightweight environment for preparing research notes, technical reports, conference materials, and early manuscript drafts.
+* LaTeX math rendering
+* Advanced table creation
+* Figure/table captions and auto-numbering
+* Cross-referencing within the document
+* BibTeX/CSL integration and reference management
 
-Start by building the document structure with headings, use meaningful temporary labels for footnotes, and prioritize the scientific narrative. The final visual appearance can be refined after the content is complete.
+For now, in v1.5.6, we recommend using headings to outline your manuscript and organize your scientific logic. If you plan to use footnotes or math, you can write the extended syntax in plain text, keeping future compatibility in mind.
 
----
+## Conclusion
 
-## 11. References
+The greatest advantage of Markdown in scientific writing is maintaining your focus on logical structure and content, free from the constant interruptions of layout adjustments.
 
-1. Krewinkel A, Winkler R. [Formatting Open Science: Agilely Creating Multiple Document Formats for Academic Manuscripts with Pandoc Scholar](https://doaj.org/article/16dc67bf1add495684b798be1d82c099). *PeerJ Computer Science*. 2017;3:e112.
+By combining the right editor, reference manager, and conversion tools, you can build a lightweight, flexible writing environment that handles everything from lab notes to final manuscript drafts. Just remember to verify your tool's specific flavor of Markdown and always review your final exported document.
 
-2. Baumer B, Cetinkaya-Rundel M, Bray A, Loi L, Horton NJ. [R Markdown: Integrating a Reproducible Analysis Tool into Introductory Statistics](https://arxiv.org/abs/1402.1894). arXiv:1402.1894.
+## References
+
+Krewinkel A, Winkler R. Formatting Open Science: Agilely Creating Multiple Document Formats for Academic Manuscripts with Pandoc Scholar. *PeerJ Computer Science*. 2017;3:e112. doi:10.7717/peerj-cs.112.
+
+Baumer B, Çetinkaya-Rundel M, Bray A, Loi L, Horton NJ. R Markdown: Integrating a Reproducible Analysis Tool into Introductory Statistics. *Technology Innovations in Statistics Education*. 2014;8(1).
