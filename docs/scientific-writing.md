@@ -301,13 +301,14 @@ For compatibility, MD//WORKS v1.5.6 supports standard Markdown specifications as
 * Headings
 * Bulleted and numbered lists
 * Bold and italics
+* Subscripts and superscripts
 * Blockquotes
 * Links and images
 * Inline code and fenced code blocks
 * Basic Markdown tables
 * Table of Contents (generated from headings)
 
-However, v1.5.6 does not yet natively preview all the extended syntax mentioned in this guide. While unsupported syntax (like subscripts/superscripts) can be written and saved as plain text, it may not render visually within the MD//WORKS preview pane.
+However, v1.5.6 does not yet natively preview all the extended syntax mentioned in this guide. While unsupported syntax can be written and saved as plain text, it may not render visually within the MD//WORKS preview pane.
 
 ### Upcoming Version: v1.5.7
 
@@ -316,7 +317,6 @@ To better support scientific and technical writing, v1.5.7 is scheduled to intro
 * Footnote preview rendering
 * Automatic footnote numbering
 * Support for descriptive text labels in footnotes
-* Subscripts and superscripts
 
 ### Future Extensions Under Consideration
 
