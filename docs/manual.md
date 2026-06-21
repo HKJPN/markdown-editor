@@ -136,6 +136,8 @@ To protect local storage capacity, image insertion is subject to the following l
 
 For security reasons, SVG images are not supported. Convert SVG files to PNG, JPEG, or WebP before inserting them.
 
+> For bulk image imports, please use the separate command-line tool [image2md.py](https://github.com/HKJPN/images2md/tree/main). This is especially useful when creating presentation slides or reports that require adding multiple photos at once.
+
 ### 3-3. Checking Input Status
 
 
