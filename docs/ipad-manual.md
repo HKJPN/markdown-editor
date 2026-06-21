@@ -155,6 +155,8 @@ To protect local storage capacity, image insertion is subject to the following l
 
 For security reasons, SVG images are not supported. Convert SVG files to PNG, JPEG, or WebP before inserting them.
 
+> For bulk image imports on iPad, we've provided a separate command-line tool called [image2md.py](https://github.com/HKJPN/images2md/tree/main). Use it alongside MD//WORKS to quickly add multiple photos at once for presentations or reports.
+
 ### 3-3. Checking Input Status
 
 The current line count, word count, and character count are shown in the status bar at the bottom of the screen.
