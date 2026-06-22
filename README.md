@@ -46,6 +46,10 @@ We've also included two standalone tools that instantly convert large batches of
 
 The "restricted HTML" format disables printing and text copying in standard web browsers. However, you can always unlock and edit these files directly within MD//WORKS.
 
+* [image2md.py](https://github.com/HKJPN/images2md/tree/main)
+* [images2rhtml.py](https://github.com/HKJPN/images2rhtml/tree/main)
+
+
 ---
 
 # Features
