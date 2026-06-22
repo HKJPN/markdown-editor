@@ -40,9 +40,11 @@ To ensure security and   file integrity, all official releases starting from v1.
 * **Math Equations**: We plan to support complex mathematical formulas used in fields like mathematics and engineering.
 * **Update notification:** When a newer official release of MD//WORKS is available, a 💡 icon will appear in the menu bar and provide a link to the latest version.
 
-## 💡 Handy Companion Tool
+## 💡 **Handy Companion Tools**
 
-We've provided a separate script, [image2md.py](https://github.com/HKJPN/images2md/tree/main), that lets you instantly batch-import images into your Markdown files. By using this command-line tool alongside MD//WORKS, you can significantly streamline your workflow—especially when creating presentation handouts or image-heavy reports.
+We've also included two standalone tools that instantly convert large batches of images into Markdown or restricted HTML files. By running these from the command line, you can significantly streamline your MD//WORKS workflow—especially when creating image-heavy reports or presentation handouts.
+
+The "restricted HTML" format disables printing and text copying in standard web browsers. However, you can always unlock and edit these files directly within MD//WORKS.
 
 ---
 
