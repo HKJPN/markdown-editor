@@ -50,10 +50,6 @@ MD//WORKSはMITライセンスの下、ご自身のウェブサイトで自由�
 ・[image2md.py](https://github.com/HKJPN/images2md/tree/main)
 ・[images2rhtml.py](https://github.com/HKJPN/images2rhtml/tree/main)
 
-
-
-大量の画像を瞬時にMarkdownファイルへ取り込める[image2md.py](https://github.com/HKJPN/images2md/tree/main)を別途ご用意しました。プレゼンテーションの配布資料や、写真が多数含まれるレポートの作成時など、コマンドラインと併用することでMD//WORKSでのワークフローをさらに効率化できます。
-
 ---
 
 # 機能一覧
