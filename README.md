@@ -40,7 +40,7 @@ To ensure security and   file integrity, all official releases starting from v1.
 * **Update notification:** When a newer official release of MD//WORKS is available, a 💡 icon will appear in the menu bar and provide a link to the latest version.
 
 ## 💡 **Handy Companion Tools**
-We've also included two standalone command-line tools that instantly compile large batches of images into a single file. This significantly streamlines your MD//WORKS workflow when creating image-heavy reports or handouts.
+We've also provided two standalone command-line tools that instantly compile large batches of images into a single file. This significantly streamlines your MD//WORKS workflow when creating image-heavy reports or handouts.
 
 - [images2md.py](https://github.com/HKJPN/images2md/tree/main): Generates **a standard Markdown file**.
 - [images2rhtml.py](https://github.com/HKJPN/images2rhtml/tree/main):  Generates **a restricted HTML file** (disables printing and text copying in standard browsers, but remains fully editable directly within MD//WORKS).
