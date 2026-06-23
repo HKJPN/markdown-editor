@@ -251,7 +251,7 @@ Your writing stays local unless you choose to export or share it.
 | :--- | :---: | :---: | :---: | :---: |
 | Combines editor and document into one | - | - | - | ✅ |
 | **Restrict** editing, printing, and copying <br>in Viewer mode | - |  -  | - | ✅ |
-| **Encrypted file export** | - | - | - | ✅ |
+| **Encrypted file export** | via Extension | via Plugin | - | ✅ |
 | Draft restoration / Safety during writing | Partial | Partial | - | ✅ |
 | **AI-assisted writing** | via Extension | via Plugin | - (Copy/paste) | 🤝 <br>**Browser Integration** \* <br>No extensions, No plugins needed|
 | Usability offline / in restricted environments | Partial | ✅ | ✅ | ✅ |
