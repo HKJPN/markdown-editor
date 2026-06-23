@@ -103,7 +103,7 @@ MD//WORKSの最大の特徴は、用途に合わせて「文書を1つのHTMLフ
 | Viewer | 🚫不可能 | 🔓無 | 🖨️可能 |
 | Restricted Viewer | **✔可能** | **🔒有** | **🛡️抑制** |
 | Password-protected Viewer | **✔可能** | **🔒有** | **🖨️パスワード入力後に可能** |
-| Standalone App | **✔可能** | 🔓不要 | 🖨️可能 |
+| Standalone App | **✔可能** | 🔓無 | 🖨️可能 |
 | Password-protected App | **✔可能** | **🔒有** | 🖨️可能 |
 
 
