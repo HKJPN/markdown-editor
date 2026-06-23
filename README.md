@@ -246,12 +246,13 @@ Your writing stays local unless you choose to export or share it.
 
 **MD//WORKS is not intended to replace IDEs, knowledge bases, or collaborative editing tools.** Instead, MD//WORKS targets a completely different area. It is a lightweight, portable Markdown editor dedicated to writing, protecting, restoring, and easily carrying your work.
 
+
 | Feature | VS Code | Obsidian | Typora | MD//WORKS |
 | :--- | :---: | :---: | :---: | :---: |
-| True portability / Single-file app export | - | Partial | - | ✅ |
-| Combines editor and document into one | - | Partial | - | ✅ |
+| Combines editor and document into one | - | - | - | ✅ |
+| **Restrict** editing, printing, and copying <br>in Viewer mode | - |  -  | - | ✅ |
 | **Export as an encrypted single file** | - | - | - | ✅ |
-| Local-only encryption / No server required | Partial | Partial | Partial | ✅ |
+| **Encrypted file export** | - | - | - | ✅ |
 | Draft restoration / Safety during writing | Partial | Partial | - | ✅ |
 | **AI-assisted writing** | via Extension | via Plugin | - (Copy/paste) | 🤝 <br>**Browser Integration** \* <br>No extensions, No plugins needed|
 | Usability offline / in restricted environments | Partial | ✅ | ✅ | ✅ |
