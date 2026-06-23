@@ -78,21 +78,17 @@ MD//WORKS is fully open-source—no exceptions. Although it runs in the browser 
 
 ---
 
-### 📦 Export as App — Your Document, Your Editor, One File
+### 📦 Flexible Export: Total Control Over Sharing & Protection
+MD//WORKS lets you export your document as a single HTML file tailored to your needs. Share, collaborate, and archive seamlessly across any environment.
 
-The signature feature of MD//WORKS.
+- 👀 Viewer Formats (3 Types): Built for Reading
+Includes a standard outline-enabled viewer, a Restricted mode to block copying/printing, and a Password-Protected mode for confidential data. Ideal for safe document distribution.
 
-With **Export as App**, you can export your current document together with the full editor into a single `.app.html` file.
+- ✍️ Standalone App Formats (2 Types): Built for Editing
+Packages your text and the editor into one file. Recipients can instantly pick up where you left off right in their browser, with zero installation (Password protection available).
 
-That file can be opened later in a browser — with your document already inside.
-
-- One self-contained HTML file
-- Works offline
-- Portable via USB, email, or cloud storage
-- No installation required
-- Uses isolated autosave storage to avoid conflicts with the main editor
-
-This makes MD//WORKS especially useful for internal sharing, field work, workshops, secure environments, and long-term document archiving.
+>💡 Pro Tip
+>Use "Restricted Viewer" for read-only handouts. Want the recipient to collaborate? Send the "Standalone App." Choose the perfect format for any situation.
 
 ---
 
