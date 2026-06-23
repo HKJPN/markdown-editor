@@ -206,14 +206,8 @@ For drafting, thinking, and finishing.
 
 ---
 
-### 📤 Export Options
-
-MD//WORKS supports practical export formats for everyday use.
-
-- Save as Markdown `.md`
-- Export styled HTML
-- Print or save as PDF
-- Export as standalone `.app.html`
+### 📤📤 Print-Ready PDF Export
+Ensures clean and stable output with custom print-optimized CSS.
 
 ---
 
