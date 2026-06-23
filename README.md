@@ -43,10 +43,10 @@ To ensure security and   file integrity, all official releases starting from v1.
 
 We've also included two standalone tools that instantly convert large batches of images into Markdown or restricted HTML files. By running these from the command line, you can significantly streamline your MD//WORKS workflow—especially when creating image-heavy reports or presentation handouts.
 
-The "restricted HTML" format disables printing and text copying in standard web browsers. However, you can always unlock and edit these files directly within MD//WORKS.
+* [image2md.py](https://github.com/HKJPN/images2md/tree/main): A standard Markdowsn file generator.
+* [images2rhtml.py](https://github.com/HKJPN/images2rhtml/tree/main): A restricted HTML file generator.
 
-* [image2md.py](https://github.com/HKJPN/images2md/tree/main)
-* [images2rhtml.py](https://github.com/HKJPN/images2rhtml/tree/main)
+The "restricted HTML" format disables printing and text copying in standard web browsers. However, you can always unlock and edit these files directly within MD//WORKS.
 
 
 ---
