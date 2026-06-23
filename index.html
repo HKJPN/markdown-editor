@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdn.jsdelivr.net; img-src 'self' data: blob:; object-src 'none'; base-uri 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdn.jsdelivr.net https://api.github.com; img-src 'self' data: blob:; object-src 'none'; base-uri 'none';">
 
 <title>MD//WORKS Editor</title>
 
@@ -148,6 +148,14 @@ button,input,textarea{font:inherit}
 .menu-entry.active .menu-check{opacity:1}
 .menu-check{opacity:0;color:var(--accent2);font-size:11px;transition:opacity .1s}
 .menu-shortcut{font-family:var(--mono);font-size:11px;color:var(--text3)}
+#update-indicator{
+  margin-left:4px;min-width:34px;height:100%;padding:0 8px;border:0;border-radius:8px;
+  background:transparent;color:var(--text2);cursor:pointer;font-size:15px;line-height:1;
+  display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+#update-indicator[hidden]{display:none!important}
+#update-indicator:hover,#update-indicator:focus-visible{background:rgba(255,255,255,.055);color:var(--text);outline:none}
+
 .menu-label-with-icon {
   display: inline-flex;
   align-items: center;
@@ -463,6 +471,7 @@ body #filename-display.locked:focus{
 #preview th{ background:rgba(255,255,255,.045);font-weight:500;color:var(--accent2) }
 #preview tr:nth-child(even) td{ background:rgba(255,255,255,.02) }
 #preview img{ max-width:100%;border-radius:6px;border:1px solid var(--border) }
+#preview video{ display:block;width:100%;max-width:100%;height:auto;margin:1em 0;border-radius:8px;border:1px solid var(--border);background:#000 }
 #preview sup,
 #preview sub {
   font-size:75%;
@@ -642,20 +651,30 @@ body #filename-display.locked:focus{
 
 /* #region [CSS-11] RELEASE NOTES MODAL (NEW) */
 #rn-modal,
-#doc-modal {
+#doc-modal,
+#update-modal,
+#export-modal {
   position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; display:none; align-items:center; justify-content:center; backdrop-filter:blur(4px);
 }
 #rn-modal.show,
-#doc-modal.show { display:flex; }
+#doc-modal.show,
+#update-modal.show,
+#export-modal.show { display:flex; }
 .rn-content,
 .doc-content {
   background:linear-gradient(180deg, rgba(29,35,49,.98), rgba(17,21,31,.98));
   border: 1px solid rgba(255,255,255,.085); border-radius: 18px; width: 600px; max-width:90%; max-height: 85vh; display:flex; flex-direction:column; box-shadow: var(--shadow-lg), var(--glow); overflow:hidden;
 }
+.update-content {
+  background:var(--surface);
+  border: 1px solid var(--border); border-radius: 18px; width: 600px; max-width:90%; max-height: 85vh; display:flex; flex-direction:column; box-shadow: var(--shadow-lg), var(--glow); overflow:hidden;
+}
 .rn-head,
 .doc-head { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid var(--border); background:rgba(0,0,0,0.2); }
+.update-head { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid var(--border); background:var(--surface2); }
 .rn-head h3,
-.doc-head h3 { font-size:15px; font-weight:700; color:var(--text); font-family:var(--sans); margin:0; }
+.doc-head h3,
+.update-head h3 { font-size:15px; font-weight:700; color:var(--text); font-family:var(--sans); margin:0; }
 .rn-body,
 .doc-body { padding:20px; overflow-y:auto; font-family:var(--sans); font-size:14px; line-height:1.6; color:var(--text2); }
 .rn-body h2,
@@ -674,10 +693,29 @@ body #filename-display.locked:focus{
 .doc-body code { font-family:var(--mono); background:rgba(255,255,255,0.06); padding:2px 5px; border-radius:4px; font-size:0.9em; color:var(--accent2); }
 .rn-foot,
 .doc-foot { padding:12px 20px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; background:rgba(0,0,0,0.2); }
+.update-foot { padding:12px 20px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; background:var(--surface2); }
 .rn-btn,
-.doc-btn { background:var(--accent); color:#fff; border:none; padding:8px 24px; border-radius:8px; cursor:pointer; font-weight:600; font-family:var(--sans); transition:opacity 0.2s;}
+.doc-btn,
+.update-btn { background:var(--accent); color:#fff; border:none; padding:8px 24px; border-radius:8px; cursor:pointer; font-weight:600; font-family:var(--sans); transition:opacity 0.2s;}
 .rn-btn:hover,
-.doc-btn:hover { opacity:0.8; }
+.doc-btn:hover,
+.update-btn:hover { opacity:0.8; }
+.update-body{padding:20px;overflow-y:auto;font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--text2)}
+.update-version-list{display:grid;gap:6px;margin-bottom:14px}
+.update-version-row{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.update-version-label{color:var(--text2)}
+.update-version-value{font-family:var(--mono);color:var(--text);font-weight:600}
+.update-btn.secondary{background:var(--surface3);color:var(--text);border:1px solid var(--border)}
+.update-head .update-btn.secondary{color:var(--text2)}
+.update-head .update-btn.secondary:hover{color:var(--text)}
+
+
+.export-content{background:linear-gradient(180deg, rgba(29,35,49,.98), rgba(17,21,31,.98));border:1px solid rgba(255,255,255,.085);border-radius:18px;width:620px;max-width:92vw;max-height:88vh;display:flex;flex-direction:column;box-shadow:var(--shadow-lg), var(--glow);overflow:hidden}
+.export-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.2)}
+.export-head h3{font-size:15px;font-weight:700;color:var(--text);font-family:var(--sans);margin:0}.export-close-btn,.export-foot-btn{background:var(--surface3);color:var(--text2);border:1px solid var(--border);padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:600;font-family:var(--sans)}.export-close-btn:hover,.export-foot-btn:hover{color:var(--text);background:var(--accent-dim)}
+.export-body{padding:16px 20px;overflow-y:auto;display:grid;gap:0}.export-section + .export-section{margin-top:16px}.export-section h4{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin:0 0 8px}.export-grid{display:flex;flex-direction:column;gap:8px}.export-option{width:100%;min-height:44px;text-align:left;display:flex;flex-direction:column;padding:12px 16px;border-radius:12px;border:1px solid var(--border);background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02));color:var(--text);cursor:pointer;font-family:var(--sans);line-height:1.45;overflow-wrap:anywhere}.export-option:hover{border-color:rgba(124,106,247,.45);background:var(--accent-dim)}.export-option:active{border-color:var(--accent2);background:rgba(124,106,247,.18)}.export-option:focus-visible,.export-close-btn:focus-visible,.export-foot-btn:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}.export-option-title{margin-bottom:3px;font-weight:700;color:var(--text);font-size:14px}.export-option-description{color:var(--text2);font-size:13px;line-height:1.45}.export-foot{display:flex;justify-content:flex-end;align-items:center;padding:12px 20px;border-top:1px solid var(--border);background:rgba(0,0,0,.2)}
+@media (max-width:800px){.export-content{max-width:92vw;max-height:88vh}.export-body{padding:16px}.export-foot-btn{min-height:44px}}
+
 /* #endregion */
 
 /* #region [CSS-12] THEME VARIANTS (PAPER / WARM)
@@ -776,13 +814,15 @@ body.theme-paper #outline-panel,
 body.theme-paper .hist-content,
 body.theme-paper .rn-content,
 body.theme-paper .doc-content,
+body.theme-paper .export-content,
 body.theme-warm .menu-dropdown,
 body.theme-warm #sr-panel,
 body.theme-warm #spell-panel,
 body.theme-warm #outline-panel,
 body.theme-warm .hist-content,
 body.theme-warm .rn-content,
-body.theme-warm .doc-content{
+body.theme-warm .doc-content,
+body.theme-warm .export-content{
   background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(245,247,251,.97));
   border-color:var(--border);
   box-shadow:var(--shadow-lg), var(--glow);
@@ -793,7 +833,8 @@ body.theme-warm #spell-panel,
 body.theme-warm #outline-panel,
 body.theme-warm .hist-content,
 body.theme-warm .rn-content,
-body.theme-warm .doc-content{
+body.theme-warm .doc-content,
+body.theme-warm .export-content{
   background:linear-gradient(180deg, rgba(255,248,236,.98), rgba(247,237,220,.97));
 }
 
@@ -1018,6 +1059,7 @@ body.ipad-safari-fullscreen #menubar {
 
 @media (max-width: 1024px) {
   #menubar { height: 44px; padding: 0 10px; }
+  #update-indicator{min-width:44px;padding:0 10px;font-size:16px}
   .menu-trigger { padding: 0 16px; font-size: 14px; }
   .menu-entry { padding: 12px 16px; font-size: 15px; }
   .menu-shortcut { font-size: 13px; }
@@ -1050,7 +1092,7 @@ body.ipad-safari-fullscreen #menubar {
     overflow:visible!important;
     background:#fff!important;
   }
-  #menubar,#titlebar,#toolbar,#statusbar,#editor-wrap,#splitter,#spell-panel,#toast,#sr-panel,#outline-panel,#history-modal,#rn-modal,#doc-modal{display:none!important}
+  #menubar,#titlebar,#toolbar,#statusbar,#editor-wrap,#splitter,#spell-panel,#toast,#sr-panel,#outline-panel,#history-modal,#rn-modal,#doc-modal,#update-modal,#export-modal{display:none!important}
   body{display:block!important;color:#000!important}
   #main-container{
     display:block!important;
@@ -1141,14 +1183,8 @@ body.zen-mode #zen-exit-btn { display: flex; }
         <span id="m-save-as"></span><span class="menu-shortcut">Ctrl+Shift+S</span>
       </div>
       <div class="menu-sep-line"></div>
-      <div class="menu-entry" onclick="exportStandalone()">
-        <span id="m-save-as-app"></span>
-      </div>
-      <div class="menu-entry" onclick="exportPrivateStandalone()">
-        <span id="m-save-as-private-app"></span>
-      </div>
-      <div class="menu-entry" onclick="exportHtml()">
-        <span id="m-export-html"></span>
+      <div class="menu-entry" id="menu-export" tabindex="0" onclick="openExportModal()">
+        <span id="m-export"></span>
       </div>
       <div class="menu-entry" onclick="exportPdf()">
         <span id="m-export-pdf"></span>
@@ -1280,6 +1316,13 @@ body.zen-mode #zen-exit-btn { display: flex; }
       </div>
     </div>
   </div>
+  <button
+    id="update-indicator"
+    type="button"
+    hidden
+    aria-label="新しいバージョンがあります"
+    title="新しいバージョンがあります"
+    onclick="openUpdateModal()">💡</button>
 </div>
 
 <div id="titlebar">
@@ -1297,7 +1340,7 @@ body.zen-mode #zen-exit-btn { display: flex; }
     <button class="title-btn" onclick="toggleSpell()" id="spell-toggle-title-btn">Spell</button>
   </div>
 
-  <input type="file" id="file-input" accept=".md,.txt,.markdown">
+  <input type="file" id="file-input" accept=".md,.txt,.markdown,.html,.htm">
   <input type="file" id="word-input" accept=".docx" style="display:none">
 </div>
 
@@ -1400,6 +1443,76 @@ body.zen-mode #zen-exit-btn { display: flex; }
   </div>
 </div>
 
+<div id="update-modal" aria-hidden="true" data-state="closed" role="dialog" aria-modal="true" aria-labelledby="update-modal-title">
+  <div class="update-content">
+    <div class="update-head">
+      <h3 id="update-modal-title"></h3>
+      <button class="update-btn secondary" style="padding:4px 10px" onclick="closeUpdateModal()" aria-label="Close">✕</button>
+    </div>
+    <div class="update-body">
+      <div class="update-version-list">
+        <div class="update-version-row">
+          <span class="update-version-label" id="update-current-version-label"></span>
+          <span class="update-version-value" id="update-current-version"></span>
+        </div>
+        <div class="update-version-row">
+          <span class="update-version-label" id="update-latest-version-label"></span>
+          <span class="update-version-value" id="update-latest-version"></span>
+        </div>
+      </div>
+      <p id="update-modal-message"></p>
+    </div>
+    <div class="update-foot">
+      <button id="update-download-btn" class="update-btn" onclick="openLatestReleasePage()"></button>
+      <button id="update-close-btn" class="update-btn secondary" onclick="closeUpdateModal()"></button>
+    </div>
+  </div>
+</div>
+
+<div id="export-modal" aria-hidden="true" data-state="closed" role="dialog" aria-modal="true" aria-labelledby="export-modal-title">
+  <div class="export-content">
+    <div class="export-head">
+      <h3 id="export-modal-title"></h3>
+      <button id="export-modal-close" class="export-close-btn" type="button" onclick="closeExportModal()" aria-label="Close">✕</button>
+    </div>
+    <div class="export-body">
+      <section class="export-section">
+        <h4 id="export-view-share-title"></h4>
+        <div class="export-grid export-grid-view">
+          <button id="export-viewer-btn" class="export-option" type="button" onclick="runExportAction(exportViewer)">
+            <span class="export-option-title" id="export-viewer-title"></span>
+            <span class="export-option-description" id="export-viewer-desc"></span>
+          </button>
+          <button id="export-restricted-viewer-btn" class="export-option" type="button" onclick="runExportAction(exportRestrictedViewer)">
+            <span class="export-option-title" id="export-restricted-title"></span>
+            <span class="export-option-description" id="export-restricted-desc"></span>
+          </button>
+          <button id="export-private-viewer-btn" class="export-option" type="button" onclick="runExportAction(exportPrivateViewer)">
+            <span class="export-option-title" id="export-password-viewer-title"></span>
+            <span class="export-option-description" id="export-password-viewer-desc"></span>
+          </button>
+        </div>
+      </section>
+      <section class="export-section">
+        <h4 id="export-standalone-apps-title"></h4>
+        <div class="export-grid export-grid-app">
+          <button id="export-standalone-btn" class="export-option" type="button" onclick="runExportAction(exportStandalone)">
+            <span class="export-option-title" id="export-standalone-title"></span>
+            <span class="export-option-description" id="export-standalone-desc"></span>
+          </button>
+          <button id="export-private-standalone-btn" class="export-option" type="button" onclick="runExportAction(exportPrivateStandalone)">
+            <span class="export-option-title" id="export-password-app-title"></span>
+            <span class="export-option-description" id="export-password-app-desc"></span>
+          </button>
+        </div>
+      </section>
+    </div>
+    <div class="export-foot">
+      <button id="export-modal-close-foot" class="export-foot-btn" type="button" onclick="closeExportModal()"></button>
+    </div>
+  </div>
+</div>
+
 <div id="doc-modal" aria-hidden="true" data-state="closed" role="dialog" aria-modal="true" aria-labelledby="doc-title">
   <div class="doc-content">
     <div class="doc-head">
@@ -1463,7 +1576,17 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
-const APP_VERSION = '1.5.6';
+const APP_VERSION = '1.5.7';
+const LATEST_RELEASE_API_URL =
+  'https://api.github.com/repos/HKJPN/markdown-editor/releases/latest';
+const LATEST_RELEASE_PAGE_URL =
+  'https://github.com/HKJPN/markdown-editor/releases/latest';
+const UPDATE_CHECK_STORAGE_KEY =
+  'mdworks_update_check_cache_v1';
+const UPDATE_CHECK_INTERVAL_MS =
+  24 * 60 * 60 * 1000;
+const UPDATE_CHECK_TIMEOUT_MS =
+  5000;
 const RELEASE_NOTES_STORAGE_KEY = 'mdworks_seen_release_notes_version';
 
 const T = {
@@ -1480,7 +1603,35 @@ const T = {
   save:        isJa ? '保存'     : 'Save',
   saveAs:      isJa ? '名前を付けて保存' : 'Save As',
   saveAsApp:   isJa ? 'Appとして書き出し' : 'Export as App',
-  saveAsPrivateApp: isJa ? 'Private Appとして書き出し' : 'Export as Private App',
+  saveAsViewer: isJa ? '閲覧専用HTMLとして保存' : 'Export as Viewer (Read-only)',
+  exportAsPrivateViewer: isJa ? 'パスワード付きViewerとして書き出し' : 'Export as Password-protected Viewer',
+  exportAsRestrictedViewer: isJa ? '制限付きViewerとして書き出し' : 'Export as Restricted Viewer',
+  saveAsPrivateApp: isJa ? 'パスワード付きAppとして書き出し' : 'Export as Password-protected App',
+  exportMenu: isJa ? '書き出し...' : 'Export...',
+  exportModalTitle: isJa ? '書き出し形式を選択' : 'Choose Export Format',
+  exportViewShare: isJa ? '閲覧・共有' : 'View & Share',
+  exportStandaloneApps: isJa ? 'スタンドアロンApp' : 'Standalone Apps',
+  exportViewerTitle: isJa ? 'Viewer' : 'Viewer',
+  exportViewerDescription: isJa ? 'Outline付きの標準閲覧用HTMLです。' : 'Standard read-only HTML with a collapsible outline.',
+  exportRestrictedTitle: isJa ? '制限付きViewer' : 'Restricted Viewer',
+  exportRestrictedDescription: isJa ? '選択、コピー、右クリック、ドラッグ、印刷を抑制します。' : 'Suppresses selection, copying, right-click, dragging, and printing.',
+  exportPasswordViewerTitle: isJa ? 'パスワード付きViewer' : 'Password-protected Viewer',
+  exportPasswordViewerDescription: isJa ? '開くときにパスワードが必要なViewerです。' : 'Requires a password when the file is opened.',
+  exportStandaloneTitle: isJa ? 'Standalone App' : 'Standalone App',
+  exportStandaloneDescription: isJa ? 'Editorを含み、ブラウザ上で編集できます。' : 'Includes the editor and remains editable in the browser.',
+  exportPasswordAppTitle: isJa ? 'パスワード付きApp' : 'Password-protected App',
+  exportPasswordAppDescription: isJa ? 'パスワードで保護された編集可能なAppです。' : 'A password-protected, editable Standalone App.',
+  exportModalClose: isJa ? '閉じる' : 'Close',
+  passwordViewerPrompt: isJa
+    ? 'パスワード付きViewerを開くためのパスワードを設定してください。\n\nこのパスワードを忘れると、Viewerを開いたり、\n元のMarkdownを復元したりできません。'
+    : 'Set a password to open this Viewer.\n\nIf you forget this password, the Viewer cannot be opened\nand the original Markdown cannot be restored.',
+  passwordAppPrompt: isJa
+    ? 'Standalone Appを保護するパスワードを設定してください。\n\nこのパスワードを忘れると、Appを開いたり、\n内容を復元したりできません。'
+    : 'Set a password to protect this Standalone App.\n\nIf you forget this password, the App cannot be opened\nand its content cannot be recovered.',
+  passwordConfirmPrompt: isJa
+    ? '確認のため、同じパスワードをもう一度入力してください。'
+    : 'Enter the same password again for confirmation.',
+  passwordMismatch: isJa ? 'パスワードが一致しません。' : 'Passwords do not match.',
   clearLocalData: isJa ? 'ローカル保存データ削除' : 'Clear Local Saved Data',
   confirmClearLocalData: isJa
     ? '保護された下書き・履歴を完全に削除しますか？\n現在のエディタ内容は画面上には残ります。'
@@ -1523,16 +1674,57 @@ const T = {
   keyboardShortcuts: isJa ? 'Keyboard Shortcuts' : 'Keyboard Shortcuts',
   github:      'GitHub',
   aboutMdworks:isJa ? 'About MD//WORKS' : 'About MD//WORKS',
+  updateAvailableTitle: isJa ? '新しいバージョンがあります' : 'A new version is available',
+  updateAvailableMessage: isJa ? '最新版では、機能改善や不具合修正が行われています。' : 'A newer version of MD//WORKS is available.',
+  updateCurrentVersion: isJa ? '現在のバージョン' : 'Current version',
+  updateLatestVersion: isJa ? '最新バージョン' : 'Latest version',
+  updateGetLatest: isJa ? '最新版を入手' : 'Get the latest version',
+  updateClose: isJa ? '閉じる' : 'Close',
+  updateIndicatorLabel: isJa ? '新しいバージョンがあります' : 'A new version is available',
 
   download:    isJa ? 'ダウンロード' : 'Download',
   downloadAs:  isJa ? '名前を付けてDL' : 'Download As',
   share:       isJa ? '共有 (Share)' : 'Share',
-  exportHtml:  isJa ? 'HTMLとしてエクスポート' : 'Export as HTML',
+  exportHtml:  isJa ? 'Viewerとして書き出し' : 'Export as Viewer',
+  exportedViewer: isJa ? '閲覧専用HTMLを書き出しました' : 'Viewer HTML exported',
+  exportedPrivateViewer: isJa ? 'パスワード付きViewerを書き出しました' : 'Password-protected Viewer exported',
+  exportedRestrictedViewer: isJa ? '制限付きViewerを書き出しました' : 'Restricted Viewer exported',
+  errViewer: isJa ? 'Viewerの作成に失敗しました' : 'Failed to create Viewer',
+  viewerPlainNotice: isJa ? 'このViewerは暗号化されていません。HTMLソース内に本文が平文で含まれます。' : 'This Viewer is not encrypted. The document content is stored as plain HTML in the file source.',
+  creatingPrivateViewer: isJa ? 'パスワード付きViewerを作成しています...' : 'Creating Password-protected Viewer...',
+  creatingRestrictedViewer: isJa ? '制限付きViewerを作成しています...' : 'Creating Restricted Viewer...',
+  viewerDecrypting: isJa ? '復号しています...' : 'Decrypting...',
+  viewerImportDecrypting: isJa ? 'Viewerを復号しています...' : 'Decrypting Viewer...',
+  viewerRestoringMarkdown: isJa ? 'Markdownを復元しています...' : 'Restoring Markdown...',
+  viewerUnlock: isJa ? '開く' : 'Unlock',
+  viewerPassphrase: isJa ? 'パスフレーズ' : 'Passphrase',
+  viewerEnterPassword: isJa ? 'パスワードを入力してください。' : 'Enter the password.',
+  viewerPassphraseError: isJa ? 'パスフレーズが正しくないか、ファイルが破損しています。' : 'The passphrase is incorrect or the file may be corrupted.',
+  viewerSecurityNotice: isJa ? 'このファイルはパスフレーズで保護された簡易Viewerです。表示後の内容はブラウザ内で平文として扱われます。コピー、印刷、スクリーンショット、開発者ツールによる確認を完全に防ぐものではありません。パスフレーズを知っているユーザーは、MD//WORKS Editorで元Markdownを復元して編集できます。' : 'This is a simple password-protected viewer. Once decrypted, the content is plain text/HTML in the browser. It does not prevent copying, printing, screenshots, or inspection through developer tools. Users who know the passphrase can restore and edit the original Markdown in MD//WORKS Editor.',
+  privateViewerImportPrompt: isJa ? 'Private Viewerを開くにはパスフレーズを入力してください' : 'Enter the passphrase to open this Private Viewer',
+  privateViewerImported: isJa ? 'Private ViewerからMarkdownを復元しました' : 'Markdown restored from Private Viewer',
+  privateViewerImportError: isJa ? 'Private Viewerの復元に失敗しました' : 'Failed to restore Private Viewer',
+  privateViewerImportMissingMarkdown: isJa ? 'このPrivate Viewerには復元可能なMarkdownが含まれていません' : 'This Private Viewer does not contain restorable Markdown',
+  restrictedViewerRecoveryPassword: isJa ? '復元用パスワードを設定してください。\nこのパスワードは、MD//WORKSで元Markdownを復元するときに使用します。\n閲覧時には使用しません。' : 'Set a recovery password.\nThis password is used only when restoring the original Markdown in MD//WORKS.\nIt is not required for viewing.',
+  restrictedViewerRecoveryPasswordConfirm: isJa ? '確認のため、復元用パスワードをもう一度入力してください。' : 'Enter the recovery password again for confirmation.',
+  restrictedViewerPasswordMismatch: isJa ? '復元用パスワードが一致しません' : 'Recovery passwords do not match',
+  restrictedViewerOpenError: isJa ? 'このViewerを開けませんでした。ファイルが破損している可能性があります。' : 'This Viewer could not be opened. The file may be corrupted.',
+  restrictedViewerImportPrompt: isJa ? 'Restricted Viewerから元Markdownを復元するには、復元用パスワードを入力してください。' : 'Enter the recovery password to restore the original Markdown from this Restricted Viewer.',
+  restrictedViewerImported: isJa ? 'Restricted ViewerからMarkdownを復元しました' : 'Markdown restored from Restricted Viewer',
+  restrictedViewerImportError: isJa ? 'Restricted Viewerの復元に失敗しました。パスワードが正しくないか、ファイルが破損しています。' : 'Failed to restore the Restricted Viewer. The password may be incorrect or the file may be corrupted.',
+  viewerOutline: isJa ? 'アウトライン' : 'Outline',
+  viewerOutlineEmpty: isJa ? '見出しがありません' : 'No headings',
   exportPdf:   isJa ? '印刷 / PDF保存' : 'Print / Save as PDF',
   confirmNew:  isJa ? '現在の内容を履歴に保存して、空白の新規ファイルを作成しますか？' : 'Save the current draft to history and create a blank new file?',
   newCreated: isJa ? '空白の新規ファイルを作成しました' : 'Blank new file created',
   processingPasteToast: isJa ? '大きなテキストを処理中...' : 'Processing large paste...',
   processingPasteStatus: isJa ? 'Processing paste...' : 'Processing paste...',
+  loadingDroppedImages: isJa
+    ? (current, total) => `画像を読み込んでいます... ${current} / ${total}`
+    : (current, total) => `Loading images... ${current} / ${total}`,
+  insertingDroppedImages: isJa
+    ? '画像と見出しを挿入しています...'
+    : 'Inserting images and headings...',
   processingTocToast: isJa ? '目次を作成中...' : 'Generating table of contents...',
   processingTocStatus: isJa ? 'Generating TOC...' : 'Generating TOC...',
   pasteReadyStatus: isJa ? 'Ready' : 'Ready',
@@ -1607,8 +1799,23 @@ const T = {
     ? '\n| 列1 | 列2 | 列3 |\n|------|------|------|\n| データ | データ | データ |\n'
     : '\n| Col1 | Col2 | Col3 |\n|------|------|------|\n| data | data | data |\n',
   placeholder: isJa
-    ? 'ここにMarkdownを入力、または画像をドロップ (上限200KB)...'
-    : 'Start writing Markdown here, or drop an image (max 200KB)...',
+    ? 'ここにMarkdownを入力、または画像をドロップ (1画像300KBまで)...'
+    : 'Start writing Markdown here, or drop images (max 300 KB each)...',
+  imageDropSkippedTitle: isJa
+    ? '次のファイルは挿入されませんでした。'
+    : 'The following files were not inserted:',
+  imageDropTooLarge: isJa
+    ? name => `${name} — 300KBを超えています`
+    : name => `${name} — Exceeds the 300 KB limit`,
+  imageDropSvgUnsupported: isJa
+    ? name => `${name} — SVG画像は挿入できません`
+    : name => `${name} — SVG images are not supported`,
+  imageDropNotImage: isJa
+    ? name => `${name} — 画像ファイルではありません`
+    : name => `${name} — Not an image file`,
+  imageDropReadFailed: isJa
+    ? name => `${name} — ファイルの読み込みに失敗しました`
+    : name => `${name} — Failed to read the file`,
   defaultMd: isJa
     ? `# MD//WORKS エディタ\n\n**スタンドアロン書き出し**に対応した究極版です。\n\n## 主な機能\n\n- **Appとして書き出し**: [ファイル] > [Appとして書き出し] で、現在の原稿とエディタ本体を \`.app.html\` として1ファイルに書き出します。USB等で持ち運べます。\n- **ローカル保存の保護**: Auto encrypted では、ローカルの下書きと履歴を平文のまま保存しないようにします。さらに保護したい場合は、Private Storage によるパスフレーズ保護を利用できます。\n\n---\n\n*そのまま編集を開始してください。*\n`
     : `# MD//WORKS Editor\n\nThe ultimate edition featuring **Standalone Export**.\n\n## Key Features\n\n- **Export as App**: Go to [File] > [Export as App] to export your current text and this entire editor into a single \`.app.html\` file for easy portability.\n- **Protected local storage**: Auto encrypted helps avoid storing local drafts and history as plain text. For stronger local protection, you can enable passphrase-based Private Storage.\n\n---\n\n*Start editing!*\n`,
@@ -1752,9 +1959,10 @@ MD//WORKS は、Markdown原稿を安全に書き、プレビューし、持ち�
 * **Standalone first**: エディタ本体と原稿を1つのHTMLとして書き出せます。
 * **Privacy aware**: 下書きと履歴はローカル環境に保存されます。Auto encrypted は平文保存を避けるための基本保護で、Private Storage によりパスフレーズ保護を追加できます。
 * **Offline ready**: 主要なヘルプと文書表示は外部fetchなしで利用できます。
+* **Update check**: MD//WORKSは、最新版の有無を確認するため、24時間に1回以下の頻度で公式GitHub Releasesへ接続します。文書内容、ファイル名、履歴、パスワードは送信されません。
 
 ### Version
-* MD//WORKS v1.5.6
+* MD//WORKS v${APP_VERSION}
 ` : `
 ## About MD//WORKS
 
@@ -1764,38 +1972,45 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
 * **Standalone first**: Export the editor and the current draft as a single HTML file.
 * **Privacy aware**: Drafts and history stay local. Auto encrypted helps avoid plain-text local storage, and Private Storage adds optional passphrase-based protection.
 * **Offline ready**: Core help and documentation views work without external fetches.
+* **Update check**: MD//WORKS may connect to the official GitHub Releases endpoint at most once every 24 hours to check for updates. Document content, filenames, history, and passwords are not transmitted.
 
 ### Version
-* MD//WORKS v1.5.6
+* MD//WORKS v${APP_VERSION}
 `,
 
-  releaseNotesTitle: isJa ? 'v1.5.6 の新機能' : "What's New in v1.5.6",
+  releaseNotesTitle: isJa ? `v${APP_VERSION} の新機能` : `What's New in v${APP_VERSION}`,
   releaseNotesIntro: isJa ? '今回の主な改善内容です。' : 'Here are the main improvements in this release.',
   releaseNotesClose: isJa ? '閉じる' : 'Close',
   releaseNotesContent: isJa ? `
 
-## v1.5.6 - TOC and Editing Stability Improvements
+## v1.5.7 - Viewer書き出しとExport機能の改善
 
-* **目次（TOC）を作成できるようになりました。**
-  Editメニューの「目次を挿入」から、文書内の見出しをもとにリンク付きの目次を作成できます。すでに作成済みの目次は、見出しの変更後に更新できます。
+* **用途に応じた3種類のViewerを書き出せるようになりました。**
+  標準のViewer、選択・コピー・右クリック・印刷などを抑制する制限付きViewer、閲覧時にパスワードが必要なパスワード付きViewerを選択できます。
 
-* **ペースト動作を安定化しました。**
-  長い文章や大量のテキストを貼り付けた際の処理を見直し、画面の一時停止や表示の乱れが起こりにくくなるよう改善しました。
+* **書き出し形式を専用のExportモーダルへ整理しました。**
+  Fileメニューの「書き出し...」から、Viewer形式とStandalone App形式を目的別に選択できます。
 
-* **iPad Safariの全画面表示時のメニュー配置を調整しました。**
-  Safari側の全画面解除ボタンとFileメニューが重なりにくいよう、表示位置を調整しました。
+* **従来の通常HTML出力をViewerへ統合しました。**
+  折りたたみ可能なOutlineを備えたViewerを、標準の閲覧用HTMLとして利用できます。
+
+* **最新版の通知を改善しました。**
+  新しい正式版が公開されている場合、メニューバーの通知アイコンから現在のバージョンと最新版を確認し、最新Releaseページを開けます。
 `:`
 
-## v1.5.6 - TOC and Editing Stability Improvements
+## v1.5.7 - Viewer Export and Export UI Improvements
 
-* **Table of Contents generation has been added.**
-  You can now create a linked table of contents from the document headings by selecting “Insert Table of Contents” from the Edit menu. An existing table of contents can also be updated after the headings change.
+* **Three Viewer formats are now available.**
+  Choose a standard Viewer, a Restricted Viewer that suppresses selection, copying, right-click, and printing, or a Password-protected Viewer that requires a password when opened.
 
-* **Paste handling has been made more stable.**
-  Processing for long or large pasted text has been improved to reduce temporary freezing and visual disruption.
+* **Export formats are now organized in a dedicated dialog.**
+  Select Viewer and Standalone App formats by purpose from File > Export....
 
-* **Improved the menu layout in iPad Safari fullscreen mode.**
-  Adjusted the File menu position to reduce overlap with Safari’s fullscreen exit control.
+* **The legacy plain HTML export has been consolidated into Viewer.**
+  Viewer now serves as the standard read-only HTML export and includes a collapsible outline.
+
+* **Latest-version notifications have been improved.**
+  When a newer stable release is available, the menu-bar indicator shows the current and latest versions and provides access to the latest Release page.
 `
 };
 
@@ -1805,6 +2020,7 @@ set('m-new', T.newFile);
 set('m-close', T.closeMenu);
 set('m-open', T.open);
 set('m-open-word', T.openWord);
+set('m-export', T.exportMenu);
 set('m-save-as-app', T.saveAsApp);
 set('m-save-as-private-app', T.saveAsPrivateApp);
 set('m-clear-local-data', T.clearLocalData);
@@ -1835,9 +2051,28 @@ set('m-help-quick-start', T.quickStart);
 set('m-help-keyboard-shortcuts', T.keyboardShortcuts);
 set('m-help-github', T.github);
 set('m-help-about', T.aboutMdworks);
+set('update-modal-title', T.updateAvailableTitle);
+set('update-modal-message', T.updateAvailableMessage);
+set('update-current-version-label', `${T.updateCurrentVersion}:`);
+set('update-latest-version-label', `${T.updateLatestVersion}:`);
+set('update-download-btn', T.updateGetLatest);
+set('update-close-btn', T.updateClose);
+const updateIndicator = document.getElementById('update-indicator');
+if (updateIndicator) {
+  updateIndicator.setAttribute('aria-label', T.updateIndicatorLabel);
+  updateIndicator.title = T.updateIndicatorLabel;
+}
+
 
 set('m-find', T.findMenu); set('m-replace', T.replaceMenu);
-set('m-export-html', T.exportHtml); set('m-export-pdf', T.exportPdf);
+set('export-modal-title', T.exportModalTitle); set('export-view-share-title', T.exportViewShare); set('export-standalone-apps-title', T.exportStandaloneApps);
+set('export-viewer-title', T.exportViewerTitle); set('export-viewer-desc', T.exportViewerDescription);
+set('export-restricted-title', T.exportRestrictedTitle); set('export-restricted-desc', T.exportRestrictedDescription);
+set('export-password-viewer-title', T.exportPasswordViewerTitle); set('export-password-viewer-desc', T.exportPasswordViewerDescription);
+set('export-standalone-title', T.exportStandaloneTitle); set('export-standalone-desc', T.exportStandaloneDescription);
+set('export-password-app-title', T.exportPasswordAppTitle); set('export-password-app-desc', T.exportPasswordAppDescription);
+set('export-modal-close-foot', T.exportModalClose);
+set('m-export-pdf', T.exportPdf);
 set('m-preview-label', T.preview); set('m-fullscreen-label', T.menuFullscreen); set('m-spell-label', T.spellCheck);
 set('m-bold', T.bold); set('m-italic', T.italic);
 set('tb-list-btn', '─ ' + T.tbList); set('tb-olist-btn', '1. ' + T.tbOList);
@@ -1972,11 +2207,11 @@ function syncFilenameInputState() {
 //#region [JS-03] SECURE STORAGE & ENCRYPTION LOGIC
 // DOMPurify Hooks
 const MARKDOWN_SANITIZE_CONFIG = Object.freeze({
-  ALLOWED_TAGS: ['h1','h2','h3','h4','h5','h6','p','br','hr','strong','b','em','i','s','del','code','pre','blockquote','ul','ol','li','table','thead','tbody','tr','th','td','a','img','input','sup','sub'],
-  ALLOWED_ATTR: ['href','title','target','rel','alt','src','class','type','checked','disabled','aria-checked','colspan','rowspan','align'],
+  ALLOWED_TAGS: ['h1','h2','h3','h4','h5','h6','p','br','hr','strong','b','em','i','s','del','code','pre','blockquote','ul','ol','li','table','thead','tbody','tr','th','td','a','img','input','sup','sub','video','source'],
+  ALLOWED_ATTR: ['href','title','target','rel','alt','src','class','type','controls','checked','disabled','aria-checked','colspan','rowspan','align'],
   ALLOW_DATA_ATTR: false,
   FORBID_TAGS: ['script','style','iframe','object','embed','form','meta','link','base','svg','math'],
-  FORBID_ATTR: ['style','srcset','onerror','onclick','onload','onmouseover','onfocus'],
+  FORBID_ATTR: ['style','srcset','autoplay','onerror','onclick','onload','onmouseover','onfocus'],
   KEEP_CONTENT: true
 });
 
@@ -1995,6 +2230,36 @@ function isSafeLocalOrDataImage(src) {
   if (/^data:image\/(png|gif|jpeg|jpg|webp);base64,/i.test(value)) return true;
   if (/^(?:\.\.?\/|\/|#|\?)/.test(value)) return true;
   return !/^[a-z][a-z0-9+.-]*:/i.test(value);
+}
+
+function getSafeLocalVideoInfo(src) {
+  const value = String(src || '').trim();
+  if (!value) return null;
+  if (/[\u0000-\u001F\u007F]/.test(value)) return null;
+  if (/^[a-z][a-z0-9+.-]*:/i.test(value)) return null;
+  if (value.startsWith('//') || value.startsWith('/') || value.startsWith('\\')) return null;
+
+  const pathPart = value.split(/[?#]/, 1)[0];
+  let decodedPath;
+  try {
+    decodedPath = decodeURIComponent(pathPart);
+  } catch (e) {
+    return null;
+  }
+
+  const normalizedPath = decodedPath.replace(/\\/g, '/');
+  const segments = normalizedPath.split('/');
+  if (segments.some(segment => segment === '..')) return null;
+
+  const match = normalizedPath.match(/\.(mp4|webm)$/i);
+  if (!match) return null;
+
+  const extension = match[1].toLowerCase();
+  return {
+    src: value,
+    extension,
+    mime: extension === 'mp4' ? 'video/mp4' : 'video/webm'
+  };
 }
 
 function setupDOMPurifyHooks() {
@@ -2019,6 +2284,31 @@ function setupDOMPurifyHooks() {
       if (!isSafeLocalOrDataImage(src)) node.removeAttribute('src');
       node.removeAttribute('srcset');
       node.removeAttribute('loading');
+    }
+    if (tag === 'video') {
+      Array.from(node.attributes).forEach(attr => {
+        if (!['src', 'controls', 'class'].includes(attr.name.toLowerCase())) node.removeAttribute(attr.name);
+      });
+      node.removeAttribute('autoplay');
+      const src = node.getAttribute('src');
+      if (src && !getSafeLocalVideoInfo(src)) node.removeAttribute('src');
+    }
+    if (tag === 'source') {
+      const parentTag = node.parentElement?.tagName?.toLowerCase();
+      if (parentTag !== 'video') {
+        node.remove();
+        return;
+      }
+      Array.from(node.attributes).forEach(attr => {
+        if (!['src', 'type'].includes(attr.name.toLowerCase())) node.removeAttribute(attr.name);
+      });
+      const info = getSafeLocalVideoInfo(node.getAttribute('src') || '');
+      if (!info) {
+        node.remove();
+        return;
+      }
+      const declaredType = (node.getAttribute('type') || '').trim().toLowerCase();
+      if (declaredType && declaredType !== info.mime) node.setAttribute('type', info.mime);
     }
     if (tag === 'input') {
       if ((node.getAttribute('type') || '').toLowerCase() !== 'checkbox') {
@@ -2314,6 +2604,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupLayoutResizeObserver();
   syncFilenameInputState();
   maybeShowReleaseNotes(); // 起動時の復元・初期描画後に、このバージョン未表示なら表示
+  scheduleUpdateCheck();
 });
 //#endregion
 
@@ -3208,25 +3499,112 @@ editor.addEventListener('paste', e => {
   handlePlainTextPaste(text);
 });
 
+const IMAGE_DROP_MAX_BYTES = 300 * 1024;
+let isImageDropProcessing = false;
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error || new Error('File read failed'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function getDroppedImageHeading(filename) {
+  const normalized = String(filename || '')
+    .replace(/[\r\n]+/g, ' ')
+    .trim();
+  const withoutExtension = normalized.replace(/\.[^.]+$/, '').trim();
+  return withoutExtension || (isJa ? '画像' : 'Image');
+}
+
+function escapeMarkdownImageAlt(text) {
+  return String(text || '')
+    .replace(/\\/g, '\\\\')
+    .replace(/\]/g, '\\]');
+}
+
+function normalizeDroppedImageMarkdownSpacing(markdown, dropSelection) {
+  const before = editor.value.slice(0, dropSelection.s);
+  const after = editor.value.slice(dropSelection.e);
+  let nextMarkdown = markdown;
+
+  if (before && !before.endsWith('\n\n')) {
+    nextMarkdown = (before.endsWith('\n') ? '\n' : '\n\n') + nextMarkdown;
+  }
+
+  if (after && !after.startsWith('\n\n')) {
+    nextMarkdown += after.startsWith('\n') ? '\n' : '\n\n';
+  }
+
+  return nextMarkdown;
+}
+
+function notifySkippedImageDrops(skipped) {
+  if (!skipped.length) return;
+  toast(`${T.imageDropSkippedTitle} ${skipped.join(' / ')}`);
+}
+
 editor.addEventListener("dragover", (e) => { e.preventDefault(); e.dataTransfer.dropEffect = "copy"; });
-editor.addEventListener("drop", (e) => {
+editor.addEventListener("drop", async (e) => {
   e.preventDefault();
-  const file = e.dataTransfer.files && e.dataTransfer.files[0];
-  if (!file || !file.type.startsWith("image/")) return;
-  if (file.type === "image/svg+xml") {
-    alert(isJa ? "SVG画像は安全上の理由により挿入できません。" : "SVG images cannot be inserted for security reasons.");
-    return;
+  const files = Array.from(e.dataTransfer?.files || []);
+  if (!files.length || isImageDropProcessing) return;
+
+  isImageDropProcessing = true;
+  const dropSelection = getPos();
+  const snippets = [];
+  const skipped = [];
+
+  showLoader(T.loadingDroppedImages(0, files.length));
+  await yieldToBrowserPaint();
+
+  try {
+    for (let index = 0; index < files.length; index += 1) {
+      const file = files[index];
+
+      if (!file.type.startsWith("image/")) {
+        skipped.push(T.imageDropNotImage(file.name));
+      } else if (file.type === "image/svg+xml") {
+        skipped.push(T.imageDropSvgUnsupported(file.name));
+      } else if (file.size > IMAGE_DROP_MAX_BYTES) {
+        skipped.push(T.imageDropTooLarge(file.name));
+      } else {
+        try {
+          const dataUrl = await readFileAsDataUrl(file);
+          const heading = getDroppedImageHeading(file.name);
+          const alt = escapeMarkdownImageAlt(file.name);
+          snippets.push(`## ${heading}\n\n![${alt}](${dataUrl})`);
+        } catch (error) {
+          console.warn('Image drop read failed', file.name, error);
+          skipped.push(T.imageDropReadFailed(file.name));
+        }
+      }
+
+      set('loader-msg', T.loadingDroppedImages(index + 1, files.length));
+      await yieldToBrowserPaint();
+    }
+
+    if (snippets.length) {
+      set('loader-msg', T.insertingDroppedImages);
+      await yieldToBrowserPaint();
+
+      const markdown = normalizeDroppedImageMarkdownSpacing(snippets.join('\n\n'), dropSelection);
+      setRange(dropSelection.s, dropSelection.e);
+      ins(markdown, false);
+      update();
+      if (spellEnabled) runSpellCheck();
+      if (srPanelOpen) performSearch(false);
+      await yieldToBrowserPaint();
+    }
+  } finally {
+    isImageDropProcessing = false;
+    hideLoader();
+    renderStorageBadge();
   }
-  if (file.size > 200 * 1024) { 
-    alert("画像が大きすぎます。ローカル保存容量を保護するため、200KB以下の画像のみ挿入できます。"); 
-    return; 
-  }
-  const reader = new FileReader();
-  reader.onload = () => {
-    const snippet = `![${file.name}](${reader.result})`;
-    ins(snippet, false);
-  };
-  reader.readAsDataURL(file);
+
+  notifySkippedImageDrops(skipped);
 });
 //#endregion
 
@@ -4300,6 +4678,144 @@ function isUserAbortError(err) {
   return err && (err.name === 'AbortError' || err.code === 20);
 }
 
+
+const RESTRICTED_VIEWER_FORMAT = 'mdworks-restricted-viewer';
+const RESTRICTED_VIEWER_VERSION = 1;
+
+function parseRestrictedViewerBoxFromHtml(htmlText) {
+  if (!String(htmlText || '').includes('mdworks-restricted-viewer-box')) return null;
+  const doc = new DOMParser().parseFromString(htmlText, 'text/html');
+  const script = doc.getElementById('mdworks-restricted-viewer-box');
+  if (!script) return null;
+  const box = JSON.parse(script.textContent || '{}');
+  const recovery = box?.recovery;
+  if (box?.format !== RESTRICTED_VIEWER_FORMAT || box?.formatVersion !== RESTRICTED_VIEWER_VERSION) return null;
+  if (!recovery || recovery.label !== 'restricted-viewer-recovery' || recovery.alg !== 'AES-GCM' || recovery.kdf !== 'PBKDF2' || recovery.hash !== 'SHA-256' || recovery.iterations !== 310000) return null;
+  return box;
+}
+
+async function decryptRestrictedViewerRecovery(box, passphrase) {
+  const plain = await decryptPrivateAppBox(box.recovery, passphrase);
+  const payload = JSON.parse(plain);
+  if (payload?.type !== 'mdworks-restricted-viewer-recovery' || typeof payload.markdown !== 'string') {
+    throw new Error('Invalid Restricted Viewer recovery payload');
+  }
+  return payload;
+}
+
+function restrictedViewerSourceToMarkdownName(sourceName) {
+  return ensureMarkdownFilename(String(sourceName || 'document')
+    .replace(/\.restricted\.view\.html?$/i, '')
+    .replace(/\.html?$/i, '') || 'document');
+}
+
+async function importRestrictedViewerHtml(htmlText, sourceName) {
+  const box = parseRestrictedViewerBoxFromHtml(htmlText);
+  if (!box) return false;
+
+  const passphrase = prompt(T.restrictedViewerImportPrompt) || '';
+  if (!passphrase) return true;
+
+  let error = null;
+  showLoader(T.viewerImportDecrypting);
+  await yieldToBrowserPaint();
+
+  try {
+    const payload = await decryptRestrictedViewerRecovery(box, passphrase);
+
+    showLoader(T.viewerRestoringMarkdown);
+    await yieldToBrowserPaint();
+
+    editor.value = payload.markdown.normalize('NFC');
+    filenameInput.value = ensureMarkdownFilename(payload.filename || payload.title || restrictedViewerSourceToMarkdownName(sourceName));
+    fileHandle = null;
+    syncFilenameInputState();
+    update();
+    markDirty();
+    await triggerAutoSave();
+    if (spellEnabled) runSpellCheck();
+    await yieldToBrowserPaint();
+  } catch (err) {
+    console.error(err);
+    error = err;
+  } finally {
+    hideLoader();
+    renderStorageBadge();
+  }
+
+  toast(error ? T.restrictedViewerImportError : T.restrictedViewerImported);
+  return true;
+}
+
+// --- NEW: parsePrivateViewerBoxFromHtml ---
+function parsePrivateViewerBoxFromHtml(htmlText) {
+  if (!String(htmlText || '').includes('mdworks-private-viewer')) return null;
+  const doc = new DOMParser().parseFromString(htmlText, 'text/html');
+  const script = doc.getElementById('mdworks-private-viewer-box');
+  if (!script) return null;
+  const box = JSON.parse(script.textContent || '{}');
+  if (box?.label !== 'private-viewer' || box?.alg !== 'AES-GCM' || box?.kdf !== 'PBKDF2') return null;
+  return box;
+}
+
+// --- NEW: decryptPrivateViewerPayload ---
+async function decryptPrivateViewerPayload(box, passphrase) {
+  const plain = await decryptPrivateAppBox(box, passphrase);
+  const payload = JSON.parse(plain);
+  if (payload?.type !== 'mdworks-private-viewer') {
+    throw new Error('Invalid Private Viewer payload');
+  }
+  if (typeof payload.markdown !== 'string') {
+    const err = new Error('Missing restorable Markdown');
+    err.code = 'MDWORKS_PRIVATE_VIEWER_MISSING_MARKDOWN';
+    throw err;
+  }
+  return payload;
+}
+
+// --- NEW: importPrivateViewerHtml ---
+async function importPrivateViewerHtml(htmlText, sourceName) {
+  const box = parsePrivateViewerBoxFromHtml(htmlText);
+  if (!box) return false;
+
+  const passphrase = prompt(T.privateViewerImportPrompt) || '';
+  if (!passphrase) return true;
+
+  let error = null;
+  showLoader(T.viewerImportDecrypting);
+  await yieldToBrowserPaint();
+
+  try {
+    const payload = await decryptPrivateViewerPayload(box, passphrase);
+
+    showLoader(T.viewerRestoringMarkdown);
+    await yieldToBrowserPaint();
+
+    editor.value = payload.markdown.normalize('NFC');
+    filenameInput.value = ensureMarkdownFilename(payload.title || String(sourceName || '').replace(/\.(private\.)?view\.html?$/i, '') || 'document');
+    fileHandle = null;
+    syncFilenameInputState();
+    update();
+    markSaved();
+    await triggerAutoSave();
+    if (spellEnabled) runSpellCheck();
+    await yieldToBrowserPaint();
+  } catch (err) {
+    console.error(err);
+    error = err;
+  } finally {
+    hideLoader();
+    renderStorageBadge();
+  }
+
+  toast(error?.code === 'MDWORKS_PRIVATE_VIEWER_MISSING_MARKDOWN'
+    ? T.privateViewerImportMissingMarkdown
+    : error
+      ? (T.privateViewerImportError || T.viewerPassphraseError)
+      : T.privateViewerImported);
+  return true;
+}
+
 function notifyFileSystemError(action, err) {
   if (isUserAbortError(err)) return;
   console.error(`${action} failed`, err);
@@ -4312,7 +4828,7 @@ async function handleOpen() {
     try {
       const openOptions = {
         id: MDWORKS_PICKER_ID,
-        types: [{ description: 'Markdown', accept: { 'text/markdown': ['.md', '.txt'] } }]
+        types: [{ description: 'Markdown / Private Viewer HTML', accept: { 'text/markdown': ['.md', '.txt', '.markdown'], 'text/html': ['.html', '.htm'] } }]
       };
       const startHandle = lastPickerStartHandle || fileHandle;
       if (startHandle) {
@@ -4320,13 +4836,16 @@ async function handleOpen() {
       }
 
       const [handle] = await window.showOpenFilePicker(openOptions);
-      fileHandle = handle;
-      syncFilenameInputState();
       lastPickerStartHandle = handle;
       const file = await handle.getFile();
       await saveToHistoryList(filenameInput.value, editor.value);
+      const text = await file.text();
+      if (await importRestrictedViewerHtml(text, file.name)) return;
+      if (await importPrivateViewerHtml(text, file.name)) return;
+      fileHandle = handle;
+      syncFilenameInputState();
       filenameInput.value = file.name;
-      editor.value = (await file.text()).normalize('NFC');
+      editor.value = text.normalize('NFC');
       update(); markSaved(); triggerAutoSave();
       toast(T.opened(file.name));
     } catch (e) {
@@ -4346,8 +4865,12 @@ document.getElementById('file-input').addEventListener('change', async (e) => {
   try {
     await saveToHistoryList(filenameInput.value, editor.value);
 
+    const text = await file.text();
+    if (await importRestrictedViewerHtml(text, file.name)) return;
+    if (await importPrivateViewerHtml(text, file.name)) return;
+
     filenameInput.value = file.name;
-    editor.value = (await file.text()).normalize('NFC');
+    editor.value = text.normalize('NFC');
     fileHandle = null;
     syncFilenameInputState();
 
@@ -4442,6 +4965,35 @@ function fallbackDownload() {
   syncFilenameInputState();
 }
 
+// --- NEW: escapeHtml ---
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// --- NEW: sanitizeFileBaseName ---
+function sanitizeFileBaseName(value) {
+  const base = String(value || '').trim() || 'document';
+  return base
+    .replace(/[\\/:*?"<>|]+/g, '-')
+    .replace(/\s+/g, ' ')
+    .slice(0, 80) || 'document';
+}
+
+// --- NEW: safeScriptJson ---
+function safeScriptJson(value) {
+  return JSON.stringify(value)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+}
+
 function buildStandaloneHtmlForExport() {
   const clone = document.documentElement.cloneNode(true);
 
@@ -4481,6 +5033,29 @@ function buildStandaloneHtmlForExport() {
 
   const docBody = clone.querySelector('#doc-body');
   if (docBody) docBody.innerHTML = '';
+
+  const updateIndicatorClone = clone.querySelector('#update-indicator');
+  if (updateIndicatorClone) updateIndicatorClone.hidden = true;
+
+  const updateModalClone = clone.querySelector('#update-modal');
+  if (updateModalClone) {
+    updateModalClone.classList.remove('show');
+    updateModalClone.setAttribute('aria-hidden', 'true');
+    updateModalClone.setAttribute('data-state', 'closed');
+  }
+
+  const exportModalClone = clone.querySelector('#export-modal');
+  if (exportModalClone) {
+    exportModalClone.classList.remove('show');
+    exportModalClone.setAttribute('aria-hidden', 'true');
+    exportModalClone.setAttribute('data-state', 'closed');
+  }
+
+  const updateCurrentVersionClone = clone.querySelector('#update-current-version');
+  if (updateCurrentVersionClone) updateCurrentVersionClone.textContent = '';
+
+  const updateLatestVersionClone = clone.querySelector('#update-latest-version');
+  if (updateLatestVersionClone) updateLatestVersionClone.textContent = '';
 
   const rnModal = clone.querySelector('#rn-modal');
   if (rnModal) {
@@ -4542,40 +5117,413 @@ async function exportStandalone() {
   }
 }
 
-function getPrivateAppPassphrase() {
-  const ok = confirm(
-    isJa
-      ? 'Private Appとして書き出します。\n\nパスフレーズを忘れると内容を復元できません。\nファイル破損に備えて、原本またはバックアップを安全な場所に保管してください。\n\n※復号後にブラウザ上で編集を続ける場合、ブラウザ内の一時保存はMD//WORKS本体の「Private Storage」等の設定に従います。より厳密に管理したい場合は、起動後にPrivate Storageも併用してください。'
-      : 'Export as Private App.\n\nIf you forget the passphrase, the content cannot be recovered. Keep an original or backup copy in a safe place.\n\nNote: Auto-saves after unlocking depend on the editor\'s normal Storage Settings. For extra security, enable Private Storage after unlocking.'
-  );
-  if (!ok) return null;
+// --- NEW: buildViewerHtml ---
+function buildViewerHtml(html, title, options = {}) {
+  const safeTitle = escapeHtml(title || 'document');
+  const notice = escapeHtml(options.notice || T.viewerPlainNotice);
+  const outlineLabel = escapeHtml(options.outlineLabel || T.viewerOutline);
+  const outlineEmpty = escapeHtml(options.outlineEmpty || T.viewerOutlineEmpty);
 
-  const p1 = prompt(
-    isJa
-      ? '暗号化App用のパスフレーズを入力してください。'
-      : 'Enter a passphrase for this Private App.'
-  ) || '';
+  return `<!DOCTYPE html>
+<html lang="${isJa ? 'ja' : 'en'}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src 'self' blob:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';">
+<title>${safeTitle}</title>
+<style>
+:root{color-scheme:light;--bg:#f6f7fb;--paper:#fff;--text:#18202f;--muted:#667085;--line:#d9deea;--accent:#3454d1;--soft:#eef2ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.75 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.viewer-shell{display:grid;grid-template-columns:minmax(90px,130px) minmax(0,860px);gap:28px;max-width:1180px;margin:0 auto;padding:28px 24px 56px}
+header{grid-column:1/-1;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px 26px;box-shadow:0 10px 30px rgba(22,34,66,.06)}
+header h1{margin:0 0 8px;font-size:clamp(1.5rem,4vw,2.1rem);line-height:1.25}.notice{margin:0;color:var(--muted);font-size:.94rem}
+.outline-wrap{position:sticky;top:18px;align-self:start;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px;max-height:calc(100vh - 36px);overflow:auto}
+.outline-wrap summary{cursor:pointer;font-weight:700;color:#202a44}.outline-list{list-style:none;margin:12px 0 0;padding:0}.outline-list li{margin:3px 0}.outline-list a{display:block;border-radius:9px;padding:5px 7px;color:var(--accent);text-decoration:none;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.outline-list a:hover{background:var(--soft)}.outline-h2{padding-left:8px}.outline-h3{padding-left:16px;font-size:.92rem}
+main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:36px;box-shadow:0 10px 30px rgba(22,34,66,.06)}
+main>:first-child{margin-top:0}main>:last-child{margin-bottom:0}h1,h2,h3,h4,h5,h6{line-height:1.35;margin:1.7em 0 .65em}h1{font-size:2rem;border-bottom:1px solid var(--line);padding-bottom:.25em}h2{font-size:1.55rem;border-bottom:1px solid #edf0f6;padding-bottom:.2em}h3{font-size:1.25rem}p,ul,ol,blockquote,pre,table{margin:1em 0}a{color:var(--accent)}img{max-width:100%;height:auto}main video{display:block;width:100%;max-width:100%;height:auto;margin:1em 0;border-radius:8px;border:1px solid var(--line);background:#000}blockquote{border-left:4px solid var(--line);padding:.2em 1em;color:#475467;background:#fafbff}pre{overflow:auto;padding:14px;border-radius:12px;background:#111827;color:#f9fafb}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.92em;background:#eef2f7;border-radius:5px;padding:.1em .3em}pre code{background:transparent;padding:0}table{display:block;max-width:100%;overflow:auto;border-collapse:collapse}th,td{border:1px solid var(--line);padding:6px 10px}th{background:#f5f7fb}
+@media (max-width:860px){.viewer-shell{display:block;padding:14px}.outline-wrap{position:static;max-height:none;margin:14px 0}main{padding:22px}header{padding:18px}}
+@media print{body{background:#fff}.viewer-shell{display:block;max-width:none;padding:0}.outline-wrap{display:none}header,main{box-shadow:none;border:0;border-radius:0}main{padding:0}}
+</style>
+</head>
+<body>
+<div class="viewer-shell">
+<header>
+<h1>${safeTitle}</h1>
+<p class="notice">${notice}</p>
+</header>
+<aside class="outline-wrap" aria-label="${outlineLabel}">
+<details open>
+<summary>${outlineLabel}</summary>
+<ol id="viewer-outline" class="outline-list"></ol>
+<p id="viewer-outline-empty" hidden>${outlineEmpty}</p>
+</details>
+</aside>
+<main id="viewer-document">
+${html}
+</main>
+</div>
+<script>
+(function(){
+  var list = document.getElementById('viewer-outline');
+  var empty = document.getElementById('viewer-outline-empty');
+  var headings = document.querySelectorAll('main h1, main h2, main h3');
+  var count = 0;
+  headings.forEach(function(h){
+    if (!h.id) return;
+    var li = document.createElement('li');
+    li.className = 'outline-' + h.tagName.toLowerCase();
+    var a = document.createElement('a');
+    a.href = '#' + encodeURIComponent(h.id);
+    a.textContent = h.textContent || h.id;
+    li.appendChild(a);
+    list.appendChild(li);
+    count++;
+  });
+  if (!count) {
+    empty.hidden = false;
+  }
+})();
+<\/script>
+</body>
+</html>`;
+}
 
-  if (!p1) return null;
+// --- NEW: exportViewer ---
+function exportViewer() {
+  closeMenus();
+  try {
+    const rawTitle = (filenameInput.value || '').replace(/\.[^/.]+$/, '').trim() || 'document';
+    const title = rawTitle || 'document';
+    const html = safeMarkdownHtml(editor.value);
+    const viewerHtml = buildViewerHtml(html, title, {
+      notice: T.viewerPlainNotice,
+      outlineLabel: T.viewerOutline,
+      outlineEmpty: T.viewerOutlineEmpty
+    });
+    const filename = sanitizeFileBaseName(title) + '.view.html';
+    triggerDownload(viewerHtml, filename, 'text/html');
+    toast(T.exportedViewer);
+  } catch (err) {
+    console.error(err);
+    toast(T.errViewer);
+  }
+}
 
-  const p2 = prompt(
-    isJa
-      ? '確認のため、もう一度パスフレーズを入力してください。'
-      : 'Enter the passphrase again to confirm.'
-  ) || '';
 
-  if (p1 !== p2) {
-    toast(isJa ? 'パスフレーズが一致しません' : 'Passphrases do not match');
-    return null;
+async function encryptRestrictedViewerDisplay(payloadText) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const key = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']);
+  const cipher = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(payloadText));
+  const rawKey = new Uint8Array(await crypto.subtle.exportKey('raw', key));
+  return {
+    alg: 'AES-GCM',
+    keyFormat: 'raw-base64',
+    key: bytesToB64(rawKey),
+    iv: bytesToB64(iv),
+    data: bytesToB64(new Uint8Array(cipher))
+  };
+}
+
+async function encryptRestrictedViewerRecovery(payloadText, passphrase) {
+  return encryptPrivateAppBox(payloadText, passphrase, 'restricted-viewer-recovery');
+}
+
+function buildRestrictedViewerHtml(box, title, options = {}) {
+  const safeTitle = escapeHtml(title || 'document');
+  const boxJson = safeScriptJson(box);
+  const loadingJson = safeScriptJson(options.loadingLabel || (isJa ? '文書を開いています...' : 'Loading...'));
+  const errorJson = safeScriptJson(options.errorLabel || T.restrictedViewerOpenError);
+  const outlineLabel = escapeHtml(options.outlineLabel || T.viewerOutline);
+  const outlineEmpty = escapeHtml(options.outlineEmpty || T.viewerOutlineEmpty);
+
+  return `<!DOCTYPE html>
+<html lang="${isJa ? 'ja' : 'en'}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src 'self' blob:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';">
+<title>${safeTitle}</title>
+<style>
+:root{color-scheme:light;--bg:#f6f7fb;--paper:#fff;--text:#18202f;--muted:#667085;--line:#d9deea;--accent:#3454d1;--danger:#b42318;--soft:#eef2ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.75 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.loading{max-width:720px;margin:10vh auto;padding:24px;color:var(--muted)}.error{color:var(--danger)}
+.viewer-shell{display:grid;grid-template-columns:minmax(90px,130px) minmax(0,860px);gap:28px;max-width:1180px;margin:0 auto;padding:28px 24px 56px;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-webkit-touch-callout:none}.viewer-shell img,.viewer-shell a{-webkit-user-drag:none}
+header{grid-column:1/-1;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px 26px;box-shadow:0 10px 30px rgba(22,34,66,.06)}header h1{margin:0;font-size:clamp(1.5rem,4vw,2.1rem);line-height:1.25}.outline-wrap{position:sticky;top:18px;align-self:start;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px;max-height:calc(100vh - 36px);overflow:auto}.outline-wrap summary{cursor:pointer;font-weight:700;color:#202a44}.outline-list{list-style:none;margin:12px 0 0;padding:0}.outline-list li{margin:3px 0}.outline-list a{display:block;border-radius:9px;padding:5px 7px;color:var(--accent);text-decoration:none;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.outline-list a:hover{background:var(--soft)}.outline-h2{padding-left:8px}.outline-h3{padding-left:16px;font-size:.92rem}
+main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:36px;box-shadow:0 10px 30px rgba(22,34,66,.06)}main>:first-child{margin-top:0}main>:last-child{margin-bottom:0}h1,h2,h3,h4,h5,h6{line-height:1.35;margin:1.7em 0 .65em}h1{font-size:2rem;border-bottom:1px solid var(--line);padding-bottom:.25em}h2{font-size:1.55rem;border-bottom:1px solid #edf0f6;padding-bottom:.2em}h3{font-size:1.25rem}p,ul,ol,blockquote,pre,table{margin:1em 0}a{color:var(--accent)}img{max-width:100%;height:auto}main video{display:block;width:100%;max-width:100%;height:auto;margin:1em 0;border-radius:8px;border:1px solid var(--line);background:#000}blockquote{border-left:4px solid var(--line);padding:.2em 1em;color:#475467;background:#fafbff}pre{overflow:auto;padding:14px;border-radius:12px;background:#111827;color:#f9fafb}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.92em;background:#eef2f7;border-radius:5px;padding:.1em .3em}pre code{background:transparent;padding:0}table{display:block;max-width:100%;overflow:auto;border-collapse:collapse}th,td{border:1px solid var(--line);padding:6px 10px}th{background:#f5f7fb}
+@media (max-width:860px){.viewer-shell{display:block;padding:14px}.outline-wrap{position:static;max-height:none;margin:14px 0}main{padding:22px}header{padding:18px}}@media print{html,body{background:#fff!important}body *{display:none!important}}
+</style>
+</head>
+<body>
+<div id="loading" class="loading"></div>
+<div id="viewer-shell" class="viewer-shell" hidden><header><h1 id="doc-title">${safeTitle}</h1></header><aside class="outline-wrap" aria-label="${outlineLabel}"><details open><summary>${outlineLabel}</summary><ol id="viewer-outline" class="outline-list"></ol><p id="viewer-outline-empty" hidden>${outlineEmpty}</p></details></aside><main id="viewer-document"></main></div>
+<script id="mdworks-restricted-viewer-box" type="application/json">${boxJson}<\/script>
+<script>
+(function(){
+  var loading=document.getElementById('loading');loading.textContent=${loadingJson};
+  var box=JSON.parse(document.getElementById('mdworks-restricted-viewer-box').textContent);
+  function b64ToBytes(b64){var bin=atob(b64),out=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)out[i]=bin.charCodeAt(i);return out}
+  async function decryptDisplay(){var display=box.display;var key=await crypto.subtle.importKey('raw',b64ToBytes(display.key),{name:'AES-GCM'},false,['decrypt']);var plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64ToBytes(display.iv)},key,b64ToBytes(display.data));return JSON.parse(new TextDecoder().decode(plain));}
+  function targetElement(target){return target instanceof Element?target:(target&&target.parentElement?target.parentElement:null)}
+  function isEditableElement(target){var el=targetElement(target);return Boolean(el&&el.closest('input, textarea, select, [contenteditable="true"]'))}
+  function isRestrictedTarget(target){var el=targetElement(target);return Boolean(el&&el.closest('#viewer-shell'))&&!isEditableElement(target)}
+  function disableDragging(){document.querySelectorAll('#viewer-shell img, #viewer-shell a').forEach(function(el){el.setAttribute('draggable','false')})}
+  ['copy','cut','selectstart','contextmenu','dragstart'].forEach(function(type){document.addEventListener(type,function(event){if(isRestrictedTarget(event.target))event.preventDefault()})});
+  document.addEventListener('keydown',function(event){var key=(event.key||'').toLowerCase(),modifier=event.ctrlKey||event.metaKey;if(!modifier)return;if(key==='p'){event.preventDefault();return}if((key==='a'||key==='c'||key==='x')&&isRestrictedTarget(event.target))event.preventDefault()});
+  function buildOutline(){var list=document.getElementById('viewer-outline'),empty=document.getElementById('viewer-outline-empty'),count=0;document.querySelectorAll('main h1, main h2, main h3').forEach(function(h){if(!h.id)return;var li=document.createElement('li'),a=document.createElement('a');li.className='outline-'+h.tagName.toLowerCase();a.href='#'+encodeURIComponent(h.id);a.textContent=h.textContent||h.id;li.appendChild(a);list.appendChild(li);count++});if(!count)empty.hidden=false}
+  decryptDisplay().then(function(payload){if(payload.type!=='mdworks-restricted-viewer-display'||typeof payload.html!=='string')throw new Error('Invalid payload');document.getElementById('doc-title').textContent=payload.title||${safeScriptJson(title || 'document')};document.getElementById('viewer-document').innerHTML=payload.html;loading.hidden=true;document.getElementById('viewer-shell').hidden=false;disableDragging();buildOutline()}).catch(function(){loading.className='loading error';loading.textContent=${errorJson}});
+})();
+<\/script>
+</body>
+</html>`;
+}
+
+async function exportRestrictedViewer() {
+  closeMenus();
+  if (!window.crypto || !crypto.subtle || !window.TextEncoder || !window.TextDecoder) {
+    alert(isJa ? 'このブラウザでは制限付きViewerを作成できません。' : 'This browser cannot create a Restricted Viewer.');
+    return;
   }
 
-  if (p1.length < 10) {
-    const weakOk = confirm(
-      isJa
-        ? 'パスフレーズが短めです。続行しますか？\n\n業務用の機密文書では、10文字以上で推測されにくいものを推奨します。'
-        : 'The passphrase is short. Continue?\n\nFor confidential business documents, use a hard-to-guess passphrase of at least 10 characters.'
-    );
-    if (!weakOk) return null;
+  let recoveryPassword = prompt(T.restrictedViewerRecoveryPassword);
+  if (!recoveryPassword) return;
+  const confirmation = prompt(T.restrictedViewerRecoveryPasswordConfirm);
+  if (!confirmation) return;
+  if (recoveryPassword !== confirmation) {
+    toast(T.restrictedViewerPasswordMismatch);
+    recoveryPassword = null;
+    return;
+  }
+
+  try {
+    showLoader(T.creatingRestrictedViewer);
+    const rawTitle = (filenameInput.value || '').replace(/\.[^/.]+$/, '').trim() || 'document';
+    const title = rawTitle || 'document';
+    const originalFilename = ensureMarkdownFilename(filenameInput.value.trim() || `${title}.md`);
+    const createdAt = new Date().toISOString();
+    const displayPayload = {
+      v: 1,
+      type: 'mdworks-restricted-viewer-display',
+      title,
+      createdAt,
+      html: safeMarkdownHtml(editor.value)
+    };
+    const recoveryPayload = {
+      v: 1,
+      type: 'mdworks-restricted-viewer-recovery',
+      title: originalFilename,
+      filename: originalFilename,
+      createdAt,
+      format: RESTRICTED_VIEWER_FORMAT,
+      markdown: editor.value
+    };
+    const box = {
+      format: RESTRICTED_VIEWER_FORMAT,
+      formatVersion: RESTRICTED_VIEWER_VERSION,
+      display: await encryptRestrictedViewerDisplay(JSON.stringify(displayPayload)),
+      recovery: await encryptRestrictedViewerRecovery(JSON.stringify(recoveryPayload), recoveryPassword)
+    };
+    recoveryPassword = null;
+    const viewerHtml = buildRestrictedViewerHtml(box, title, {
+      errorLabel: T.restrictedViewerOpenError,
+      outlineLabel: T.viewerOutline,
+      outlineEmpty: T.viewerOutlineEmpty
+    });
+    const filename = sanitizeFileBaseName(title) + '.restricted.view.html';
+    triggerDownload(viewerHtml, filename, 'text/html');
+    toast(T.exportedRestrictedViewer);
+  } catch (err) {
+    console.error(err);
+    toast(T.errViewer);
+  } finally {
+    recoveryPassword = null;
+    hideLoader();
+  }
+}
+
+// --- NEW: buildPrivateViewerHtml ---
+function buildPrivateViewerHtml(encryptedBox, title, options = {}) {
+  const safeTitle = escapeHtml(title || 'document');
+  const boxJson = safeScriptJson(encryptedBox);
+  const passphraseLabel = escapeHtml(options.passphraseLabel || T.viewerPassphrase);
+  const unlockLabel = escapeHtml(options.unlockLabel || T.viewerUnlock);
+  const decryptingJson = safeScriptJson(options.decryptingLabel || T.viewerDecrypting);
+  const errorJson = safeScriptJson(options.errorLabel || T.viewerPassphraseError);
+  const notice = escapeHtml(options.notice || T.viewerSecurityNotice);
+  const enterPassword = escapeHtml(options.enterPassword || T.viewerEnterPassword);
+  const outlineLabel = escapeHtml(options.outlineLabel || T.viewerOutline);
+  const outlineEmpty = escapeHtml(options.outlineEmpty || T.viewerOutlineEmpty);
+
+  return `<!DOCTYPE html>
+<html lang="${isJa ? 'ja' : 'en'}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src 'self' blob:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';">
+<title>${safeTitle}</title>
+<style>
+:root{color-scheme:light;--bg:#f6f7fb;--paper:#fff;--text:#18202f;--muted:#667085;--line:#d9deea;--accent:#3454d1;--danger:#b42318;--soft:#eef2ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.75 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.viewer-shell{display:grid;grid-template-columns:minmax(90px,130px) minmax(0,860px);gap:28px;max-width:1180px;margin:0 auto;padding:28px 24px 56px}.unlock-shell{max-width:720px;margin:8vh auto;padding:24px}
+header,.unlock-card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px 26px;box-shadow:0 10px 30px rgba(22,34,66,.06)}header{grid-column:1/-1}header h1,.unlock-card h1{margin:0 0 8px;font-size:clamp(1.5rem,4vw,2.1rem);line-height:1.25}.notice{margin:0 0 18px;color:var(--muted);font-size:.94rem}
+.unlock-form{display:flex;gap:10px;align-items:end}.field{flex:1}.field label{display:block;font-weight:700;margin:0 0 6px}.field input{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px 12px;font:inherit}button{border:0;border-radius:12px;background:var(--accent);color:#fff;font:inherit;font-weight:700;padding:12px 18px;cursor:pointer}button:disabled{opacity:.65;cursor:wait}.status{min-height:1.5em;margin:12px 0 0;color:var(--muted)}.error{color:var(--danger)}
+.outline-wrap{position:sticky;top:18px;align-self:start;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px;max-height:calc(100vh - 36px);overflow:auto}.outline-wrap summary{cursor:pointer;font-weight:700;color:#202a44}.outline-list{list-style:none;margin:12px 0 0;padding:0}.outline-list li{margin:3px 0}.outline-list a{display:block;border-radius:9px;padding:5px 7px;color:var(--accent);text-decoration:none;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.outline-list a:hover{background:var(--soft)}.outline-h2{padding-left:8px}.outline-h3{padding-left:16px;font-size:.92rem}
+main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:36px;box-shadow:0 10px 30px rgba(22,34,66,.06)}main>:first-child{margin-top:0}main>:last-child{margin-bottom:0}h1,h2,h3,h4,h5,h6{line-height:1.35;margin:1.7em 0 .65em}h1{font-size:2rem;border-bottom:1px solid var(--line);padding-bottom:.25em}h2{font-size:1.55rem;border-bottom:1px solid #edf0f6;padding-bottom:.2em}h3{font-size:1.25rem}p,ul,ol,blockquote,pre,table{margin:1em 0}a{color:var(--accent)}img{max-width:100%;height:auto}main video{display:block;width:100%;max-width:100%;height:auto;margin:1em 0;border-radius:8px;border:1px solid var(--line);background:#000}blockquote{border-left:4px solid var(--line);padding:.2em 1em;color:#475467;background:#fafbff}pre{overflow:auto;padding:14px;border-radius:12px;background:#111827;color:#f9fafb}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.92em;background:#eef2f7;border-radius:5px;padding:.1em .3em}pre code{background:transparent;padding:0}table{display:block;max-width:100%;overflow:auto;border-collapse:collapse}th,td{border:1px solid var(--line);padding:6px 10px}th{background:#f5f7fb}
+body.private-viewer-unlocked .viewer-shell{user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-webkit-touch-callout:none}body.private-viewer-unlocked img,body.private-viewer-unlocked a{-webkit-user-drag:none}
+@media (max-width:860px){.viewer-shell{display:block;padding:14px}.outline-wrap{position:static;max-height:none;margin:14px 0}main{padding:22px}header{padding:18px}.unlock-form{display:block}.unlock-form button{width:100%;margin-top:10px}}@media print{html,body{background:#fff!important}body *{display:none!important}}
+</style>
+</head>
+<body>
+<section id="unlock-shell" class="unlock-shell">
+<div class="unlock-card">
+<h1>${safeTitle}</h1>
+<p class="notice">${enterPassword}</p>
+<div class="unlock-form">
+<div class="field"><input id="passphrase" type="password" autocomplete="current-password" aria-label="${passphraseLabel}"></div>
+<button id="unlock-btn" type="button">${unlockLabel}</button>
+</div>
+<p id="status" class="status"></p>
+</div>
+</section>
+<div id="viewer-shell" class="viewer-shell" hidden>
+<header><h1 id="doc-title">${safeTitle}</h1></header>
+<aside class="outline-wrap" aria-label="${outlineLabel}"><details open><summary>${outlineLabel}</summary><ol id="viewer-outline" class="outline-list"></ol><p id="viewer-outline-empty" hidden>${outlineEmpty}</p></details></aside>
+<main id="viewer-document"></main>
+</div>
+<script id="mdworks-private-viewer-box" type="application/json">${boxJson}<\/script>
+<script>
+(function(){
+  var box = JSON.parse(document.getElementById('mdworks-private-viewer-box').textContent);
+  var pass = document.getElementById('passphrase');
+  var btn = document.getElementById('unlock-btn');
+  var status = document.getElementById('status');
+  function b64ToBytes(b64){var bin=atob(b64),out=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)out[i]=bin.charCodeAt(i);return out}
+  async function deriveKey(passphrase){
+    var material=await crypto.subtle.importKey('raw',new TextEncoder().encode(passphrase),'PBKDF2',false,['deriveKey']);
+    return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64ToBytes(box.salt),iterations:box.iterations,hash:box.hash||'SHA-256'},material,{name:'AES-GCM',length:256},false,['decrypt']);
+  }
+  async function decryptBox(passphrase){
+    var key=await deriveKey(passphrase);
+    var plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64ToBytes(box.iv)},key,b64ToBytes(box.data));
+    return new TextDecoder().decode(plain);
+  }
+  function buildOutline(){
+    var list=document.getElementById('viewer-outline'),empty=document.getElementById('viewer-outline-empty'),count=0;
+    document.querySelectorAll('main h1, main h2, main h3').forEach(function(h){
+      if(!h.id)return;
+      var li=document.createElement('li'),a=document.createElement('a');
+      li.className='outline-'+h.tagName.toLowerCase();a.href='#'+encodeURIComponent(h.id);a.textContent=h.textContent||h.id;li.appendChild(a);list.appendChild(li);count++;
+    });
+    if(!count)empty.hidden=false;
+  }
+  // --- NEW: Private Viewer interaction restrictions ---
+  function targetElement(target){
+    if(target instanceof Element)return target;
+    return target && target.parentElement ? target.parentElement : null;
+  }
+  function isEditableElement(target){
+    var el=targetElement(target);
+    return Boolean(el && el.closest('input, textarea, select, [contenteditable="true"]'));
+  }
+  function isRestrictedTarget(target){
+    var el=targetElement(target);
+    return document.body.classList.contains('private-viewer-unlocked') &&
+      Boolean(el && el.closest('#viewer-shell')) &&
+      !isEditableElement(target);
+  }
+  function disableDragging(){
+    document.querySelectorAll('#viewer-shell img, #viewer-shell a').forEach(function(el){
+      el.setAttribute('draggable','false');
+    });
+  }
+  ['copy','cut','selectstart','contextmenu','dragstart'].forEach(function(type){
+    document.addEventListener(type,function(event){
+      if(isRestrictedTarget(event.target))event.preventDefault();
+    });
+  });
+  document.addEventListener('keydown',function(event){
+    var key=(event.key||'').toLowerCase();
+    var modifier=event.ctrlKey||event.metaKey;
+    if(!modifier)return;
+    if(key==='p'){
+      event.preventDefault();
+      return;
+    }
+    if((key==='a'||key==='c'||key==='x') && isRestrictedTarget(event.target)){
+      event.preventDefault();
+    }
+  });
+  async function unlock(){
+    status.className='status';status.textContent=${decryptingJson};btn.disabled=true;await new Promise(function(r){setTimeout(r,0)});
+    try{
+      var payload=JSON.parse(await decryptBox(pass.value||''));
+      if(payload.type!=='mdworks-private-viewer'||payload.contentType!=='sanitized-html'||typeof payload.html!=='string')throw new Error('Invalid payload');
+      document.getElementById('viewer-document').innerHTML=payload.html;
+      document.getElementById('unlock-shell').hidden=true;document.getElementById('viewer-shell').hidden=false;document.body.classList.add('private-viewer-unlocked');disableDragging();buildOutline();
+    }catch(err){status.className='status error';status.textContent=${errorJson};btn.disabled=false;}
+  }
+  btn.addEventListener('click',unlock);pass.addEventListener('keydown',function(e){if(e.key==='Enter')unlock()});
+})();
+<\/script>
+</body>
+</html>`;
+}
+
+// --- NEW: exportPrivateViewer ---
+async function exportPrivateViewer() {
+  closeMenus();
+
+  if (!window.crypto || !crypto.subtle || !window.TextEncoder || !window.TextDecoder) {
+    alert(isJa ? 'このブラウザではパスワード付きViewerを作成できません。' : 'This browser cannot create a Password-protected Viewer.');
+    return;
+  }
+
+  const passphrase = getPrivateAppPassphrase('viewer');
+  if (!passphrase) return;
+
+  try {
+    showLoader(T.creatingPrivateViewer);
+    const rawTitle = (filenameInput.value || '').replace(/\.[^/.]+$/, '').trim() || 'document';
+    const title = rawTitle || 'document';
+    const payload = {
+      v: 1,
+      type: 'mdworks-private-viewer',
+      contentType: 'sanitized-html',
+      title,
+      createdAt: new Date().toISOString(),
+      markdown: editor.value,
+      html: safeMarkdownHtml(editor.value)
+    };
+    const encryptedBox = await encryptPrivateAppBox(JSON.stringify(payload), passphrase, 'private-viewer');
+    const viewerHtml = buildPrivateViewerHtml(encryptedBox, title, {
+      passphraseLabel: T.viewerPassphrase,
+      unlockLabel: T.viewerUnlock,
+      decryptingLabel: T.viewerDecrypting,
+      errorLabel: T.viewerPassphraseError,
+      enterPassword: T.viewerEnterPassword,
+      notice: T.viewerSecurityNotice,
+      outlineLabel: T.viewerOutline,
+      outlineEmpty: T.viewerOutlineEmpty
+    });
+    const filename = sanitizeFileBaseName(title) + '.private.view.html';
+    triggerDownload(viewerHtml, filename, 'text/html');
+    toast(T.exportedPrivateViewer);
+  } catch (err) {
+    console.error(err);
+    toast(T.errViewer);
+  } finally {
+    hideLoader();
+  }
+}
+
+function getPrivateAppPassphrase(target = 'app') {
+  const p1 = prompt(target === 'viewer' ? T.passwordViewerPrompt : T.passwordAppPrompt) || '';
+  if (!p1) return null;
+
+  const p2 = prompt(T.passwordConfirmPrompt) || '';
+  if (!p2) return null;
+
+  if (p1 !== p2) {
+    toast(T.passwordMismatch);
+    return null;
   }
 
   return p1;
@@ -4636,6 +5584,20 @@ async function encryptPrivateAppBox(plainText, passphrase, label) {
   };
 }
 
+// --- NEW: decryptPrivateAppBox ---
+async function decryptPrivateAppBox(box, passphrase) {
+  const key = await derivePrivateAppKey(passphrase, b64ToBytes(box.salt), box.iterations);
+  const plain = await crypto.subtle.decrypt(
+    {
+      name: 'AES-GCM',
+      iv: b64ToBytes(box.iv)
+    },
+    key,
+    b64ToBytes(box.data)
+  );
+  return dec.decode(plain);
+}
+
 async function buildPrivateAppPayload(htmlStr, passphrase, meta) {
   return {
     v: 1,
@@ -4664,7 +5626,7 @@ async function exportPrivateStandalone() {
     return;
   }
 
-  const passphrase = getPrivateAppPassphrase();
+  const passphrase = getPrivateAppPassphrase('app');
   if (!passphrase) return;
 
   await saveToHistoryList(filenameInput.value, editor.value);
@@ -5321,6 +6283,178 @@ function openGitHubRepo() {
 }
 //#endregion
 
+
+//#region [JS-16A] UPDATE NOTIFICATION LOGIC
+let updateCheckInFlight = false;
+let updateCheckSessionCache = null;
+let availableUpdateVersion = '';
+let updateModalReturnFocus = null;
+
+function parseVersion(value) {
+  const match = String(value || '').trim().match(/^v?(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?$/i);
+  if (!match) return null;
+  return [
+    Number(match[1]),
+    Number(match[2]),
+    Number(match[3]),
+    match[4] === undefined ? 0 : Number(match[4])
+  ];
+}
+
+function normalizeVersion(value) {
+  const parsed = parseVersion(value);
+  return parsed ? parsed.join('.') : '';
+}
+
+function compareVersions(left, right) {
+  const a = parseVersion(left);
+  const b = parseVersion(right);
+  if (!a || !b) return NaN;
+  for (let i = 0; i < 4; i += 1) {
+    if (a[i] > b[i]) return 1;
+    if (a[i] < b[i]) return -1;
+  }
+  return 0;
+}
+
+function isNewerVersion(latestVersion, currentVersion = APP_VERSION) {
+  return compareVersions(latestVersion, currentVersion) > 0;
+}
+
+function readUpdateCache() {
+  try {
+    const raw = localStorage.getItem(UPDATE_CHECK_STORAGE_KEY);
+    if (!raw) return updateCheckSessionCache;
+    const cache = JSON.parse(raw);
+    if (!cache || !Number.isFinite(cache.checkedAt)) return null;
+    const latestVersion = normalizeVersion(cache.latestVersion);
+    return { checkedAt: cache.checkedAt, latestVersion };
+  } catch (e) {
+    return updateCheckSessionCache;
+  }
+}
+
+function writeUpdateCache(cache) {
+  updateCheckSessionCache = cache;
+  try {
+    localStorage.setItem(UPDATE_CHECK_STORAGE_KEY, JSON.stringify(cache));
+  } catch (e) {
+    // localStorage may be unavailable for file:// or restricted contexts.
+  }
+}
+
+function applyUpdateAvailability(latestVersion) {
+  const indicator = document.getElementById('update-indicator');
+  if (!indicator) return;
+  const normalizedLatest = normalizeVersion(latestVersion);
+  const hasUpdate = !!normalizedLatest && isNewerVersion(normalizedLatest, APP_VERSION);
+  availableUpdateVersion = hasUpdate ? normalizedLatest : '';
+  indicator.hidden = !hasUpdate;
+}
+
+async function fetchLatestRelease() {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), UPDATE_CHECK_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(LATEST_RELEASE_API_URL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      },
+      credentials: 'omit',
+      cache: 'no-store',
+      referrerPolicy: 'no-referrer',
+      signal: controller.signal
+    });
+    if (!response.ok) return '';
+
+    const data = await response.json();
+    if (data?.draft === true || data?.prerelease === true) return '';
+    return normalizeVersion(data?.tag_name);
+  } catch (e) {
+    return '';
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+async function checkForUpdates() {
+  if (hasStandaloneData || updateCheckInFlight) return;
+  updateCheckInFlight = true;
+
+  try {
+    const now = Date.now();
+    const cache = readUpdateCache();
+    const cachedLatestVersion = normalizeVersion(cache?.latestVersion);
+    if (cachedLatestVersion) applyUpdateAvailability(cachedLatestVersion);
+
+    if (cache && Number.isFinite(cache.checkedAt) && now - cache.checkedAt < UPDATE_CHECK_INTERVAL_MS) return;
+
+    const attemptCache = {
+      checkedAt: now,
+      latestVersion: cachedLatestVersion || ''
+    };
+    writeUpdateCache(attemptCache);
+
+    const latestVersion = await fetchLatestRelease();
+    if (latestVersion) {
+      writeUpdateCache({ checkedAt: now, latestVersion });
+      applyUpdateAvailability(latestVersion);
+    }
+  } finally {
+    updateCheckInFlight = false;
+  }
+}
+
+function scheduleUpdateCheck() {
+  if (hasStandaloneData) return;
+  const start = () => { void checkForUpdates(); };
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(start, { timeout: 3000 });
+  } else {
+    setTimeout(start, 1000);
+  }
+}
+
+function setUpdateModalState(isOpen) {
+  const modal = document.getElementById('update-modal');
+  if (!modal) return;
+  modal.classList.toggle('show', isOpen);
+  modal.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+  modal.setAttribute('data-state', isOpen ? 'open' : 'closed');
+}
+
+function openUpdateModal() {
+  if (!availableUpdateVersion) return;
+  const active = document.activeElement;
+  updateModalReturnFocus = active && typeof active.focus === 'function' ? active : document.getElementById('update-indicator');
+  closeMenus();
+  set('update-current-version', `v${normalizeVersion(APP_VERSION)}`);
+  set('update-latest-version', `v${availableUpdateVersion}`);
+  setUpdateModalState(true);
+  const downloadButton = document.getElementById('update-download-btn');
+  if (downloadButton) downloadButton.focus({ preventScroll: true });
+}
+
+function closeUpdateModal() {
+  const returnFocus = updateModalReturnFocus || document.getElementById('update-indicator');
+  setUpdateModalState(false);
+  updateModalReturnFocus = null;
+  if (returnFocus && document.contains(returnFocus)) {
+    try { returnFocus.focus({ preventScroll: true }); }
+    catch (e) { returnFocus.focus(); }
+  }
+}
+
+function openLatestReleasePage() {
+  const opened = window.open(LATEST_RELEASE_PAGE_URL, '_blank', 'noopener,noreferrer');
+  if (opened) opened.opener = null;
+  closeUpdateModal();
+}
+//#endregion
+
 //#region [JS-16] RELEASE NOTES LOGIC
 function setReleaseNotesModalState(isOpen) {
   const modal = document.getElementById('rn-modal');
@@ -5369,12 +6503,61 @@ function closeOutlinePanel() {
   document.getElementById('outline-check').style.opacity = '0';
 }
 
+
+function setExportModalState(isOpen) {
+  const modal = document.getElementById('export-modal');
+  if (!modal) return;
+  modal.classList.toggle('show', isOpen);
+  modal.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+  modal.setAttribute('data-state', isOpen ? 'open' : 'closed');
+}
+
+function openExportModal() {
+  closeMenus();
+  setExportModalState(true);
+  const firstButton = document.getElementById('export-viewer-btn');
+  if (firstButton) firstButton.focus({ preventScroll: true });
+}
+
+function closeExportModal() {
+  const wasOpen = isElementVisibleByClass('#export-modal');
+  setExportModalState(false);
+  if (wasOpen) {
+    const menuExport = document.getElementById('menu-export');
+    if (menuExport) menuExport.focus({ preventScroll: true });
+  }
+}
+
+function runExportAction(action) {
+  closeExportModal();
+  if (typeof action === 'function') action();
+}
+
+const exportModalEl = document.getElementById('export-modal');
+if (exportModalEl) {
+  exportModalEl.addEventListener('click', e => {
+    if (e.target === exportModalEl) closeExportModal();
+  });
+}
+
 const closableUiRegistry = [
   {
     name: 'doc-modal',
     priority: 110,
     isOpen: () => isElementVisibleByClass('#doc-modal'),
     close: closeDocModal
+  },
+  {
+    name: 'export-modal',
+    priority: 108,
+    isOpen: () => isElementVisibleByClass('#export-modal'),
+    close: closeExportModal
+  },
+  {
+    name: 'update-modal',
+    priority: 105,
+    isOpen: () => isElementVisibleByClass('#update-modal'),
+    close: closeUpdateModal
   },
   {
     name: 'release-notes-modal',
