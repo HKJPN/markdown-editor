@@ -98,13 +98,13 @@ MD//WORKSの最大の特徴は、用途に合わせて「文書を1つのHTMLフ
 >💡 **シチュエーションに応じた使い分け**
 >提示するだけのハンドアウト資料は「制限付きViewer」でスマートに。相手にも加筆してほしい場合は「Standalone App」として渡すだけ。目的に合わせて出力形式を切り替えられます。
 
-| 形式 | MD//WORKSでの再編集 | パスワード | コピー・印刷 |
+| 形式 | MD//WORKSでの再編集 | パスワード保護 | コピー・印刷 |
 | --- | --- | --- | --- |
-| Viewer | 🚫不可能 | 🔓不要 | 🖨️可能 |
-| Restricted Viewer | **✔可能** | 🔓不要 | **🛡️抑制** |
-| Password-protected Viewer | **✔可能** | **🔒必要** | 🖨️パスワード入力後に可能 |
+| Viewer | 🚫不可能 | 🔓無 | 🖨️可能 |
+| Restricted Viewer | **✔可能** | **🔒有** | **🛡️抑制** |
+| Password-protected Viewer | **✔可能** | **🔒有** | **🖨️パスワード入力後に可能** |
 | Standalone App | **✔可能** | 🔓不要 | 🖨️可能 |
-| Password-protected App | **✔可能** | **🔒必要** | 🖨️可能 |
+| Password-protected App | **✔可能** | **🔒有** | 🖨️可能 |
 
 
 ---
