@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.5.6 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.5.7 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
 <img width="869" height="720" alt="1_5_5rayoute" src="https://github.com/user-attachments/assets/5200e876-6cfc-4071-8a3e-d92a96c4ef2d" />
 
@@ -19,25 +19,20 @@ Try it instantly in your browser. 👉 **https://hkjpn.github.io/markdown-editor
 You are also free to host MD//WORKS on your own website under the MIT License. However, for security and performance reasons, we strongly recommend keeping your deployment updated to the latest version.
 
 ---
-## ✨ What’s New in v1.5.6
+## ✨ ✨ What’s New in v1.5.7
 
-This release introduces **automatic Table of Contents** generation, improves the **stability of large text pastes**, refines the **iPad** Safari fullscreen experience, and expands support for **scientific and technical writing**.
+This release focuses on Viewer exports and export workflow improvements.
 
-* Added **automatic Table of Contents** (TOC) generation.
-* **Improved paste stability** when handling large amounts of text.
-* Adjusted the menu layout for fullscreen mode in **iPad** Safari.
-* Added **superscript (`<sup>`) and subscript (`<sub>`)support** in Markdown preview.
-* Added the [**Scientific Writing Guide**](docs/scientific-writing.md) and the [**iPad User Guide**](docs/ipad-manual.md).
-
-### **🔒 Release File Hashes (Checksums)**
-To ensure security and   file integrity, all official releases starting from v1.5.4 include **SHA-256 hash values** in the release notes. You can verify that your downloaded file has not been tampered with by using standard OS commands (such as `Get-FileHash` in Windows PowerShell).
+* Added **Viewer**, **Restricted Viewer**, and **Password-protected Viewer** exports.
+* Organized export formats in a dedicated **Export** dialog.
+* Consolidated the legacy plain HTML export into **Viewer** with a collapsible outline.
+* Improved the menu-bar latest-version notification with current/latest version display and access to the latest Release page.
 
 ## ✨ Upcoming Features
 
-* **Viewer-only mode:** We plan to add distribution-oriented modes, including a read-only mode and a password-protected mode.
 * **Footnotes**: We plan to add support for footnotes, such as citations and references.
 * **Math Equations**: We plan to support complex mathematical formulas used in fields like mathematics and engineering.
-* **Update notification:** When a newer official release of MD//WORKS is available, a 💡 icon will appear in the menu bar and provide a link to the latest version.
+* **Deep Edit Mode**: A planned feature that tracks a detailed history of your thought process and revisions.
 
 ## 💡 **Handy Companion Tools**
 We've also provided two standalone command-line tools that instantly compile large batches of images into a single file. This significantly streamlines your MD//WORKS workflow when creating image-heavy reports or handouts.
