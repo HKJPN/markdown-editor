@@ -45,10 +45,13 @@ MD//WORKSはMITライセンスの下、ご自身のウェブサイトで自由�
 
 ---
 
-## 💡 便利なコンパニオンツール
-大量の画像を瞬時にMarkdown又は制限付きのhtmlファイルに変換する2つのツールを別途ご用意します。写真が多数含まれるレポートの作成やプレゼンテーションの配布資料など、コマンドラインと併用することでMD//WORKSでのワークフローをさらに効率化できます。制限付きのhtmlはブラウザ上で印刷や選択コピー等が抑制されますが、もちろんMD//WORKS上では制限を解除して編集を加えることが可能です。
-* [image2md.py](https://github.com/HKJPN/images2md/tree/main)
-* [images2rhtml.py](https://github.com/HKJPN/images2rhtml/tree/main)
+## 💡  便利なコンパニオンツール
+
+大量の画像を瞬時に1つのファイルへとまとめる、2つのコマンドラインツールも提供しています。画像主体のレポートや配布資料を作成する際、MD//WORKSでの作業効率を更に向上させます。
+
+- [images2md.py](https://github.com/HKJPN/images2md/tree/main): 標準的なMarkdownファイルを生成します。
+
+- [images2rhtml.py](https://github.com/HKJPN/images2rhtml/tree/main): 制限付きHTMLファイルを生成します（通常のブラウザ上では印刷やテキストのコピーが無効化されますが、MD//WORKS内ではそのまま完全に編集可能です）。
 
 ---
 
