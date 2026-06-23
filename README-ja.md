@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.5.6 — AIアシスタント融合スタンドアロン Markdown エディタ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.5.7 — AIアシスタント融合スタンドアロン Markdown エディタ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:** [🇺🇸 English](README.md) or [🇯🇵 日本語](README-ja.md)
 <img width="871" height="720" alt="1_5_5rayoutj" src="https://github.com/user-attachments/assets/af7f44e9-eca5-41a3-b20f-de452e2f4472" />
 
@@ -20,14 +20,14 @@ MD//WORKSはMITライセンスの下、ご自身のウェブサイトで自由�
 
 ---
 
-## ✨ v1.5.6 の主な機能改善
-今回のリリースでは、**目次の自動生成機能**が導入されたほか、**大量のテキストを貼り付ける際の安定性**が向上しました。また、**iPad**のSafariにおけるフルスクリーン表示の操作性が改善され、**科学・技術文書の執筆ガイド**等も提供しています。
+## ✨ v1.5.7 の主な機能改善
 
-*  **目次**(TOC)の**自動生成機能**を追加しました。
-* 大量のテキストを貼り付ける際の**安定性を改善**しました。
-* **iPad Safari**の全画面表示に合わせて、メニュー配置を調整しました。
-* Markdownプレビューで**上付き文字（`<sup>`）と下付き文字（`<sub>`）の表示に対応**しました。
-* [「Markdownによる**科学論文執筆ガイド**」](docs/scientific-writing-ja.md)と[「**iPadユーザーガイド**」](docs/ipad-manual-ja.md)を追加しました。
+今回のリリースでは、Viewer書き出しとExport機能の整理を中心に改善しています。
+
+* **Viewer**、**制限付きViewer**、**パスワード付きViewer**の3形式の書き出しに対応しました。
+* 書き出し形式を専用の**Export**モーダルへ整理しました。
+* 従来の通常HTML出力を、折りたたみ可能なOutline付きの**Viewer**へ統合しました。
+* メニューバーの最新版通知で、現在のバージョンと最新版を確認し、最新Releaseページを開けるようにしました。
 
 
 
