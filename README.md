@@ -19,7 +19,7 @@ Try it instantly in your browser. 👉 **https://hkjpn.github.io/markdown-editor
 You are also free to host MD//WORKS on your own website under the MIT License. However, for security and performance reasons, we strongly recommend keeping your deployment updated to the latest version.
 
 ---
-## ✨ ✨ What’s New in v1.5.7
+## ✨ What’s New in v1.5.7
 
 This release focuses on Viewer exports and export workflow improvements.
 
