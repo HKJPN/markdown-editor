@@ -90,6 +90,14 @@ Packages your text and the editor into one file. Recipients can instantly pick u
 >💡 Pro Tip
 >Use "Restricted Viewer" for read-only handouts. Want the recipient to collaborate? Send the "Standalone App." Choose the perfect format for any situation.
 
+| Format | Editable in MD//WORKS | Password Protection | Copy / Print |
+| --- | --- | --- | --- |
+| Viewer | 🚫 No | 🔓 None | 🖨️ Allowed |
+| Restricted Viewer | ✔ Yes | 🔒 Yes | 🛡️ Restricted |
+| Password-protected Viewer | ✔ Yes | 🔒 Yes | 🖨️ Allowed after unlocking |
+| Standalone App | ✔ Yes | 🔓 None | 🖨️ Allowed |
+| Password-protected App | ✔ Yes | 🔒 Yes | 🖨️ Allowed after unlocking |
+
 ---
 
 ### ✍️ Advanced Markdown Editing
