@@ -206,7 +206,7 @@ For drafting, thinking, and finishing.
 
 ---
 
-### 📤📤 Print-Ready PDF Export
+### 📤 Print-Ready PDF Export
 Ensures clean and stable output with custom print-optimized CSS.
 
 ---
