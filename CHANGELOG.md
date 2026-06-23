@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-06-23 - v1.5.7 - Viewer Export and Export UI Improvements
+
+- Added Viewer, Restricted Viewer, and Password-protected Viewer exports.
+- Organized export formats in a dedicated Export dialog.
+- Consolidated the legacy plain HTML export into Viewer.
+- Improved the menu-bar latest-version notification.
+
+
 ## 2026-06-17 -v1.5.6- TOC and Editing Stability Improvements
 
 - Added Table of Contents (TOC) generation.
