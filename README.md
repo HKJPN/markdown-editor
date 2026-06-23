@@ -7,9 +7,8 @@ MD//WORKS itself is entirely local and cloud-free, **ensuring your data never le
 
 # 🚀 Live Demo
 
-👉 **https://hkjpn.github.io/markdown-editor/**
+Try it instantly in your browser. 👉 **https://hkjpn.github.io/markdown-editor/**
 
-Try it instantly in your browser.  
 - [Quick Start ](docs/quick-start.md)
 - [📖 User Manual (General) ](docs/manual.md)
 - [📱 User Manual for iPad](docs/ipad-manual.md).
