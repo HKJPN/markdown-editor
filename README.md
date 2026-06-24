@@ -92,9 +92,9 @@ Packages your text and the editor into one file. Recipients can instantly pick u
 | --- | --- | --- | --- |
 | Viewer | 🚫 No | 🔓 None | 🖨️ Allowed |
 | Restricted Viewer | ✔ Yes | 🔐 Yes | 🛡️ Restricted |
-| Password-protected Viewer | ✔ Yes | 🔐 Yes | 🖨️ Allowed after unlocking |
+| Password-protected Viewer | ✔ Yes | 🔐 Yes | 🖨️🔓 Allowed after unlocking |
 | Standalone App | ✔ Yes | 🔓 None | 🖨️ Allowed |
-| Password-protected App | ✔ Yes | 🔐 Yes | 🖨️ Allowed after unlocking |
+| Password-protected App | ✔ Yes | 🔐 Yes | 🖨️🔓 Allowed after unlocking |
 
 ---
 
