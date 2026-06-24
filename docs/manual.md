@@ -365,12 +365,12 @@ Select **File > Export as HTML** to export the rendered Markdown as a static HTM
 
 Use this option when you want to view the formatted document in a browser or share it as a web page.
 
-### 7-4. Printing or Saving as PDF
+### 7-2. Printing or Saving as PDF
 
 
 
 Select **File > Print / Save as PDF** to open the browser print dialog based on the rendered preview.  
-Choose **Save as PDF** as the destination to generate a PDF file.
+Choose **Save as PDF** as the destination to generate a PDF file. **Turning off the Headers and footers option** in the advanced settings allows you to save it as a plain PDF file.
 
 When creating PDFs for submission or distribution, always open the exported PDF and check for layout issues, missing tables, image problems, or awkward page breaks.
 
