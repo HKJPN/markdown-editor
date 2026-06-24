@@ -137,7 +137,7 @@ Raw data is available from the [NCBI Gene Expression Omnibus](https://www.ncbi.n
 ## 3. Scientific and Chemical Symbols
 
 Life sciences, chemistry, and physics documents frequently require subscripts and superscripts for chemical formulas, charges, units, and exponents.
-*(Note: Subscript and superscript notations are extended features, popular in Pandoc Markdown, but not part of standard Markdown.)*
+Note that subscript and superscript notations are extended features but not part of standard Markdown.
 
 ### 3-1. Subscripts
 
