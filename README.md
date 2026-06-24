@@ -33,6 +33,7 @@ This release focuses on Viewer exports and export workflow improvements.
 * **Footnotes**: We plan to add support for footnotes, such as citations and references.
 * **Math Equations**: We plan to support complex mathematical formulas used in fields like mathematics and engineering.
 * **Deep Edit Mode**: A planned feature that tracks a detailed history of your thought process and revisions.
+* **Preview Focus Mode**: We plan to introduce a viewing mode that expands the right-side preview to fill the entire screen.
 * **Line Numbers**: To assist with both basic coding and academic paper reviews, we will be rolling out features in stages, including logical line-based display, current line highlighting, line selection via the gutter, and disabling word wrap for coding mode.
 
 ## 💡 **Handy Companion Tools**
