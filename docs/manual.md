@@ -136,7 +136,13 @@ To protect local storage capacity, image insertion is subject to the following l
 
 For security reasons, SVG images are not supported. Convert SVG files to PNG, JPEG, or WebP before inserting them.
 
-> For bulk image imports, please use the separate command-line tool [image2md.py](https://github.com/HKJPN/images2md/tree/main). This is especially useful when creating presentation slides or reports that require adding multiple photos at once.
+> We have provided [image2md.py](https://github.com/HKJPN/images2md/tree/main) and [images2rhtml.py](https://github.com/HKJPN/images2rhtml/tree/main) as separate command-line tools for importing large numbers of images. Please utilize these tools when you need to import multiple photos at once, such as when creating reports or handouts for presentations.
+
+| Tool | Output | Best Suited For |
+| --- | --- | --- |
+| **MD//WORKS** | Markdown / Viewer/ <br>Restricted Viewer HTML / Standalone App, etc. | Compiling a small number of images, editing related footnotes, and exporting a file with/without password protection later. |
+| **`images2md.py`** | Markdown | Compiling a large number of images and then adding text, videos, PDFs, meeting minutes, etc., for further editing. |
+| **`images2rHTML.py`** | Restricted Viewer HTML | Quickly compiling and distributing numerous image materials while restricting general copying, printing, and unintended modifications, with the option for detailed editing later. |
 
 ### 3-3. Checking Input Status
 
