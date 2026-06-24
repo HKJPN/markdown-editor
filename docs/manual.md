@@ -212,6 +212,17 @@ Code blocks and tables are especially useful when writing technical notes or spe
 | File format | Markdown |
 | Extension | .md |
 ```
+### 4-4. Superscript and Subscript
+In life sciences, chemistry, and physics documents, subscripts and superscripts are frequently used for chemical formulas, charges, units, and exponents. Try pasting the following into the editor and checking how it looks in the preview panel:
+
+```markdown
+H<sub>2</sub>O, CO<sub>2</sub>, A<sub>260</sub>/A<sub>280</sub>
+Ca<sup>2+</sup>, 10<sup>6</sup> cells, cm<sup>2</sup>
+
+```
+
+Subscripts and superscripts are not supported in standard Markdown. However, by using HTML tags as shown above, you can maintain compatibility and ensure they display correctly across most environments.
+
 
 ---
 
