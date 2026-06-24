@@ -48,9 +48,9 @@ No login required. Simply click the **Leo** icon in your browser.
 You can import `.docx` files and convert them into Markdown format.  
 Some complex layouts may be simplified during conversion.
 
-## 7. Standalone Save
+## 7.Standalone Save
 
-By using Export as App, you can save the current document and the editor together as a single HTML file.
+Use **File > Export...** to choose Viewer, Restricted Viewer, Password-protected Viewer, Standalone App, or Password-protected App. Viewer formats are read-only in the browser; Standalone App formats include the editor and remain editable.
 
 ## 8. FAQ
 
