@@ -25,10 +25,12 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 
 This release focuses on Viewer exports and export workflow improvements.
 
-* Added **Viewer**, **Restricted Viewer**, and **Password-protected Viewer** exports.
-* Organized export formats in a dedicated **Export** dialog.
-* Consolidated the legacy plain HTML export into **Viewer** with a collapsible outline.
-* Improved the menu-bar latest-version notification with current/latest version display and access to the latest Release page.
+* ✨ **What’s New in v1.5.7**
+* **Powerful new ways to share and protect your documents.**
+  
+* **Advanced Viewer Modes:** Safely distribute your work with new *Viewer*, *Restricted*, and *Password-protected* export options.
+* **Redesigned Export Experience:** A brand-new, centralized Export dialog makes your workflow smoother than ever.
+* Improved the menu-bar:* **Latest-version notification** with current/latest version display and access to the latest Release page.
 
 ## ✨ Upcoming Features
 
