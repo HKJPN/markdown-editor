@@ -134,7 +134,14 @@ MD//WORKS Editorでは、Markdown形式で文章を作成できます。
 
 SVG画像は安全性のため挿入できません。必要に応じてPNG、JPEG、WebPなどに変換してから挿入してください。
 
->多数の画像を取り込むに[image2md.py](https://github.com/HKJPN/images2md/tree/main)と[images2rhtml.py](https://github.com/HKJPN/images2rhtml/tree/main)を別途のコマンドラインツールとしてご用意しました。レポートやプレゼンテーションの配布資料作成など、多数の写真を一度に取り込む際にこれらコマンドラインツールも併用ください。
+>多数の画像を取り込むために[image2md.py](https://github.com/HKJPN/images2md/tree/main)と[images2rhtml.py](https://github.com/HKJPN/images2rhtml/tree/main)を別途のコマンドラインツールとしてご用意しました。レポートやプレゼンテーションの配布資料作成など、多数の写真を一度に取り込む際にこれらコマンドラインツールも併用ください。
+
+| ツール               | 出力                     | 向いている用途                              |
+| ----------------- | ---------------------- | ------------------------------------ |
+| `images2md.py`    | Markdown               | 画像をまとめた後、文章、動画、PDF、議事録などを追加して編集したい   |
+| `images2rHTML.py` | Restricted Viewer HTML | 画像資料をすぐに配布し、一般的なコピー、印刷、意図しない改変を抑制したい |
+| MD//WORKS         | Markdown／Viewer        | 詳細編集、Markdown復元、各種Viewer出力を行いたい    
+
 
 ### 3-3. 入力状況を確認する
 
