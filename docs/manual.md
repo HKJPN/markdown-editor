@@ -371,39 +371,12 @@ Recipients of the file can instantly resume editing simply by opening it in a we
 | Password-protected App | ✔ Yes | 🔒 Yes | 🖨️ Allowed after unlocking |
 
 
-### 7-2. Saving as a Private App
-
-Select **File > Save as Private App** to export the current document as a passphrase-protected standalone HTML file.
-
-Use this option for personal notes, confidential drafts, or documents that require additional protection.  
-If you forget the passphrase, the document cannot be recovered. Store the passphrase securely.
-
-### 7-3. Exporting as HTML
-
-
-
-Select **File > Export as HTML** to export the rendered Markdown as a static HTML file.
-
-Use this option when you want to view the formatted document in a browser or share it as a web page.
-
 ### 7-2. Printing or Saving as PDF
-
-
 
 Select **File > Print / Save as PDF** to open the browser print dialog based on the rendered preview.  
 Choose **Save as PDF** as the destination to generate a PDF file. **Turning off the Headers and footers option** in the advanced settings allows you to save it as a plain PDF file.
 
 When creating PDFs for submission or distribution, always open the exported PDF and check for layout issues, missing tables, image problems, or awkward page breaks.
-
-### 7-5. Choosing an Export Format
-
-| Goal | Recommended action |
-| --- | --- |
-| Keep the document as Markdown | File > Save |
-| Carry the editor and document as one file | File > Save as App |
-| Export a protected HTML app | File > Save as Private App |
-| View or share as a web page | File > Export as HTML |
-| Print or submit formally | File > Print / Save as PDF |
 
 ---
 
