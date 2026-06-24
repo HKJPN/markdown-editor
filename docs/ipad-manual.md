@@ -376,12 +376,12 @@ Recipients of the file can instantly resume editing simply by opening it in a we
 | Format | Editable in MD//WORKS | Password Protection | Copy / Print |
 | --- | --- | --- | --- |
 | Viewer | 🚫 No | 🔓 None | 🖨️ Allowed |
-| Restricted Viewer | ✔ Yes | 🔒 Yes | 🛡️ Restricted |
-| Password-protected Viewer | ✔ Yes | 🔒 Yes | 🖨️ Allowed after unlocking |
+| Restricted Viewer | ✔ Yes | 🔐 Yes | 🛡️ Restricted |
+| Password-protected Viewer | ✔ Yes | 🔐 Yes | 🖨️🔒 Allowed after unlocking |
 | Standalone App | ✔ Yes | 🔓 None | 🖨️ Allowed |
-| Password-protected App | ✔ Yes | 🔒 Yes | 🖨️ Allowed after unlocking |
+| Password-protected App | ✔ Yes | 🔐 Yes | 🖨️🔒 Allowed after unlocking |
 
-
+🔒
 ### 7-2. Printing or Saving as PDF
 
 Select **File > Print / Save as PDF** to open the browser print dialog based on the rendered preview.  
