@@ -338,19 +338,40 @@ MD//WORKS Editor is designed to work across a wide range of environments, includ
 ## 7. Exporting to HTML and PDF
 
 
-In addition to saving Markdown files, MD//WORKS Editor can export documents in several formats.
+In addition to saving as a standard Markdown file, MD//WORKS Editor allows you to export your documents in multiple formats depending on your needs.
 
-### 7-1. Saving as a Standalone App
+### 7-1. Document Sharing and Protection via Flexible Export Features
 
+MD//WORKS features the ability to export your documents as a single HTML file. This enables secure document sharing, collaborative writing, and long-term archiving in a format tailored to your purpose, without relying on the recipient's system environment.
 
-Select **File > Save as App** to export the current draft as a standalone HTML file.
+You can choose from the following two categories of export formats based on your needs:
 
-This format combines the editor and your document into a single HTML file.  
-It is useful for carrying or sharing a self-contained editable document, even when no internet connection is available.
+**1. View-Only Formats (Viewer Formats: 3 types)**
+Specialized for viewing documents. These formats are ideal for secure information disclosure, such as distributing presentation materials.
+
+* **Standard:** A highly readable format featuring a built-in outline (table of contents).
+* **Restricted:** Disables unauthorized text copying and printing operations.
+* **Password-Protected:** Requires a password to view the document, ensuring the protection of sensitive information.
+
+**2. Editable Formats (Standalone App Formats: 2 types)**
+Packages the created document data and the application's editor features into a single output file.
+Recipients of the file can instantly resume editing simply by opening it in a web browser—no dedicated software installation is required. Password protection is also available for this format.
+
+**■ Recommended Formats by Use Case**
+
+* **For presentation only:** We recommend the "Restricted Viewer Format" for distributing materials such as handouts.
+* **For collaborative editing:** Use the "Standalone App Format" when requesting the recipient to add or edit content (Standalone Save).
+
+| Format | Editable in MD//WORKS | Password Protection | Copy / Print |
+| --- | --- | --- | --- |
+| Viewer | 🚫 No | 🔓 None | 🖨️ Allowed |
+| Restricted Viewer | ✔ Yes | 🔒 Yes | 🛡️ Restricted |
+| Password-protected Viewer | ✔ Yes | 🔒 Yes | 🖨️ Allowed after unlocking |
+| Standalone App | ✔ Yes | 🔓 None | 🖨️ Allowed |
+| Password-protected App | ✔ Yes | 🔒 Yes | 🖨️ Allowed after unlocking |
+
 
 ### 7-2. Saving as a Private App
-
-
 
 Select **File > Save as Private App** to export the current document as a passphrase-protected standalone HTML file.
 
