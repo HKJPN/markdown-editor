@@ -346,38 +346,44 @@ MD//WORKS Editor is designed to work across various environments. The behavior f
 
 ---
 
-## 7. Exporting to HTML and PDF
+## 7. 7-1. Document Sharing and Protection via Flexible Export Features
 
-In addition to saving Markdown files, MD//WORKS Editor can export documents in several formats.
+MD//WORKS features the ability to export your documents as a single HTML file. This enables secure document sharing, collaborative writing, and long-term archiving in a format tailored to your purpose, without relying on the recipient's system environment.
 
-### 7-1. Saving as a Standalone App
+You can choose from the following two categories of export formats based on your needs:
 
-Select **File > Save as App** to export the current draft as a standalone HTML file.
-This format combines the editor and your document into a single HTML file. It is useful for carrying or sharing a self-contained editable document, even when no internet connection is available.
+**1. View-Only Formats (Viewer Formats: 3 types)**
+Specialized for viewing documents. These formats are ideal for secure information disclosure, such as distributing presentation materials.
 
-### 7-2. Saving as a Private App
+* **Standard:** A highly readable format featuring a built-in outline (table of contents).
+* **Restricted:** Disables unauthorized text copying and printing operations.
+* **Password-Protected:** Requires a password to view the document, ensuring the protection of sensitive information.
 
-Select **File > Save as Private App** to export the current document as a passphrase-protected standalone HTML file.
-Use this option for personal notes, confidential drafts, or documents that require additional protection. If you forget the passphrase, the document cannot be recovered. Store the passphrase securely.
+**2. Editable Formats (Standalone App Formats: 2 types)**
+Packages the created document data and the application's editor features into a single output file.
+Recipients of the file can instantly resume editing simply by opening it in a web browser—no dedicated software installation is required. Password protection is also available for this format.
 
-### 7-3. Exporting as HTML
+**■ Recommended Formats by Use Case**
 
-Select **File > Export as HTML** to export the rendered Markdown as a static HTML file.
-Use this option when you want to view the formatted document in a browser or share it as a web page.
+* **For presentation only:** We recommend the "Restricted Viewer Format" for distributing materials such as handouts.
+* **For collaborative editing:** Use the "Standalone App Format" when requesting the recipient to add or edit content (Standalone Save).
 
-### 7-4. Printing or Saving as PDF
+| Format | Editable in MD//WORKS | Password Protection | Copy / Print |
+| --- | --- | --- | --- |
+| Viewer | 🚫 No | 🔓 None | 🖨️ Allowed |
+| Restricted Viewer | ✔ Yes | 🔒 Yes | 🛡️ Restricted |
+| Password-protected Viewer | ✔ Yes | 🔒 Yes | 🖨️ Allowed after unlocking |
+| Standalone App | ✔ Yes | 🔓 None | 🖨️ Allowed |
+| Password-protected App | ✔ Yes | 🔒 Yes | 🖨️ Allowed after unlocking |
 
-Select **File > Print / Save as PDF** to open the browser print dialog based on the rendered preview. Choose **Save as PDF** as the destination to generate a PDF file.
 
-### 7-5. Choosing an Export Format
+### 7-2. Printing or Saving as PDF
 
-| Goal | Recommended action |
-| --- | --- |
-| Keep the document as Markdown | File > Save |
-| Carry the editor and document as one file | File > Save as App |
-| Export a protected HTML app | File > Save as Private App |
-| View or share as a web page | File > Export as HTML |
-| Print or submit formally | File > Print / Save as PDF |
+Select **File > Print / Save as PDF** to open the browser print dialog based on the rendered preview.  
+Choose **Save as PDF** as the destination to generate a PDF file. **Turning off the Headers and footers option** in the advanced settings allows you to save it as a plain PDF file.
+
+When creating PDFs for submission or distribution, always open the exported PDF and check for layout issues, missing tables, image problems, or awkward page breaks.
+
 
 ---
 
