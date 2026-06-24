@@ -353,7 +353,7 @@ In addition to saving as a standard Markdown file, MD//WORKS Editor allows you t
 
 ### 7-1. Document Sharing and Protection via Flexible Export Features
 
-MD//WORKS features the ability to export your documents as a single HTML file. This enables secure document sharing, collaborative writing, and long-term archiving in a format tailored to your purpose, without relying on the recipient's system environment.
+MD//WORKS features the ability to export your documents as a single HTML file. This enables **secure document sharin**g, collaborative writing, and **long-term archiving** in a format tailored to your purpose, without relying on the recipient's system environment.
 
 You can choose from the following two categories of export formats based on your needs:
 
