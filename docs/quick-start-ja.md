@@ -50,7 +50,7 @@ Previewボタンで、Markdownの表示結果を確認できます。
 `.docx` ファイルを読み込み、Markdown形式に変換できます。
 一部の複雑なレイアウトは簡略化される場合があります。
 
-## 7.7. スタンドアロン保存
+## 7. スタンドアロン保存
 
 **ファイル > 書き出し...** から、Viewer、制限付きViewer、パスワード付きViewer、Standalone App、パスワード付きAppを選択できます。Viewer形式はブラウザ上では閲覧専用で、Standalone App形式はEditor本体を含みブラウザ上で編集できます。
 
