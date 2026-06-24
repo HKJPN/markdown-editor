@@ -23,7 +23,7 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 ---
 ## ✨ What’s New in v1.5.7
 
-This release focuses on the powerful new ways to share and **protect** your documents.
+This release focuses on new ways to share and **protect** your documents.
 * **Advanced Viewer Modes:** Safely distribute your work with new *Viewer*, *Restricted*, and *Password-protected* export options.
 * **Redesigned Export Experience:** A brand-new, centralized Export dialog makes your workflow smoother than ever.
 * **Improved the menu-bar:** **Latest-version notification** with current/latest version display and access to the latest Release page.
