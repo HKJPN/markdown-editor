@@ -138,10 +138,9 @@ SVG画像は安全性のため挿入できません。必要に応じてPNG、JP
 
 | ツール               | 出力                     | 向いている用途                              |
 | ----------------- | ---------------------- | ------------------------------------ |
-| `images2md.py`    | Markdown               | 画像をまとめた後、文章、動画、PDF、議事録などを追加して編集したい   |
-| `images2rHTML.py` | Restricted Viewer HTML | 画像資料をすぐに配布し、一般的なコピー、印刷、意図しない改変を抑制したい |
-| MD//WORKS         | Markdown／Viewer        | 詳細編集、Markdown復元、各種Viewer出力を行いたい    
-
+| MD//WORKS         | Markdown／Viewer<br> Restricted Viewer HTML／Standalone App.等      | 少数の画像をまとめた後に、関連する脚注文等の編集を行って、あとからパスワード保護等も自由に選択して行いたい　  |    
+| `images2md.py`    | Markdown               | 多数の画像をまとめた後、文章、動画、PDF、議事録などを追加して編集したい   |
+| `images2rHTML.py` | Restricted Viewer HTML | 多数の画像資料をまとめてすぐに配布し、一般的なコピー、印刷、意図しない改変を抑制したい。更にあとから詳細編集行いたい |
 
 ### 3-3. 入力状況を確認する
 
