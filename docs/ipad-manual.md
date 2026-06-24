@@ -385,10 +385,11 @@ Recipients of the file can instantly resume editing simply by opening it in a we
 ### 7-2. Printing or Saving as PDF
 
 Select **File > Print / Save as PDF** to open the browser print dialog based on the rendered preview.  
-Choose **Save as PDF** as the destination to generate a PDF file. **Turning off the Headers and footers option** in the advanced settings allows you to save it as a plain PDF file.
+Choose **Save as PDF** as the destination to generate a PDF file. 
 
 When creating PDFs for submission or distribution, always open the exported PDF and check for layout issues, missing tables, image problems, or awkward page breaks.
 
+> 💡 When exporting a PDF from the iPad's default browser, "Safari", browser specifications will cause a warning to appear asking for automatic printing permission, and the URL will be forcibly printed on the page. If you wish to create a plain PDF without headers and footers (URL text), please open this editor using a different browser app, such as Firefox or Brave, and perform the export.
 
 ---
 
