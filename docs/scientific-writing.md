@@ -141,31 +141,34 @@ Life sciences, chemistry, and physics documents frequently require subscripts an
 
 ### 3-1. Subscripts
 
-Wrap the text in tildes `~`.
+Wrap the text in `<sub> </sub>`
+
 
 **Input:**
 
 ```markdown
-H~2~O, CO~2~, A~260~/A~280~
+H<sub>2</sub>O, CO<sub>2</sub>, A<sub>260</sub>/A<sub>280</sub>
 
 ```
 
 **Output:**
-H₂O, CO₂, A₂₆₀/A₂₈₀
+H<sub>2</sub>O, CO<sub>2</sub>, A<sub>260</sub>/A<sub>280</sub>
+
+
 
 ### 3-2. Superscripts
 
-Wrap the text in carets `^`.
+Wrap the text in <sup>　</sup>.
 
 **Input:**
 
 ```markdown
-Ca^2+^, 10^6^ cells, cm^2^
+Ca<sup>2+</sup>, 10<sup>6</sup> cells, cm<sup>2</sup>
 
 ```
 
 **Output:**
-Ca²⁺, 10⁶ cells, cm²
+Ca<sup>2+</sup>, 10<sup>6</sup> cells, cm<sup>2</sup>
 
 For complex fractions, integrals, matrices, or reaction equations, it is better to use LaTeX-formatted mathematical equations.
 
