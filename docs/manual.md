@@ -191,7 +191,7 @@ Example: `code`
 ### 4-3. Creating Lists, Tasks, and Quotes
 
 
-You can create bulleted lists, numbered lists, task checklists, and blockquotes.
+You can create bulleted lists and checklists for task management. You can apply these settings by selecting one or multiple lines simultaneously and clicking the list, number, or task buttons on the toolbar. Clicking the button multiple times will reapply or clear the formatting. You can also create blockquotes.
 
 ```markdown
 - Bullet point
