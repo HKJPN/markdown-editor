@@ -158,7 +158,7 @@ H<sub>2</sub>O, CO<sub>2</sub>, A<sub>260</sub>/A<sub>280</sub>
 
 ### 3-2. Superscripts
 
-Wrap the text in <sup>　</sup>.
+Wrap the text in `<sup>　</sup>`.
 
 **Input:**
 
