@@ -162,9 +162,8 @@ Markdownの画像構文は、通常、画像ファイルへの参照を記録す
 
 入力：
 
-```markdown
 H<sub>2</sub>O、CO<sub>2</sub>、A<sub>260</sub>/A<sub>280</sub>
-```
+
 
 出力例：
 
