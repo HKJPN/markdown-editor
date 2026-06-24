@@ -390,10 +390,10 @@ MD//WORKS Editorでは、Markdownファイルとして保存するだけでな�
 | 形式 | MD//WORKSでの再編集 | パスワード保護 | コピー・印刷 |
 | --- | --- | --- | --- |
 | Viewer | 🚫不可 | 🔓無 | 🖨️可能 |
-| Restricted Viewer | **✔可能** | **🔒有** | **🛡️抑制** |
-| Password-protected Viewer | **✔可能** | **🔒有** | **🖨️保護解除後に可能** |
+| Restricted Viewer | **✔可能** | **🔐有** | **🛡️抑制** |
+| Password-protected Viewer | **✔可能** | **🔐有** | **🔓🖨️保護解除後に可能** |
 | Standalone App | **✔可能** | 🔓無 | 🖨️可能 |
-| Password-protected App | **✔可能** | **🔒有** | **🖨️保護解除後に可能** |
+| Password-protected App | **✔可能** | **🔐有** | **🔓🖨️保護解除後に可能** |
 
 
 ### 7-2. 印刷 / PDF保存
