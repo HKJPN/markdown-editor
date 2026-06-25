@@ -383,7 +383,7 @@ Recipients of the file can instantly resume editing simply by opening it in a we
 * **For presentation only:** We recommend the "Restricted Viewer Format" for distributing materials such as handouts.
 * **For collaborative editing:** Use the "Standalone App Format" when requesting the recipient to add or edit content (Standalone Save).
 
-<img src="images/exportmodalE.JPG" width="350" align="right">
+<img src="images/exportmodalE.JPG" width="300" align="right">
 
 | Format | Editable <br>in MD//WORKS | Password Protection | Copy / Print |
 | --- | --- | --- | --- |
