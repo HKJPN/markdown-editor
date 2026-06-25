@@ -375,7 +375,7 @@ MD//WORKSは、用途に応じて作成した文書を単一のHTMLファイル�
 * **提示のみを目的とする場合:** 配布用ハンドアウト資料などには「制限付きViewer形式」を推奨します。
 * **受信者に加筆を依頼する場合:** 共同執筆など、相手に編集を求める用途には「Standalone App形式」をご利用ください。スタンドアロン保存
 
-<img src="images/exportmodalJ.JPG" width="450" align="right">
+<img src="images/exportmodalJ.JPG" width="300" align="right">
 
 | 形式 | MD//WORKS<br>での再編集 | パスワード保護 | コピー・印刷 |
 | --- | --- | --- | --- |
