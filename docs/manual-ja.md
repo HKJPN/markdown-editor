@@ -378,7 +378,7 @@ MD//WORKSは、用途に応じて作成した文書を単一のHTMLファイル�
 
 <img src="images/exportmodalJ.JPG" width="300" align="right">
 
-| 形式 | MD//WORKSでの再編集 | パスワード保護 | コピー・印刷 |
+| 形式 | MD//WORKSでの<br>再編集 | パスワード<br>保護 | コピー・印刷 |
 | --- | --- | --- | --- |
 | Viewer | 🚫不可 | 🔓無 | 🖨️可能 |
 | 制限付きViewer | ✔可能 | 🔐有 | 🛡️抑制 |
