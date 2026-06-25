@@ -382,7 +382,7 @@ MD//WORKSは、用途に応じて作成した文書を単一のHTMLファイル�
 | Password-protected Viewer | **✔可能** | **🔐有** | **🔓🖨️保護解除後に可能** |
 | Standalone App | **✔可能** | 🔓無 | 🖨️可能 |
 | Password-protected App | **✔可能** | **🔐有** | **🔓🖨️保護解除後に可能** |
-
+<img src="images/exportmodalE.JPG" width="300" alt="エクスポート画面">
 
 ### 7-2. 印刷 / PDF保存
 
