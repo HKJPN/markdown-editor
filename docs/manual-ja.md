@@ -378,13 +378,13 @@ MD//WORKSは、用途に応じて作成した文書を単一のHTMLファイル�
 
 <img src="images/exportmodalJ.JPG" width="300" align="right">
 
-| 形式 | MD//WORKSでの<br>再編集 | パスワード<br>保護 | コピー・印刷 |
+| 形式 | MD//WORKS<br>再編集 | パスワード<br>保護 | コピー・印刷 |
 | --- | --- | --- | --- |
 | Viewer | 🚫不可 | 🔓無 | 🖨️可能 |
-| 制限付きViewer | ✔可能 | 🔐有 | 🛡️抑制 |
-| パスワード付きViewer | ✔可能 | 🔐有 | 🔓🖨️<br>保護解除後に<br>可能 |
-| Standalone App | ✔可能 | 🔓無 | 🖨️可能 |
-| パスワード付きApp | ✔可能 | 🔐有 | 🔓🖨️<br>保護解除後に<br>可能 |
+| 制限付き<br>Viewer | ✔可能 | 🔐有 | 🛡️抑制 |
+| パスワード付き<br>Viewer | ✔可能 | 🔐有 | 🔓🖨️<br>保護解除後に<br>可能 |
+| Standalone <br>App | ✔可能 | 🔓無 | 🖨️可能 |
+| パスワード付き<br>App | ✔可能 | 🔐有 | 🔓🖨️<br>保護解除後に<br>可能 |
 
 <br clear="all">
 
