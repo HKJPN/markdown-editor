@@ -376,7 +376,7 @@ MD//WORKSは、用途に応じて作成した文書を単一のHTMLファイル�
 * **受信者に加筆を依頼する場合:** 共同執筆など、相手に編集を求める用途には「Standalone App形式」をご利用ください。スタンドアロン保存
 
 
-<img src="images/exportmodalJ.JPG" width="300" align="right">
+<img src="images/exportmodalJ.JPG" width="400" align="right">
 
 | 形式 | MD//WORKS<br>再編集 | パスワード<br>保護 | コピー・印刷 |
 | --- | --- | --- | --- |
