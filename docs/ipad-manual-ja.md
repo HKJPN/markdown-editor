@@ -399,13 +399,20 @@ MD//WORKS Editorでは、Markdownファイルとして保存するだけでな�
 * **提示のみを目的とする場合:** 配布用ハンドアウト資料などには「制限付きViewer形式」を推奨します。
 * **受信者に加筆を依頼する場合:** 共同執筆など、相手に編集を求める用途には「Standalone App形式」をご利用ください。スタンドアロン保存
 
-| 形式 | MD//WORKSでの再編集 | パスワード保護 | コピー・印刷 |
+<img src="images/exportmodalJ.JPG" width="350" align="right">
+
+| 形式 | MD//WORKS<br>再編集 | パスワード<br>保護 | コピー・印刷 |
 | --- | --- | --- | --- |
 | Viewer | 🚫不可 | 🔓無 | 🖨️可能 |
-| Restricted Viewer | **✔可能** | **🔐有** | **🛡️抑制** |
-| Password-protected Viewer | **✔可能** | **🔐有** | **🔓🖨️保護解除後に可能** |
-| Standalone App | **✔可能** | 🔓無 | 🖨️可能 |
-| Password-protected App | **✔可能** | **🔐有** | **🔓🖨️保護解除後に可能** |
+| 制限付き<br>Viewer | ✔可能 | 🔐有 | 🛡️抑制 |
+| パスワード付き<br>Viewer | ✔可能 | 🔐有 | 🔓🖨️<br>保護解除後に<br>可能 |
+| Standalone <br>App | ✔可能 | 🔓無 | 🖨️可能 |
+| パスワード付き<br>App | ✔可能 | 🔐有 | 🔓🖨️<br>保護解除後に<br>可能 |
+
+<br clear="all">
+
+
+
 
 
 ### 7-2. 印刷 / PDF保存
