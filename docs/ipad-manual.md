@@ -389,9 +389,9 @@ Recipients of the file can instantly resume editing simply by opening it in a we
 | --- | --- | --- | --- |
 | Viewer | 🚫 No | 🔓 None | 🖨️ Allowed |
 | Restricted Viewer | ✔ Yes | 🔐 Yes | 🛡️ Restricted |
-| Password-protected Viewer | ✔ Yes | 🔐 Yes | 🖨️🔓 <br>Allowed after unlocking |
+| Password-protected <br>Viewer | ✔ Yes | 🔐 Yes | 🖨️🔓 <br>Allowed after unlocking |
 | Standalone App | ✔ Yes | 🔓 None | 🖨️ Allowed |
-| Password-protected App | ✔ Yes | 🔐 Yes | 🖨️🔓 <br>Allowed after unlocking |
+| Password-protected <br>App | ✔ Yes | 🔐 Yes | 🖨️🔓 <br>Allowed after unlocking |
 
 <br clear="all">
 
