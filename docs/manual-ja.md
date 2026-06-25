@@ -375,7 +375,10 @@ MD//WORKSは、用途に応じて作成した文書を単一のHTMLファイル�
 * **提示のみを目的とする場合:** 配布用ハンドアウト資料などには「制限付きViewer形式」を推奨します。
 * **受信者に加筆を依頼する場合:** 共同執筆など、相手に編集を求める用途には「Standalone App形式」をご利用ください。スタンドアロン保存
 
-<img src="images/exportmodalJ.JPG" width="300" align="right">
+
+<div style="display: flex; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
+
+<div>
 
 | 形式 | MD//WORKS<br>での再編集 | パスワード保護 | コピー・印刷 |
 | --- | --- | --- | --- |
@@ -384,6 +387,17 @@ MD//WORKSは、用途に応じて作成した文書を単一のHTMLファイル�
 | パスワード付きViewer | **✔可能** | **🔐有** | **🔓🖨️保護解除後に<br>可能** |
 | Standalone App | **✔可能** | 🔓無 | 🖨️可能 |
 | パスワード付きApp | **✔可能** | **🔐有** | **🔓🖨️保護解除後に<br>可能** |
+
+
+</div>
+
+<div>
+
+<img src="images/exportmodalJ.JPG" style="width: 350px; max-width: 100%; height: auto;">
+
+</div>
+
+</div>
 
 
 ### 7-2. 印刷 / PDF保存
