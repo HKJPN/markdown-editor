@@ -621,14 +621,28 @@ In our testing, **Leo in Brave Browser** provides the most seamless and effectiv
 
 ## 12. Troubleshooting
 
-### 12-1. Pressing the ⌘ + ↑ / ⌘ + ↓ keys does not move the cursor
+### 12-1. Cannot Save Directly to the Cloud
+
+**Cause**
+
+MD//WORKS intentionally does not support direct cloud integration. This is a deliberate design choice to ensure the long-term safety, privacy, and reliability of your data:
+
+* **Privacy:** All processing remains strictly within your browser. By not connecting to external servers, the risk of data leaks is eliminated.
+* **Longevity:** Avoiding reliance on external cloud APIs prevents the application from breaking if those services suddenly change or shut down.
+* **Reliability:** Official desktop sync apps are much more stable and less prone to file corruption from network errors compared to direct browser uploads.
+
+**Workaround**
+
+To sync your documents to the cloud, please save your files directly into your local cloud sync folder (such as OneDrive, Google Drive, iCloud, or Dropbox) on your device. Your cloud provider's desktop application will automatically and safely handle the synchronization.
+
+### 12-2. Pressing the ⌘ + ↑ / ⌘ + ↓ keys does not move the cursor
 
 In the editor, the Home/End equivalent keys are mapped to smoothly edit text. To move to the absolute beginning or end of the document on iPad, use:
 
 * **⌘ + ↑** – Go to the beginning of the document
 * **⌘ + ↓** – Go to the end of the document
 
-### 12-2. Long-term access and compatibility of encrypted files
+### 12-3. Long-term access and compatibility of encrypted files
 
 MD//WORKS uses widely adopted encryption methods and standard browser APIs. Encrypted files are therefore expected to remain accessible for the foreseeable future. However, permanent compatibility cannot be guaranteed because browser specifications, security requirements, operating systems, and device environments may change over time.
 
@@ -645,53 +659,53 @@ For important long-term records, keep the following files and information togeth
 
 Do not store the password in plain text in the same location as the encrypted file.
 
-### 12-3. I saved the document, but I cannot find the file
+### 12-4. I saved the document, but I cannot find the file
 
 Check your browser’s default Downloads folder or the "Files" app destination you selected.
 
 Remember that **Auto encrypted** only protects drafts stored in the browser; it does not permanently create a `.md` file. Always use **File > Save (⌘S)**.
 
-### 12-4. The title bar shows “Unsaved”
+### 12-5. The title bar shows “Unsaved”
 
 This means the document has been modified since the last save. Save the document before ending your session.
 
-### 12-5. I cannot paste from the menu
+### 12-6. I cannot paste from the menu
 
 Browser security restrictions may block paste operations from custom menus. Use the keyboard shortcut **⌘V**.
 
-### 12-6. I cannot insert an image
+### 12-7. I cannot insert an image
 
 Ensure the image is under 200 KB and is a PNG, JPEG, or WebP. SVG files and large files are restricted for security and storage reasons.
 
-### 12-7. Preview is not displayed
+### 12-8. Preview is not displayed
 
 Ensure Preview is toggled on. If the screen is narrow, use the central divider to adjust pane widths.
 
-### 12-8. Search returns no results
+### 12-9. Search returns no results
 
 Check search options like "Case Sensitive" or "Whole Word". Ensure there are no invisible spaces causing mismatches by toggling **View > Show Invisibles**.
 
-### 12-9. “Invalid regular expression” appears
+### 12-10. “Invalid regular expression” appears
 
 If you do not intend to use regular expressions, turn off the **RegExp** search option.
 
-### 12-10. Spell (EN) is not working
+### 12-11. Spell (EN) is not working
 
 Ensure the document contains English text. This feature is intended for English spelling only.
 
-### 12-11. I forgot my Private Storage passphrase
+### 12-12. I forgot my Private Storage passphrase
 
 Drafts protected by Private Storage cannot be recovered without the passphrase. Always keep manual `.md` backups.
 
-### 12-12. I forgot my Private App passphrase
+### 12-13. I forgot my Private App passphrase
 
 HTML files exported as Private Apps cannot be decrypted without the correct passphrase.
 
-### 12-13. My Standalone HTML app does not open correctly
+### 12-14. My Standalone HTML app does not open correctly
 
 Ensure your browser is up-to-date and no corporate restrictions are blocking the file.
 
-### 12-14. PDF export does not work correctly
+### 12-15. PDF export does not work correctly
 
 Ensure your print destination is set to "Save as PDF". Always review the output file layout manually.
 
