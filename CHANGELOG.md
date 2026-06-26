@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2026-06-26 - v1.5.7 - -Hotfix v1.5.7candidate
+## 2026-06-26 - v1.5.7 - Hotfix v1.5.7candidate
 - Fixed regex replacement so escape sequences such as `\n` and `\t` are interpreted correctly.
 
 ## 2026-06-23 - v1.5.7candidate - Viewer Export and Export UI Improvements
