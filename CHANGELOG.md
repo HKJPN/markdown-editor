@@ -2,7 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2026-06-23 - v1.5.7 - Viewer Export and Export UI Improvements
+## 2026-06-26 - v1.5.7 - -Hotfix v1.5.7candidate
+- Fixed regex replacement so escape sequences such as `\n` and `\t` are interpreted correctly.
+
+## 2026-06-23 - v1.5.7candidate - Viewer Export and Export UI Improvements
 
 - Added Viewer, Restricted Viewer, and Password-protected Viewer exports.
 - Organized export formats in a dedicated Export dialog.
