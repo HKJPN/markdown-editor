@@ -392,6 +392,9 @@ Recipients of the file can instantly resume editing simply by opening it in a we
 
 <br clear="all">
 
+> For important documents intended for long-term storage, please ensure you keep the original Markdown file, the password, and the HTML file of the MD//WORKS version used as a precaution. For more details, please refer to 'Troubleshooting: Long-term access and compatibility of encrypted files'.
+
+
 ### 7-2. Printing or Saving as PDF
 
 Select **File > Print / Save as PDF** to open the browser print dialog based on the rendered preview.  
