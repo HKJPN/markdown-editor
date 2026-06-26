@@ -621,6 +621,8 @@ In our testing, **Leo in Brave Browser** provides the most seamless and effectiv
 
 ## 12. Troubleshooting
 
+This section covers common issues and how to resolve them.
+
 ### 12-1. Cannot Save Directly to the Cloud
 
 **Cause**
