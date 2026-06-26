@@ -413,7 +413,7 @@ MD//WORKS Editorでは、Markdownファイルとして保存するだけでな�
 <br clear="all">
 
 
-
+> 長期保存する重要文書については、元のMarkdownファイル、パスワード、使用したMD//WORKSのバージョンのhtmlファイルも念のため保管してください。詳しくは「巻末のTroubleshooting：暗号化ファイルの長期保存」を参照してください。
 
 
 ### 7-2. 印刷 / PDF保存
