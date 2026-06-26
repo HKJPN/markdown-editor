@@ -734,6 +734,7 @@ This section covers common issues and how to resolve them.
 ### 12-1. Cannot Save Directly to the Cloud
 
 **Cause**
+
 MD//WORKS intentionally does not support direct cloud integration. This is a deliberate design choice to ensure the long-term safety, privacy, and reliability of your data:
 
 * **Privacy:** All processing remains strictly within your browser. By not connecting to external servers, the risk of data leaks is eliminated.
@@ -741,6 +742,7 @@ MD//WORKS intentionally does not support direct cloud integration. This is a del
 * **Reliability:** Official desktop sync apps are much more stable and less prone to file corruption from network errors compared to direct browser uploads.
 
 **Workaround**
+
 To sync your documents to the cloud, please save your files directly into your local cloud sync folder (such as OneDrive, Google Drive, iCloud, or Dropbox) on your device. Your cloud provider's desktop application will automatically and safely handle the synchronization.
 
 ### 12-2. Pressing the Home / End keys in the editor does not move the cursor to the beginning or end of the document.
