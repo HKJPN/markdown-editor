@@ -37,7 +37,7 @@ This release dramatically improves your export workflow, giving you more securit
 * **Line Numbers**: To assist with both basic coding and academic paper reviews, we will be rolling out features in stages, including logical line-based display, current line highlighting, line selection via the gutter, and disabling word wrap for coding mode.
 * **Math Equations**: We plan to support complex mathematical formulas used in fields like mathematics and engineering.
 * **Deep Edit Mode**: A planned feature that tracks a detailed history of your thought process and revisions.
-* **PWA**
+* **PWA Support**: We plan to support Progressive Web Apps (PWA), allowing you to install the editor directly on your device for a faster, seamless, native-app-like experience.
 
 ## 💡 **Handy Companion Tools**
 We've also provided two standalone command-line tools that instantly compile large batches of images into a single file. This significantly streamlines your MD//WORKS workflow when creating image-heavy reports or handouts.
