@@ -625,53 +625,70 @@ In the editor, the Home/End equivalent keys are mapped to smoothly edit text. To
 * **⌘ + ↑** – Go to the beginning of the document
 * **⌘ + ↓** – Go to the end of the document
 
-### 12-2. I saved the document, but I cannot find the file
+### 12-2. Long-term access and compatibility of encrypted files
+
+MD//WORKS uses widely adopted encryption methods and standard browser APIs. Encrypted files are therefore expected to remain accessible for the foreseeable future. However, permanent compatibility cannot be guaranteed because browser specifications, security requirements, operating systems, and device environments may change over time.
+
+The single-file HTML edition of MD//WORKS does not require installation or continued access to a specific online service. The exact version of the application used to create an encrypted file can be stored as a local file.Keeping the corresponding MD//WORKS HTML file together with the encrypted document reduces the risk of future application updates affecting compatibility. Decryption is performed locally in the browser, so access does not depend on the continued operation of an external decryption server or cloud service.
+
+For important long-term records, keep the following files and information together:
+
+* The encrypted Viewer or App file
+* The original Markdown file
+* The MD//WORKS HTML file or release package used to create the encrypted file
+* The version number of MD//WORKS
+* The SHA-256 hash of the MD//WORKS file, when available
+* A record of how and where the password is securely managed
+
+Do not store the password in plain text in the same location as the encrypted file.
+
+### 12-3. I saved the document, but I cannot find the file
 
 Check your browser’s default Downloads folder or the "Files" app destination you selected.
 
 Remember that **Auto encrypted** only protects drafts stored in the browser; it does not permanently create a `.md` file. Always use **File > Save (⌘S)**.
 
-### 12-3. The title bar shows “Unsaved”
+### 12-4. The title bar shows “Unsaved”
 
 This means the document has been modified since the last save. Save the document before ending your session.
 
-### 12-4. I cannot paste from the menu
+### 12-5. I cannot paste from the menu
 
 Browser security restrictions may block paste operations from custom menus. Use the keyboard shortcut **⌘V**.
 
-### 12-5. I cannot insert an image
+### 12-6. I cannot insert an image
 
 Ensure the image is under 200 KB and is a PNG, JPEG, or WebP. SVG files and large files are restricted for security and storage reasons.
 
-### 12-6. Preview is not displayed
+### 12-7. Preview is not displayed
 
 Ensure Preview is toggled on. If the screen is narrow, use the central divider to adjust pane widths.
 
-### 12-7. Search returns no results
+### 12-8. Search returns no results
 
 Check search options like "Case Sensitive" or "Whole Word". Ensure there are no invisible spaces causing mismatches by toggling **View > Show Invisibles**.
 
-### 12-8. “Invalid regular expression” appears
+### 12-9. “Invalid regular expression” appears
 
 If you do not intend to use regular expressions, turn off the **RegExp** search option.
 
-### 12-9. Spell (EN) is not working
+### 12-10. Spell (EN) is not working
 
 Ensure the document contains English text. This feature is intended for English spelling only.
 
-### 12-10. I forgot my Private Storage passphrase
+### 12-11. I forgot my Private Storage passphrase
 
 Drafts protected by Private Storage cannot be recovered without the passphrase. Always keep manual `.md` backups.
 
-### 12-11. I forgot my Private App passphrase
+### 12-12. I forgot my Private App passphrase
 
 HTML files exported as Private Apps cannot be decrypted without the correct passphrase.
 
-### 12-12. My Standalone HTML app does not open correctly
+### 12-13. My Standalone HTML app does not open correctly
 
 Ensure your browser is up-to-date and no corporate restrictions are blocking the file.
 
-### 12-13. PDF export does not work correctly
+### 12-14. PDF export does not work correctly
 
 Ensure your print destination is set to "Save as PDF". Always review the output file layout manually.
 
