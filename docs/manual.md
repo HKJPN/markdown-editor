@@ -729,10 +729,21 @@ When using the AI sidebar, switching to full-screen mode is highly recommended t
 
 ## 12. Troubleshooting
 
-
 This section covers common issues and how to resolve them.
 
-### 12-1. Pressing the Home / End keys in the editor does not move the cursor to the beginning or end of the document.
+### 12-1. Cannot Save Directly to the Cloud
+
+**Cause**
+MD//WORKS intentionally does not support direct cloud integration. This is a deliberate design choice to ensure the long-term safety, privacy, and reliability of your data:
+
+* **Privacy:** All processing remains strictly within your browser. By not connecting to external servers, the risk of data leaks is eliminated.
+* **Longevity:** Avoiding reliance on external cloud APIs prevents the application from breaking if those services suddenly change or shut down.
+* **Reliability:** Official desktop sync apps are much more stable and less prone to file corruption from network errors compared to direct browser uploads.
+
+**Workaround**
+To sync your documents to the cloud, please save your files directly into your local cloud sync folder (such as OneDrive, Google Drive, iCloud, or Dropbox) on your device. Your cloud provider's desktop application will automatically and safely handle the synchronization.
+
+### 12-2. Pressing the Home / End keys in the editor does not move the cursor to the beginning or end of the document.
 
 In the editor, the Home / End keys are assigned to **move the cursor to the beginning or end of the current line** to allow for smoother text input and editing. (Note: In the Preview screen, they will move to the beginning or end of the entire document.)
 
@@ -742,7 +753,7 @@ To move to the beginning or end of the entire document, please use the following
 * **Ctrl + End** – Go to the end of the document
 * For Mac / iPad: **⌘ + ↑** / **⌘ + ↓**
 
-### 12-2. Long-term access and compatibility of encrypted files
+### 12-3. Long-term access and compatibility of encrypted files
 
 MD//WORKS uses widely adopted encryption methods and standard browser APIs. Encrypted files are therefore expected to remain accessible for the foreseeable future. However, permanent compatibility cannot be guaranteed because browser specifications, security requirements, operating systems, and device environments may change over time.
 
@@ -759,14 +770,14 @@ For important long-term records, keep the following files and information togeth
 
 Do not store the password in plain text in the same location as the encrypted file.
 
-### 12-3. I saved the document, but I cannot find the file
+### 12-4. I saved the document, but I cannot find the file
 
 First, check your browser’s default Downloads folder.  
 Saving and export operations follow your browser’s download settings. Also confirm that the name in the file name field matches the downloaded file.
 
 Remember that **Auto encrypted** only protects drafts and history stored in the browser. It does not create a `.md` file on your computer. To keep a regular file, use **File > Save (Ctrl+S / ⌘S)**.
 
-### 12-4. The title bar shows “Unsaved”
+### 12-5. The title bar shows “Unsaved”
 
 
 
@@ -775,12 +786,12 @@ Before ending your work session, save the document using the **Save** button or 
 
 After the file is saved, the indicator returns to **Saved**.
 
-### 12-5. I cannot paste from the menu
+### 12-6. I cannot paste from the menu
 
 Browser security restrictions may block paste operations from custom menus.  
 If this happens, use the keyboard shortcut **Ctrl+V / ⌘V**.
 
-### 12-6. I cannot insert an image
+### 12-7. I cannot insert an image
 
 If drag-and-drop image insertion does not work, check the following:
 
@@ -792,20 +803,20 @@ If drag-and-drop image insertion does not work, check the following:
 
 To protect local storage capacity and improve security, MD//WORKS Editor does not accept images over 200 KB or SVG files.
 
-### 12-7. Preview is not displayed
+### 12-8. Preview is not displayed
 
 If Preview does not appear, make sure it is enabled by clicking the **Preview** button on the title bar or selecting **View > Preview**.
 
 On narrow screens, Preview may appear as a full-width pane or may be out of view.  
 When Preview is active, you can drag the central divider to adjust the width of the editor and preview panes.
 
-### 12-8. Search returns no results
+### 12-9. Search returns no results
 
 If search returns no results, check the search options, such as **Case Sensitive**, **Whole Word**, and **RegExp**.
 
 The issue may also be caused by full-width/half-width character differences or invisible spaces. Turn on **View > Show Invisibles** to inspect the text if necessary.
 
-### 12-9. “Invalid regular expression” appears
+### 12-10. “Invalid regular expression” appears
 
 
 
@@ -814,27 +825,27 @@ If the syntax is invalid, an error appears.
 
 If you do not intend to use regular expressions, turn off **RegExp**.
 
-### 12-10. Spell (EN) is not working
+### 12-11. Spell (EN) is not working
 
 Spell (EN) is designed for English text only and does not proofread other languages.
 
 Make sure Spell (EN) is enabled and that the document contains English text.  
 Depending on your network environment, the dictionary data may take a few seconds to load.
 
-### 12-11. I forgot my Private Storage passphrase
+### 12-12. I forgot my Private Storage passphrase
 
 If you forget your Private Storage passphrase, drafts and history protected by Private Storage cannot be recovered.
 
 For important documents, do not rely solely on Private Storage. Save a separate Markdown file (`.md`) to your computer.
 
-### 12-12. I forgot my Private App passphrase
+### 12-13. I forgot my Private App passphrase
 
 HTML files created with **File > Save as Private App** cannot be decrypted without the correct passphrase.
 
 If the passphrase is forgotten, the document cannot be recovered.  
 Before exporting a Private App, save the original Markdown document securely on your computer.
 
-### 12-13. My Standalone HTML app does not open correctly
+### 12-14. My Standalone HTML app does not open correctly
 
 If a Standalone App or Private App does not open correctly, check the following:
 
@@ -847,7 +858,7 @@ If a Standalone App or Private App does not open correctly, check the following:
 
 Creating and decrypting Private Apps works best in the latest desktop versions of Google Chrome or Microsoft Edge.
 
-### 12-14. PDF export does not work correctly
+### 12-15. PDF export does not work correctly
 
 PDF export (**File > Print / Save as PDF**) relies on the browser’s print function.  
 Make sure the print destination is set to **Save as PDF**, and check the paper size and margins.
