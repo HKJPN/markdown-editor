@@ -296,8 +296,9 @@ The title bar shows the current save status.
 
 | Indicator | Meaning |
 | --- | --- |
-| Saved | All changes have been saved |
 | Unsaved | The document contains unsaved changes |
+| Saved | All changes have been saved |
+
 
 If you edit the document after saving, the status changes to **Unsaved**.
 
