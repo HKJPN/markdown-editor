@@ -26,7 +26,7 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 This release dramatically improves your export workflow, giving you more security and flexibility.
 
 * **Enhanced Export Options & Dedicated UI:** Introduced a new export modal for quicker, more intuitive format selection. You can now easily export "Restricted" or "Password-protected" viewers to protect your sensitive documents from unauthorized access or copying.
-* **Update Notifications:** Added a notification feature to the menubar, allowing you to instantly check your current version against the latest release and access the release page smoothly.
+* **Update Notifications:** Added a notification feature to the menubar, allowing you to instantly check your current version against the latest release and access the release page smoothly. Update checks are securely limited to a maximum of once per 24 hours with minimal traffic, and all your documents are processed strictly on your local device.
 * **Bug Fix:** Fixed a critical  issue in regex replacement where escape sequences such as `\n` and `\t` were not interpreted correctly.
 
 ## ✨ Upcoming Features
