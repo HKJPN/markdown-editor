@@ -3913,6 +3913,38 @@ document.getElementById('tab-replace').onclick = () => openSearchPanel('replace'
 document.getElementById('sr-close').onclick = closeSearchPanel;
 
 function escapeRegExp(string) { return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+function decodeRegexReplacementEscapes(value) {
+  let result = '';
+  for (let i = 0; i < value.length; i++) {
+    const char = value[i];
+    if (char !== '\\') {
+      result += char;
+      continue;
+    }
+    if (i === value.length - 1) {
+      result += '\\';
+      continue;
+    }
+    const next = value[i + 1];
+    switch (next) {
+      case 'n': result += '\n'; i++; break;
+      case 'r': result += '\r'; i++; break;
+      case 't': result += '\t'; i++; break;
+      case '\\': result += '\\'; i++; break;
+      default: result += '\\' + next; i++; break;
+    }
+  }
+  return result;
+}
+
+function getSearchReplacementValue() {
+  const replacement = srReplaceInput.value;
+  return document.getElementById('sr-opt-regex').checked
+    ? decodeRegexReplacementEscapes(replacement)
+    : replacement;
+}
+
 function buildRegex(isGlobal = true) {
   const query = srInput.value;
   if (!query) return null;
@@ -4006,7 +4038,7 @@ document.getElementById('sr-btn-replace').onclick = () => {
   if (editor.selectionStart !== m.start || editor.selectionEnd !== m.end) { highlightCurrentMatch(); return; }
   const regex = buildRegex(false);
   if (!regex) return;
-  const repStr = srReplaceInput.value;
+  const repStr = getSearchReplacementValue();
   const newSubText = m.text.replace(regex, repStr);
   editor.focus();
   document.execCommand('insertText', false, newSubText);
@@ -4020,7 +4052,7 @@ document.getElementById('sr-btn-replace-all').onclick = () => {
   if (!confirm(T.confirmRepAll(count))) return;
   const regex = buildRegex(true);
   if (!regex) return;
-  const repStr = srReplaceInput.value;
+  const repStr = getSearchReplacementValue();
   const oldFullText = editor.value;
   const newFullText = oldFullText.replace(regex, repStr);
   const scrollTop = editor.scrollTop;
