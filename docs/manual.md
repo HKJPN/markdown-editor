@@ -42,7 +42,7 @@ Features related to creating or decrypting Private Apps depend on browser capabi
 ![Image: Overall screen layout with numbers ① to ⑥ indicating each area](<./images/overall-screen-layout.jpg>)
 
 * **① Menu Bar**  
-  Provides access to the File, Edit, View, and Help menus. Use it to create files, open files, save, export, switch views, and access help.
+  Provides access to the File, Edit, View, Help, and Latest Version Notification menus. Use it to create new files, save, export, switch views, and access help.
 
 * **② Title Bar**  
   Displays the app name, file name, save status, and primary action buttons.  
