@@ -32,7 +32,7 @@ This release dramatically improves your export workflow, giving you more securit
 ## ✨ Upcoming Features
 
 * **Footnotes**: We plan to add support for footnotes, such as citations and references.
-* **Pandoc-Compatible Superscript & Subscript:** Native support for `^superscript^` and `~subscript~` syntax. Easily apply, remove, or toggle these formats using dedicated toolbar buttons.
+* **Pandoc-Compatible Superscript & Subscript**: Along with standard HTML tags, enjoy native support for `^superscript^` and `~subscript~` syntax. Easily apply, remove, or toggle these formats using dedicated toolbar buttons.
 * **Preview Focus Mode**: We plan to introduce a viewing mode that expands the right-side preview to fill the entire screen.
 * **Line Numbers**: To assist with both basic coding and academic paper reviews, we will be rolling out features in stages, including logical line-based display, current line highlighting, line selection via the gutter, and disabling word wrap for coding mode.
 * **Math Equations**: We plan to support complex mathematical formulas used in fields like mathematics and engineering.
