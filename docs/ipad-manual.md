@@ -53,8 +53,7 @@ MD//WORKS Editor works comfortably in the following iPad environments:
 
 ![Image: Overall screen layout with numbers ① to ⑥ indicating each area](<./images/overall-screen-layout.jpg>)
 
-* **① Menu Bar**
-
+* **① Menu Bar**  
   Provides access to the File, Edit, View, and Help menus. Use it to create files, open files, save (share), export, switch views, and access help.
 
 * **② Title Bar**
