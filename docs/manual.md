@@ -49,7 +49,7 @@ Features related to creating or decrypting Private Apps depend on browser capabi
   You can quickly open files, save, toggle Preview, enter fullscreen mode, or enable Spell (EN).
 
 * **③ Toolbar**  
-  Lets you insert headings, bold text, italics, lists, tasks, quotes, code, links, and tables with a single click.  
+  Lets you insert headings, bold text, italics, strikethrough, superscript, subscript, lists, numbered lists, tasks, quotes, code, links, and tables with a single click.
   This is useful even if you are not familiar with Markdown syntax.
 
 * **④ Editor Area**  
