@@ -53,21 +53,27 @@ MD//WORKS Editor works comfortably in the following iPad environments:
 
 ![Image: Overall screen layout with numbers ① to ⑥ indicating each area](<./images/overall-screen-layout.jpg>)
 
-* **① Menu Bar** Provides access to the File, Edit, View, and Help menus. Use it to create files, open files, save (share), export, switch views, and access help.
+* **① Menu Bar**
+ Provides access to the File, Edit, View, and Help menus. Use it to create files, open files, save (share), export, switch views, and access help.
 
-* **② Title Bar** Displays the app name, file name, save status, and primary action buttons.  
+* **② Title Bar**
+  Displays the app name, file name, save status, and primary action buttons.  
   You can quickly open files, save, toggle Preview, enter fullscreen mode, or enable Spell (EN).
 
-* **③ Toolbar** Lets you insert headings, bold text, italics, lists, tasks, quotes, code, links, and tables with a single click.  
+* **③ Toolbar**
+  Lets you insert headings, bold text, italics, strikethrough, superscript, subscript, lists, numbered lists, tasks, quotes, code, links, and tables with a single click.  
   This is useful even if you are not familiar with Markdown syntax.
 
-* **④ Editor Area** The main area for writing and editing text in Markdown format.  
+* **④ Editor Area**
+  The main area for writing and editing text in Markdown format.  
   Use this area to enter text, create headings and lists, and insert images.
 
-* **⑤ Preview Area** Renders your Markdown as formatted output.  
+* **⑤ Preview Area**
+  Renders your Markdown as formatted output.  
   You can edit on the left while checking the rendered result on the right. Toggle the preview using the **Preview** button on the title bar or **View > Preview**.
 
-* **⑥ Status Bar** Displays the current line count, word count, character count, Spell (EN) status, and storage protection mode.  
+* **⑥ Status Bar**
+  Displays the current line count, word count, character count, Spell (EN) status, and storage protection mode.  
   Storage protection modes include **Auto encrypted** and passphrase-protected **Private Storage**.
 
 > 💡 **When using Safari:** Tap the "aA" button on the left side of the browser's URL bar to adjust settings, such as hiding the toolbar for a wider screen or adjusting the page zoom level between 85% and 100%.
