@@ -37,6 +37,9 @@ MD//WORKSは、最新ブラウザが動作するほぼすべての環境に対�
 * **端末要件:** 最新ブラウザが動作するPC(Windows/Linux)、Mac、iPad、Androidタブレット、およびChromebook等。
 * **画面サイズ:** タブレットサイズ以上が必要です。iPhoneやAndroidスマートフォンにおいても、横画面表示や外部ディスプレイを使うことで、ほぼすべての機能をご利用いただけます。
 
+>💡 **テクニック：複数文書の同時編集は別ブラウザがおすすめ**
+複数の原稿を並べて編集する際は、異なるブラウザ（例：Chrome、Brave、Edge）に分け、後述するテーマ色でも区別するのががおすすめです。ブラウザ間で下書き履歴が衝突せず、動作がより安定し、画面上での認識も簡単です。Windows、Mac、タブレットのいずれの環境でも有効です。
+
 ### 1-3. 画面構成
 
 ![Image: Overall screen layout with numbers ① to ⑥ indicating each area](<./images/overall-screen-layout-ja.jpg>)
