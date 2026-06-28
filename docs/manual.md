@@ -37,6 +37,9 @@ MD//WORKS is compatible with almost all environments that can run a modern web b
 * **Screen Size:** A tablet-sized screen or larger is required. Almost all features can also be used on iPhones and Android smartphones by switching to landscape mode or using an external display.
 For best results, use the latest version of a modern desktop browser such as Chrome, Brave, Edge, Firefox or Safari.
 
+>💡 **Pro Tip: Use Separate Browsers for Simultaneous Editing**
+When editing multiple documents side-by-side, we recommend using different browsers (e.g., Chrome, Brave) and visually distinguishing them with the theme colors described later. This prevents draft history conflicts between browsers, ensuring more stable operation and easier visual identification on your screen. This approach works effectively across Windows, Mac, and tablet environments.
+
 ### 1-3. Screen Layout
 
 ![Image: Overall screen layout with numbers ① to ⑥ indicating each area](<./images/overall-screen-layout.jpg>)
