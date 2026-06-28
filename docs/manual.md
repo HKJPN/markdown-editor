@@ -38,7 +38,7 @@ MD//WORKS is compatible with almost all environments that can run a modern web b
 For best results, use the latest version of a modern desktop browser such as Chrome, Brave, Edge, Firefox or Safari.
 
 >💡 **Pro Tip: Use Separate Browsers for Simultaneous Editing**
-When editing multiple documents side-by-side, we recommend using different browsers (e.g., Chrome, Brave) and visually distinguishing them with the theme colors described later. This prevents draft history conflicts between browsers, ensuring more stable operation and easier visual identification on your screen. This approach works effectively across Windows, Mac, and tablet environments.
+>When editing multiple documents side-by-side, we recommend using different browsers (e.g., Chrome, Brave) and visually distinguishing them with the theme colors described later. This prevents draft history conflicts between browsers, ensuring more stable operation and easier visual identification on your screen. This approach works effectively across Windows, Mac, and tablet environments.
 
 ### 1-3. Screen Layout
 
