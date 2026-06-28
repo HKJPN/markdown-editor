@@ -29,13 +29,15 @@ No installation is required; the editor runs directly in a supported browser.
 After the file opens, you can begin typing Markdown in the editor area.  
 If draft data from a previous session is available, you may be asked whether you want to restore it. Choose the restore option if you want to recover the previous draft.
 
-### 1-2. Supported Environments
+### 1-2. 
 
+Supported Environments
+
+MD//WORKS is compatible with almost all environments that can run a modern web browser. Please refer to [save behavior by OS and browser](#save-behavior) for detailed differences in saving behavior across various OS and browser combinations.
+
+* **Device Requirements:** PC (Windows/Linux), Mac, iPad, Android tablets, Chromebook, etc., capable of running a modern web browser.
+* **Screen Size:** A tablet-sized screen or larger is required. Almost all features can also be used on iPhones and Android smartphones by switching to landscape mode or using an external display.
 For best results, use the latest version of a modern desktop browser such as Chrome, Brave, Edge, Firefox or Safari.
-
-Some features, including file saving, printing, fullscreen mode, and Private App creation, may not work correctly in outdated browsers, restricted corporate environments, or browsers with strict security settings. Learn more about [save behavior by OS and browser](#save-behavior).
-
-Features related to creating or decrypting Private Apps depend on browser capabilities such as the Web Crypto API. If you encounter problems, try the latest desktop version of Chrome or Edge.
 
 ### 1-3. Screen Layout
 
