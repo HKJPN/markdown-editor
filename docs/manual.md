@@ -29,9 +29,7 @@ No installation is required; the editor runs directly in a supported browser.
 After the file opens, you can begin typing Markdown in the editor area.  
 If draft data from a previous session is available, you may be asked whether you want to restore it. Choose the restore option if you want to recover the previous draft.
 
-### 1-2. 
-
-Supported Environments
+### 1-2. Supported Environments
 
 MD//WORKS is compatible with almost all environments that can run a modern web browser. Please refer to [save behavior by OS and browser](#save-behavior) for detailed differences in saving behavior across various OS and browser combinations.
 
