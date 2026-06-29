@@ -153,6 +153,8 @@ For security reasons, SVG images are not supported. Convert SVG files to PNG, JP
 	
 MD//WORKS Editor allows you to display and play local files such as images, videos, audio, and PDFs in the preview screen by specifying them with "relative paths." Images can also be embedded using Base64. This section explains how to display files using relative links and how to embed them.
 
+>  **⚠️Note**:On mobile operating systems like iPadOS, local relative links do not function due to strict OS security restrictions. Please use the direct embedding method instead.
+
 #### 3-3-1. Opening the App from a Local Folder
 
 Relative links will function correctly by placing the MD//WORKS HTML file, your Markdown file, and all related media files within the same folder structure.
@@ -199,8 +201,6 @@ When using the web version of MD//WORKS hosted on a website and selecting a Mark
 
 > 💡 **For a small number of images or small image sizes (up to a few tens of MBs in total):**
 > Even if files cannot be automatically loaded from the folder, you can directly embed (drag and drop) images into your Markdown by referring to "3-2. Inserting Images". Images embedded in the created Markdown file have the advantage of being stably displayed inline in any environment.
-
-※ Note:On mobile operating systems like iPadOS, local relative links do not function due to strict OS security restrictions. Please use the direct embedding method instead.
 
 
 ### 3-4. Checking Input Status
