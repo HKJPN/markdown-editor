@@ -203,6 +203,7 @@ project/
 
 入力中の行数、単語数、文字数は画面下部のステータスバーに表示されます。
 
+![Image: statusbar](<./images/statusbar.JPG>)
 
 ---
 
