@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-06-29 - v1.5.7.1
+- Added a dedicated app icon.
+- Added a new section on how to install the editor as an app in the manual.
+
 ## 2026-06-26 - v1.5.7 - Hotfix v1.5.7candidate
 - Fixed regex replacement so escape sequences such as `\n` and `\t` are interpreted correctly.
 
