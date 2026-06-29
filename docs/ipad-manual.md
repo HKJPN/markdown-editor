@@ -565,11 +565,8 @@ Change the interface theme from the **View** menu.
 
 Use **View > Fullscreen** or the fullscreen icon on the title bar to expand the browser to fullscreen mode.
 
-> 💡 **iPadOS Fullscreen Specification**
-> Due to browser security restrictions on iPad (Safari, etc.), **fullscreen mode is automatically canceled if the software keyboard appears on the screen.**
-> To write comfortably while maintaining fullscreen mode, we recommend:
-> * **Using Apple Pencil:** Handwriting input (Scribble) does not trigger the software keyboard, allowing you to stay in fullscreen.
-> * **Using an External Keyboard:** Typing via a hardware keyboard like the Magic Keyboard keeps the screen wide and uninterrupted.
+> 💡 **iPadOS Fullscreen Specification**<br>
+> Due to browser security restrictions on iPad (Safari, etc.), **fullscreen mode is automatically canceled if the software keyboard appears on the screen.**  We recommend tapping the "aA" button on the left side of the Safari browser's URL bar to hide the toolbar and maximize your screen space.
 > 
 > 
 
