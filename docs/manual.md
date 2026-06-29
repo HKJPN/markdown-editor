@@ -41,11 +41,10 @@ Although installation is not required, you can convert it into an app using the 
 
 ### 1-2. Supported Environments
 
-MD//WORKS is compatible with almost all environments that can run a modern web browser. Please refer to [save behavior by OS and browser](#save-behavior) for detailed differences in saving behavior across various OS and browser combinations.
+MD//WORKS is compatible with almost all environments that can run a modern web browser. Please refer to [save behavior by OS and browser](#save-behavior) for detailed differences in saving behavior across various OS and browser combinations. For best results, use the latest version of a modern desktop browser such as Chrome, Brave, Edge, Firefox or Safari.
 
 * **Device Requirements:** PC (Windows/Linux), Mac, iPad, Android tablets, Chromebook, etc., capable of running a modern web browser.
 * **Screen Size:** A tablet-sized screen or larger is required. Almost all features can also be used on iPhones and Android smartphones by switching to landscape mode or using an external display.
-For best results, use the latest version of a modern desktop browser such as Chrome, Brave, Edge, Firefox or Safari.
 
 >💡 **Pro Tip: Use Separate Browsers for Simultaneous Editing**
 >
