@@ -708,7 +708,7 @@ MD//WORKS can be used with several browser-based AI assistants. This section exp
    Make sure you are signed in to your Google Account in Chrome.
 
 2. **Open Gemini**  
-   Launch Gemini from the browser side panel, the toolbar button, or the “Ask Gemini” option.
+   Launch Gemini from the browser side panel, the toolbar button, or the “Ask Gemini” option. If you are launching MD//WORKS from the app, select 'Open in Chrome' from the menu (︙) in the top right corner of the screen, return to the browser tab, and then launch it from 'Ask Gemini'."
 
 3. **Ask Gemini to review or summarize your document**  
    With MD//WORKS open, you can ask Gemini to proofread, summarize, translate, or review your document. You can work with the entire document, or select only a specific section. In many cases, simply selecting text with the cursor is enough to limit the scope of the AI request, without copying and pasting the text manually.
