@@ -220,7 +220,7 @@ When using the web version of MD//WORKS hosted on a website and selecting a Mark
 ### 3-4. Checking Input Status
 
 The current line count, word count, and character count are shown in the status bar at the bottom of the screen.
-![Image: statusbar](<./images/statusbar.jpg>)
+![Image: statusbar](<./images/statusbar.JPG>)
 
 ---
 
