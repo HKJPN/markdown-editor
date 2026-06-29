@@ -166,6 +166,7 @@ For security reasons, SVG images are not supported. Convert SVG files to PNG, JP
 ### 3-3. Checking Input Status
 
 The current line count, word count, and character count are shown in the status bar at the bottom of the screen.
+![Image: statusbar](<./images/statusbar.jpg>)
 
 ---
 
