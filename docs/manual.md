@@ -21,13 +21,22 @@ Depending on your browser or operating system, some shortcuts may conflict with 
 
 ## 1. Starting the App and Understanding the Screen Layout
 
-### 1-1. Starting the App
+### 1-1. Starting the App**
 
-Open the MD//WORKS Editor HTML file in your web browser to launch the app.  
-No installation is required; the editor runs directly in a supported browser.
+MD//WORKS does not require installation; you can use it simply by opening the Editor's HTML file in a browser. It can also be launched directly from the [MD//WORKS Editor website](<https://hkjpn.github.io/markdown-editor/>). If unsaved data from a previous session remains, a restoration prompt may appear. If you wish to restore the data, select "Restore" on the confirmation screen.
 
-After the file opens, you can begin typing Markdown in the editor area.  
-If draft data from a previous session is available, you may be asked whether you want to restore it. Choose the restore option if you want to recover the previous draft.
+Although installation is not required, you can convert it into an app using the following steps. Even after turning it into an app, you can switch back and forth with your browser as needed.
+
+**1-1-1. Steps to Create an App and Switch with Browser Tabs (For Chrome)**
+
+1. Open the [MD//WORKS Editor website](<https://hkjpn.github.io/markdown-editor/>) in the Chrome browser on your PC/Mac.
+2. Select the menu (︙) in the top right corner of the screen > "Cast, save, and share" > "Install page as app".
+3. Click "Install" on the confirmation screen, and a dedicated MD//WORKS icon will be created on your desktop or taskbar.
+4. By simply clicking this icon, it will launch immediately as an independent window so you can begin editing.
+5. When you want to use browser AI or similar features, select **"Open in Chrome"** from the menu (︙) in the top right corner. This will move you to a standard browser tab while retaining the text you are currently editing.
+6. To return to the app mode and focus on writing again, click the "Open in app" button displayed at the far right of the browser's address bar.
+<br><img src="./images/icon2.png" alt="Image:icon" width="90">
+
 
 ### 1-2. Supported Environments
 
