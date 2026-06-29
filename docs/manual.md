@@ -148,12 +148,67 @@ For security reasons, SVG images are not supported. Convert SVG files to PNG, JP
 | **`images2md.py`** | Markdown | Compiling a large number of images and then adding text, videos, PDFs, meeting minutes, etc., for further editing. |
 | **`images2rHTML.py`** | Restricted Viewer HTML | Quickly compiling and distributing numerous image materials while restricting general copying, printing, and unintended modifications, with the option for detailed editing later. |
 
-### 3-3. Checking Input Status
+
+### 3-3. Local Files and Relative Links
+	
+MD//WORKS Editor allows you to display and play local files such as images, videos, audio, and PDFs in the preview screen by specifying them with "relative paths." Images can also be embedded using Base64. This section explains how to display files using relative links and how to embed them.
+
+#### 3-3-1. Opening the App from a Local Folder
+
+Relative links will function correctly by placing the MD//WORKS HTML file, your Markdown file, and all related media files within the same folder structure.
+
+**【Example of Folder Structure】**
+
+```text
+project/
+├─ MD-WORKS.html (App Main File)
+├─ manual.md
+├─ images/
+│  └─ figure01.png
+├─ videos/
+│  └─ demonstration.mp4
+└─ audio/
+   └─ explanation.mp3
+
+```
+
+**【Example of Markdown Syntax】**
+
+```markdown
+![Image Description](images/figure01.png)
+
+[Open Video](videos/demonstration.mp4)
+
+[Open Audio](audio/explanation.mp3)
+
+<video controls src="videos/demonstration.mp4"></video>
+
+```
+
+With this configuration, you can smoothly view images, navigate through file links, and play compatible videos inline within the preview screen.
+
+
+> 💡 **When utilizing a large amount of local media (images, videos, audio, PDFs):**
+> This structure is highly recommended when you have a large number of media files or large file sizes, as it keeps MD//WORKS running lightweight and smoothly.
 
 
 
-You can use MD//WORKS Editor for long drafts, technical notes, specifications, meeting minutes, and research notes.  
+#### 3-3-2. Opening Local Files from MD//WORKS on the Web
+
+When using the web version of MD//WORKS hosted on a website and selecting a Markdown file from your local computer to edit, images and other media files in the same folder will not be loaded automatically. This is a standard behavior driven by web browser security specifications (same-origin policy) and is not a malfunction of the application.
+
+> 💡 **For a small number of images or small image sizes (up to a few tens of MBs in total):**
+> Even if files cannot be automatically loaded from the folder, you can directly embed (drag and drop) images into your Markdown by referring to "3-2. Inserting Images". Images embedded in the created Markdown file have the advantage of being stably displayed inline in any environment.
+
+※ Note:On mobile operating systems like iPadOS, local relative links do not function due to strict OS security restrictions. Please use the direct embedding method instead.
+
+
+### 3-4. Checking Input Status
+
+  
 The current line count, word count, and character count are shown in the status bar at the bottom of the screen.
+![Image: statusbar](<./images/statusbar-ja.JPG>)
+
 
 ---
 
