@@ -37,6 +37,7 @@ Although installation is not required, you can convert it into an app using the 
 6. To return to the app mode and focus on writing again, click the "Open in app" button displayed at the far right of the browser's address bar.
 <br><img src="./images/icon2.png" alt="Image:icon" width="90">
 
+> 💡 **If using a downloaded HTML file locally:** The install button will not appear in the address bar. Instead, open the Chrome menu (︙), go to **Save and share** > **Create shortcut**, check the **Open as window** box, and click **Create**.
 
 ### 1-2. Supported Environments
 
