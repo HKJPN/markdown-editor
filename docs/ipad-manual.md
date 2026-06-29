@@ -26,7 +26,7 @@ You can also start it by opening a locally saved HTML file in your browser. (How
 After the file opens, you can begin typing Markdown in the editor area.  
 If draft data from a previous session is available, you may be asked whether you want to restore it. Choose the restore option if you want to recover the previous draft.
 
-> 💡 **iPad Tip:** Select "Add to Home Screen" from Safari's Share button (the square with an upward arrow) to add an icon to your home screen. From then on, you can launch it just like a regular app.<br><img src="./images/IMG_0303.PNG" alt="Image:icon" width="90">
+> 💡 **iPad Tip:** Select "Add to Home Screen" from Safari's Share button (the square with an upward arrow) to add an icon to your home screen. From then on, you can launch it just like a regular app.<br><img src="./images/icon2.png" alt="Image:icon" width="90">
 
 ### 1-2. Supported Environments
 
