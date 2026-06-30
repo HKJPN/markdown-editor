@@ -155,7 +155,7 @@ To protect local storage capacity, image insertion is subject to the following l
 
 | Item | Details |
 | --- | --- |
-| Maximum size | Under 200 KB |
+| Maximum size | Under 300 KB |
 | Supported formats | PNG, JPEG, WebP, etc. |
 | Unsupported formats | SVG |
 
@@ -735,7 +735,7 @@ Browser security restrictions may block paste operations from custom menus. Use 
 
 ### 12-7. I cannot insert an image
 
-Ensure the image is under 200 KB and is a PNG, JPEG, or WebP. SVG files and large files are restricted for security and storage reasons.
+Ensure the image is under 300 KB and is a PNG, JPEG, or WebP. SVG files and large files are restricted for security and storage reasons.
 
 ### 12-8. Preview is not displayed
 
