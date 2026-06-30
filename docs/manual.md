@@ -164,6 +164,7 @@ For security reasons, SVG images are not supported. Convert SVG files to PNG, JP
 | **`images2md.py`** | Markdown | Compiling a large number of images and then adding text, videos, PDFs, meeting minutes, etc., for further editing. |
 | **`images2rHTML.py`** | Restricted Viewer HTML | Quickly compiling and distributing numerous image materials while restricting general copying, printing, and unintended modifications, with the option for detailed editing later. |
 
+> 💡 **Pro Tip:** You can bypass the 300 KB image limit by using tools like `images2md.py` or `images2rHTML.py`. However, to maintain stable performance, please ensure the total file size does not exceed 20MB when re-importing into MD//WORKS.
 
 ### 3-3. Local Files and Relative Links
 	
