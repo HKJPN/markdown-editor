@@ -288,7 +288,7 @@ Code blocks and tables are especially useful when writing technical notes or spe
 | Extension | .md |
 
 ```
-### 4-4. Superscript and Subscript
+### 4-5. Superscript and Subscript
 In life sciences, chemistry, and physics documents, subscripts and superscripts are frequently used for chemical formulas, charges, units, and exponents. Try pasting the following into the editor and checking how it looks in the preview panel:
 
 ```markdown
@@ -298,6 +298,16 @@ Ca<sup>2+</sup>, 10<sup>6</sup> cells, cm<sup>2</sup>
 ```
 
 Subscripts and superscripts are not supported in standard Markdown. However, by using HTML tags as shown above, you can maintain compatibility and ensure they display correctly across most environments.
+
+### 4-6. Inserting Footnotes
+
+You can add notes, supplementary explanations, or references to your text. This feature is available only via direct Markdown typing. For details on formatting footnotes in scientific reports, please refer to the [Guide to Markdown for Scientific Writing](https://github.com/HKJPN/markdown-editor/blob/main/docs/scientific-writing.md).
+
+* **In the body text:** Insert a footnote reference like `[^note]` or `[^1]` where you want the footnote to appear. (Labels can contain alphanumeric characters, hyphens, and underscores.)
+* **Footnote definition:** Type `[^note]: Your footnote text here` anywhere in the document (placing them at the end of the document is recommended).
+
+**💡 How they are displayed**<br>
+In the Preview panel and exported files (such as Viewers), footnotes are automatically sequentially numbered (1, 2...) based on their first appearance in the body text, regardless of the label used. They are collected at the bottom of the page, creating bi-directional links that allow you to jump between the reference and the footnote content.
 
 ---
 
