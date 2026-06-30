@@ -33,7 +33,7 @@ Seamlessly cycle through "Split View (Real-time sync)", "Focus Preview (Distract
 In addition to traditional HTML tags (`<sup>`, `<sub>`), we now support the simple, easy-to-type Pandoc-compatible syntax (`^superscript^`, `~subscript~`)—perfect for chemical formulas and math equations.
 * ✍️ **Start Writing Instantly on a "Blank Slate"**
 We've removed the default sample text on startup, providing you with a clean, blank slate. The moment you open the app, you can dive straight into capturing your ideas.
-* <img src="./images/icon2.png" alt="Image:icon" width="45"> **App Launch Icon**: Added a dedicated app icon for a more native app-like experience, and updated the manual with detailed installation instructions.
+* <img src="./images/icon2.png" alt="Image:icon" width="22.5"> **App Launch Icon**: Added a dedicated app icon for a more native app-like experience, and updated the manual with detailed installation instructions.
 
 
 
