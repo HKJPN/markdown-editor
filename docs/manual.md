@@ -35,7 +35,7 @@ Although installation is not required, you can convert it into an app using the 
 4. By simply clicking this icon, it will launch immediately as an independent window so you can begin editing.
 5. When you want to use browser AI or similar features, select **"Open in Chrome"** from the menu (︙) in the top right corner. This will move you to a standard browser tab while retaining the text you are currently editing.
 6. To return to the app mode and focus on writing again, click the "Open in app" button displayed at the far right of the browser's address bar.
-<br><img src="./images/icon2.png" alt="Image:icon" width="90">
+<br><img src="./images/icon2s.png" alt="Image:icon" width="90">
 
 > 💡 **If using a downloaded HTML file locally:** The install button will not appear in the address bar. Instead, open the Chrome menu (︙), go to **Save and share** > **Create shortcut**, check the **Open as window** box, and click **Create**.
 
