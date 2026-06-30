@@ -150,7 +150,7 @@ To protect local storage capacity, image insertion is subject to the following l
 
 | Item | Details |
 | --- | --- |
-| Maximum size | Under 200 KB |
+| Maximum size | Under 300 KB |
 | Supported formats | PNG, JPEG, WebP, etc. |
 | Unsupported formats | SVG |
 
@@ -874,7 +874,7 @@ If drag-and-drop image insertion does not work, check the following:
 
 | Item to check | Solution |
 | --- | --- |
-| The image is too large | Compress it to under 200 KB |
+| The image is too large | Compress it to under 300 KB |
 | The image is an SVG file | Convert it to PNG, JPEG, or WebP |
 | The file is not an image | Use a valid image file |
 
