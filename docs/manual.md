@@ -318,36 +318,47 @@ In the Preview panel and exported files (such as Viewers), footnotes are automat
 
 ---
 
-## 5. Checking Your Document with Preview
+## 5. Verifying with Preview
 
+The Preview feature allows you to see exactly how the Markdown text entered in the editor will look when rendered. In addition to basic styling like headings and bold text, you can check elements that tend to have complex structures—such as tables, footnotes, superscripts, and subscripts. Verifying your document in Preview makes it easy to spot syntax errors or layout glitches.
 
-Use Preview to check how your Markdown will look when rendered.
+### 5-1. Displaying the Preview
 
-### 5-1. Toggling Preview
+Each time you click/tap one of the following, the display cycles through three steps: "Split View (Editor & Preview)" → "Focus Preview" → "Editor Only".
 
-To show or hide Preview, use either of the following methods:
+- The **Preview** button on the title bar
+- **View > Preview** in the menu bar
 
-* Click the **Preview** button on the title bar.
-* Select **View > Preview** from the menu bar.
+#### 5-1-1. Split View (Editor & Preview)
 
-When Preview is enabled, the preview pane appears on the right side of the screen.  
-Edits made in the Markdown editor on the left are reflected in the preview on the right.
+The Markdown editor is displayed on the left side of the screen, and the Preview is displayed on the right side.
+As you edit the text on the left, the changes are reflected in the Preview in real time, allowing you to write while instantly checking the final output. This is especially useful when adjusting tables, footnotes, and images. You can adjust the width of the panes by dragging the splitter between the editor and the preview.
 
-### 5-2. What You Can Check in Preview
+#### 5-1-2. Focus Preview
 
-Preview lets you check the appearance of:
+This mode expands the Preview to full width, allowing you to focus on reading the document. By opening the Outline panel and selecting a heading, you can quickly jump to that specific section. This view is ideal for reviewing the entire document, proofreading, collaborative reading, or giving simple presentations.
 
-* Headings
-* Bold, italics, and other text formatting
-* Bulleted and numbered lists
-* Checklists
-* Tables
-* Blockquotes
-* Code blocks
-* Images
+To return to the editor from Focus Preview, use one of the following methods:
 
-The Preview area is for checking the final appearance of the document.  
-Text editing is performed in the Editor Area on the left.
+- Click/tap **Preview** again on the title bar or menu bar.
+- Click/tap the **Return to Editor** button on the screen.
+
+### 5-2. Content Verifiable in Preview
+
+The Preview panel mainly supports rendering and verifying the following elements:
+
+- Headings
+- Bold, Italic, and Strikethrough text
+- Superscripts and Subscripts
+- Bulleted and Numbered lists
+- Task lists (Checklists)
+- Tables
+- Blockquotes
+- Footnotes
+- Inline code and Code blocks
+- Hyperlinks
+- Images
+
 
 ---
 
