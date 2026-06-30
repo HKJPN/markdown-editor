@@ -972,7 +972,6 @@ llama-server --model /path/to/your-model.gguf --port 8080
 
 > 💡 **Note:** Adjust the launch options (such as GPU offloading via `-ngl`) as needed based on your hardware capabilities and desired processing speed.
 
----
 
 ### 2. Configuring Advanced Settings in Firefox
 
@@ -983,7 +982,6 @@ After starting the server, modify Firefox's advanced settings so it can securely
 3. Type **`browser.ml.chat.hideLocalhost`** in the search bar at the top.
 4. The default value is set to `true` (hidden). Click the toggle button on the right (or double-click the row) to change it to **`false`** (visible).
 
----
 
 ### 3. Basic Usage
 
@@ -1011,6 +1009,24 @@ Currently, **Google Chrome (with the Gemini sidebar)** behaves differently: even
 
 **Future Work**
 We are monitoring browser updates. If the behavior on Brave, Edge, or Firefox changes to match Chrome's implementation in the future, this workaround may no longer be necessary.
+
+---
+
+## Appendix 3: Uninstalling the Chrome App
+
+If you installed the editor as a Chrome App, uninstalling it directly from the app window might occasionally fail. **If the app does not uninstall properly or if the shortcut icon remains**, please try one of the manual removal methods below:
+
+## **A. Remove from the Chrome App List**
+  1. Open your Chrome browser, type `chrome://apps` in the address bar, and press **Enter**.
+  2. Right-click the **MD//WORKS** icon (Mac users: `Control`-click or two-finger tap).
+  3. Select **"Remove from Chrome"** and confirm the deletion on the prompt screen.
+
+## **B. Remove Using Standard OS Features**
+  You can also uninstall it just like any standard desktop software.
+  * **Windows:** Go to **Settings** > **Apps** > **Installed apps**, locate **MD//WORKS**, click the three-dot menu (**...**), and select **Uninstall**.
+  * **Mac:** 1. Open **Finder** and navigate to the **Applications** folder.
+    2. Open the **Chrome Apps** folder.
+    3. Drag the **MD//WORKS** icon to the **Trash** (or right-click and select **Move to Trash**).
 
 ---
 Google, Google Chrome, and Gemini are trademarks of Google LLC. All other company, product, and service names mentioned are trademarks or registered trademarks of their respective owne.
