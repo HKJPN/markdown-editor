@@ -8,7 +8,7 @@
 <title>MD//WORKS Editor</title>
 <link rel="icon" type="image/png" href="images/icon2.png">
 <link rel="apple-touch-icon" href="images/icon2.png">
-  
+
 <script>
   (function() {
     try {
@@ -322,6 +322,9 @@ body #filename-display.locked:focus{
 }
 .tool-btn:active{transform:scale(.97)}
 .tool-btn.heading{color:var(--accent2);font-weight:700;text-shadow:0 0 18px rgba(143,130,255,.16)}
+.script-btn sup,.script-btn sub{font-size:.72em;line-height:0;position:relative;vertical-align:baseline}
+.script-btn sup{bottom:.45em}
+.script-btn sub{top:.25em}
 /* #endregion */
 
 /* #region [CSS-05] EDITOR & BACKDROP ENGINE */
@@ -484,6 +487,15 @@ body #filename-display.locked:focus{
 #preview sup { bottom:.5em }
 #preview sub { top:.25em }
 
+#preview .mdw-footnote-ref{font-size:78%;line-height:0;white-space:nowrap}
+#preview .mdw-footnote-ref-link{text-decoration:none}
+#preview .mdw-footnotes-separator{margin:2.2em 0 1em;border:none;border-top:1px solid var(--border2)}
+#preview .mdw-footnotes{font-size:88%;line-height:1.7;overflow-wrap:anywhere}
+#preview .mdw-footnote-item{margin:.35em 0;padding-left:.15em}
+#preview .mdw-footnote-item p{margin:.25em 0}
+#preview .mdw-footnote-backref{margin-left:.35em;text-decoration:none}
+@media print{.mdw-footnote-backref{display:none!important}}
+
 #preview li.task-open-item, #preview li.task-done-item{ list-style:none; display:flex; align-items:flex-start; gap:.72em; margin:.28em 0; padding:.42em .58em .42em .48em; border-radius:10px; transition:background-color .16s ease, opacity .16s ease, color .16s ease; }
 #preview li.task-open-item:hover, #preview li.task-done-item:hover{ background:rgba(255,255,255,.032); }
 #preview li.task-open-item input[type="checkbox"], #preview li.task-done-item input[type="checkbox"]{ flex:0 0 auto; margin:.18em 0 0; width:15px; height:15px; accent-color:var(--accent2); opacity:.95; transform:scale(.96); }
@@ -629,6 +641,31 @@ body #filename-display.locked:focus{
 .ol-h2 { padding-left:18px; }
 .ol-h3 { padding-left:28px; font-size:12px; }
 .ol-h4, .ol-h5, .ol-h6 { padding-left:38px; font-size:11.5px; opacity:0.8; }
+.preview-focus-command-disabled,
+button.preview-focus-command-disabled:disabled {
+  opacity:.42;
+  cursor:default;
+  filter:saturate(.65);
+}
+.menu-entry.preview-focus-command-disabled,
+.menu-entry.preview-focus-command-disabled:hover,
+.title-btn.preview-focus-command-disabled,
+.tool-btn.preview-focus-command-disabled {
+  color:var(--text3);
+  background:transparent;
+  border-color:var(--border);
+  box-shadow:none;
+}
+.menu-entry.preview-focus-command-disabled .menu-shortcut,
+.menu-entry.preview-focus-command-disabled .menu-check { opacity:.55; }
+body.preview-focus-mode #preview h1,
+body.preview-focus-mode #preview h2,
+body.preview-focus-mode #preview h3,
+body.preview-focus-mode #preview h4,
+body.preview-focus-mode #preview h5,
+body.preview-focus-mode #preview h6 {
+  scroll-margin-top: calc(72px + env(safe-area-inset-top, 0px));
+}
 
 #history-modal {
   position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; display:none; align-items:center; justify-content:center; backdrop-filter:blur(4px);
@@ -1049,6 +1086,28 @@ body.theme-warm #toast{
   color:var(--text);
 }
 
+body.theme-paper #preview-focus-exit-btn,
+body.theme-warm #preview-focus-exit-btn{
+  background:linear-gradient(180deg, var(--surface3), var(--surface2));
+  border-color:var(--border2);
+  color:var(--text);
+  box-shadow:var(--shadow-md), var(--glow);
+}
+body.theme-paper #preview-focus-exit-btn:hover,
+body.theme-warm #preview-focus-exit-btn:hover{
+  background:linear-gradient(180deg, var(--accent-dim), var(--surface3));
+  border-color:var(--accent2);
+  color:var(--accent2);
+}
+body.theme-paper #preview-focus-exit-btn:focus-visible,
+body.theme-warm #preview-focus-exit-btn:focus-visible{
+  outline:3px solid var(--accent2);
+  outline-offset:3px;
+  background:linear-gradient(180deg, var(--surface3), var(--surface2));
+  border-color:var(--accent2);
+  color:var(--text);
+}
+
 /* #endregion */
 
 /* #region [CSS-13] RESPONSIVE & PRINT STYLES */
@@ -1139,6 +1198,21 @@ body.ipad-safari-fullscreen #menubar {
   h1,h2,h3{page-break-after:avoid}
   img{max-width:100%!important;page-break-inside:avoid}
 }
+
+#preview-wrap{position:relative}
+#fullscreen-toggle-title-btn{font-size:16px;line-height:1}
+body.preview-focus-mode #editor-wrap,body.preview-focus-mode #splitter{display:none!important}
+body.preview-focus-mode #preview-wrap{width:auto!important;min-width:0!important;max-width:none!important;flex:1 1 auto;overflow-y:auto}
+body.preview-focus-mode #preview{max-width:960px}
+#preview-focus-exit-btn{
+  position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:calc(12px + env(safe-area-inset-right,0px));margin:0;
+  z-index:160;min-width:44px;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(20,24,34,.86);color:var(--text);cursor:pointer;backdrop-filter:blur(12px);box-shadow:var(--shadow-lg);display:none;align-items:center;gap:8px;
+}
+body.preview-focus-mode #preview-focus-exit-btn{display:flex}
+@media (max-width:760px){body.preview-focus-mode #preview{padding:28px}#preview-focus-exit-btn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
+@media print{#preview-focus-exit-btn{display:none!important}}
+
 /* Zen Mode (Focus Mode) */
 body.zen-mode #menubar, body.zen-mode #titlebar, body.zen-mode #toolbar, body.zen-mode #statusbar, body.zen-mode #splitter, body.zen-mode #preview-wrap { display: none !important; }
 body.zen-mode #main-container { height: 100vh; }
@@ -1285,7 +1359,7 @@ body.zen-mode #zen-exit-btn { display: flex; }
       <div class="menu-sep-line"></div>
       <div class="menu-entry" id="m-fullscreen-entry" onclick="toggleFullscreen()">
         <span class="menu-label-with-icon">
-          <span class="menu-icon" aria-hidden="true">⛶</span>
+          <span aria-hidden="true">⛶</span>
           <span id="m-fullscreen-label"></span>
         </span>
         <span class="menu-check" id="fullscreen-check">✓</span>
@@ -1338,7 +1412,7 @@ body.zen-mode #zen-exit-btn { display: flex; }
     <button class="title-btn" onclick="handleOpen()" id="open-btn">Open</button>
     <button class="title-btn primary" onclick="handleSave(false)" id="save-btn">Save</button>
     <button class="title-btn" onclick="togglePreview()" id="preview-toggle-btn">Preview</button>
-    <button class="title-btn icon-only" onclick="toggleFullscreen()" id="fullscreen-toggle-title-btn" title="Fullscreen" aria-label="Fullscreen">⛶</button>
+    <button class="title-btn icon-only" onclick="toggleFullscreen()" id="fullscreen-toggle-title-btn" title="Fullscreen" aria-label="Fullscreen"><span aria-hidden="true">⛶</span></button>
     <button class="title-btn" onclick="toggleSpell()" id="spell-toggle-title-btn">Spell</button>
   </div>
 
@@ -1356,6 +1430,8 @@ body.zen-mode #zen-exit-btn { display: flex; }
     <button class="tool-btn" onclick="wrap('**')"><b>B</b></button>
     <button class="tool-btn" onclick="wrap('*')"><i>I</i></button>
     <button class="tool-btn" onclick="wrap('~~')"><s>S</s></button>
+    <button class="tool-btn script-btn" id="tb-sup-btn" onclick="toggleScriptFormat('^')">X<sup>2</sup></button>
+    <button class="tool-btn script-btn" id="tb-sub-btn" onclick="toggleScriptFormat('~')">X<sub>2</sub></button>
     <button class="tool-btn" onclick="wrap('`')">` `</button>
   </div>
   <div class="tool-group">
@@ -1378,7 +1454,10 @@ body.zen-mode #zen-exit-btn { display: flex; }
     <textarea id="editor" spellcheck="false"></textarea>
   </div>
   <div id="splitter" aria-hidden="true"></div>
-  <div id="preview-wrap"><div id="preview"></div></div>
+  <div id="preview-wrap">
+    <div id="preview" tabindex="-1"></div>
+  </div>
+  <button id="preview-focus-exit-btn" type="button" onclick="closePreviewSessionFromFocus()" title="" aria-label="">↩ <span id="preview-focus-exit-label"></span></button>
 
   <div id="sr-panel">
     <div id="sr-tabs">
@@ -1578,7 +1657,38 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
-const APP_VERSION = '1.5.7';
+const APP_VERSION = '1.5.8';
+const LEGACY_DEFAULT_MARKDOWN_SAMPLES = [
+  `# MD//WORKS エディタ
+
+**スタンドアロン書き出し**に対応した究極版です。
+
+## 主な機能
+
+- **Appとして書き出し**: [ファイル] > [Appとして書き出し] で、現在の原稿とエディタ本体を \`.app.html\` として1ファイルに書き出します。USB等で持ち運べます。
+- **ローカル保存の保護**: Auto encrypted では、ローカルの下書きと履歴を平文のまま保存しないようにします。さらに保護したい場合は、Private Storage によるパスフレーズ保護を利用できます。
+
+---
+
+*そのまま編集を開始してください。*
+`,
+  `# MD//WORKS Editor
+
+The ultimate edition featuring **Standalone Export**.
+
+## Key Features
+
+- **Export as App**: Go to [File] > [Export as App] to export your current text and this entire editor into a single \`.app.html\` file for easy portability.
+- **Protected local storage**: Auto encrypted helps avoid storing local drafts and history as plain text. For stronger local protection, you can enable passphrase-based Private Storage.
+
+---
+
+*Start editing!*
+`
+];
+function isLegacyDefaultMarkdown(text) {
+  return LEGACY_DEFAULT_MARKDOWN_SAMPLES.includes(String(text || ''));
+}
 const LATEST_RELEASE_API_URL =
   'https://api.github.com/repos/HKJPN/markdown-editor/releases/latest';
 const LATEST_RELEASE_PAGE_URL =
@@ -1653,6 +1763,10 @@ const T = {
   menuFullscreen: isJa ? '全画面表示' : 'Fullscreen',
   menuZenMode: isJa ? 'Zenモード（集中モード）' : 'Zen Mode (Focus Mode)',
   zenExitTitle: isJa ? 'Zenモード解除' : 'Exit Zen Mode',
+  previewActionShow: isJa ? 'プレビューを表示' : 'Show Preview',
+  previewActionFocus: isJa ? 'プレビューを拡大' : 'Focus Preview',
+  previewActionReturn: isJa ? '編集画面へ戻る' : 'Return to Editor',
+  previewFocusExit: isJa ? '編集画面へ戻る' : 'Return to Editor',
   menuHistory: isJa ? '作業履歴' : 'History',
   menuFormat:  isJa ? 'Markdownを整形' : 'Format Markdown',
   themeLabel:  isJa ? 'テーマ' : 'Theme',
@@ -1775,6 +1889,10 @@ const T = {
   tbLink:      isJa ? 'リンク'   : 'Link',
   tbTable:     isJa ? '表'       : 'Table',
   tbHr:        isJa ? '区切り'   : 'Rule',
+  tbSup:       isJa ? '上付き'   : 'Superscript',
+  tbSub:       isJa ? '下付き'   : 'Subscript',
+  scriptSelectText: isJa ? '上付きまたは下付きにする文字を選択してください。' : 'Select text to format as superscript or subscript.',
+  scriptOneLine: isJa ? '上付き・下付きは1行内の文字へ適用してください。' : 'Superscript and subscript can only be applied within one line.',
   spellBtn:    isJa ? 'Spell (EN)' : 'Spell (EN)',
   spellOn:     isJa ? 'Spell ON' : 'Spell ON',
   spellPanelTitle: isJa ? 'スペル候補' : 'Possible misspellings',
@@ -1818,9 +1936,7 @@ const T = {
   imageDropReadFailed: isJa
     ? name => `${name} — ファイルの読み込みに失敗しました`
     : name => `${name} — Failed to read the file`,
-  defaultMd: isJa
-    ? `# MD//WORKS エディタ\n\n**スタンドアロン書き出し**に対応した究極版です。\n\n## 主な機能\n\n- **Appとして書き出し**: [ファイル] > [Appとして書き出し] で、現在の原稿とエディタ本体を \`.app.html\` として1ファイルに書き出します。USB等で持ち運べます。\n- **ローカル保存の保護**: Auto encrypted では、ローカルの下書きと履歴を平文のまま保存しないようにします。さらに保護したい場合は、Private Storage によるパスフレーズ保護を利用できます。\n\n---\n\n*そのまま編集を開始してください。*\n`
-    : `# MD//WORKS Editor\n\nThe ultimate edition featuring **Standalone Export**.\n\n## Key Features\n\n- **Export as App**: Go to [File] > [Export as App] to export your current text and this entire editor into a single \`.app.html\` file for easy portability.\n- **Protected local storage**: Auto encrypted helps avoid storing local drafts and history as plain text. For stronger local protection, you can enable passphrase-based Private Storage.\n\n---\n\n*Start editing!*\n`,
+  defaultMd: '',
   
   quickStartDoc: isJa ? `
 ## Quick Start
@@ -1957,7 +2073,7 @@ MD//WORKS is a single-file Markdown editor for drafting, previewing, saving, and
 
 MD//WORKS は、Markdown原稿を安全に書き、プレビューし、持ち運べる形で保存するためのエディタです。
 
-### 重点
+### 特徴
 * **Standalone first**: エディタ本体と原稿を1つのHTMLとして書き出せます。
 * **Privacy aware**: 下書きと履歴はローカル環境に保存されます。Auto encrypted は平文保存を避けるための基本保護で、Private Storage によりパスフレーズ保護を追加できます。
 * **Offline ready**: 主要なヘルプと文書表示は外部fetchなしで利用できます。
@@ -1985,36 +2101,41 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
   releaseNotesClose: isJa ? '閉じる' : 'Close',
   releaseNotesContent: isJa ? `
 
-## v1.5.7 - Viewer書き出しとExport機能の改善
+## v1.5.8 - 学術執筆と操作性の改善
 
-* **用途に応じた3種類のViewerを書き出せるようになりました。**
-  標準のViewer、選択・コピー・右クリック・印刷などを抑制する制限付きViewer、閲覧時にパスワードが必要なパスワード付きViewerを選択できます。
+* **脚注記法に対応しました。**
+  論文の引用、参考文献、補足説明の記述に便利な脚注記法をサポートしました。\`[^1]\`と\`[^1]: 脚注本文\`の形式で記述し、Previewで確認できます。
 
-* **書き出し形式を専用のExportモーダルへ整理しました。**
-  Fileメニューの「書き出し...」から、Viewer形式とStandalone App形式を目的別に選択できます。
+* **Previewを3段階で切り替えられるようになりました。**
+  Previewボタンを押すことで、「編集とPreviewの分割表示」「Focus Preview」「編集画面へ戻る」を順に切り替えられます。
 
-* **従来の通常HTML出力をViewerへ統合しました。**
-  折りたたみ可能なOutlineを備えたViewerを、標準の閲覧用HTMLとして利用できます。
+* **上付き・下付き文字の記法を拡張しました。**
+  HTMLの\`<sup>上付き</sup>\`および\`<sub>下付き</sub>\`に加えて、Pandoc互換の\`^上付き^\`および\`~下付き~\`記法をサポートしました。
 
-* **最新版の通知を改善しました。**
-  新しい正式版が公開されている場合、メニューバーの通知アイコンから現在のバージョンと最新版を確認し、最新Releaseページを開けます。
+* **新しいバージョンのお知らせに対応しました。**
+  新しい正式版が公開されている場合、メニューバーの通知アイコンから現在のバージョンと最新版を確認できます。
+
+* **新しい文書を空白の状態から開始するようにしました。**
+  初回起動時の説明用サンプル文を廃止し、すぐに新しい文書を書き始められます。
 `:`
 
-## v1.5.7 - Viewer Export and Export UI Improvements
+## v1.5.8 - Academic Writing and Workflow Improvements
 
-* **Three Viewer formats are now available.**
-  Choose a standard Viewer, a Restricted Viewer that suppresses selection, copying, right-click, and printing, or a Password-protected Viewer that requires a password when opened.
+* **Added footnote support.**
+  MD//WORKS now supports footnote syntax for citations, references, and additional notes. Use \`[^1]\` and \`[^1]: Footnote text\` to add footnotes that are rendered in Preview.
 
-* **Export formats are now organized in a dedicated dialog.**
-  Select Viewer and Standalone App formats by purpose from File > Export....
+* **Preview now supports a three-step viewing cycle.**
+  Use the Preview button to switch between the split editor and preview view, Focus Preview, and the editor-only view.
 
-* **The legacy plain HTML export has been consolidated into Viewer.**
-  Viewer now serves as the standard read-only HTML export and includes a collapsible outline.
+* **Expanded superscript and subscript support.**
+  In addition to HTML \`<sup>superscript</sup>\` and \`<sub>subscript</sub>\` tags, MD//WORKS now supports the Pandoc-compatible \`^superscript^\` and \`~subscript~\` syntax.
 
-* **Latest-version notifications have been improved.**
-  When a newer stable release is available, the menu-bar indicator shows the current and latest versions and provides access to the latest Release page.
-`
-};
+* **Added update notifications.**
+  A new notification icon in the menu bar displays the current and latest stable versions.
+
+* **Blank new documents.**
+  The initial sample text has been removed so new documents start completely blank, allowing users to begin writing immediately.
+`};
 
 const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 set('t-file', T.menuFile); set('t-view', T.menuView); set('t-edit', T.menuEdit); set('t-help', T.menuHelp);
@@ -2049,6 +2170,12 @@ if (zenExitBtn) {
   zenExitBtn.title = T.zenExitTitle;
   zenExitBtn.setAttribute('aria-label', T.zenExitTitle);
 }
+const previewFocusExitBtn = document.getElementById('preview-focus-exit-btn');
+if (previewFocusExitBtn) {
+  previewFocusExitBtn.title = T.previewFocusExit;
+  previewFocusExitBtn.setAttribute('aria-label', T.previewFocusExit);
+}
+set('preview-focus-exit-label', T.previewFocusExit);
 set('m-help-quick-start', T.quickStart);
 set('m-help-keyboard-shortcuts', T.keyboardShortcuts);
 set('m-help-github', T.github);
@@ -2080,6 +2207,7 @@ set('m-bold', T.bold); set('m-italic', T.italic);
 set('tb-list-btn', '─ ' + T.tbList); set('tb-olist-btn', '1. ' + T.tbOList);
 set('tb-task', T.tbTask); set('tb-quote', T.tbQuote); set('tb-code', T.tbCode);
 set('tb-link', T.tbLink); set('tb-table', T.tbTable); set('tb-hr', T.tbHr);
+['tb-sup-btn','tb-sub-btn'].forEach((id) => { const btn = document.getElementById(id); if (btn) { const label = id === 'tb-sup-btn' ? T.tbSup : T.tbSub; btn.title = label; btn.setAttribute('aria-label', label); } });
 set('s-label-lines', T.sLines); set('s-label-words', T.sWords); set('s-label-chars', T.sChars);
 set('sp-title', T.spellPanelTitle); set('spell-empty', T.spellOk);
 set('tab-find', T.findTab); set('tab-replace', T.replaceTab);
@@ -2118,12 +2246,11 @@ function updateTitleActionLabels() {
 
   if (previewBtn) {
     previewBtn.textContent = T.preview;
-    previewBtn.title = T.preview;
-    previewBtn.setAttribute('aria-label', T.preview);
+    previewBtn.title = T.previewActionShow;
+    previewBtn.setAttribute('aria-label', T.previewActionShow);
   }
 
   if (fullscreenBtn) {
-    fullscreenBtn.textContent = '⛶';
     fullscreenBtn.title = T.menuFullscreen;
     fullscreenBtn.setAttribute('aria-label', T.menuFullscreen);
   }
@@ -2178,11 +2305,538 @@ let ignoredWords = new Set();
 let isDirty = false;
 let isDraggingSplitter = false;
 let isPreviewActive = false;
+let previewFocusOpen = false;
+let previewFocusSnapshot = null;
+let suppressPreviewScrollSync = false;
+let isPreviewFocusTransitioning = false;
+let previewFocusTransitionToken = 0;
+let wasZenBeforePreviewSession = false;
+let previewSessionActive = false;
+
+const PREVIEW_FOCUS_COMMAND_DISABLED_CLASS = 'preview-focus-command-disabled';
+const PREVIEW_FOCUS_ALLOWED_COMMANDS = new Set(['open', 'save', 'preview', 'fullscreen', 'outline', 'return-to-editor']);
+
+function canRunEditorCommand() {
+  return !previewFocusOpen;
+}
+
+function guardEditorCommand() {
+  if (canRunEditorCommand()) return true;
+  closeMenus();
+  return false;
+}
+
+function isPreviewFocusAllowedCommand(command) {
+  return PREVIEW_FOCUS_ALLOWED_COMMANDS.has(command);
+}
+
+function getPreviewFocusElementCommand(el) {
+  if (!el) return '';
+  if (el.dataset.previewFocusCommand) return el.dataset.previewFocusCommand;
+  if (el.id === 'open-btn' || el.querySelector?.('#m-open')) return 'open';
+  if (el.id === 'save-btn' || el.querySelector?.('#m-save')) return 'save';
+  if (el.id === 'preview-toggle-btn' || el.id === 'm-preview-entry') return 'preview';
+  if (el.id === 'fullscreen-toggle-title-btn' || el.id === 'm-fullscreen-entry') return 'fullscreen';
+  if (el.id === 'm-outline-entry' || el.id === 'outline-close') return 'outline';
+  if (el.id === 'preview-focus-exit-btn') return 'return-to-editor';
+  return '';
+}
+
+function setPreviewFocusDisabledState(el, disabled) {
+  if (!el || isPreviewFocusAllowedCommand(getPreviewFocusElementCommand(el))) return;
+  el.classList.toggle(PREVIEW_FOCUS_COMMAND_DISABLED_CLASS, disabled);
+  el.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+  if (disabled) {
+    if (!el.dataset.previewFocusTabindex && el.hasAttribute('tabindex')) {
+      el.dataset.previewFocusTabindex = el.getAttribute('tabindex');
+    }
+    if (!/^(BUTTON|INPUT|SELECT|TEXTAREA)$/i.test(el.tagName)) el.setAttribute('tabindex', '-1');
+    if ('disabled' in el) el.disabled = true;
+  } else {
+    if (el.dataset.previewFocusTabindex) {
+      el.setAttribute('tabindex', el.dataset.previewFocusTabindex);
+      delete el.dataset.previewFocusTabindex;
+    } else if (!/^(BUTTON|INPUT|SELECT|TEXTAREA)$/i.test(el.tagName)) {
+      el.removeAttribute('tabindex');
+    }
+    if ('disabled' in el) el.disabled = false;
+  }
+}
+
+function getPreviewFocusCommandElements() {
+  return Array.from(document.querySelectorAll('#toolbar button, #spell-toggle-title-btn, .menu-entry, #filename-display'));
+}
+
+function updatePreviewFocusCommandAvailability() {
+  getPreviewFocusCommandElements().forEach(el => setPreviewFocusDisabledState(el, previewFocusOpen));
+}
+
+function refreshCommandStateAfterPreviewFocus() {
+  renderPreviewState();
+  renderInvisiblesMenuCheck();
+  renderZenModeState(isZenModeActive());
+  renderFullscreenMenuCheck();
+  renderThemeMenuChecks();
+  const spellTitle = document.getElementById('spell-toggle-title-btn');
+  const spellEntry = document.getElementById('m-spell-entry');
+  if (spellTitle) {
+    spellTitle.classList.toggle('active', spellEnabled);
+    spellTitle.setAttribute('aria-pressed', spellEnabled ? 'true' : 'false');
+  }
+  if (spellEntry) {
+    spellEntry.classList.toggle('active', spellEnabled);
+    spellEntry.setAttribute('aria-pressed', spellEnabled ? 'true' : 'false');
+  }
+}
+
+function isPreviewFocusDisabledElement(target) {
+  if (!previewFocusOpen || !(target instanceof Element)) return false;
+  const commandEl = target.closest(`.${PREVIEW_FOCUS_COMMAND_DISABLED_CLASS}`);
+  return Boolean(commandEl && !isPreviewFocusAllowedCommand(getPreviewFocusElementCommand(commandEl)));
+}
+
+document.addEventListener('click', e => {
+  if (!isPreviewFocusDisabledElement(e.target)) return;
+  e.preventDefault();
+  e.stopPropagation();
+}, true);
+
+document.addEventListener('keydown', e => {
+  if (!['Enter', ' '].includes(e.key) || !isPreviewFocusDisabledElement(e.target)) return;
+  e.preventDefault();
+  e.stopPropagation();
+}, true);
 
 editor.placeholder = T.placeholder;
+
+function isZenModeActive() {
+  return document.body.classList.contains('zen-mode');
+}
+
+function renderZenModeState(isZen) {
+  const entry = document.getElementById('m-zen-entry');
+  const check = document.getElementById('zen-check');
+  if (entry) {
+    entry.classList.toggle('active', isZen);
+    entry.setAttribute('aria-pressed', isZen ? 'true' : 'false');
+  }
+  if (check) check.style.opacity = isZen ? '1' : '0';
+}
+
+function setZenMode(enabled) {
+  document.body.classList.toggle('zen-mode', !!enabled);
+  renderZenModeState(!!enabled);
+}
+
+function renderPreviewState() {
+  previewWrap.classList.toggle('open', previewOpen);
+  mainContainer.classList.toggle('preview-on', previewOpen);
+  const previewCheck = document.getElementById('preview-check');
+  const previewEntry = document.getElementById('m-preview-entry');
+  const previewBtn = document.getElementById('preview-toggle-btn');
+  if (previewCheck) previewCheck.style.opacity = previewOpen ? '1' : '0';
+  if (previewEntry) previewEntry.classList.toggle('active', previewOpen);
+  if (previewBtn) {
+    previewBtn.classList.toggle('active', previewOpen);
+    previewBtn.setAttribute('aria-pressed', previewOpen ? 'true' : 'false');
+  }
+  updatePreviewButtonAction();
+}
+
+function updatePreviewButtonAction() {
+  const label = previewFocusOpen ? T.previewActionReturn : (previewOpen ? T.previewActionFocus : T.previewActionShow);
+  const previewBtn = document.getElementById('preview-toggle-btn');
+  const previewEntry = document.getElementById('m-preview-entry');
+  if (previewBtn) {
+    previewBtn.title = label;
+    previewBtn.setAttribute('aria-label', label);
+  }
+  if (previewEntry) {
+    previewEntry.title = label;
+    previewEntry.setAttribute('aria-label', label);
+    previewEntry.setAttribute('aria-pressed', previewOpen ? 'true' : 'false');
+  }
+}
+
+function renderPreviewFocusState() {
+  document.body.classList.toggle('preview-focus-mode', previewFocusOpen);
+  updatePreviewButtonAction();
+  updatePreviewFocusCommandAvailability();
+}
+
+function restorePreviewFocusScrolls(snapshot) {
+  if (!snapshot) return;
+  suppressPreviewScrollSync = true;
+  previewWrap.scrollTop = snapshot.previewScrollTop;
+  previewWrap.scrollLeft = snapshot.previewScrollLeft;
+  editor.scrollTop = snapshot.editorScrollTop;
+  editor.scrollLeft = snapshot.editorScrollLeft;
+  backdrop.scrollTop = editor.scrollTop;
+  backdrop.scrollLeft = editor.scrollLeft;
+  requestAnimationFrame(() => { suppressPreviewScrollSync = false; });
+}
+
+function enterPreviewFocusMode() {
+  closeMenus();
+  if (previewFocusOpen) return;
+
+  const wasPreviewOpen = previewOpen;
+  if (!previewSessionActive) beginPreviewSession();
+  previewFocusSnapshot = {
+    wasPreviewOpen,
+    previewWidth: previewWrap.style.width,
+    previewScrollTop: previewWrap.scrollTop,
+    previewScrollLeft: previewWrap.scrollLeft,
+    editorSelectionStart: editor.selectionStart,
+    editorSelectionEnd: editor.selectionEnd,
+    editorSelectionDirection: editor.selectionDirection,
+    editorScrollTop: editor.scrollTop,
+    editorScrollLeft: editor.scrollLeft,
+    wasZen: wasZenBeforePreviewSession,
+    activeElement: document.activeElement
+  };
+
+  isPreviewFocusTransitioning = true;
+  suppressPreviewScrollSync = true;
+  if (!previewOpen) {
+    previewOpen = true;
+    renderPreviewState();
+    renderPreview(true);
+  }
+
+  previewFocusOpen = true;
+  const transitionToken = ++previewFocusTransitionToken;
+  renderPreviewFocusState();
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    if (transitionToken !== previewFocusTransitionToken || !previewFocusOpen) return;
+    restorePreviewFocusScrolls(previewFocusSnapshot);
+    const exitBtn = document.getElementById('preview-focus-exit-btn');
+    if (exitBtn) exitBtn.focus({ preventScroll: true });
+    isPreviewFocusTransitioning = false;
+    suppressPreviewScrollSync = false;
+  }));
+}
+
+function exitPreviewFocusMode(options = {}) {
+  const { restoreZen = true, closePreview = true } = options;
+  const snapshot = previewFocusSnapshot;
+  const transitionToken = ++previewFocusTransitionToken;
+
+  if (!previewFocusOpen && !snapshot && !isPreviewFocusTransitioning) {
+    previewFocusOpen = false;
+    previewFocusSnapshot = null;
+    isPreviewFocusTransitioning = false;
+    suppressPreviewScrollSync = false;
+    renderPreviewFocusState();
+    return Promise.resolve();
+  }
+
+  isPreviewFocusTransitioning = true;
+  suppressPreviewScrollSync = true;
+  previewFocusOpen = false;
+  renderPreviewFocusState();
+
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (transitionToken === previewFocusTransitionToken) {
+        if (snapshot) {
+          previewWrap.scrollTop = snapshot.previewScrollTop;
+          previewWrap.scrollLeft = snapshot.previewScrollLeft;
+          editor.focus({ preventScroll: true });
+          editor.setSelectionRange(snapshot.editorSelectionStart, snapshot.editorSelectionEnd, snapshot.editorSelectionDirection || 'none');
+          editor.scrollTop = snapshot.editorScrollTop;
+          editor.scrollLeft = snapshot.editorScrollLeft;
+          backdrop.scrollTop = editor.scrollTop;
+          backdrop.scrollLeft = editor.scrollLeft;
+        } else {
+          editor.focus({ preventScroll: true });
+        }
+        if (closePreview) {
+          previewOpen = false;
+          isPreviewActive = false;
+          previewWrap.style.width = '';
+        } else {
+          previewOpen = true;
+          previewWrap.style.width = snapshot?.previewWidth || '';
+        }
+        renderPreviewState();
+        if (restoreZen && snapshot?.wasZen) setZenMode(true);
+        refreshCommandStateAfterPreviewFocus();
+        previewFocusSnapshot = null;
+        isPreviewFocusTransitioning = false;
+        suppressPreviewScrollSync = false;
+        scheduleViewportRefresh('preview-focus-exit');
+      }
+      resolve();
+    }));
+  });
+}
+
+function beginPreviewSession() {
+  if (previewSessionActive) return;
+  previewSessionActive = true;
+  wasZenBeforePreviewSession = isZenModeActive();
+  if (wasZenBeforePreviewSession) setZenMode(false);
+}
+
+function clearPreviewSession() {
+  previewSessionActive = false;
+  wasZenBeforePreviewSession = false;
+}
+
+function finishPreviewSession({ restoreZen = true } = {}) {
+  const shouldRestoreZen = restoreZen && previewSessionActive && wasZenBeforePreviewSession;
+  clearPreviewSession();
+  if (shouldRestoreZen) setZenMode(true);
+}
+
+function togglePreviewFocusMode() {
+  cyclePreviewMode();
+}
+
 editor.value = T.defaultMd;
 
-if (window.marked) marked.use({ gfm: true, breaks: true });
+let mdworksMarked = null;
+let mdworksFootnoteState = null;
+
+function normalizeFootnoteLabel(label) {
+  const value = String(label || '').trim();
+  if (!value || /[\]\r\n\s]/u.test(value)) return '';
+  return value.toLocaleLowerCase();
+}
+
+function createFootnoteMarker() {
+  const bytes = new Uint8Array(8);
+  if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(bytes);
+  else for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
+  return 'mdw-fn-marker-' + Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function createFootnoteState() {
+  return {
+    marker: createFootnoteMarker(),
+    definitions: new Map(),
+    numberByLabel: new Map(),
+    orderedLabels: [],
+    referenceCount: new Map(),
+    inFootnoteContent: false
+  };
+}
+
+function parseFootnoteDefinitionBlock(src) {
+  const firstLineMatch = String(src || '').match(/^(\[\^([^\]\r\n]+)\]:[ \t]?([^\r\n]*))(?:\r?\n|$)/u);
+  if (!firstLineMatch) return null;
+  const normalizedLabel = normalizeFootnoteLabel(firstLineMatch[2]);
+  if (!normalizedLabel) return null;
+
+  const lines = String(src || '').split(/(\r?\n)/);
+  let raw = firstLineMatch[0];
+  const bodyLines = [firstLineMatch[3] || ''];
+  let index = firstLineMatch[0].endsWith('\n') ? 2 : 1;
+  let pendingBlank = [];
+
+  while (index < lines.length) {
+    const line = lines[index] || '';
+    const eol = lines[index + 1] || '';
+    if (line === '' && !eol) break;
+    if (/^[ \t]*$/.test(line)) {
+      pendingBlank.push('');
+      raw += line + eol;
+      index += 2;
+      continue;
+    }
+    if (/^(?: {4}|\t)/.test(line)) {
+      bodyLines.push(...pendingBlank);
+      pendingBlank = [];
+      bodyLines.push(line.replace(/^(?: {4}|\t)/, ''));
+      raw += line + eol;
+      index += 2;
+      continue;
+    }
+    break;
+  }
+  return { raw, label: normalizedLabel, text: bodyLines.join('\n').replace(/\n+$/g, '') };
+}
+
+function collectFootnoteDefinition(state, label, text) {
+  if (!state || !label) return;
+  if (state.definitions.has(label)) {
+    console.warn('Duplicate footnote definition ignored:', label);
+    return;
+  }
+  state.definitions.set(label, text || '');
+}
+
+function ensureFootnoteNumber(state, label) {
+  if (!state.numberByLabel.has(label)) {
+    state.numberByLabel.set(label, state.orderedLabels.length + 1);
+    state.orderedLabels.push(label);
+    state.referenceCount.set(label, 0);
+  }
+  const count = (state.referenceCount.get(label) || 0) + 1;
+  state.referenceCount.set(label, count);
+  return { number: state.numberByLabel.get(label), count };
+}
+
+function escapeFootnoteAttr(value) {
+  return String(value || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function renderFootnotesHtml(state) {
+  if (!state || !state.orderedLabels.length || !mdworksMarked) return '';
+  const marker = escapeFootnoteAttr(state.marker);
+  let items = '';
+  state.inFootnoteContent = true;
+  try {
+    state.orderedLabels.forEach((label) => {
+      const number = state.numberByLabel.get(label);
+      const text = state.definitions.get(label) || '';
+      let content = mdworksMarked.parse(text || '');
+      if (!/^\s*<p[\s>]/i.test(content)) content = `<p>${content}</p>`;
+      const refs = state.referenceCount.get(label) || 1;
+      const backrefs = Array.from({ length: refs }, (_, i) => `<a class="mdw-footnote-backref ${marker} mdw-footnote-backref-${number}-${i + 1}" href="#">↩</a>`).join(' ');
+      content = content.replace(/<\/p>\s*$/i, ` ${backrefs}</p>`);
+      items += `<li class="mdw-footnote-item ${marker} mdw-footnote-item-${number}">${content}</li>`;
+    });
+  } finally {
+    state.inFootnoteContent = false;
+  }
+  return `<hr class="mdw-footnotes-separator ${marker}">\n<ol class="mdw-footnotes ${marker}">\n${items}</ol>`;
+}
+
+
+function collectFootnoteDefinitionsBeforeRender(markdownText, state) {
+  const source = String(markdownText || '');
+  const lines = source.split(/(\r?\n)/);
+  let index = 0;
+  let charOffset = 0;
+  let fence = null;
+  while (index < lines.length) {
+    const line = lines[index] || '';
+    const eol = lines[index + 1] || '';
+    const candidate = line.replace(/^ {0,3}(?:> ?)* {0,3}/, '');
+    const marker = candidate.match(/^(`{3,}|~{3,})/);
+    if (fence) {
+      if (marker && marker[1][0] === fence.char && marker[1].length >= fence.length && candidate.slice(marker[1].length).trim() === '') fence = null;
+      charOffset += line.length + eol.length;
+      index += 2;
+      continue;
+    }
+    if (marker) {
+      fence = { char: marker[1][0], length: marker[1].length };
+      charOffset += line.length + eol.length;
+      index += 2;
+      continue;
+    }
+    const remaining = source.slice(charOffset);
+    const parsed = parseFootnoteDefinitionBlock(remaining);
+    if (parsed) {
+      collectFootnoteDefinition(state, parsed.label, parsed.text);
+      const consumedParts = parsed.raw.split(/(\r?\n)/);
+      const consumed = consumedParts[consumedParts.length - 1] === '' ? consumedParts.length - 1 : consumedParts.length;
+      charOffset += parsed.raw.length;
+      index += Math.max(1, consumed);
+      continue;
+    }
+    charOffset += line.length + eol.length;
+    index += 2;
+  }
+}
+
+function findMdwScriptDelimiter(src, delimiter) {
+  for (let i = 1; i < src.length; i += 1) {
+    const ch = src[i];
+    if (ch === '\n' || ch === '\r') return -1;
+    if (ch !== delimiter) continue;
+    if (src[i - 1] === '\\') continue;
+    if (delimiter === '~' && src[i + 1] === '~') continue;
+    return i;
+  }
+  return -1;
+}
+
+function decodeMdwScriptText(text) {
+  return String(text || '').replace(/\\ /g, ' ');
+}
+
+function createMdwScriptTokenizer(name, delimiter, tagName) {
+  return {
+    name,
+    level: 'inline',
+    start(src) {
+      for (let i = 0; i < src.length; i += 1) {
+        if (src[i] !== delimiter) continue;
+        if (i > 0 && src[i - 1] === '\\') continue;
+        if (delimiter === '~' && (src[i + 1] === '~' || src[i - 1] === '~')) continue;
+        if (delimiter === '^' && src[i + 1] === '[') continue;
+        return i;
+      }
+      return undefined;
+    },
+    tokenizer(src) {
+      if (!src || src[0] !== delimiter) return false;
+      if (src[1] === delimiter) return false;
+      if (delimiter === '~' && src[1] === '~') return false;
+      if (delimiter === '^' && src[1] === '[') return false;
+      const end = findMdwScriptDelimiter(src, delimiter);
+      if (end <= 1) return false;
+      if (delimiter === '~' && src[end + 1] === '~') return false;
+      const text = src.slice(1, end);
+      if (!text || /[\r\n]/.test(text)) return false;
+      if (/(^|[^\\])[ \t]/.test(text)) return false;
+      return { type: name, raw: src.slice(0, end + 1), text: decodeMdwScriptText(text) };
+    },
+    renderer(token) {
+      return `<${tagName}>${escapeHtml(token.text)}</${tagName}>`;
+    }
+  };
+}
+
+function initializeMarkdownRenderer() {
+  if (!window.marked || mdworksMarked) return;
+  const scriptExtension = {
+    extensions: [
+      createMdwScriptTokenizer('mdwSuperscript', '^', 'sup'),
+      createMdwScriptTokenizer('mdwSubscript', '~', 'sub')
+    ]
+  };
+  const footnoteExtension = {
+    extensions: [
+      {
+        name: 'mdwFootnoteDefinition',
+        level: 'block',
+        start(src) { const match = src.match(/^\[\^[^\]\r\n]+\]:/um); return match ? match.index : undefined; },
+        tokenizer(src) {
+          const parsed = parseFootnoteDefinitionBlock(src);
+          if (!parsed) return false;
+          if (mdworksFootnoteState && !mdworksFootnoteState.definitions.has(parsed.label)) collectFootnoteDefinition(mdworksFootnoteState, parsed.label, parsed.text);
+          return { type: 'mdwFootnoteDefinition', raw: parsed.raw, label: parsed.label, text: parsed.text };
+        },
+        renderer() { return ''; }
+      },
+      {
+        name: 'mdwFootnoteReference',
+        level: 'inline',
+        start(src) { return src.indexOf('[^'); },
+        tokenizer(src) {
+          const match = src.match(/^\[\^([^\]\r\n]+)\]/u);
+          if (!match) return false;
+          const label = normalizeFootnoteLabel(match[1]);
+          if (!label || !mdworksFootnoteState || mdworksFootnoteState.inFootnoteContent || !mdworksFootnoteState.definitions.has(label)) return false;
+          const ref = ensureFootnoteNumber(mdworksFootnoteState, label);
+          return { type: 'mdwFootnoteReference', raw: match[0], text: String(ref.number), number: ref.number, refIndex: ref.count };
+        },
+        renderer(token) {
+          const marker = escapeFootnoteAttr(mdworksFootnoteState?.marker || '');
+          return `<sup class="mdw-footnote-ref ${marker} mdw-footnote-ref-${token.number}-${token.refIndex}"><a class="mdw-footnote-ref-link ${marker}" href="#">${token.text}</a></sup>`;
+        }
+      }
+    ]
+  };
+  const MarkedCtor = marked.Marked || window.marked.Marked;
+  mdworksMarked = MarkedCtor ? new MarkedCtor({ gfm: true, breaks: true }, scriptExtension, footnoteExtension) : marked.use({ gfm: true, breaks: true }, scriptExtension, footnoteExtension);
+}
+initializeMarkdownRenderer();
 const segmenter = typeof Intl.Segmenter !== 'undefined'
   ? new Intl.Segmenter('ja', { granularity: 'word' }) : null;
 
@@ -2326,20 +2980,79 @@ function sanitizeHtml(html, config = MARKDOWN_SANITIZE_CONFIG) {
   setupDOMPurifyHooks();
   return DOMPurify.sanitize(String(html || ''), config);
 }
-function addHeadingIds(html) {
+function getHeadingTextWithoutFootnotes(heading) {
+  const clone = heading.cloneNode(true);
+  clone.querySelectorAll('.mdw-footnote-ref').forEach(node => node.remove());
+  return (clone.textContent || '').trim();
+}
+
+function decorateSanitizedMarkdownHtml(html, footnoteState) {
   const template = document.createElement('template');
   template.innerHTML = String(html || '');
+  const marker = footnoteState?.marker || '';
   const used = Object.create(null);
+
+  if (marker) {
+    template.content.querySelectorAll(`sup.mdw-footnote-ref.${marker}`).forEach(sup => {
+      const classMatch = Array.from(sup.classList).join(' ').match(/(?:^| )mdw-footnote-ref-(\d+)-(\d+)(?: |$)/);
+      const number = Number(classMatch?.[1]);
+      const refIndex = Number(classMatch?.[2]);
+      const link = sup.querySelector(`a.mdw-footnote-ref-link.${marker}`);
+      if (!classMatch || !Number.isInteger(number) || number < 1 || !Number.isInteger(refIndex) || refIndex < 1 || !link) return;
+      sup.id = `mdw-fnref-${number}-${refIndex}`;
+      sup.setAttribute('role', 'doc-noteref');
+      sup.setAttribute('aria-label', `Footnote ${number}`);
+      link.setAttribute('href', `#mdw-fn-${number}`);
+      link.setAttribute('aria-label', `Footnote ${number}`);
+      sup.classList.remove(`mdw-footnote-ref-${number}-${refIndex}`);
+    });
+
+    template.content.querySelectorAll(`li.mdw-footnote-item.${marker}`).forEach(li => {
+      const classMatch = Array.from(li.classList).join(' ').match(/(?:^| )mdw-footnote-item-(\d+)(?: |$)/);
+      const number = Number(classMatch?.[1]);
+      if (!classMatch || !Number.isInteger(number) || number < 1) return;
+      li.id = `mdw-fn-${number}`;
+      li.setAttribute('role', 'doc-endnote');
+      li.classList.remove(`mdw-footnote-item-${number}`);
+    });
+
+    template.content.querySelectorAll(`a.mdw-footnote-backref.${marker}`).forEach(anchor => {
+      const classMatch = Array.from(anchor.classList).join(' ').match(/(?:^| )mdw-footnote-backref-(\d+)-(\d+)(?: |$)/);
+      const number = Number(classMatch?.[1]);
+      const refIndex = Number(classMatch?.[2]);
+      if (!classMatch || !Number.isInteger(number) || number < 1 || !Number.isInteger(refIndex) || refIndex < 1) return;
+      anchor.setAttribute('href', `#mdw-fnref-${number}-${refIndex}`);
+      anchor.setAttribute('aria-label', `Back to reference ${refIndex}`);
+      anchor.classList.remove(`mdw-footnote-backref-${number}-${refIndex}`);
+    });
+
+    template.content.querySelectorAll(`.${marker}`).forEach(el => el.classList.remove(marker));
+  }
+
   template.content.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(heading => {
-    heading.id = slugifyHeading(heading.textContent, used);
+    heading.id = slugifyHeading(getHeadingTextWithoutFootnotes(heading), used);
   });
   return template.innerHTML;
 }
 
+function addHeadingIds(html) {
+  return decorateSanitizedMarkdownHtml(html, null);
+}
+
 function safeMarkdownHtml(markdownText) {
   if (!window.marked || !window.DOMPurify) return '';
-  const sanitized = sanitizeHtml(marked.parse(String(markdownText || '')), MARKDOWN_SANITIZE_CONFIG);
-  return addHeadingIds(sanitized);
+  initializeMarkdownRenderer();
+  mdworksFootnoteState = createFootnoteState();
+  collectFootnoteDefinitionsBeforeRender(markdownText, mdworksFootnoteState);
+  let rendered = '';
+  try {
+    rendered = mdworksMarked.parse(String(markdownText || ''));
+    rendered += renderFootnotesHtml(mdworksFootnoteState);
+    const sanitized = sanitizeHtml(rendered, MARKDOWN_SANITIZE_CONFIG);
+    return decorateSanitizedMarkdownHtml(sanitized, mdworksFootnoteState);
+  } finally {
+    mdworksFootnoteState = null;
+  }
 }
 
 // ----------------------------------------------------
@@ -2535,7 +3248,7 @@ async function loadAutoSave() {
 
   const savedTxt = await secureGetItem(AUTOSAVE_TXT_KEY);
   const savedName = await secureGetItem(AUTOSAVE_NAME_KEY);
-  if (savedTxt && savedTxt !== T.defaultMd && savedTxt !== '') {
+  if (savedTxt && savedTxt !== T.defaultMd && !isLegacyDefaultMarkdown(savedTxt) && savedTxt !== '') {
     if (confirm(T.restorePrompt)) {
       editor.value = savedTxt;
       if (savedName) filenameInput.value = savedName;
@@ -2641,6 +3354,7 @@ function renderInvisiblesMenuCheck() {
 }
 
 function toggleInvisibles() {
+  if (!guardEditorCommand()) return;
   showInvisibles = !showInvisibles;
   try { localStorage.setItem(INVISIBLES_STORAGE_KEY, showInvisibles ? '1' : '0'); } catch (e) { console.warn('Invisibles setting save failed', e); }
   renderInvisiblesMenuCheck();
@@ -2685,7 +3399,7 @@ function renderFullscreenMenuCheck() {
 }
 
 function normalizePreviewWidth(reason = '') {
-  if (!previewOpen || !previewWrap || !mainContainer || isDraggingSplitter) return;
+  if (previewFocusOpen || !previewOpen || !previewWrap || !mainContainer || isDraggingSplitter) return;
 
   const containerRect = mainContainer.getBoundingClientRect();
   const containerWidth = containerRect.width;
@@ -2713,7 +3427,7 @@ function refreshLayoutAfterViewportChange(reason = '') {
   renderFullscreenMenuCheck();
   if (previewOpen) {
     normalizePreviewWidth(reason);
-    renderPreview();
+    if (!isPreviewFocusTransitioning) renderPreview();
   }
   refreshBackdrop();
   if (outlineOpen) renderOutline();
@@ -2827,11 +3541,20 @@ async function toggleFullscreen() {
 }
 
 function toggleZenMode() {
-  const isZen = document.body.classList.toggle('zen-mode');
-  const entry = document.getElementById('m-zen-entry');
-  const check = document.getElementById('zen-check');
-  if (entry) entry.classList.toggle('active', isZen);
-  if (check) check.style.opacity = isZen ? '1' : '0';
+  if (!guardEditorCommand()) return;
+  if (previewFocusOpen) {
+    closePreviewSessionFromFocus({ restoreZen: false, afterClose: () => setZenMode(true) });
+    clearPreviewSession();
+  } else if (previewOpen) {
+    previewOpen = false;
+    isPreviewActive = false;
+    renderPreviewState();
+    clearPreviewSession();
+    setZenMode(true);
+    scheduleViewportRefresh('zen-from-preview');
+  } else {
+    setZenMode(!isZenModeActive());
+  }
   closeMenus();
 }
 
@@ -2924,6 +3647,7 @@ async function migrateToMode(mode, passphrase = null) {
 }
 
 async function togglePrivateStorage() {
+  if (!guardEditorCommand()) return;
   closeMenus();
   try {
     if (currentMode() === "private") {
@@ -2949,6 +3673,7 @@ async function togglePrivateStorage() {
 }
 
 async function clearProtectedStorage() {
+  if (!guardEditorCommand()) return;
   closeMenus();
   const ok = confirm(T.confirmClearLocalData);
   if (!ok) return;
@@ -2957,24 +3682,58 @@ async function clearProtectedStorage() {
   toast(T.localDataCleared);
 }
 
-function togglePreview() {
-  previewOpen = !previewOpen;
-  previewWrap.classList.toggle('open', previewOpen);
-  mainContainer.classList.toggle('preview-on', previewOpen);
-  document.getElementById('preview-check').style.opacity = previewOpen ? '1' : '0';
-  document.getElementById('m-preview-entry').classList.toggle('active', previewOpen);
-  const previewBtn = document.getElementById('preview-toggle-btn');
-  if (previewBtn) {
-    previewBtn.classList.toggle('active', previewOpen);
-    previewBtn.setAttribute('aria-pressed', previewOpen ? 'true' : 'false');
-  }
-  if (!previewOpen) {
-    previewWrap.style.width = '';
+async function closePreviewSessionFromFocus(options = {}) {
+  await exitPreviewFocusMode({ restoreZen: false, closePreview: true });
+  finishPreviewSession({ restoreZen: options.restoreZen !== false });
+  if (typeof options.afterClose === 'function') options.afterClose();
+  scheduleViewportRefresh('preview-cycle-exit');
+}
+
+async function closePreviewBeforeOpen() {
+  if (previewFocusOpen || previewFocusSnapshot || isPreviewFocusTransitioning) {
+    await closePreviewSessionFromFocus({ restoreZen: false });
+  } else if (previewOpen) {
+    previewOpen = false;
     isPreviewActive = false;
+    renderPreviewState();
+    finishPreviewSession({ restoreZen: false });
+  } else {
+    clearPreviewSession();
   }
-  if (previewOpen) renderPreview();
-  scheduleViewportRefresh('preview-toggle');
+  previewFocusOpen = false;
+  previewOpen = false;
+  isPreviewActive = false;
+  previewFocusSnapshot = null;
+  isPreviewFocusTransitioning = false;
+  suppressPreviewScrollSync = false;
+  renderPreviewFocusState();
+  renderPreviewState();
+  scheduleViewportRefresh('preview-open-reset');
+}
+
+function cyclePreviewMode() {
+  if (previewFocusOpen) {
+    closePreviewSessionFromFocus();
+    closeMenus();
+    return;
+  }
+
+  if (previewOpen) {
+    enterPreviewFocusMode();
+    closeMenus();
+    return;
+  }
+
+  beginPreviewSession();
+  previewOpen = true;
+  renderPreviewState();
+  renderPreview();
+  scheduleViewportRefresh('preview-cycle-open');
   closeMenus();
+}
+
+function togglePreview() {
+  cyclePreviewMode();
 }
 
 renderFullscreenMenuCheck();
@@ -3296,6 +4055,7 @@ editor.addEventListener('keydown', handleEditorTabKey);
 editor.addEventListener('scroll', () => {
   backdrop.scrollTop = editor.scrollTop;
   backdrop.scrollLeft = editor.scrollLeft;
+  if (suppressPreviewScrollSync || previewFocusOpen) return;
   
   if (previewOpen) {
     const editorScrollable = editor.scrollHeight - editor.clientHeight;
@@ -3881,6 +4641,7 @@ srInput.addEventListener('compositionstart', () => { isComposing = true; });
 srInput.addEventListener('compositionend', () => { isComposing = false; performSearch(true); });
 
 function openSearchPanel(mode) {
+  if (!guardEditorCommand()) return;
   closeMenus();
   srPanelOpen = true;
   srMode = mode;
@@ -3915,38 +4676,27 @@ document.getElementById('tab-replace').onclick = () => openSearchPanel('replace'
 document.getElementById('sr-close').onclick = closeSearchPanel;
 
 function escapeRegExp(string) { return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
-
 function decodeRegexReplacementEscapes(value) {
   let result = '';
-  for (let i = 0; i < value.length; i++) {
+  for (let i = 0; i < value.length; i += 1) {
     const char = value[i];
-    if (char !== '\\') {
-      result += char;
-      continue;
-    }
-    if (i === value.length - 1) {
-      result += '\\';
-      continue;
-    }
+    if (char !== '\\') { result += char; continue; }
+    if (i === value.length - 1) { result += '\\'; continue; }
     const next = value[i + 1];
     switch (next) {
-      case 'n': result += '\n'; i++; break;
-      case 'r': result += '\r'; i++; break;
-      case 't': result += '\t'; i++; break;
-      case '\\': result += '\\'; i++; break;
-      default: result += '\\' + next; i++; break;
+      case 'n': result += '\n'; i += 1; break;
+      case 'r': result += '\r'; i += 1; break;
+      case 't': result += '\t'; i += 1; break;
+      case '\\': result += '\\'; i += 1; break;
+      default: result += '\\' + next; i += 1; break;
     }
   }
   return result;
 }
-
-function getSearchReplacementValue() {
-  const replacement = srReplaceInput.value;
-  return document.getElementById('sr-opt-regex').checked
-    ? decodeRegexReplacementEscapes(replacement)
-    : replacement;
+function getReplacementString() {
+  const repStr = srReplaceInput.value;
+  return document.getElementById('sr-opt-regex').checked ? decodeRegexReplacementEscapes(repStr) : repStr;
 }
-
 function buildRegex(isGlobal = true) {
   const query = srInput.value;
   if (!query) return null;
@@ -4035,12 +4785,13 @@ srPanel.addEventListener('keydown', e => {
 });
 
 document.getElementById('sr-btn-replace').onclick = () => {
+  if (!guardEditorCommand()) return;
   if (srMatches.length === 0 || srCurrentIdx === -1) return;
   const m = srMatches[srCurrentIdx];
   if (editor.selectionStart !== m.start || editor.selectionEnd !== m.end) { highlightCurrentMatch(); return; }
   const regex = buildRegex(false);
   if (!regex) return;
-  const repStr = getSearchReplacementValue();
+  const repStr = getReplacementString();
   const newSubText = m.text.replace(regex, repStr);
   editor.focus();
   document.execCommand('insertText', false, newSubText);
@@ -4049,12 +4800,13 @@ document.getElementById('sr-btn-replace').onclick = () => {
 };
 
 document.getElementById('sr-btn-replace-all').onclick = () => {
+  if (!guardEditorCommand()) return;
   if (srMatches.length === 0) return;
   const count = srMatches.length;
   if (!confirm(T.confirmRepAll(count))) return;
   const regex = buildRegex(true);
   if (!regex) return;
-  const repStr = getSearchReplacementValue();
+  const repStr = getReplacementString();
   const oldFullText = editor.value;
   const newFullText = oldFullText.replace(regex, repStr);
   const scrollTop = editor.scrollTop;
@@ -4093,6 +4845,7 @@ async function initDict() {
 }
 
 function toggleSpell() {
+  if (!guardEditorCommand()) return;
   spellEnabled = !spellEnabled;
   const titleBtn = document.getElementById('spell-toggle-title-btn');
   const entry = document.getElementById('m-spell-entry');
@@ -4241,6 +4994,7 @@ function removeSpellRow(lower) {
 }
 
 function replaceWord(original, replacement) {
+  if (!guardEditorCommand()) return;
   const val = editor.value;
   const esc = original.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const re = new RegExp('\\b' + esc + '\\b', 'i');
@@ -4328,13 +5082,53 @@ function maskMarkdownForToc(text) {
   return masked.join('');
 }
 
+function stripFootnoteReferencesFromHeadingSource(text) {
+  const source = String(text || '');
+  let output = '';
+  let i = 0;
+  while (i < source.length) {
+    const char = source[i];
+    if (char === '\\') {
+      output += source.slice(i, i + 2);
+      i += 2;
+      continue;
+    }
+    if (char === '`') {
+      const tickMatch = source.slice(i).match(/^`+/);
+      const ticks = tickMatch ? tickMatch[0] : '`';
+      const end = source.indexOf(ticks, i + ticks.length);
+      if (end >= 0) {
+        output += source.slice(i, end + ticks.length);
+        i = end + ticks.length;
+      } else {
+        output += char;
+        i += 1;
+      }
+      continue;
+    }
+    if (source.startsWith('[^', i)) {
+      const end = source.indexOf(']', i + 2);
+      if (end > i + 2) {
+        const label = source.slice(i + 2, end);
+        if (normalizeFootnoteLabel(label)) {
+          i = end + 1;
+          continue;
+        }
+      }
+    }
+    output += char;
+    i += 1;
+  }
+  return output;
+}
+
 function stripInlineMarkdownForHeading(text) {
   const container = document.createElement('div');
   if (window.marked && window.DOMPurify) {
-    container.innerHTML = sanitizeHtml(marked.parseInline(String(text || '')), MARKDOWN_SANITIZE_CONFIG);
+    container.innerHTML = sanitizeHtml((mdworksMarked || marked).parseInline(stripFootnoteReferencesFromHeadingSource(text)), MARKDOWN_SANITIZE_CONFIG);
     return (container.textContent || '').trim();
   }
-  return String(text || '')
+  return stripFootnoteReferencesFromHeadingSource(text)
     .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
     .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
     .replace(/<[^>]+>/g, '')
@@ -4407,6 +5201,7 @@ function buildTocMarkdown(headings, lineEnding = '\n') {
 }
 
 function replaceEditorText(start, end, replacement) {
+  if (!guardEditorCommand()) return;
   editor.focus();
   editor.setSelectionRange(start, end);
   const before = editor.value;
@@ -4417,6 +5212,7 @@ function replaceEditorText(start, end, replacement) {
 }
 
 async function insertOrUpdateToc() {
+  if (!guardEditorCommand()) return;
   closeMenus();
   const text = editor.value;
   const existing = findTocBlockRange(text);
@@ -4533,6 +5329,7 @@ function setRange(s, e) {
   editor.focus();
 }
 function ins(text, lineStart) {
+  if (!guardEditorCommand()) return;
   const { s } = getPos();
   if (lineStart) {
     const val = editor.value;
@@ -4545,16 +5342,112 @@ function ins(text, lineStart) {
   triggerAutoSave();
 }
 function wrap(mark) {
+  if (!guardEditorCommand()) return;
   const { s, e } = getPos();
-  const sel = editor.value.slice(s, e) || (isJa ? '文字' : 'text');
+  const value = editor.value;
+  const scrollTop = editor.scrollTop;
+  const scrollLeft = editor.scrollLeft;
+  const hasSelection = s !== e;
+  const sel = value.slice(s, e) || (isJa ? '文字' : 'text');
+  const replaceAndSelect = (rangeStart, rangeEnd, replacement, selectStart, selectEnd) => {
+    editor.focus();
+    editor.setSelectionRange(rangeStart, rangeEnd);
+    document.execCommand('insertText', false, replacement);
+    setRange(selectStart, selectEnd);
+    editor.scrollTop = scrollTop;
+    editor.scrollLeft = scrollLeft;
+    markDirty();
+    triggerAutoSave();
+  };
+
+  const countEdgeChars = (text, char, fromStart) => {
+    let count = 0;
+    const step = fromStart ? 1 : -1;
+    let index = fromStart ? 0 : text.length - 1;
+    while (index >= 0 && index < text.length && text[index] === char) {
+      count += 1;
+      index += step;
+    }
+    return count;
+  };
+  const isWrappedSelection = () => {
+    if (!hasSelection || sel.length < mark.length * 2) return false;
+    if (mark === '*') {
+      const leading = countEdgeChars(sel, '*', true);
+      const trailing = countEdgeChars(sel, '*', false);
+      return leading % 2 === 1 && trailing % 2 === 1;
+    }
+    return sel.startsWith(mark) && sel.endsWith(mark);
+  };
+
+  if (isWrappedSelection()) {
+    const inner = sel.slice(mark.length, -mark.length);
+    replaceAndSelect(s, e, inner, s, s + inner.length);
+    return;
+  }
+
+  if (hasSelection && s >= mark.length && value.slice(s - mark.length, s) === mark && value.slice(e, e + mark.length) === mark) {
+    replaceAndSelect(s - mark.length, e + mark.length, sel, s - mark.length, s - mark.length + sel.length);
+    return;
+  }
+
   const rep = mark + sel + mark;
-  editor.focus();
-  document.execCommand('insertText', false, rep);
-  setRange(s + mark.length, s + mark.length + sel.length);
-  markDirty();
-  triggerAutoSave();
+  replaceAndSelect(s, e, rep, s + mark.length, s + mark.length + sel.length);
 }
+
+function toggleScriptFormat(delimiter) {
+  if (!guardEditorCommand()) return;
+  const other = delimiter === '^' ? '~' : '^';
+  const { s, e } = getPos();
+  const value = editor.value;
+  const scrollTop = editor.scrollTop;
+  const scrollLeft = editor.scrollLeft;
+  const selected = value.slice(s, e);
+  if (!selected) { toast(T.scriptSelectText); editor.focus(); return; }
+  if (/[\r\n]/.test(selected)) { toast(T.scriptOneLine); editor.focus(); return; }
+  if (/[ \t]/.test(selected)) { toast(T.scriptSelectText); editor.focus(); return; }
+
+  const replaceAndSelect = (rangeStart, rangeEnd, replacement, selectStart, selectEnd) => {
+    editor.focus();
+    editor.setSelectionRange(rangeStart, rangeEnd);
+    document.execCommand('insertText', false, replacement);
+    setRange(selectStart, selectEnd);
+    editor.scrollTop = scrollTop;
+    editor.scrollLeft = scrollLeft;
+    markDirty();
+    triggerAutoSave();
+  };
+
+  const isWrappedSelection = (mark) => selected.length >= 2 && selected.startsWith(mark) && selected.endsWith(mark);
+  const hasOuterMarks = (mark) => s > 0 && e < value.length && value[s - 1] === mark && value[e] === mark;
+
+  if (isWrappedSelection(delimiter)) {
+    const inner = selected.slice(1, -1);
+    replaceAndSelect(s, e, inner, s, s + inner.length);
+    return;
+  }
+  if (hasOuterMarks(delimiter)) {
+    replaceAndSelect(s - 1, e + 1, selected, s - 1, s - 1 + selected.length);
+    return;
+  }
+  if (isWrappedSelection(other)) {
+    const inner = selected.slice(1, -1);
+    const replacement = delimiter + inner + delimiter;
+    replaceAndSelect(s, e, replacement, s + 1, s + 1 + inner.length);
+    return;
+  }
+  if (hasOuterMarks(other)) {
+    const replacement = delimiter + selected + delimiter;
+    replaceAndSelect(s - 1, e + 1, replacement, s, e);
+    return;
+  }
+
+  const replacement = delimiter + selected + delimiter;
+  replaceAndSelect(s, e, replacement, s + 1, s + 1 + selected.length);
+}
+
 function insBlock(before, after) {
+  if (!guardEditorCommand()) return;
   const { s, e } = getPos();
   const sel = editor.value.slice(s, e);
   const rep = before + sel + after;
@@ -4565,6 +5458,7 @@ function insBlock(before, after) {
   triggerAutoSave();
 }
 function insertLink() {
+  if (!guardEditorCommand()) return;
   const { s, e } = getPos();
   const sel = editor.value.slice(s, e) || T.insertLink;
   const rep = `[${sel}](URL)`;
@@ -4575,6 +5469,7 @@ function insertLink() {
   triggerAutoSave();
 }
 function insertTable() {
+  if (!guardEditorCommand()) return;
   editor.focus();
   document.execCommand('insertText', false, T.tableSnippet);
   markDirty();
@@ -4585,8 +5480,9 @@ function insertTable() {
 //#region [JS-13] WORD IMPORT (MAMMOTH + TURNDOWN)
 const WORD_MAX_BYTES = 10 * 1024 * 1024;
 function triggerWordImport() {
+  if (!guardEditorCommand()) return;
   closeMenus();
-  if (isDirty && editor.value.trim() !== '' && editor.value !== T.defaultMd) {
+  if (isDirty && editor.value.trim() !== '' && editor.value !== T.defaultMd && !isLegacyDefaultMarkdown(editor.value)) {
     if (!confirm(T.confirmWordImport || T.confirmNew)) return;
   }
   document.getElementById('word-input').click();
@@ -4858,6 +5754,7 @@ function notifyFileSystemError(action, err) {
 
 async function handleOpen() {
   closeMenus();
+  await closePreviewBeforeOpen();
   if (!isMobile && window.showOpenFilePicker) {
     try {
       const openOptions = {
@@ -4930,6 +5827,7 @@ function ensureMarkdownFilename(name) {
 }
 
 async function handleSave(isSaveAs = false) {
+  if (previewFocusOpen && isSaveAs) { closeMenus(); return; }
   closeMenus();
   await saveToHistoryList(filenameInput.value, editor.value);
   const saveFilename = ensureMarkdownFilename(filenameInput.value);
@@ -5133,6 +6031,7 @@ function buildStandaloneHtmlForExport() {
 }
 
 async function exportStandalone() {
+  if (!guardEditorCommand()) return;
   closeMenus();
   await saveToHistoryList(filenameInput.value, editor.value);
 
@@ -5174,9 +6073,9 @@ header h1{margin:0 0 8px;font-size:clamp(1.5rem,4vw,2.1rem);line-height:1.25}.no
 .outline-wrap{position:sticky;top:18px;align-self:start;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px;max-height:calc(100vh - 36px);overflow:auto}
 .outline-wrap summary{cursor:pointer;font-weight:700;color:#202a44}.outline-list{list-style:none;margin:12px 0 0;padding:0}.outline-list li{margin:3px 0}.outline-list a{display:block;border-radius:9px;padding:5px 7px;color:var(--accent);text-decoration:none;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.outline-list a:hover{background:var(--soft)}.outline-h2{padding-left:8px}.outline-h3{padding-left:16px;font-size:.92rem}
 main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:36px;box-shadow:0 10px 30px rgba(22,34,66,.06)}
-main>:first-child{margin-top:0}main>:last-child{margin-bottom:0}h1,h2,h3,h4,h5,h6{line-height:1.35;margin:1.7em 0 .65em}h1{font-size:2rem;border-bottom:1px solid var(--line);padding-bottom:.25em}h2{font-size:1.55rem;border-bottom:1px solid #edf0f6;padding-bottom:.2em}h3{font-size:1.25rem}p,ul,ol,blockquote,pre,table{margin:1em 0}a{color:var(--accent)}img{max-width:100%;height:auto}main video{display:block;width:100%;max-width:100%;height:auto;margin:1em 0;border-radius:8px;border:1px solid var(--line);background:#000}blockquote{border-left:4px solid var(--line);padding:.2em 1em;color:#475467;background:#fafbff}pre{overflow:auto;padding:14px;border-radius:12px;background:#111827;color:#f9fafb}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.92em;background:#eef2f7;border-radius:5px;padding:.1em .3em}pre code{background:transparent;padding:0}table{display:block;max-width:100%;overflow:auto;border-collapse:collapse}th,td{border:1px solid var(--line);padding:6px 10px}th{background:#f5f7fb}
+main>:first-child{margin-top:0}main>:last-child{margin-bottom:0}h1,h2,h3,h4,h5,h6{line-height:1.35;margin:1.7em 0 .65em}h1{font-size:2rem;border-bottom:1px solid var(--line);padding-bottom:.25em}h2{font-size:1.55rem;border-bottom:1px solid #edf0f6;padding-bottom:.2em}h3{font-size:1.25rem}p,ul,ol,blockquote,pre,table{margin:1em 0}a{color:var(--accent)}img{max-width:100%;height:auto}main video{display:block;width:100%;max-width:100%;height:auto;margin:1em 0;border-radius:8px;border:1px solid var(--line);background:#000}blockquote{border-left:4px solid var(--line);padding:.2em 1em;color:#475467;background:#fafbff}pre{overflow:auto;padding:14px;border-radius:12px;background:#111827;color:#f9fafb}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.92em;background:#eef2f7;border-radius:5px;padding:.1em .3em}pre code{background:transparent;padding:0}table{display:block;max-width:100%;overflow:auto;border-collapse:collapse}th,td{border:1px solid var(--line);padding:6px 10px}th{background:#f5f7fb}.mdw-footnote-ref{font-size:78%;line-height:0;white-space:nowrap}.mdw-footnote-ref-link,.mdw-footnote-backref{text-decoration:none}.mdw-footnotes-separator{margin:2.2em 0 1em;border:none;border-top:1px solid var(--line)}.mdw-footnotes{font-size:88%;line-height:1.7;overflow-wrap:anywhere}.mdw-footnote-item{margin:.35em 0;padding-left:.15em}.mdw-footnote-item p{margin:.25em 0}.mdw-footnote-backref{margin-left:.35em}
 @media (max-width:860px){.viewer-shell{display:block;padding:14px}.outline-wrap{position:static;max-height:none;margin:14px 0}main{padding:22px}header{padding:18px}}
-@media print{body{background:#fff}.viewer-shell{display:block;max-width:none;padding:0}.outline-wrap{display:none}header,main{box-shadow:none;border:0;border-radius:0}main{padding:0}}
+@media print{body{background:#fff}.viewer-shell{display:block;max-width:none;padding:0}.outline-wrap{display:none}header,main{box-shadow:none;border:0;border-radius:0}main{padding:0}.mdw-footnote-backref{display:none!important}}
 </style>
 </head>
 <body>
@@ -5200,6 +6099,7 @@ ${html}
 (function(){
   var list = document.getElementById('viewer-outline');
   var empty = document.getElementById('viewer-outline-empty');
+  function headingText(h){var c=h.cloneNode(true);c.querySelectorAll('.mdw-footnote-ref').forEach(function(n){n.remove()});return (c.textContent||h.id).trim()}
   var headings = document.querySelectorAll('main h1, main h2, main h3');
   var count = 0;
   headings.forEach(function(h){
@@ -5208,7 +6108,7 @@ ${html}
     li.className = 'outline-' + h.tagName.toLowerCase();
     var a = document.createElement('a');
     a.href = '#' + encodeURIComponent(h.id);
-    a.textContent = h.textContent || h.id;
+    a.textContent = headingText(h) || h.id;
     li.appendChild(a);
     list.appendChild(li);
     count++;
@@ -5224,6 +6124,7 @@ ${html}
 
 // --- NEW: exportViewer ---
 function exportViewer() {
+  if (!guardEditorCommand()) return;
   closeMenus();
   try {
     const rawTitle = (filenameInput.value || '').replace(/\.[^/.]+$/, '').trim() || 'document';
@@ -5282,7 +6183,7 @@ function buildRestrictedViewerHtml(box, title, options = {}) {
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.75 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.loading{max-width:720px;margin:10vh auto;padding:24px;color:var(--muted)}.error{color:var(--danger)}
 .viewer-shell{display:grid;grid-template-columns:minmax(90px,130px) minmax(0,860px);gap:28px;max-width:1180px;margin:0 auto;padding:28px 24px 56px;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-webkit-touch-callout:none}.viewer-shell img,.viewer-shell a{-webkit-user-drag:none}
 header{grid-column:1/-1;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px 26px;box-shadow:0 10px 30px rgba(22,34,66,.06)}header h1{margin:0;font-size:clamp(1.5rem,4vw,2.1rem);line-height:1.25}.outline-wrap{position:sticky;top:18px;align-self:start;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px;max-height:calc(100vh - 36px);overflow:auto}.outline-wrap summary{cursor:pointer;font-weight:700;color:#202a44}.outline-list{list-style:none;margin:12px 0 0;padding:0}.outline-list li{margin:3px 0}.outline-list a{display:block;border-radius:9px;padding:5px 7px;color:var(--accent);text-decoration:none;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.outline-list a:hover{background:var(--soft)}.outline-h2{padding-left:8px}.outline-h3{padding-left:16px;font-size:.92rem}
-main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:36px;box-shadow:0 10px 30px rgba(22,34,66,.06)}main>:first-child{margin-top:0}main>:last-child{margin-bottom:0}h1,h2,h3,h4,h5,h6{line-height:1.35;margin:1.7em 0 .65em}h1{font-size:2rem;border-bottom:1px solid var(--line);padding-bottom:.25em}h2{font-size:1.55rem;border-bottom:1px solid #edf0f6;padding-bottom:.2em}h3{font-size:1.25rem}p,ul,ol,blockquote,pre,table{margin:1em 0}a{color:var(--accent)}img{max-width:100%;height:auto}main video{display:block;width:100%;max-width:100%;height:auto;margin:1em 0;border-radius:8px;border:1px solid var(--line);background:#000}blockquote{border-left:4px solid var(--line);padding:.2em 1em;color:#475467;background:#fafbff}pre{overflow:auto;padding:14px;border-radius:12px;background:#111827;color:#f9fafb}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.92em;background:#eef2f7;border-radius:5px;padding:.1em .3em}pre code{background:transparent;padding:0}table{display:block;max-width:100%;overflow:auto;border-collapse:collapse}th,td{border:1px solid var(--line);padding:6px 10px}th{background:#f5f7fb}
+main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:36px;box-shadow:0 10px 30px rgba(22,34,66,.06)}main>:first-child{margin-top:0}main>:last-child{margin-bottom:0}h1,h2,h3,h4,h5,h6{line-height:1.35;margin:1.7em 0 .65em}h1{font-size:2rem;border-bottom:1px solid var(--line);padding-bottom:.25em}h2{font-size:1.55rem;border-bottom:1px solid #edf0f6;padding-bottom:.2em}h3{font-size:1.25rem}p,ul,ol,blockquote,pre,table{margin:1em 0}a{color:var(--accent)}img{max-width:100%;height:auto}main video{display:block;width:100%;max-width:100%;height:auto;margin:1em 0;border-radius:8px;border:1px solid var(--line);background:#000}blockquote{border-left:4px solid var(--line);padding:.2em 1em;color:#475467;background:#fafbff}pre{overflow:auto;padding:14px;border-radius:12px;background:#111827;color:#f9fafb}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.92em;background:#eef2f7;border-radius:5px;padding:.1em .3em}pre code{background:transparent;padding:0}table{display:block;max-width:100%;overflow:auto;border-collapse:collapse}th,td{border:1px solid var(--line);padding:6px 10px}th{background:#f5f7fb}.mdw-footnote-ref{font-size:78%;line-height:0;white-space:nowrap}.mdw-footnote-ref-link,.mdw-footnote-backref{text-decoration:none}.mdw-footnotes-separator{margin:2.2em 0 1em;border:none;border-top:1px solid var(--line)}.mdw-footnotes{font-size:88%;line-height:1.7;overflow-wrap:anywhere}.mdw-footnote-item{margin:.35em 0;padding-left:.15em}.mdw-footnote-item p{margin:.25em 0}.mdw-footnote-backref{margin-left:.35em}
 @media (max-width:860px){.viewer-shell{display:block;padding:14px}.outline-wrap{position:static;max-height:none;margin:14px 0}main{padding:22px}header{padding:18px}}@media print{html,body{background:#fff!important}body *{display:none!important}}
 </style>
 </head>
@@ -5299,10 +6200,14 @@ main{min-width:0;background:var(--paper);border:1px solid var(--line);border-rad
   function targetElement(target){return target instanceof Element?target:(target&&target.parentElement?target.parentElement:null)}
   function isEditableElement(target){var el=targetElement(target);return Boolean(el&&el.closest('input, textarea, select, [contenteditable="true"]'))}
   function isRestrictedTarget(target){var el=targetElement(target);return Boolean(el&&el.closest('#viewer-shell'))&&!isEditableElement(target)}
+  function isAllowedFootnoteNavigation(target){var el=targetElement(target);var anchor=el&&el.closest('a.mdw-footnote-ref-link, a.mdw-footnote-backref');if(!anchor)return false;var href=anchor.getAttribute('href')||'';if(!/^#mdw-fn-\d+$/.test(href)&&!/^#mdw-fnref-\d+-\d+$/.test(href))return false;var doc=document.getElementById('viewer-document'),dest=document.getElementById(href.slice(1));return Boolean(doc&&dest&&doc.contains(anchor)&&doc.contains(dest))}
+  function isAllowedViewerNavigation(target){var el=targetElement(target);return Boolean(el&&el.closest('.outline-wrap a'))||isAllowedFootnoteNavigation(target)}
   function disableDragging(){document.querySelectorAll('#viewer-shell img, #viewer-shell a').forEach(function(el){el.setAttribute('draggable','false')})}
   ['copy','cut','selectstart','contextmenu','dragstart'].forEach(function(type){document.addEventListener(type,function(event){if(isRestrictedTarget(event.target))event.preventDefault()})});
+  ['mousedown','pointerdown','touchstart','click'].forEach(function(type){document.addEventListener(type,function(event){if(isAllowedViewerNavigation(event.target))return;if(isRestrictedTarget(event.target))event.preventDefault()})});
   document.addEventListener('keydown',function(event){var key=(event.key||'').toLowerCase(),modifier=event.ctrlKey||event.metaKey;if(!modifier)return;if(key==='p'){event.preventDefault();return}if((key==='a'||key==='c'||key==='x')&&isRestrictedTarget(event.target))event.preventDefault()});
-  function buildOutline(){var list=document.getElementById('viewer-outline'),empty=document.getElementById('viewer-outline-empty'),count=0;document.querySelectorAll('main h1, main h2, main h3').forEach(function(h){if(!h.id)return;var li=document.createElement('li'),a=document.createElement('a');li.className='outline-'+h.tagName.toLowerCase();a.href='#'+encodeURIComponent(h.id);a.textContent=h.textContent||h.id;li.appendChild(a);list.appendChild(li);count++});if(!count)empty.hidden=false}
+  function headingText(h){var c=h.cloneNode(true);c.querySelectorAll('.mdw-footnote-ref').forEach(function(n){n.remove()});return (c.textContent||h.id).trim()}
+  function buildOutline(){var list=document.getElementById('viewer-outline'),empty=document.getElementById('viewer-outline-empty'),count=0;document.querySelectorAll('main h1, main h2, main h3').forEach(function(h){if(!h.id)return;var li=document.createElement('li'),a=document.createElement('a');li.className='outline-'+h.tagName.toLowerCase();a.href='#'+encodeURIComponent(h.id);a.textContent=headingText(h)||h.id;li.appendChild(a);list.appendChild(li);count++});if(!count)empty.hidden=false}
   decryptDisplay().then(function(payload){if(payload.type!=='mdworks-restricted-viewer-display'||typeof payload.html!=='string')throw new Error('Invalid payload');document.getElementById('doc-title').textContent=payload.title||${safeScriptJson(title || 'document')};document.getElementById('viewer-document').innerHTML=payload.html;loading.hidden=true;document.getElementById('viewer-shell').hidden=false;disableDragging();buildOutline()}).catch(function(){loading.className='loading error';loading.textContent=${errorJson}});
 })();
 <\/script>
@@ -5311,6 +6216,7 @@ main{min-width:0;background:var(--paper);border:1px solid var(--line);border-rad
 }
 
 async function exportRestrictedViewer() {
+  if (!guardEditorCommand()) return;
   closeMenus();
   if (!window.crypto || !crypto.subtle || !window.TextEncoder || !window.TextDecoder) {
     alert(isJa ? 'このブラウザでは制限付きViewerを作成できません。' : 'This browser cannot create a Restricted Viewer.');
@@ -5439,12 +6345,13 @@ body.private-viewer-unlocked .viewer-shell{user-select:none;-webkit-user-select:
     var plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64ToBytes(box.iv)},key,b64ToBytes(box.data));
     return new TextDecoder().decode(plain);
   }
+  function headingText(h){var c=h.cloneNode(true);c.querySelectorAll('.mdw-footnote-ref').forEach(function(n){n.remove()});return (c.textContent||h.id).trim()}
   function buildOutline(){
     var list=document.getElementById('viewer-outline'),empty=document.getElementById('viewer-outline-empty'),count=0;
     document.querySelectorAll('main h1, main h2, main h3').forEach(function(h){
       if(!h.id)return;
       var li=document.createElement('li'),a=document.createElement('a');
-      li.className='outline-'+h.tagName.toLowerCase();a.href='#'+encodeURIComponent(h.id);a.textContent=h.textContent||h.id;li.appendChild(a);list.appendChild(li);count++;
+      li.className='outline-'+h.tagName.toLowerCase();a.href='#'+encodeURIComponent(h.id);a.textContent=headingText(h)||h.id;li.appendChild(a);list.appendChild(li);count++;
     });
     if(!count)empty.hidden=false;
   }
@@ -5463,6 +6370,18 @@ body.private-viewer-unlocked .viewer-shell{user-select:none;-webkit-user-select:
       Boolean(el && el.closest('#viewer-shell')) &&
       !isEditableElement(target);
   }
+  function isAllowedFootnoteNavigation(target){
+    var el=targetElement(target),anchor=el&&el.closest('a.mdw-footnote-ref-link, a.mdw-footnote-backref');
+    if(!anchor)return false;
+    var href=anchor.getAttribute('href')||'';
+    if(!/^#mdw-fn-\d+$/.test(href)&&!/^#mdw-fnref-\d+-\d+$/.test(href))return false;
+    var doc=document.getElementById('viewer-document'),dest=document.getElementById(href.slice(1));
+    return Boolean(doc&&dest&&doc.contains(anchor)&&doc.contains(dest));
+  }
+  function isAllowedViewerNavigation(target){
+    var el=targetElement(target);
+    return Boolean(el&&el.closest('.outline-wrap a'))||isAllowedFootnoteNavigation(target);
+  }
   function disableDragging(){
     document.querySelectorAll('#viewer-shell img, #viewer-shell a').forEach(function(el){
       el.setAttribute('draggable','false');
@@ -5470,6 +6389,12 @@ body.private-viewer-unlocked .viewer-shell{user-select:none;-webkit-user-select:
   }
   ['copy','cut','selectstart','contextmenu','dragstart'].forEach(function(type){
     document.addEventListener(type,function(event){
+      if(isRestrictedTarget(event.target))event.preventDefault();
+    });
+  });
+  ['mousedown','pointerdown','touchstart','click'].forEach(function(type){
+    document.addEventListener(type,function(event){
+      if(isAllowedViewerNavigation(event.target))return;
       if(isRestrictedTarget(event.target))event.preventDefault();
     });
   });
@@ -5503,6 +6428,7 @@ body.private-viewer-unlocked .viewer-shell{user-select:none;-webkit-user-select:
 
 // --- NEW: exportPrivateViewer ---
 async function exportPrivateViewer() {
+  if (!guardEditorCommand()) return;
   closeMenus();
 
   if (!window.crypto || !crypto.subtle || !window.TextEncoder || !window.TextDecoder) {
@@ -5649,6 +6575,7 @@ async function buildPrivateAppPayload(htmlStr, passphrase, meta) {
 }
 
 async function exportPrivateStandalone() {
+  if (!guardEditorCommand()) return;
   closeMenus();
 
   if (!window.crypto || !crypto.subtle || !window.TextEncoder || !window.TextDecoder) {
@@ -6155,16 +7082,54 @@ function renderOutline() {
   const container = document.getElementById('outline-list');
   container.innerHTML = '';
   let charOffset = 0;
+  const usedHeadingIds = Object.create(null);
   editor.value.split('\n').forEach(line => {
     const m = line.match(/^(#{1,6})\s+(.+)/);
     if (m) {
       const div = document.createElement('div');
-      div.className = `ol-item ol-h${m[1].length}`; div.textContent = m[2];
-      const target = charOffset; div.onclick = () => jumpToOffset(target);
+      const raw = m[2].replace(/[ \t]+#+[ \t]*$/, '').trim();
+      const title = stripInlineMarkdownForHeading(raw);
+      div.className = `ol-item ol-h${m[1].length}`;
+      div.textContent = title;
+      div.dataset.headingId = slugifyHeading(title, usedHeadingIds);
+      const target = charOffset;
+      div.onclick = () => handleOutlineNavigation(target, div.dataset.headingId);
       container.appendChild(div);
     }
     charOffset += line.length + 1;
   });
+}
+
+function cssEscapeId(id) {
+  if (window.CSS && typeof CSS.escape === 'function') return CSS.escape(id);
+  return String(id).replace(/[^a-zA-Z0-9_-]/g, ch => `\\${ch}`);
+}
+
+function getPreviewFocusScrollOffset() {
+  const exitBtn = document.getElementById('preview-focus-exit-btn');
+  const btnHeight = exitBtn ? exitBtn.getBoundingClientRect().height : 0;
+  return Math.max(56, Math.ceil(btnHeight + 24));
+}
+
+function navigatePreviewToHeading(headingId) {
+  if (!headingId) return;
+  const target = preview.querySelector(`#${cssEscapeId(headingId)}`);
+  if (!target) {
+    console.warn('Preview heading not found for outline item:', headingId);
+    return;
+  }
+  const scroller = previewWrap;
+  const targetTop = target.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop - getPreviewFocusScrollOffset();
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  scroller.scrollTo({ top: Math.max(0, targetTop), behavior: reduceMotion ? 'auto' : 'smooth' });
+}
+
+function handleOutlineNavigation(offset, headingId) {
+  if (previewFocusOpen) {
+    navigatePreviewToHeading(headingId);
+    return;
+  }
+  jumpToOffset(offset);
 }
 
 function jumpToOffset(offset) {
@@ -6179,13 +7144,14 @@ function jumpToOffset(offset) {
 }
 
 async function saveToHistoryList(filename, content) {
-  if (!content || content.trim() === '' || content === T.defaultMd) return;
+  if (!content || content.trim() === '' || content === T.defaultMd || isLegacyDefaultMarkdown(content)) return;
   let hist = JSON.parse((await secureGetItem(HISTORY_KEY)) || '[]');
   hist = [{ filename, content, date: Date.now() }, ...hist.filter(h => h.filename !== filename)].slice(0, 10);
   await secureSetItem(HISTORY_KEY, JSON.stringify(hist));
 }
 
 async function openHistory() {
+  if (!guardEditorCommand()) return;
   closeMenus();
   const hist = JSON.parse((await secureGetItem(HISTORY_KEY)) || '[]');
   const container = document.getElementById('hist-list');
@@ -6211,6 +7177,7 @@ async function openHistory() {
 function closeHistory() { document.getElementById('history-modal').classList.remove('show'); }
 
 function formatDoc() {
+  if (!guardEditorCommand()) return;
   editor.value = editor.value.replace(/\n{3,}/g, '\n\n').split('\n').map(l => l.trimEnd()).join('\n');
   update(); toast(T.formatDone);
 }
@@ -6547,6 +7514,7 @@ function setExportModalState(isOpen) {
 }
 
 function openExportModal() {
+  if (!guardEditorCommand()) return;
   closeMenus();
   setExportModalState(true);
   const firstButton = document.getElementById('export-viewer-btn');
@@ -6628,6 +7596,12 @@ const closableUiRegistry = [
     priority: 50,
     isOpen: () => isElementVisibleByClass('#outline-panel'),
     close: closeOutlinePanel
+  },
+  {
+    name: 'preview-focus-mode',
+    priority: 10,
+    isOpen: () => previewFocusOpen,
+    close: closePreviewSessionFromFocus
   }
 ].sort((a, b) => b.priority - a.priority);
 
@@ -6652,8 +7626,16 @@ window.addEventListener('keydown', e => {
     selectPreviewContents();
     return;
   }
-  if (key === 's' && m) { e.preventDefault(); handleSave(e.shiftKey); }
+  if (key === 's' && m) { e.preventDefault(); handleSave(previewFocusOpen ? false : e.shiftKey); }
   if (key === 'o' && m) { e.preventDefault(); handleOpen(); }
+  if (previewFocusOpen) {
+    const blocked = ['a', 'b', 'f', 'h', 'i', 'k', 'v', 'x', 'y', 'z'];
+    if (m && (blocked.includes(key) || (key === 's' && e.shiftKey))) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    return;
+  }
   if (key === 'f' && m) { e.preventDefault(); openSearchPanel('find'); }
 });
 
@@ -6664,6 +7646,9 @@ function resetDocumentIdentity(filename = 'untitled.md') {
 }
 
 async function newFile() {
+  if (!guardEditorCommand()) return;
+  if (previewFocusOpen) closePreviewSessionFromFocus({ restoreZen: false });
+  clearPreviewSession();
   if (isDirty && !confirm(T.confirmNew)) return;
   await saveToHistoryList(filenameInput.value, editor.value);
   editor.value = '';
@@ -6676,6 +7661,9 @@ async function newFile() {
 }
 
 async function closeFile() {
+  if (!guardEditorCommand()) return;
+  if (previewFocusOpen) closePreviewSessionFromFocus({ restoreZen: false });
+  clearPreviewSession();
   if (isDirty && !confirm(T.confirmClose)) return;
   await saveToHistoryList(filenameInput.value, editor.value);
   editor.value = ''; resetDocumentIdentity(); update(); markSaved();
@@ -6685,10 +7673,12 @@ async function closeFile() {
 }
 
 async function execEdit(action) {
+  if (!guardEditorCommand()) return;
   editor.focus(); if (action === 'selectAll') editor.select(); else document.execCommand(action);
 }
 
 function exportHtml() {
+  if (!guardEditorCommand()) return;
   const html = `<html><body style="max-width:800px;margin:auto;padding:40px">${safeMarkdownHtml(editor.value)}</body></html>`;
   triggerDownload(html, filenameInput.value.replace('.md', '.html'), 'text/html');
 }
@@ -6756,6 +7746,7 @@ window.addEventListener('beforeprint', preparePrintPreview);
 window.addEventListener('afterprint', cleanupPrintPreview);
 
 function exportPdf() {
+  if (!guardEditorCommand()) return;
   closeMenus();
   preparePrintPreview();
   requestAnimationFrame(() => window.print());
