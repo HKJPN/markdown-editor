@@ -1,4 +1,4 @@
-# MD//WORKS Manual
+# MD//WORKS クイックスタート
 
 ## 1. はじめに
 
