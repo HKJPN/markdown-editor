@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.5.7 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.5.8 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
 <img width="869" height="720" alt="1_5_5rayoute" src="https://github.com/user-attachments/assets/5200e876-6cfc-4071-8a3e-d92a96c4ef2d" />
 
@@ -21,21 +21,24 @@ Try it instantly in your browser. 👉 **https://hkjpn.github.io/markdown-editor
 You are also free to host MD//WORKS on your own website under the MIT License. However, for security and performance reasons, we strongly recommend keeping your deployment updated to the latest version.
 
 ---
-## ✨ What’s New in v1.5.7
+## ✨ What's New in v1.5.8
 
-This release dramatically improves your export workflow, giving you more security and flexibility.
+In this update, we've introduced powerful features to supercharge your academic and report writing, along with UI enhancements for a smoother workflow.
 
-* **Enhanced Export Options & Dedicated UI:** Introduced a new export modal for quicker, more intuitive format selection. You can now easily export "Restricted" or "Password-protected" viewers to protect your sensitive documents from unauthorized access or copying.
-* **Update Notifications:** Added a notification feature to the menubar, allowing you to instantly check your current version against the latest release and access the release page smoothly. Update checks are securely limited to a maximum of once per 24 hours with minimal traffic, and all your documents are processed strictly on your local device.
-* **Bug Fix:** Fixed a critical  issue in regex replacement where escape sequences such as `\n` and `\t` were not interpreted correctly.
+* 📖 **Long-awaited Footnote Support!**
+We've added native support for footnotes (`[^1]`), an essential tool for academic writing. Add annotations and references without breaking your flow. Beautifully cross-linked footnote lists are automatically generated in the Preview panel and exported Viewers.
+* 👀 **More Intuitive "3-Step" Preview**
+Seamlessly cycle through "Split View (Real-time sync)", "Focus Preview (Distraction-free reading)", and "Editor Only" with a single click of the Preview button. Instantly switch to the perfect layout for whatever writing phase you're in.
+* 🧪 **Easier Superscripts & Subscripts**
+In addition to traditional HTML tags (`<sup>`, `<sub>`), we now support the simple, easy-to-type Pandoc-compatible syntax (`^superscript^`, `~subscript~`)—perfect for chemical formulas and math equations.
+* ✍️ **Start Writing Instantly on a "Blank Slate"**
+We've removed the default sample text on startup, providing you with a clean, blank slate. The moment you open the app, you can dive straight into capturing your ideas.
+* 🖥️ **App Launch Icon**: Added a dedicated app icon for a more native app-like experience, and updated the manual with detailed installation instructions.
+
+
 
 ## ✨ Upcoming Features
 
-* **Footnotes**: We plan to add support for footnotes, such as citations and references.
-* **Pandoc-Compatible Superscript & Subscript**: Along with standard HTML tags, enjoy native support for `^superscript^` and `~subscript~` syntax. Easily apply, remove, or toggle these formats using dedicated toolbar buttons.
-* **Preview Focus Mode**: We plan to introduce a viewing mode that expands the right-side preview to fill the entire screen.
-* **App Icon**: We plan to add a dedicated app icon for a more native feel.
-* **Section to Create an App**: We plan to add a new section to the manual explaining how to install and run the editor as a standalone app.
 * **Line Numbers**: To assist with both basic coding and academic paper reviews, we will be rolling out features in stages, including logical line-based display, current line highlighting, line selection via the gutter, and disabling word wrap for coding mode.
 * **Math Equations**: We plan to support complex mathematical formulas used in fields like mathematics and engineering.
 * **Deep Edit Mode**: A planned feature that tracks a detailed history of your thought process and revisions.
