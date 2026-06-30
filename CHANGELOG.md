@@ -2,13 +2,6 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2026-06-30 - v1.5.8 candidate Focus Preview & UX Improvements
-
-* **Added 3-step Preview toggle:** Clicking the Preview button now cycles through Split View, Focus Preview, and Editor modes.
-* **Unified text formatting toggles:** Bold, Italic, Strikethrough, and Inline Code buttons now act as toggles to apply or remove formatting on the selected text.
-* **Added update notifications:** A new notification icon in the menu bar displays the current and latest stable versions.
-* **Blank new documents:** Removed the initial sample text so new documents start completely blank, allowing you to write immediately.
-
 ## 2026-06-29 - v1.5.7.1
 - Added a dedicated app icon.
 - Added a new section on how to install the editor as an app in the manual.
