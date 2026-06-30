@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-06-30 - v1.5.8 candidate - Academic Writing and Workflow Improvements
+
+* **Added footnote support:** Use `[^1]` syntax for citations and notes.
+* **3-step preview cycle:** Easily switch between split, focus, and editor-only views.
+* **Expanded super/subscript support:** Added Pandoc-compatible syntax (`^superscript^` and `~subscript~`).
+* **Update notifications:** Added a version status icon to the menu bar.
+* **Blank new documents:** Removed initial sample text to let you start writing immediately.
+
 ## 2026-06-29 - v1.5.7.1
 - Added a dedicated app icon.
 - Added a new section on how to install the editor as an app in the manual.
