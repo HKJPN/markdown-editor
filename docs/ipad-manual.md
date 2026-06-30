@@ -161,7 +161,7 @@ To protect local storage capacity, image insertion is subject to the following l
 
 For security reasons, SVG images are not supported. Convert SVG files to PNG, JPEG, or WebP before inserting them.
 
-> For bulk image imports on iPad, we've provided a separate command-line tool called [image2md.py](https://github.com/HKJPN/images2md/tree/main). Use it alongside MD//WORKS to quickly add multiple photos at once for presentations or reports.
+> For bulk image imports on iPad, we've provided a separate command-line tool called [images2md.py](https://github.com/HKJPN/images2md/tree/main). Use it alongside MD//WORKS to quickly add multiple photos at once for presentations or reports. However, to maintain stable performance, please ensure the total file size does not exceed 20MB when re-importing into MD//WORKS.
 
 ### 3-3. Local Files and Relative Links
 	
