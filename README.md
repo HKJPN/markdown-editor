@@ -15,7 +15,7 @@ Try it instantly in your browser. 👉 **https://hkjpn.github.io/markdown-editor
 - [📖 User Manual (General) ](docs/manual.md)
 - [📱 User Manual for iPad](docs/ipad-manual.md).
 - [🎓Scientific Writing Guide](docs/scientific-writing.md)
-- [Security / Privacy](SECURITY.md)
+- [🛡️Security / Privacy](SECURITY.md)
 
 
 You are also free to host MD//WORKS on your own website under the MIT License. However, for security and performance reasons, we strongly recommend keeping your deployment updated to the latest version.
