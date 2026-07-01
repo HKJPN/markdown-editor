@@ -28,8 +28,6 @@ MD//WORKS はインストールは不要で、Editor のHTMLファイルをブ�
 
 インストールは不要ですが、次の手順でアプリ化することも可能で、アプリ化した後も必要に応じてブラウザと行き来することができます。
 
-> 💡 その他のブラウザは付録4をご覧ください
-
 #### 1-1-1. アプリ化の手順とブラウザタブとの行き来（Chromeの場合<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">）
 他のブラウザは付録４を御覧ください。<img src="./images/SafariIcon.png" alt="Image:icon" width="25"> <img src="./images/BraveIcon.jpg" alt="Image:icon" width="22"> <img src="./images/EdgeIcon.png" alt="Image:icon" width="22"> 
 
