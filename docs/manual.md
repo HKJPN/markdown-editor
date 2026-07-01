@@ -27,7 +27,7 @@ MD//WORKS does not require installation; you can use it simply by opening the Ed
 
 Although installation is not required, you can convert it into an app using the following steps. Even after turning it into an app, you can switch back and forth with your browser as needed. 
 
-**1-1-1. Steps to Create an App and Switch with Browser Tabs (For Chrome<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">)
+#### 1-1-1. Steps to Create an App and Switch with Browser Tabs (For Chrome<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">)
 
 For other browsers<img src="./images/FirefoxIcon.jpg" alt="Image:icon" width="20"> <img src="./images/BraveIcon.jpg" alt="Image:icon" width="16"> <img src="./images/EdgeIcon.png" alt="Image:icon" width="16">, please refer to Appendix 4  
 
@@ -41,7 +41,7 @@ For other browsers<img src="./images/FirefoxIcon.jpg" alt="Image:icon" width="20
 
 > 💡 **If using a downloaded HTML file locally:** The install button will not appear in the address bar. Instead, open the Chrome menu (︙), go to **Save and share** > **Create shortcut**, check the **Open as window** box, and click **Create**.
 
-### 1-1-2. Uninstall
+#### 1-1-2. Uninstall
 
 If you are running the app from the HTML file or directly from the [MD//WORKS Editor website](https://hkjpn.github.io/markdown-editor/), uninstallation is not required. You can completely remove it simply by deleting the HTML file and clearing your browser cache.
 
