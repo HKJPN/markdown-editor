@@ -7,7 +7,7 @@
 * **100% Local, yet AI-Ready:** MD//WORKS is entirely local and **cloud-free**. Keep your data fully secure on your device, while still leveraging your browser's native **AI sidebars** for **seamless assistance** without copy-pasting.
 * **Secure Single-HTML Export:** Easily share and protect your work. Our new export feature packages your document into a single HTML file, enabling everything from **restricted viewing** to sharing fully editable drafts with anyone.
 
-For more information about AI integration, see ["11. AI-Assisted Writing" in the manual](docs/manual.md#11-ai-assisted-writing).
+For more information about AI integration, see ["11. AI-Assisted Writing" in the manual](https://github.com/HKJPN/markdown-editor/blob/main/docs/manual.md#11-ai-assisted-writing-).
 
 # 🚀 Live Demo
 
