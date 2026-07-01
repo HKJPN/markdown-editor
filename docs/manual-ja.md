@@ -29,7 +29,7 @@ MD//WORKS はインストールは不要で、Editor のHTMLファイルをブ�
 インストールは不要ですが、次の手順でアプリ化することも可能で、アプリ化した後も必要に応じてブラウザと行き来することができます。
 
 #### 1-1-1. アプリ化の手順とブラウザタブとの行き来（Chromeの場合<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">）
-他のブラウザは付録４を御覧ください。<img src="./images/SafariIcon.png" alt="Image:icon" width="25"> <img src="./images/BraveIcon.jpg" alt="Image:icon" width="22"> <img src="./images/EdgeIcon.png" alt="Image:icon" width="22"> 
+他のブラウザは付録４を御覧ください。<img src="./images/SafariIcon.png" alt="Image:icon" width="25"> <img src="./images/BraveIcon.jpg" alt="Image:icon" width="22"> <img src="./images/EdgeIcon.png" alt="Image:icon" width="16"> 
 
 
 1. PC/MacのChromeブラウザで [MD//WORKS Editorのサイト](<https://hkjpn.github.io/markdown-editor/>) を開きます。
@@ -439,7 +439,7 @@ MD//WORKS Editorでは、下書きや履歴などのローカル保存データ�
 
 MD//WORKS Editor は、Windows、macOS、iPadOS、Android、ChromeOS、Linux など、さまざまな環境で利用できます。 ご利用の端末（OS）とブラウザの組み合わせにより、ファイルの保存および「上書き保存（ダウンロード）」の挙動が異なります。
 
-| OS / プラットフォーム | Chrome <img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">/ <br>Edge <img src="./images/EdgeIcon.png" alt="Image:icon" width="22">  | Brave<img src="./images/BraveIcon.jpg" alt="Image:icon" width="22">  | Firefox   <img src="./images/FirefoxIcon.jpg" alt="Image:icon" width="22">  | Safari  <img src="./images/SafariIcon.png" alt="Image:icon" width="25">   |
+| OS / プラットフォーム | Chrome <img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">/ <br>Edge <img src="./images/EdgeIcon.png" alt="Image:icon" width="16">  | Brave<img src="./images/BraveIcon.jpg" alt="Image:icon" width="22">  | Firefox   <img src="./images/FirefoxIcon.jpg" alt="Image:icon" width="22">  | Safari  <img src="./images/SafariIcon.png" alt="Image:icon" width="25">   |
 | ------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------- |
 | **Windows / Linux** | 初回保存以降、**直接上書き**が可能。                                                         | 任意のフォルダに「名前を付けてDL」で**手動で上書き可能**。 | 直接上書き不可。<br>**番号付きのサフィックス**を付けた新しいファイルとしてダウンロードされます。 | —                          |
 | **macOS**           | 初回保存以降、**直接上書き**が可能。                                                         |  任意のフォルダに「名前を付けてDL」で**手動で上書き可能**。 | 直接上書き不可。<br>**番号付きのサフィックス**を付けた新しいファイルとしてダウンロードされます。 | **Firefox** と同じ。       |
@@ -1052,7 +1052,7 @@ Chrome以外のブラウザをご利用の場合も、PC/Mac等で対応して�
 * **アプリ化（iPad / iPhone）:** 画面上部または下部の共有ボタン（四角から上矢印が飛び出たアイコン）＞「ホーム画面に追加」を選択します。
 * **アンインストール:** Macの場合はLaunchpadからアイコンを長押しして削除するか「アプリケーション」フォルダから削除します。iPad等の場合はホーム画面のアイコンを長押しし、「Appを削除」または「ブックマークを削除」を選択してください。
 
-### 付録4-3.**<img src="./images/EdgeIcon.png" alt="Image:icon" width="30"> Microsoft Edgeの場合**
+### 付録4-3.**<img src="./images/EdgeIcon.png" alt="Image:icon" width="16"> Microsoft Edgeの場合**
 
 * **アプリ化:** 画面右上のメニュー（…）＞「アプリ」＞「このサイトをアプリとしてインストール」を選択します。
 * **アンインストール:** 独立したアプリウィンドウの右上メニュー（…）＞「アプリの設定」からアンインストールするか、ブラウザのアドレスバーに `edge://apps` と入力し、一覧から「削除」を選択してください。
