@@ -711,7 +711,7 @@ To check the app version and core concepts, select **Help > About MD//WORKS**.
 
 ---
 
-## 11. AI-Assisted Writing<img src="images/BgemniE.jpg" alt="Image: askGemini" width="50"> ![Image: LeoImage](<images/Leoimage.png>)
+## 11. AI-Assisted Writing<img src="images/BgemniE.jpg" alt="Image: askGemini" width="180"> ![Image: LeoImage](<images/Leoimage.png>)
 
 MD//WORKS is not only a plain text and Markdown editor. It can also be used together with browser-based AI assistants, such as Gemini in Chrome and Leo in Brave, to support a wider range of writing tasks.
 
