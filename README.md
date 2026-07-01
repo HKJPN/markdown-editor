@@ -14,7 +14,7 @@ Try it instantly in your browser. 👉 **https://hkjpn.github.io/markdown-editor
 - [Quick Start ](docs/quick-start.md)
 - [📖 User Manual (General) ](docs/manual.md)
 - [📱 User Manual for iPad](docs/ipad-manual.md).
-- [Scientific Writing Guide](docs/scientific-writing.md)
+- [🎓Scientific Writing Guide](docs/scientific-writing.md)
 - [Security / Privacy](SECURITY.md)
 
 
