@@ -790,7 +790,7 @@ If you do not want Gemini in Chrome to access the content of your MD//WORKS tab,
 
 The following comparison is based on our own testing with MD//WORKS. The behavior of each AI assistant may change depending on the browser version, AI service updates, account settings, subscription plan, and organizational policy.
 
-| Item | Copilot in Edge<br>![Image: copiloticon](<images/Bcopilot.png>  | Gemini in Chrome<br>![Image: askGemini](<images/BgemniE.jpg>)  | Brave Browser / Leo<br> ![Image: LeoImage](<images/Leoimage.png>) | Firefox AI Controls )<br>![Image: FirefoxAIcontorls](<images/FirefoxAIcontorls.png>) |
+| Item | Copilot in Edge<br>![Image: copiloticon](<images/Bcopilot.png>)  | Gemini in Chrome<br>![Image: askGemini](<images/BgemniE.jpg>)  | Brave Browser / Leo<br> ![Image: LeoImage](<images/Leoimage.png>) | Firefox AI Controls )<br>![Image: FirefoxAIcontorls](<images/FirefoxAIcontorls.png>) |
 | :--- | :--- | :--- | :--- | :--- |
 | **AI integration with MD//WORKS** | 🚫 Mainly copy-and-paste based, even when the sidebar is available | ✅ **Can analyze the overall document structure or selected areas** | ✅ **Can analyze the overall document structure** | 🚫 Mainly copy-and-paste based, even when the sidebar is available |
 | **Real-time Context Awareness** | 🚫 **Limited**<br>Requires manual trigger; context updates only when panel is refreshed or explicitly instructed | ✅ **Full Real-time**<br>Directly monitors DOM & selection; updates instantly as you type or select | ⚠️ **Snapshot-based**<br>Captures state when opened; does not auto-sync with ongoing typing without reopening | 🚫 **None**<br>Relies on copy-paste or manual page summary|
