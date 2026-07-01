@@ -29,7 +29,7 @@ Although installation is not required, you can convert it into an app using the 
 
 >💡 For other browsers, please refer to Appendix 4.
 
-**1-1-1. Steps to Create an App and Switch with Browser Tabs (For Chrome)**
+**1-1-1. Steps to Create an App and Switch with Browser Tabs (For Chrome)**![Image: GoogleIcon](<images/GoogleIcon.jpg>) 
 
 1. Open the [MD//WORKS Editor website](<https://hkjpn.github.io/markdown-editor/>) in the Chrome browser on your PC/Mac.
 2. Select the menu (︙) in the top right corner of the screen > "Cast, save, and share" > "Install page as app".
