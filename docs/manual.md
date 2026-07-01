@@ -581,17 +581,7 @@ Selecting **Edit > Insert Table of Contents** automatically generates a clickabl
 
 The View menu lets you toggle Preview, Outline, Show Invisibles, Theme, Fullscreen, Spell (EN), and Zen Mode.
 
-### 9-1. Toggling Preview
-
-
-
-Select **View > Preview** to show or hide the preview pane.  
-You can also use the **Preview** button on the title bar.
-
-When Preview is enabled, the editor appears on the left and the preview appears on the right.  
-This allows you to edit while checking the rendered Markdown.
-
-### 9-2. Using Outline
+### 9-1. Using Outline
 
 
 
@@ -600,7 +590,7 @@ Select **View > Outline** to display a list of headings in the document.
 Outline extracts Markdown headings such as `#`, `##`, and `###`.  
 In long documents, click a heading to jump directly to that section. This makes it easier to review structure and navigate quickly.
 
-### 9-3. Showing Invisible Characters
+### 9-2. Showing Invisible Characters
 
 
 
@@ -618,7 +608,7 @@ Examples include:
 In Markdown, spaces and line breaks can affect the rendered result.  
 This feature is useful when fine-tuning the document layout.
 
-### 9-4. Changing Themes
+### 9-3. Changing Themes
 
 
 
@@ -634,7 +624,7 @@ Choose a theme based on your working environment: **Paper** for reviewing, **War
 
 ![Image: Theame](<./images/theame.jpg>)
 
-### 9-5. Fullscreen Mode
+### 9-4. Fullscreen Mode
 
 
 
@@ -642,7 +632,7 @@ Use **View > Fullscreen** or the fullscreen icon on the title bar to expand the 
 
 This is useful when you want a wider workspace or need to review the document before a presentation.
 
-### 9-6. Using Spell (EN)
+### 9-5. Using Spell (EN)
 
 
 
@@ -652,7 +642,7 @@ When Spell (EN) is enabled, possible English spelling errors are detected. You c
 
 This feature is intended for English text only and does not provide proofreading for other languages.
 
-### 9-7. Focusing with Zen Mode
+### 9-6. Focusing with Zen Mode
 
 
 
