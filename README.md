@@ -1,6 +1,6 @@
 # 🚀 MD//WORKS v1.5.8 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
- <img src="./docs/images/rayout2.JPG" alt="rayout2.JPG"> 
+ <img src="./docs/images/rayout3.JPG" alt="rayout3.JPG"> 
  <img src="./docs/images/rayout1.JPG" alt="rayout1.JPG"> 
 
 
