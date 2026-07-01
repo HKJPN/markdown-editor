@@ -44,7 +44,7 @@ MD//WORKS はインストールは不要で、Editor のHTMLファイルをブ�
 
 > 💡**HTMLファイルをダウンロードしてローカルでご使用の場合**:アドレスバーにインストールボタンは表示されません。Chromeのメニュー（︙）の「保存して共有」＞「ショートカットを作成」から、「ウィンドウとして開く」にチェックを入れて作成してください。
 
-#### 1-1-2. アンインストール
+#### 1-1-2. アンインストール（Chromeの場合<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">）
 
 　MD//WORKS EditorのHTMLファイルからの実行又は[MD//WORKS Editorのサイト](<https://hkjpn.github.io/markdown-editor/>)から実行の場合はアンインストールは必要ありません。MD//WORKSのHTMLァイルをキャッシュも含め削除することで完全に消去できます。ChromeのAppとしてイントールした場合は、 独立したアプリウィンドウを起動し、画面右上のメニュー（︙）から **「MD//WORKS をアンインストール」** を選択してください。※削除できない場合は、付録３の「アンインストール」をご覧ください。
 
@@ -441,7 +441,7 @@ MD//WORKS Editorでは、下書きや履歴などのローカル保存データ�
 
 MD//WORKS Editor は、Windows、macOS、iPadOS、Android、ChromeOS、Linux など、さまざまな環境で利用できます。 ご利用の端末（OS）とブラウザの組み合わせにより、ファイルの保存および「上書き保存（ダウンロード）」の挙動が異なります。
 
-| OS / プラットフォーム | Chrome / Edge                                                                                               | Brave                                                                             | Firefox                                                                                   | Safari                     |
+| OS / プラットフォーム | Chrome <img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">/ <br>Edge <img src="./images/EdgeIcon.png" alt="Image:icon" width="22">  | Brave<img src="./images/BraveIcon.jpg" alt="Image:icon" width="22">  | Firefox   <img src="./images/FirefoxIcon.jpg" alt="Image:icon" width="22">  | Safari  <img src="./images/SafariIcon.png" alt="Image:icon" width="25">   |
 | ------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------- |
 | **Windows / Linux** | 初回保存以降、**直接上書き**が可能。                                                         | 任意のフォルダに「名前を付けてDL」で**手動で上書き可能**。 | 直接上書き不可。<br>**番号付きのサフィックス**を付けた新しいファイルとしてダウンロードされます。 | —                          |
 | **macOS**           | 初回保存以降、**直接上書き**が可能。                                                         |  任意のフォルダに「名前を付けてDL」で**手動で上書き可能**。 | 直接上書き不可。<br>**番号付きのサフィックス**を付けた新しいファイルとしてダウンロードされます。 | **Firefox** と同じ。       |
