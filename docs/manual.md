@@ -723,7 +723,7 @@ By offloading these supporting tasks to AI, you can reduce the cognitive burden 
 
 MD//WORKS can be used with several browser-based AI assistants. This section explains the basic setup for using Gemini in Google Chrome and Leo in Brave Browser.
 
-#### 11-1-1. Google Chrome: Using Gemini
+#### 11-1-1. Google Chrome: Using Gemini<img src="images/BgemniE.jpg" alt="Image: askGemini" width="120"> 
 
 1. **Sign in to your Google Account**  
    Make sure you are signed in to your Google Account in Chrome.
@@ -736,7 +736,7 @@ MD//WORKS can be used with several browser-based AI assistants. This section exp
 
 > Note: The availability and behavior of Gemini in Chrome may vary depending on your Chrome version, Google Account, region, plan, and organizational settings.
 
-#### 11-1-2. Brave Browser: Using Leo
+#### 11-1-2. Brave Browser: Using Leo ![Image: LeoImage](<images/Leoimage.png>)
 
 1. **Open Leo from Brave Browser**  
    No login is required. Click the AI chat icon on the right side of the address bar, or open it from the “…” menu.
