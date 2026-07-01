@@ -1046,21 +1046,23 @@ If you installed the editor as a Chrome App, uninstalling it directly from the a
 
 If you are using a browser other than Chrome, you can also install it as an app (launching in an independent window) as long as your environment, such as a PC/Mac, supports it.
 
-### Appendix 4-1. **■ For Brave**
+### Appendix 4-1. **<img src="./images/BraveIcon.jpg" alt="Image:icon" width="30">  For Brave**
 
 * **Installation:** Click the "Install" icon displayed at the right end of the address bar, or select the menu (≡) at the top right of the screen > "Save and share" > "Install page as app".
 * **Uninstallation:** Select "Uninstall MD//WORKS" from the top right menu (︙) of the app window, or enter `brave://apps` in the browser's address bar and delete it from the list.
 
-### Appendix 4-2. **■ For Safari (Mac / iPadOS)**
+### Appendix 4-2. **<img src="./images/SafariIcon.png" alt="Image:icon" width="25"> For Safari (Mac / iPadOS)**
 
 * **Installation (Mac):** With MD//WORKS open in Safari, select "File" > "Add to Dock" from the menu bar. You will then be able to launch it as an independent web app from the Dock (*macOS Sonoma or later).
 * **Installation (iPad / iPhone):** Select the Share button (the square icon with an upward arrow) at the top or bottom of the screen > "Add to Home Screen".
 * **Uninstallation:** For Mac, long-press the icon in Launchpad to delete it, or delete it from the "Applications" folder. For iPads and iPhones, long-press the icon on the home screen and select "Remove App" or "Delete Bookmark".
 
-### Appendix 4-3. **■ For Microsoft Edge**
+### Appendix 4-3. **<img src="./images/EdgeIcon.png" alt="Image:icon" width="16"> For Microsoft Edge**
 
 * **Installation:** Select the menu (…) at the top right of the screen > "Apps" > "Install this site as an app".
 * **Uninstallation:** Uninstall from "App settings" in the top right menu (…) of the independent app window, or enter `edge://apps` in the browser's address bar and select "Remove" from the list.
+
+> <img src="./images/FirefoxIcon.jpg" alt="Image:icon" width="30"> Firefox does not natively support web apps (PWA), so please use it as a standard browser tab.
 
 ---
 
