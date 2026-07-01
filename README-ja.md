@@ -1,7 +1,7 @@
 # 🚀 MD//WORKS v1.5.8 — AIアシスタント融合スタンドアロン Markdown エディタ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:** [🇺🇸 English](README.md) or [🇯🇵 日本語](README-ja.md)
 <img src="./docs/images/rayoutJ.jpg" alt="rayoutJ.jpg" width="100%">
-<img src="./docs/images/rayout3.JPG" alt="rayout3.JPG" width="80%">
+<img src="./docs/images/rayout3.JPG" alt="rayout3.JPG" width="90%">
 
 * **完全ローカル、なのにAI対応**  
   MD//WORKSはクラウドに依存しない完全なローカル環境で動作します。データは手元のデバイスに安全に保管したまま、ブラウザ標準のAIサイドバーと連携。面倒なコピペ作業なしで、シームレスにAIを活用できます。
