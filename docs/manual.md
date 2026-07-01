@@ -25,7 +25,9 @@ Depending on your browser or operating system, some shortcuts may conflict with 
 
 MD//WORKS does not require installation; you can use it simply by opening the Editor's HTML file in a browser. It can also be launched directly from the [MD//WORKS Editor website](<https://hkjpn.github.io/markdown-editor/>). If unsaved data from a previous session remains, a restoration prompt may appear. If you wish to restore the data, select "Restore" on the confirmation screen.
 
-Although installation is not required, you can convert it into an app using the following steps. Even after turning it into an app, you can switch back and forth with your browser as needed.
+Although installation is not required, you can convert it into an app using the following steps. Even after turning it into an app, you can switch back and forth with your browser as needed. 
+
+>💡 For other browsers, please refer to Appendix 4.
 
 **1-1-1. Steps to Create an App and Switch with Browser Tabs (For Chrome)**
 
