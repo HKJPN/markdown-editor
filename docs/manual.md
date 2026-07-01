@@ -579,7 +579,7 @@ Selecting **Edit > Insert Table of Contents** automatically generates a clickabl
 
 
 
-The View menu lets you toggle Preview, Outline, Show Invisibles, Theme, Fullscreen, Spell (EN), and Zen Mode.
+The View menu lets you toggle Outline, Show Invisibles, Theme, Fullscreen, Spell (EN), and Zen Mode.
 
 ### 9-1. Using Outline
 
