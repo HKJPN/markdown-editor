@@ -27,7 +27,7 @@ MD//WORKS does not require installation; you can use it simply by opening the Ed
 
 Although installation is not required, you can convert it into an app using the following steps. Even after turning it into an app, you can switch back and forth with your browser as needed. 
 
->💡 For other browsers, please refer to Appendix 4  <img src="./images/FirefoxIcon.jpg" alt="Image:icon" width="20"> <img src="./images/BraveIcon.jpg" alt="Image:icon" width="13"> <img src="./images/EdgeIcon.png" alt="Image:icon" width="13">
+>💡 For other browsers, please refer to Appendix 4  <img src="./images/FirefoxIcon.jpg" alt="Image:icon" width="20"> <img src="./images/BraveIcon.jpg" alt="Image:icon" width="16"> <img src="./images/EdgeIcon.png" alt="Image:icon" width="16">
 
 
 **1-1-1. Steps to Create an App and Switch with Browser Tabs (For Chrome)<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="18">
