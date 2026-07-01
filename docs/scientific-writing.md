@@ -297,9 +297,9 @@ This renders the probability density function of a normal distribution with mean
 
 The writing methods described in this guide can be easily applied using **MD//WORKS**, our dedicated Markdown editor.
 
-### Current Stable Version: v1.5.6
+### Current Stable Version: v1.5.8
 
-For compatibility, MD//WORKS v1.5.6 supports standard Markdown specifications as well as some representative extended syntax:
+MD//WORKS v1.5.8 supports standard Markdown specifications as well as most of representative extended syntax:
 
 * Headings
 * Bulleted and numbered lists
@@ -310,16 +310,9 @@ For compatibility, MD//WORKS v1.5.6 supports standard Markdown specifications as
 * Inline code and fenced code blocks
 * Basic Markdown tables
 * Table of Contents (generated from headings)
-
-However, v1.5.7 does not yet natively preview all the extended syntax mentioned in this guide. While unsupported syntax can be written and saved as plain text, it may not render visually within the MD//WORKS preview pane.
-
-### Upcoming Version: v1.5.8
-
-To better support scientific and technical writing, v1.5.7 is scheduled to introduce:
-
 * Footnote preview rendering
 * Automatic footnote numbering
-* Support for descriptive text labels in footnotes
+* Descriptive text labels in footnotes
 
 ### Future Extensions Under Consideration
 
@@ -330,8 +323,6 @@ Future updates, including a "Deep Editing Mode" for long-form writing, may explo
 * Figure/table captions and auto-numbering
 * Cross-referencing within the document
 * BibTeX/CSL integration and reference management
-
-For now, in v1.5.6, we recommend using headings to outline your manuscript and organize your scientific logic. If you plan to use footnotes or math, you can write the extended syntax in plain text, keeping future compatibility in mind.
 
 ## Conclusion
 
