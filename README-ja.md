@@ -16,8 +16,8 @@
 - [クイックスタート（はじめに）](docs/quick-start-ja.md)
 - [📖 取扱説明書(汎用)](docs/manual-ja.md)
 - [📱 iPad向け 取扱説明書](docs/ipad-manual-ja.md)
-- [Scientific Writing Guide](docs/scientific-writing-ja.md).
-- [セキュリティとプライバシー](SECURITY.md)
+- [🎓Scientific Writing Guide](docs/scientific-writing-ja.md).
+- [🛡️セキュリティとプライバシー](SECURITY.md)
 
 MD//WORKSはMITライセンスの下、ご自身のウェブサイトで自由にホストしてのご利用も可能です。ただし、セキュリティとパフォーマンスの観点から、公開環境は常に最新バージョンに保つことを強く推奨します。
 
