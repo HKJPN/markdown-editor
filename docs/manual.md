@@ -1032,6 +1032,53 @@ Once the configuration is complete, you can start using your local LLM.
 2. **"localhost"** will now appear under the chat provider options. Select it and click **"Continue."**
 3. Click the **"Summarize page"** button at the bottom left of the chat window. The content of your active web page will be sent to your local LLM, and a summary will be generated automatically.
 
+## Appendix 1-3. Brave<img src="./images/BraveIcon.jpg" alt="Image:icon" width="30"> 
+
+### Appendix 1-3-1. Prerequisites
+This procedure uses Ollama, which is the easiest to implement.
+
+* **Target Software**: Brave Browser Desktop Edition (Version 1.69 or later)
+* **Recommended Hardware**: PC with 8GB or more of memory (RAM) (required for model execution)
+* **Framework**: [Ollama](https://ollama.com/download)
+
+### Appendix 1-3-2. Setup Procedure
+
+The setup is broadly divided into two stages: "Building the local environment (Ollama) (Phase 1)" and "Connection settings on the Brave browser side (Phase 2)".
+
+#### Phase 1: Installing Ollama and Acquiring a Model
+
+Set up the server to run the LLM locally.
+
+1. **Get the Installer**: Access the [Ollama download page](https://ollama.com/download) and download the installer that matches your operating system (Windows/Mac/Linux).
+2. **Installation**: Run the downloaded file and follow the on-screen instructions to complete the installation. After installation, ensure the Ollama application is running.
+3. **Download the Model**:
+* Open your PC's terminal (Command Prompt or PowerShell for Windows, Terminal for Mac).
+* Enter and execute the following command. Here, we will acquire the recommended model "Llama 3," which offers a good balance of quality and performance.
+`ollama pull llama3`
+* *Note: Depending on the model's file size (approx. 4.7GB), the download may take some time to complete.*
+> In addition to Llama 3, various models supported by Ollama, such as Mistral 7B (Mistral AI) and Phi 3 Mini (Microsoft), can be used following the same procedure.
+
+4. **Verify Completion**: Once you confirm the successful download in the terminal, close it. Your PC is now ready to run local models.
+
+#### Phase 2: Configuration for Brave Leo Integration
+
+Configure the settings in the Brave browser to call the local model prepared in Phase 1.
+
+1. Open the Brave browser and navigate to **[Settings]** > **[Leo]** from the menu.
+2. Scroll down and click **[Add new model]** in the **Bring your own model** section.
+3. Accurately enter the following configuration items:
+* **Label**: Any name that is easy to identify in the Brave menu, such as `Local Llama 3`.
+* **Model request name**: `llama3` (*This must exactly match the model name acquired via Ollama.*)
+* **Server endpoint**: `http://localhost:11434/v1/chat/completions` (*This is Ollama's default listening URL.*)
+* **API Key**: Leave this blank. (It is only required when using third-party external APIs.)
+4. Click **[Add model]** to save your settings.
+
+#### Phase 3: Verifying the Setup
+
+1. Open "Leo" from the Brave browser's sidebar.
+2. Open the model selection menu near the chat input field and select the label you configured in Phase 2 (e.g., `Local Llama 3`).
+3. Enter a prompt and verify that a response is successfully generated in your local environment.
+
 ---
 <a id="appendix-2-fullscreen-browser-compatibility"></a>
 
