@@ -749,7 +749,7 @@ MD//WORKS can be used with several browser-based AI assistants. This section exp
 
 #### 11-1-3. Local AI
 
-In **Firefox**, it is also possible to build a fully local AI environment that summarizes web pages or proofreads text **without sending data over the internet**. For details, see **[Appendix 1: Using a Local LLM with Firefox AI Chat](#appendix-firefox-llm)**.
+It is also possible to build a "completely local AI environment" without sending any data to the internet. For detailed setup instructions, please refer to [Appendix 1:](#appendix-firefox-llm) in this document. 
 
 ### 11-2. Example Use Cases
 
