@@ -955,7 +955,7 @@ PDF出力（**ファイル > 印刷 / PDF保存**）は、ブラウザの印刷�
 
 ## 付録1：各種ブラウザでローカルLLMを使う方法
 
-### 付録1-1. Chrome<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">
+### 付録1-1. Chrome<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">/Edge<img src="./images/EdgeIcon.png" alt="Image:icon" width="16">
 
 「Page Assist」を使う方法では、AIの回答にWeb検索の結果を組み込む（グラウンディング）機能を備えています。ローカルモデルの弱点である「最新情報の不足」を補いながら、文書は文書は全てローカルに保ったままAI支援機能を使うことができきます。
 
@@ -964,7 +964,8 @@ PDF出力（**ファイル > 印刷 / PDF保存**）は、ブラウザの印刷�
 
 
 #### 2. **拡張機能のインストール**
-* **Chrome ウェブストア**から「Page Assist」を検索し、ブラウザにインストールします。
+* Chromeの場合: Chrome ウェブストアから「Page Assist」を検索し、インストールします。
+* Edgeの場合: Microsoft Edge アドオンストア（またはChrome ウェブストア）から「Page Assist」を検索し、インストールします。
 
 
 #### 3. **プロバイダーの接続設定**
