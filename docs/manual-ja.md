@@ -957,6 +957,8 @@ PDF出力（**ファイル > 印刷 / PDF保存**）は、ブラウザの印刷�
 
 ### 付録1-1. Chrome
 
+「Page Assist」を使う方法では、AIの回答にWeb検索の結果を組み込む（グラウンディング）機能を備えています。ローカルモデルの弱点である「最新情報の不足」を補いながら、文書は完全にローカルに保ちつつAI支援機能を使うことができきます。
+
 #### 1. **ローカルLLM（Ollama）の起動**
 * まず、お使いのマシンで [Ollama](https://www.glukhov.org/ja/llm-hosting/ollama/ollama-cheatsheet/) などのローカルLLMサーバーが動作していることを確認します（例: `ollama run llama3` などでモデルを起動できる状態）。
 
