@@ -809,7 +809,7 @@ Our testing confirms that MD//WORKS features high compatibility and seamless per
 
 #### For Strict Security and Corporate Policies
 
-In the case of Gemini in Chrome, it is protected under a Workspace agreement. Copilot allows for management based on Intune/DLP integration. For fully local processing, Chrome or Firefox are strong options. Alternatively, Firefox offers the ability to completely block AI access.
+In the case of Gemini in Chrome, it is protected under a Workspace agreement. Copilot allows for management based on Intune/DLP integration. If you prioritize security even more, we recommend using a local LLM or blocking AI.
 
 ### 11-5. AI Sidebar and Full-Screen Mode Behavior
 
