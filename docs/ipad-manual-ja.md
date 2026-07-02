@@ -180,7 +180,7 @@ MD//WORKSのHTMLファイル、Markdownファイル、および関連するメ�
 
 ```text
 project/
-├─ MD-WORKS.html (アプリ本体)
+├─ index.html (アプリ本体)
 ├─ manual.md
 ├─ images/
 │  └─ figure01.png
