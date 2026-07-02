@@ -293,11 +293,14 @@ In life sciences, chemistry, and physics documents, subscripts and superscripts 
 
 ```markdown
 H<sub>2</sub>O, CO<sub>2</sub>, A<sub>260</sub>/A<sub>280</sub>
+H~2~O, CO~2~, A~260~/A~280~
+
 Ca<sup>2+</sup>, 10<sup>6</sup> cells, cm<sup>2</sup>
+Ca^2+^, 10^6^ cells, cm^2^
 
 ```
 
-Subscripts and superscripts are not supported in standard Markdown. However, by using HTML tags as shown above, you can maintain compatibility and ensure they display correctly across most environments.
+Pandoc-compatible syntax using `~` and `^` is now supported. For broader compatibility across other environments, using HTML tags is recommended.
 
 ### 4-6. Inserting Footnotes
 
