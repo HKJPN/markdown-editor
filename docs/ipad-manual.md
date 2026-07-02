@@ -691,7 +691,7 @@ The following comparison illustrates how different AI browsers interact with MD/
 | **Real-time Context Awareness** | 🚫 **Limited** | ✅ **Full Real-time** | ⚠️ **Snapshot-based** | 🚫 **None** |
 | **AI support on iPad** | 🚫 Not available | 🚫 Not available | **✅ Available** | 🚫 Not available |
 | **Model selection** | 🚫 Not available | 🚫 Not available (Pro/Flash only) | **✅ Available** | **✅ Available** |
-| **Security / privacy** | Best for MS 365 environments | Depends on Google Workspace settings | Minimizes data sharing | Block AI |
+| **Security / privacy** | Best for MS 365 environments | Depends on Google Workspace and account settings; ✅local LLM usage is also possible| Minimizes data sharing | ✅Can block AI access; ✅local LLM usage is also possible |
 | **Recommended use** | Organizations utilizing **MS365** | Writing with **frontier models** | Proofreading, **mobile/iPad use**, model selection | Users who want **strict AI control** |
 
 #### For users looking for smooth mobile integration
