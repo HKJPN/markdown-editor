@@ -967,28 +967,26 @@ For submission-ready PDFs, always open the generated file and confirm that the l
 
 This section explains the steps to connect your browser with a local LLM server running on your PC.
 
-### 1. Chrome (Using Page Assist)<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">
+### Appendix 1-1. Chrome<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">/Edge<img src="./images/EdgeIcon.png" alt="Image:icon" width="16">
 
-In Chrome, you can use an extension called "Page Assist." This extension features a grounding function that incorporates web search results into the AI's responses, compensating for the "lack of latest information"—a common weakness of local models. It allows you to use AI assistance features while keeping highly confidential documents completely local.
+The method using "Page Assist" features grounding, which incorporates web search results into the AI's responses. This compensates for the local model's weakness of "lacking up-to-date information" while allowing you to use AI assistance with all your documents kept completely local.
 
-**Setup Instructions:**
+#### 1. **Starting the Local LLM (Ollama)**
 
-1. **Launch the Local LLM (Ollama)**
-* First, ensure that a local LLM server such as Ollama is running on your machine (e.g., in a state where a model can be launched using `ollama run llama3`).
+* First, ensure that a local LLM server such as [Ollama](https://www.glukhov.org/ja/llm-hosting/ollama/ollama-cheatsheet/) is running on your machine (e.g., in a state where you can start a model using `ollama run llama3`).
 
+#### 2. **Installing the Extension**
 
-2. **Install the Extension**
-* Search for "Page Assist" in the Chrome Web Store and install it in your browser.
+* For Chrome: Search for "Page Assist" in the Chrome Web Store and install it.
+* For Edge: Search for "Page Assist" in the Microsoft Edge Add-ons store (or Chrome Web Store) and install it.
 
+#### 3. **Provider Connection Settings**
 
-3. **Configure Provider Connection**
-* Open the Page Assist settings screen and select **Ollama** as your local AI provider (it is usually recognized automatically at `http://localhost:11434`).
+* Open the Page Assist settings screen and select **Ollama** as the local AI provider (it is usually auto-detected at `http://localhost:11434`).
 
+#### 4. **Start Chatting in the Sidebar**
 
-4. **Start Chatting in the Sidebar**
-* Open the sidebar using a shortcut key or the extension icon, select a loaded model, and you can start conversing immediately.
-
-
+* Open the sidebar using the shortcut key or the extension icon, select a loaded model, and you can start a conversation immediately.
 
 ---
 
