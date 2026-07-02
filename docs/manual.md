@@ -963,63 +963,73 @@ For submission-ready PDFs, always open the generated file and confirm that the l
 
 # Appendix 
 
-## Appendix 1: How to Use Local LLMs in Various Browsers**
+## Appendix 1: How to Use Local LLMs in Various Browsers
 
-This section explains the steps to connect Browser with a local LLM server running on your PC.
+This section explains the steps to connect your browser with a local LLM server running on your PC.
 
-### **Appendix 1-1. Chrome**
+### 1. Chrome (Using Page Assist)<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">
 
- The method using "Page Assist" features a grounding function that incorporates web search results into the AI's responses. It compensates for the "lack of latest information"—a common weakness of local models—while allowing you to use AI assistance features with all your documents kept completely local.
+In Chrome, you can use an extension called "Page Assist." This extension features a grounding function that incorporates web search results into the AI's responses, compensating for the "lack of latest information"—a common weakness of local models. It allows you to use AI assistance features while keeping highly confidential documents completely local.
 
-#### **1. Launch the Local LLM (Ollama)**
- First, ensure that a local LLM server such as Ollama is running on your machine (e.g., in a state where a model can be launched using `ollama run llama3`).
+**Setup Instructions:**
 
-#### **2. Install the Extension**
- Search for "Page Assist" in the Chrome Web Store and install it in your browser.
+1. **Launch the Local LLM (Ollama)**
+* First, ensure that a local LLM server such as Ollama is running on your machine (e.g., in a state where a model can be launched using `ollama run llama3`).
 
-#### **3. Provider Connection Settings**
- Open the Page Assist settings screen and select Ollama as your local AI provider (it is usually recognized automatically at `http://localhost:11434`).
 
-#### **4. Start Chatting in the Sidebar**
- Open the sidebar using a shortcut key or the extension icon, select a loaded model, and you can start conversing immediately.
+2. **Install the Extension**
+* Search for "Page Assist" in the Chrome Web Store and install it in your browser.
 
-### **Appendix 1-2. Firefox <img src="./images/FirefoxIcon.jpg" alt="Image:icon" width="30">
 
-#### 1 Preparation local LLM.
+3. **Configure Provider Connection**
+* Open the Page Assist settings screen and select **Ollama** as your local AI provider (it is usually recognized automatically at `http://localhost:11434`).
+
+
+4. **Start Chatting in the Sidebar**
+* Open the sidebar using a shortcut key or the extension icon, select a loaded model, and you can start conversing immediately.
+
+
+
+---
+
+### 2. Firefox (Native Integration)<img src="./images/FirefoxIcon.jpg" alt="Image:icon" width="30">
+
+In Firefox, you can directly connect the browser's native sidebar feature with a local server (such as `llama.cpp`).
+
+**Setup Instructions:**
+
+#### ① Prepare the Local LLM
 
 First, start the server (interface) to run the LLM locally on your PC.
 
-* **Tools Required:**
-  * [llama.cpp](https://github.com/ggml-org/llama.cpp) (Download the pre-built binary matching your operating system)
-* **Model Required:**
-  * Model files in **GGUF format**, such as `gpt-oss-20b` or `GPT-OSS Swallow`.
-* **Example Launch Command:**
-  * Open your terminal (or Command Prompt) and run the following command to start the server on port `8080`:
-
+* **Tools Required:** `llama.cpp` (Download the pre-built binary matching your operating system)
+* **Model Required:** Model files in **GGUF format**, such as `gpt-oss-20b` or `GPT-OSS Swallow`.
+* **Example Launch Command:** Open your terminal (or Command Prompt) and run the following command to start the server on port `8080`:
 ```bash
 llama-server --model /path/to/your-model.gguf --port 8080
 
 ```
 
+
 > 💡 **Note:** Adjust the launch options (such as GPU offloading via `-ngl`) as needed based on your hardware capabilities and desired processing speed.
 
 
-#### 2. Firefox configration 
+
+#### ② Firefox Configuration (`about:config`)
 
 After starting the server, modify Firefox's advanced settings so it can securely recognize your local LLM server (localhost).
 
-1. Type **`about:config`** in the Firefox address bar and press Enter.
+1. Type **`about:config`** in the Firefox address bar and press **Enter**.
 2. If a warning screen appears, click **"Accept the Risk and Continue"**.
 3. Type **`browser.ml.chat.hideLocalhost`** in the search bar at the top.
 4. The default value is set to `true` (hidden). Click the toggle button on the right (or double-click the row) to change it to **`false`** (visible).
 
-
-#### 3. Basic Usage
+#### ③ Basic Usage
 
 Once the configuration is complete, you can start using your local LLM.
 
 1. Open the "AI Chatbot" panel from the Firefox **sidebar**.
-2. **"localhost"** will now appear under the chat provider options. Select it and click "Continue."
+2. **"localhost"** will now appear under the chat provider options. Select it and click **"Continue."**
 3. Click the **"Summarize page"** button at the bottom left of the chat window. The content of your active web page will be sent to your local LLM, and a summary will be generated automatically.
 
 ---
