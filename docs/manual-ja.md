@@ -299,7 +299,10 @@ project/
 
 ```markdown
 H<sub>2</sub>O, CO<sub>2</sub>, A<sub>260</sub>/A<sub>280</sub>
+H~2~O, CO~2~, A~260~/A~280~
+
 Ca<sup>2+</sup>, 10<sup>6</sup> cells, cm<sup>2</sup>
+Ca^2+^, 10^6^ cells, cm^2^
 ```
 
 下付き文字や上付き文字は、標準のMarkdownではサポートされていません。ただし、上記のようにHTMLタグを使う方法であれば、他の多くの環境でも互換性を保ったまま表示できます。
