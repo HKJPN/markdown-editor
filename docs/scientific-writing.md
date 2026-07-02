@@ -136,12 +136,11 @@ Raw data is available from the [NCBI Gene Expression Omnibus](https://www.ncbi.n
 
 ## 3. Scientific and Chemical Symbols
 
-Life sciences, chemistry, and physics documents frequently require subscripts and superscripts for chemical formulas, charges, units, and exponents.
-Note that subscript and superscript notations are extended features but not part of standard Markdown.
+In papers and documents for life sciences, medicine, chemistry, and physics, superscripts and subscripts are essential for chemical formulas, electrical charges, units, and exponents. However, formatting for **superscripts** and **subscripts** is not a standard feature in common Markdown flavors. If you want to ensure your text displays correctly across various platforms, we recommend using HTML tags rather than the Pandoc-compatible syntax (`~` and `^`). Please note that the following examples may not render properly depending on your environment.
 
 ### 3-1. Subscripts
 
-Wrap the text in `<sub> </sub>`
+Wrap the text in `<sub> </sub>`. Or warp the text in `~`
 
 
 **Input:**
@@ -149,28 +148,34 @@ Wrap the text in `<sub> </sub>`
 ```markdown
 H<sub>2</sub>O, CO<sub>2</sub>, A<sub>260</sub>/A<sub>280</sub>
 
+H~2~O, CO~2~, A~260~/A~280~
+
 ```
 
 **Output:**
 H<sub>2</sub>O, CO<sub>2</sub>, A<sub>260</sub>/A<sub>280</sub>
 
+H~2~O, CO~2~, A~260~/A~280~
 
 
 ### 3-2. Superscripts
 
-Wrap the text in `<sup>　</sup>`.
+Wrap the text in `<sup>　</sup>`. Or wrat the text in `^`
 
 **Input:**
 
 ```markdown
 Ca<sup>2+</sup>, 10<sup>6</sup> cells, cm<sup>2</sup>
 
+Ca^2+^, 10^6^ cells, cm^2^
+
 ```
 
 **Output:**
 Ca<sup>2+</sup>, 10<sup>6</sup> cells, cm<sup>2</sup>
 
-For complex fractions, integrals, matrices, or reaction equations, it is better to use LaTeX-formatted mathematical equations.
+Ca^2+^, 10^6^ cells, cm^2^
+
 
 ## 4. Text Emphasis
 
