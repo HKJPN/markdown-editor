@@ -36,7 +36,8 @@ In addition to traditional HTML tags (`<sup>`, `<sub>`), we now support the simp
 * ✍️ **Start Writing Instantly on a "Blank Slate"**
 We've removed the default sample text on startup, providing you with a clean, blank slate. The moment you open the app, you can dive straight into capturing your ideas.
 * <img src="./images/icon2s.png" alt="Image:icon" width="30"> **App Launch Icon**: Added a dedicated app icon for a more native app-like experience, and updated the manual with detailed installation instructions.
-
+* **🛡️ Privacy-First AI**
+*  We've updated the manual with a guide on setting up a local LLM for users who are particularly concerned about information security.
 
 
 
