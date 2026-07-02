@@ -180,7 +180,7 @@ Relative links will function correctly by placing the MD//WORKS HTML file, your 
 
 ```text
 project/
-├─ MD-WORKS.html (App Main File)
+├─ index.html (App Main File)
 ├─ manual.md
 ├─ images/
 │  └─ figure01.png
