@@ -696,7 +696,7 @@ The following comparison illustrates how different AI browsers interact with MD/
 
 #### For users looking for smooth mobile integration
 
-In our testing, **Leo in Brave Browser** provides the most seamless and effective experience for iPad users. Because it captures a snapshot of your document structure when opened, it is perfect for full-document proofreading, summarization, and consistency checks on your iPad.
+In our testing, **Leo in Brave Browser** provides the most seamless and effective experience for iPad users. Because it captures a snapshot of your document structure when opened, it is perfect for full-document proofreading, summarization, and consistency checks on your iPad. If you need to have the AI recognize an updated document, simply launch a new instance of Leo.
 
 ---
 
