@@ -27,16 +27,16 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 
 In this update, we've introduced powerful features to supercharge your academic and report writing, along with UI enhancements for a smoother workflow.
 
-* 📖 **Long-awaited Footnote Support!**
+* 📖 **Long-awaited Footnote Support!**<br>
 We've added native support for footnotes (`[^1]`), an essential tool for academic writing. Add annotations and references without breaking your flow. Beautifully cross-linked footnote lists are automatically generated in the Preview panel and exported Viewers.
-* 👀 **More Intuitive "3-Step" Preview**
+* 👀 **More Intuitive "3-Step" Preview**<br>
 Seamlessly cycle through "Split View (Real-time sync)", "Focus Preview (Distraction-free reading)", and "Editor Only" with a single click of the Preview button. Instantly switch to the perfect layout for whatever writing phase you're in.
-* 🧪 **Easier Superscripts & Subscripts**
+* 🧪 **Easier Superscripts & Subscripts**<br>
 In addition to traditional HTML tags (`<sup>`, `<sub>`), we now support the simple, easy-to-type Pandoc-compatible syntax (`^superscript^`, `~subscript~`)—perfect for chemical formulas and math equations.
-* ✍️ **Start Writing Instantly on a "Blank Slate"**
+* ✍️ **Start Writing Instantly on a "Blank Slate"**<br>
 We've removed the default sample text on startup, providing you with a clean, blank slate. The moment you open the app, you can dive straight into capturing your ideas.
 * <img src="./images/icon2s.png" alt="Image:icon" width="30"> **App Launch Icon**: Added a dedicated app icon for a more native app-like experience, and updated the manual with detailed installation instructions.
-* 🛡️ **Privacy-First AI**
+* 🛡️ **Privacy-First AI**<br>
  We've updated the manual with a guide on setting up a **local LLM** for users who are particularly concerned about information security.
 
 
