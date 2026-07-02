@@ -163,12 +163,14 @@ Markdownの画像構文は、通常、画像ファイルへの参照を記録す
 入力：
 ```markdown
 H<sub>2</sub>O、CO<sub>2</sub>、A<sub>260</sub>/A<sub>280</sub>
-H~2~O, CO~2~, A ~260~ /A ~280~
+
+H ~2~O, CO ~2~, A ~260~ /A ~280~
 ```
 
 出力例：
 H<sub>2</sub>O、CO<sub>2</sub>、A<sub>260</sub>/A<sub>280</sub>
-H~2~O, CO~2~, A ~260~ /A ~280~
+
+H ~2~O, CO ~2~, A ~260~ /A ~280~
 
 ### 3-2. 上付き文字
 
@@ -178,6 +180,7 @@ H~2~O, CO~2~, A ~260~ /A ~280~
 
 ```markdown
 Ca<sup>2+</sup>, 10<sup>6</sup> cells, cm<sup>2</sup>
+
 Ca^2+^, 10^6^ cells, cm^2^
 
 ```
@@ -185,6 +188,7 @@ Ca^2+^, 10^6^ cells, cm^2^
 出力例：
 
 Ca<sup>2+</sup>, 10<sup>6</sup> cells, cm<sup>2</sup>
+
 Ca^2+^, 10^6^ cells, cm^2^
 
 単純な化学式や指数には上付き・下付き文字が便利ですが、分数、積分、行列、複雑な反応式などを記述する場合は、LaTeX形式の数式を利用する方が適しています。
