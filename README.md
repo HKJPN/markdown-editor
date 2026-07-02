@@ -4,7 +4,7 @@
 <img src="./docs/images/rayout3.JPG" alt="rayout3.JPG" width="100%">
 
 
-* **100% Local, yet AI-Ready:** MD//WORKS is entirely local and **cloud-free**. Keep your data fully secure on your device, while still leveraging your browser's native **AI sidebars** for **seamless assistance** without copy-pasting. And yes, ocal LLMs are supported too.
+* **100% Local, yet AI-Ready:** MD//WORKS is entirely local and **cloud-free**. Keep your data fully secure on your device, while still leveraging your browser's native **AI sidebars** for **seamless assistance** without copy-pasting. Of course, it also offers full support for local LLMs.
 * **Secure Single-HTML Export:** Easily share and protect your work. Our new export feature packages your document into a single HTML file, enabling everything from **restricted viewing** to sharing fully editable drafts with anyone.
 
 For more information about AI integration, see ["11. AI-Assisted Writing" in the manual](https://github.com/HKJPN/markdown-editor/blob/main/docs/manual.md#11-ai-assisted-writing-).
