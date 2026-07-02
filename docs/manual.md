@@ -797,7 +797,7 @@ The following comparison is based on our own testing with MD//WORKS. The behavio
 | **Real-time Context Awareness** | 🚫 **Limited**<br>Requires manual trigger; context updates only when panel is refreshed or explicitly instructed | ✅ **Full Real-time**<br>Directly monitors DOM & selection; updates instantly as you type or select | ⚠️ **Snapshot-based**<br>Captures state when opened; does not auto-sync with ongoing typing without reopening | 🚫 **None**<br>Relies on copy-paste or manual page summary|
 | **AI support on iPad** | 🚫 Not available | 🚫 Not available | ✅ **Available** | 🚫 Not available |
 | **Model selection** | 🚫 Not available | 🚫 Not available (Limited to Pro and Flash) | ✅ **Available** | ✅ Available when using a local or configurable AI setup |
-| **Security / privacy orientation** | Best suited for managed Microsoft 365 environments | Depends on Google Workspace and account settings | Minimizes unnecessary data sharing and offers privacy-oriented controls | ✅Can **block AI** access; **local LLM** usage is also possible |
+| **Security / privacy orientation** | Best suited for managed Microsoft 365 environments | Depends on Google Workspace and account settings; **local LLM** usage is also possible  | Minimizes unnecessary data sharing and offers privacy-oriented controls | ✅Can **block AI** access; **local LLM** usage is also possible |
 | **Recommended use** | Organizations that prioritize **Microsoft 365 governance** | Writing, proofreading, and review using **powerful AI models** | Writing, proofreading, **mobile use**, and **model selection** | Users who want **strict AI control**, AI blocking, or a fully local AI option |
 
 #### For Users Who Want a Smooth and Easy AI Writing Environment
@@ -809,7 +809,7 @@ Our testing confirms that MD//WORKS features high compatibility and seamless per
 
 #### For Strict Security and Corporate Policies
 
-If your organization requires strict adherence to data protection policies, Copilot in Edge is highly recommended for environments governed by Microsoft 365. Alternatively, Firefox offers the ability to completely block AI access or run a fully local LLM for maximum privacy.
+In the case of Gemini in Chrome, it is protected under a Workspace agreement. Copilot allows for management based on Intune/DLP integration. For fully local processing, Chrome or Firefox are strong options. Alternatively, Firefox offers the ability to completely block AI access.
 
 ### 11-5. AI Sidebar and Full-Screen Mode Behavior
 
@@ -961,15 +961,31 @@ For submission-ready PDFs, always open the generated file and confirm that the l
 
 <div id="appendix-firefox-llm"></div>
 
-# Appendix
+# Appendix 
 
-## Appendix 1: How to Use a Local LLM with Firefox's AI Chat Feature
+## Appendix 1: How to Use Local LLMs in Various Browsers**
 
-This section explains the steps to connect Firefox with a local LLM server running on your PC, allowing you to summarize and chat with web pages entirely within a secure, local environment.
+This section explains the steps to connect Browser with a local LLM server running on your PC.
 
----
+### **Appendix 1-1. Chrome**
 
-### 1. Launching the Local LLM Server (Preparation)
+ The method using "Page Assist" features a grounding function that incorporates web search results into the AI's responses. It compensates for the "lack of latest information"—a common weakness of local models—while allowing you to use AI assistance features with all your documents kept completely local.
+
+#### **1. Launch the Local LLM (Ollama)**
+ First, ensure that a local LLM server such as Ollama is running on your machine (e.g., in a state where a model can be launched using `ollama run llama3`).
+
+#### **2. Install the Extension**
+ Search for "Page Assist" in the Chrome Web Store and install it in your browser.
+
+#### **3. Provider Connection Settings**
+ Open the Page Assist settings screen and select Ollama as your local AI provider (it is usually recognized automatically at `http://localhost:11434`).
+
+#### **4. Start Chatting in the Sidebar**
+ Open the sidebar using a shortcut key or the extension icon, select a loaded model, and you can start conversing immediately.
+
+### **Appendix 1-2. Firefox <img src="./images/FirefoxIcon.jpg" alt="Image:icon" width="30">
+
+#### 1 Preparation local LLM.
 
 First, start the server (interface) to run the LLM locally on your PC.
 
@@ -988,7 +1004,7 @@ llama-server --model /path/to/your-model.gguf --port 8080
 > 💡 **Note:** Adjust the launch options (such as GPU offloading via `-ngl`) as needed based on your hardware capabilities and desired processing speed.
 
 
-### 2. Configuring Advanced Settings in Firefox
+#### 2. Firefox configration 
 
 After starting the server, modify Firefox's advanced settings so it can securely recognize your local LLM server (localhost).
 
@@ -998,7 +1014,7 @@ After starting the server, modify Firefox's advanced settings so it can securely
 4. The default value is set to `true` (hidden). Click the toggle button on the right (or double-click the row) to change it to **`false`** (visible).
 
 
-### 3. Basic Usage
+#### 3. Basic Usage
 
 Once the configuration is complete, you can start using your local LLM.
 
