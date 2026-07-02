@@ -27,7 +27,7 @@ MD//WORKS does not require installation; you can use it simply by opening the Ed
 
 Although installation is not required, you can convert it into an app using the following steps. Even after turning it into an app, you can switch back and forth with your browser as needed. 
 
-#### 1-1-1. Steps to Create an App and Switch with Browser Tabs for Chrome<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">. <br>For other browsers<img src="./images/SafariIcon.png" alt="Image:icon" width="25"> <img src="./images/BraveIcon.jpg" alt="Image:icon" width="22"> <img src="./images/EdgeIcon.png" alt="Image:icon" width="16">, please refer to Appendix 4  
+#### 1-1-1. Steps to Create an App and Switch with Browser Tabs for Chrome<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">. <br>For other browsers, please refer to Appendix 4  
 
 1. Open the [MD//WORKS Editor website](<https://hkjpn.github.io/markdown-editor/>) in the Chrome browser on your PC/Mac.
 2. Select the menu (︙) in the top right corner of the screen > "Cast, save, and share" > "Install page as app".
