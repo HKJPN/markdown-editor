@@ -747,9 +747,9 @@ MD//WORKS can be used with several browser-based AI assistants. This section exp
 
 > In our testing, Leo worked smoothly with MD//WORKS, including on mobile environments such as iPad. It was able to read the page structure with a level of accuracy close to the desktop version, even when the HTML structure was relatively complex or imperfect. Brave may therefore be a useful option when you want AI assistance without relying on a Google account, or when you want a more privacy-oriented browser environment.
 
-#### 11-1-3. Local AI
+#### 11-1-3. Local LLM
 
-It is also possible to build a "completely local AI environment" without sending any data to the internet. For detailed setup instructions, please refer to [Appendix 1:](#appendix-firefox-llm) in this document. 
+It is also possible to build a "completely local LLM environment" without sending any data to the internet. For detailed setup instructions, please refer to [Appendix 1:](#appendix-firefox-llm) in this document. 
 
 ### 11-2. Example Use Cases
 
