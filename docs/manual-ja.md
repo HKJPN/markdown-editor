@@ -807,7 +807,7 @@ MD//WORKS環境下での検証において、ChromeのGeminiおよびBraveのLeo
 
 #### セキュリティや社内規定を最重視する方
 
-Gemini in Chromeの場合Workspace契約において保護対象となります。CopilotはIntune/DLP連携が前提となる管理が可能です。完全ローカルでの処理ではChromeかFirefoxが有力な選択肢となります。
+Gemini in Chromeの場合Workspace契約において保護対象となります。CopilotはIntune/DLP連携が前提となる管理が可能です。よりセキュリティを重視する場合は、ローカルLLMを使用するか、AIをブロックすることがおすすめです。
 
 ### 11-5.  AIサイドバーと全画面表示時の挙動
 
