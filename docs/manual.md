@@ -485,11 +485,13 @@ Recipients of the file can instantly resume editing simply by opening it in a we
 | Format | Editable <br>in MD//WORKS | Password Protection | Copy / Print |
 | --- | --- | --- | --- |
 | Viewer | 🚫 No | 🔓 None | 🖨️ Allowed |
-| Restricted Viewer | ✔ Yes | Viewing🔓None<br>Editing🔐Yes| 🛡️ Restricted |
+| Restricted Viewer | ✔ Yes | Viewing: 🔓 Not required<br>Restoring: 🔐 Required | 🛡️ Restricted |
 | Password-protected <br>Viewer | ✔ Yes | 🔐 Yes | 🖨️🔓 <br>Allowed after <br>unlocking |
 | Standalone App | ✔ Yes | 🔓 None | 🖨️ Allowed |
 | Password-protected <br>App | ✔ Yes | 🔐 Yes | 🖨️🔓 <br>Allowed after <br>unlocking |
 
+> 💡 **About the Restricted Viewer password**
+> No password is needed to open and view a Restricted Viewer file. The password you set is only used when you **restore** the original Markdown back into MD//WORKS for re-editing — it is not required for viewing.
 <br clear="all">
 
 > For important documents intended for long-term storage, please ensure you keep the original Markdown file, the password, and the HTML file of the MD//WORKS version used as a precaution. For more details, please refer to 'Troubleshooting: Long-term access and compatibility of encrypted files'.
