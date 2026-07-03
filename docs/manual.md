@@ -779,8 +779,6 @@ In addition to everyday text proofreading, summarization, terminology consistenc
 
 We have verified that MD//WORKS is capable of assisting with the rewriting of large documents (ranging from tens of thousands to a hundred thousand characters) when used in conjunction with top-tier AI models (frontier models). Please refer to Appendix ## 5 for a compilation of useful prompt examples.
 
-In addition to everyday text proofreading, summarization, terminology consistency checks, and simple coding support, it can also perform tasks such as "identifying inconsistencies in quality assurance documents" and "reviewing the overall structure of long documents." Examples of specific prompts are provided.
-
 ### 11-3. Important Notes When Using Browser AI
 
 When you use a browser-based AI assistant, the entire visible document or the selected area may be processed by the AI service. If you are working with confidential information, personal data, or internal company documents, always check what information is being shared and how your browser or organization manages AI access.
