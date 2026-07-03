@@ -753,11 +753,7 @@ It is also possible to build a "completely local LLM environment" without sendin
 
 ### 11-2. Example Use Cases
 
-For everyday proofreading, summarizing, terminology checks, and basic structural reviews, a lightweight model is often more practical than a high-end model. It usually responds faster and allows you to stay focused on writing.
-
-For regular writing tasks, it is recommended to use a lightweight model such as Gemini Flash by default, and switch to a frontier model only when more advanced review is needed. Examples include reviewing the structure of a long document, comparing subtle differences between Japanese and English wording, or checking whether a technical explanation is clear and accurate.
-
-Below are some example prompts.
+In addition to everyday text proofreading, summarization, terminology consistency checks, and simple coding support, it can also perform tasks such as "identifying inconsistencies in quality assurance documents" and "reviewing the overall structure of long documents." Examples of specific prompts are provided.
 
 #### For Papers, Articles, and Technical Documents
 
@@ -777,7 +773,13 @@ Below are some example prompts.
 * Add explanatory comments to each line of the selected Python code.
 * Explain the cause of the error in this R code and suggest how to fix it.
 * Explain what this JavaScript function does in a way that a beginner can understand.
-* Rewrite the following specifications as an implementation prompt for Codex.
+* Rewrite the specifications being edited as an implementation prompt for Codex.
+
+#### Long-Form Text Rewriting Support
+
+We have verified that MD//WORKS is capable of assisting with the rewriting of large documents (ranging from tens of thousands to a hundred thousand characters) when used in conjunction with top-tier AI models (frontier models). Please refer to Appendix ## 5 for a compilation of useful prompt examples.
+
+In addition to everyday text proofreading, summarization, terminology consistency checks, and simple coding support, it can also perform tasks such as "identifying inconsistencies in quality assurance documents" and "reviewing the overall structure of long documents." Examples of specific prompts are provided.
 
 ### 11-3. Important Notes When Using Browser AI
 
@@ -1137,6 +1139,87 @@ If you are using a browser other than Chrome, you can also install it as an app 
 * **Uninstallation:** Uninstall from "App settings" in the top right menu (…) of the independent app window, or enter `edge://apps` in the browser's address bar and select "Remove" from the list.
 
 > <img src="./images/FirefoxIcon.jpg" alt="Image:icon" width="30"> Firefox does not natively support web apps (PWA), so please use it as a standard browser tab.
+
+---
+
+## Appendix 5.　AI-assisted re-writing for long context
+
+### Appendix 5-1. Example for liability risk management
+
+The documents being edited are:
+#1. Product Specification
+#2. Manufacturing Work Instruction
+#3. Inspection Standard
+
+As a Quality Assurance Engineer compliant with JIS Q 9001, please review the following three points collectively.
+
+TASK: Identify every instance of the following three issues. Do not summarize. Do not assume.
+
+1. CONTRADICTIONS IN REQUIREMENTS
+   - Definition: The same parameter has different numerical values, tolerances, units, or pass-fail criteria across documents. Example: Spec states "tensile strength 500N ±5N" but Inspection accepts "≥450N".
+2. REDUNDANT DUPLICATION
+   - Definition: Identical procedural explanation appears in two or more sections where removing one would not change meaning or compliance. Exclude legally required warnings.
+3. AMBIGUOUS OR UNVERIFIABLE LANGUAGE
+   - Definition: Any instruction lacking a quantifiable acceptance criterion. Flag subjective terms: "thoroughly, adequately, sufficiently, as needed, properly, gently, ensure good mixing, stir well, clean, visually acceptable, approximately". Also flag missing who, how long, how many, at what temperature, torque, pressure.
+
+OUTPUT FORMAT:
+Return three separate tables in Markdown. Quote the exact source text and include Document Name, Section ID, Page.
+
+Table 1 – Contradictions
+| Doc A (Sec) | Original Text A | Doc B (Sec) | Original Text B | Conflict Explained |
+
+Table 2 – Redundancy
+| Location 1 | Text | Location 2 | Text | Recommended Action (Keep/Delete) |
+
+Table 3 – Ambiguity
+| Location | Original Text | Why Ambiguous | Suggested Rewrite with measurable criteria |
+
+RULES:
+- If no findings for a category, write "None found".
+- Prioritize patient safety, product liability, and audit traceability.
+- Do not rewrite the whole manual, only list findings.
+
+---
+
+### Appendix 5-2. Academic Proceedings Proofreading and Logical Consistency Review
+
+The documents being edited are the draft chapters of an academic conference proceeding consisting of 10 chapters, co-authored by 10 different researchers.
+
+Acting as a senior journal editor and a rigorous peer reviewer, please conduct a cross-chapter comprehensive review to eliminate inconsistencies and logical flaws caused by multi-author collaboration. Identify all areas requiring correction based on the following four criteria.
+
+[REVIEW CRITERIA]
+1. STYLE AND FORMAT UNIFORMITY
+   - Ensure figure/table references are consistent across all chapters (e.g., resolving mixtures of "Figure 1", "Fig. 1", or "fig.1").
+   - Check for inconsistencies in section numbering, bullet point styles, and text capitalization/emphasis.
+
+2. SCIENTIFIC NOTATION AND SI UNITS COMPLIANCE
+   - Ensure a proper half-width space between numerical values and units (e.g., correcting "10mg/ml" to "10 mg/mL").
+   - Verify that unit symbols adhere to international standards (e.g., using uppercase "L" for liters, proper sub/superscripts).
+
+3. CITATION ACCURACY (APA STYLE)
+   - Verify that both in-text citations (e.g., Author, 2026) and the final reference list strictly adhere to the APA style guidelines.
+   - Check for cross-referencing mismatches (e.g., cited in text but missing from the reference list, or vice versa).
+
+4. CROSS-CHAPTER LOGICAL CONTRADICTIONS
+   - Detect any explicit contradictions, mismatched data, conflicting parameters, or clashing conclusions between different chapters (e.g., Chapter 2 claiming "Condition A is optimal" while Chapter 5 states "Condition A is ineffective").
+
+[OUTPUT FORMAT & RULES]
+- Do not summarize. Quote the exact "Original Text" that requires correction and always specify the "Chapter/Section ID".
+- If no findings are found for a category, explicitly state "None found".
+- Present your findings in three separate Markdown tables as formatted below.
+
+Table 1: Formatting, Style, and Scientific Notation Errors
+| Chapter/Sec | Original Text | Suggested Correction | Reason / Standard to Follow |
+| :--- | :--- | :--- | :--- |
+
+Table 2: Reference and Citation Errors (APA Style)
+| Chapter/Sec | Original Text / Reference | Corrected Version (APA) | Description of Mismatch/Error |
+| :--- | :--- | :--- | :--- |
+
+Table 3: Cross-Chapter Logical Contradictions and Inconsistencies
+| Section A | Text in Section A | Section B | Text in Section B | Explanation of Contradiction |
+| :--- | :--- | :--- | :--- | :--- |
+
 
 ---
 
