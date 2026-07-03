@@ -780,7 +780,7 @@ In addition to everyday text proofreading, summarization, terminology consistenc
 
 #### Long-Form Text Rewriting Support
 
-We have verified that MD//WORKS is capable of assisting with the rewriting of large documents (ranging from tens of thousands to a hundred thousand characters) when used in conjunction with top-tier AI models (frontier models). Please refer to Appendix ## 5 for a compilation of useful prompt examples.
+We have verified that MD//WORKS is capable of assisting with the rewriting of large documents (ranging from tens of thousands to a hundred thousand characters) when used in conjunction with top-tier AI models (frontier models). Please refer to Appendix 5 for a compilation of useful prompt examples.
 
 ### 11-3. Important Notes When Using Browser AI
 
