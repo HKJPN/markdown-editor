@@ -674,7 +674,7 @@ For everyday proofreading, summarizing, terminology checks, and basic structural
 * Check the specified lines (e.g., `Lines 120-135`) or code block for any inconsistencies in the multilingual message `I18N`.
 * Identify the cause and suggest a fix for the error that occurs when running the R code block at the specified lines (e.g., `# Line 3000`).
 * Explain the processing logic of the specified JavaScript function so that even a beginner can understand it.
-* Organize the following specifications as an implementation prompt to be passed to Codex.
+* Rewrite the specifications being edited as an implementation prompt for Codex.
 
  
 ### 11-3. Important Notes When Using Browser AI
