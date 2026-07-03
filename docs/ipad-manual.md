@@ -468,19 +468,23 @@ Recipients of the file can instantly resume editing simply by opening it in a we
 * **For presentation only:** We recommend the "Restricted Viewer Format" for distributing materials such as handouts.
 * **For collaborative editing:** Use the "Standalone App Format" when requesting the recipient to add or edit content (Standalone Save).
 
-<img src="images/exportmodalE.JPG" width="300" align="right">
+<img src="images/exportmodalE.JPG" width="350" align="right">
 
 | Format | Editable <br>in MD//WORKS | Password Protection | Copy / Print |
 | --- | --- | --- | --- |
 | Viewer | 🚫 No | 🔓 None | 🖨️ Allowed |
-| Restricted Viewer | ✔ Yes | 🔐 Yes | 🛡️ Restricted |
+| Restricted Viewer | ✔ Yes | Viewing: 🔓 Not required<br>Restoring: 🔐 Required | 🛡️ Restricted |
 | Password-protected <br>Viewer | ✔ Yes | 🔐 Yes | 🖨️🔓 <br>Allowed after <br>unlocking |
 | Standalone App | ✔ Yes | 🔓 None | 🖨️ Allowed |
 | Password-protected <br>App | ✔ Yes | 🔐 Yes | 🖨️🔓 <br>Allowed after <br>unlocking |
 
+
+> 💡 **About the Restricted Viewer password**
+> 
+> No password is needed to open and view a Restricted Viewer file. The password you set is only used when you **restore** the original Markdown back into MD//WORKS for re-editing — it is not required for viewing.
 <br clear="all">
 
-> For important documents intended for long-term storage, please ensure you keep the original Markdown file, the password, and the HTML file of the MD//WORKS version used as a precaution. For more details, please refer to 'Troubleshooting: Long-term access and compatibility of encrypted files'.
+For important documents intended for long-term storage, please ensure you keep the original Markdown file, the password, and the HTML file of the MD//WORKS version used as a precaution. For more details, please refer to 'Troubleshooting: Long-term access and compatibility of encrypted files'.
 
 
 ### 7-2. Printing or Saving as PDF
