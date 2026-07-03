@@ -485,7 +485,7 @@ Recipients of the file can instantly resume editing simply by opening it in a we
 | Format | Editable <br>in MD//WORKS | Password Protection | Copy / Print |
 | --- | --- | --- | --- |
 | Viewer | 🚫 No | 🔓 None | 🖨️ Allowed |
-| Restricted Viewer | ✔ Yes | 🔐 Yes | 🛡️ Restricted |
+| Restricted Viewer | ✔ Yes | Viewing🔓None<br>Editing🔐Yes| 🛡️ Restricted |
 | Password-protected <br>Viewer | ✔ Yes | 🔐 Yes | 🖨️🔓 <br>Allowed after <br>unlocking |
 | Standalone App | ✔ Yes | 🔓 None | 🖨️ Allowed |
 | Password-protected <br>App | ✔ Yes | 🔐 Yes | 🖨️🔓 <br>Allowed after <br>unlocking |
