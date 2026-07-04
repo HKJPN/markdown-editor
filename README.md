@@ -101,10 +101,10 @@ Packages your text and the editor into one file. Recipients can instantly pick u
 | Format | Editable in <br>MD//WORKS | Password <br>Protection | Copy / Print |
 | --- | --- | --- | --- |
 | Viewer | 🚫 No | 🔓 None | 🖨️ Allowed |
-| Restricted <br>Viewer | ✔ Yes | Viewing: <br>🔓 Not required/<br>Restoring: <br>🔐 Required | 🛡️ Restricted |
-| Password-<br>protected Viewer | ✔ Yes | 🔐 Yes | 🖨️🔓 <br>Allowed after <br>unlocking |
+| Restricted Viewer | ✔ Yes | Viewing: 🔓 Not required/<br>Restoring: 🔐 Required | 🛡️ Restricted |
+| Password-protected Viewer | ✔ Yes | 🔐 Yes | 🖨️🔓 <br>Allowed after unlocking |
 | Standalone App | ✔ Yes | 🔓 None | 🖨️ Allowed |
-| Password-<br>protected App | ✔ Yes | 🔐 Yes | 🖨️🔓 <br>Allowed after <br>unlocking |
+| Password-protected App | ✔ Yes | 🔐 Yes | 🖨️🔓 <br>Allowed after unlocking |
 
 
 
