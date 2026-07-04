@@ -482,7 +482,7 @@ Recipients of the file can instantly resume editing simply by opening it in a we
 
 <img src="images/exportmodalE.JPG" width="350" align="right">
 
-| Format | Editable <br>in MD//WORKS | Password Protection | Copy / Print |
+| Format | Editable <br>in MD//WORKS | Password <br>Protection | Copy / Print |
 | --- | --- | --- | --- |
 | Viewer | 🚫 No | 🔓 None | 🖨️ Allowed |
 | Restricted Viewer | ✔ Yes | Viewing: <br>🔓 Not required/<br>Restoring: <br>🔐 Required | 🛡️ Restricted |
