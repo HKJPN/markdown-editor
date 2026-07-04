@@ -110,7 +110,9 @@ MD//WORKSの最大の特徴は、用途に合わせて「文書を1つのHTMLフ
 | 形式 | MD//WORKSでの再編集 | パスワード保護 | コピー・印刷 |
 | --- | --- | --- | --- |
 | Viewer | 🚫不可 | 🔓無 | 🖨️可能 |
-| Restricted Viewer | **✔可能** | **🔐有** | **🛡️抑制** |
+| Restricted Viewer | **✔可能** | 閲覧時:🔓不要<br>
+
+復元時:🔐必要 | **🛡️抑制** |
 | Password-protected Viewer | **✔可能** | **🔐有** | **🖨️🔓保護解除後に可能** |
 | Standalone App | **✔可能** | 🔓無 | 🖨️可能 |
 | Password-protected App | **✔可能** | **🔐有** | **🖨️🔓保護解除後に可能** |
