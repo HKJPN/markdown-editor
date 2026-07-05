@@ -27,7 +27,7 @@ MD//WORKS does not require installation; you can use it simply by opening the Ed
 
 Although installation is not required, you can convert it into an app using the following steps. Even after turning it into an app, you can switch back and forth with your browser as needed. 
 
-#### 1-1-1. Steps to Create an App and Switch with Browser Tabs for Chrome<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">. <br>For other browsers, please refer to Appendix 4  
+#### 1-1-1. Steps to Create an App and Switch with Browser Tabs for Chrome<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">. <br>For other browsers, please refer to Appendix 5
 
 1. Open the [MD//WORKS Editor website](<https://hkjpn.github.io/markdown-editor/>) in the Chrome browser on your PC/Mac.
 2. Select the menu (︙) in the top right corner of the screen > "Cast, save, and share" > "Install page as app".
@@ -44,7 +44,7 @@ Although installation is not required, you can convert it into an app using the 
 If you are running the app from the HTML file or directly from the [MD//WORKS Editor website](https://hkjpn.github.io/markdown-editor/), uninstallation is not required. You can completely remove it simply by deleting the HTML file and clearing your browser cache.
 
 If you installed it as a Chrome App, open the standalone app window, click the menu icon (︙) in the top-right corner, and select **"Uninstall MD//WORKS"**.
-> *Note: If you are unable to uninstall it this way, please refer to Appendix 3.*
+> *Note: If you are unable to uninstall it this way, please refer to Appendix 4.*
 
 ### 1-2. Supported Environments
 
@@ -780,7 +780,7 @@ In addition to everyday text proofreading, summarization, terminology consistenc
 
 #### Long-Form Text Rewriting Support
 
-We have verified that MD//WORKS is capable of assisting with the rewriting of large documents (ranging from tens of thousands to a hundred thousand characters) when used in conjunction with top-tier AI models (frontier models). When targeting long documents, it is convenient to request a list of all rewrite suggestions in a single response. Please refer to Appendix 5 for a compilation of useful prompt examples.
+We have verified that MD//WORKS is capable of assisting with the rewriting of large documents (ranging from tens of thousands to a hundred thousand characters) when used in conjunction with top-tier AI models (frontier models). When targeting long documents, it is convenient to request a list of all rewrite suggestions in a single response. Please refer to Appendix 6 for a compilation of useful prompt examples.
 
 ### 11-3. Important Notes When Using Browser AI
 
@@ -816,7 +816,7 @@ In the case of Gemini in Chrome, it is protected under a Workspace agreement. Co
 
 ### 11-5. AI Sidebar and Full-Screen Mode Behavior
 
-When using the AI sidebar, switching to full-screen mode is highly recommended to maximize your workspace. However, depending on your browser, you may experience better stability by using your browser's native full-screen shortcut rather than the "Full Screen" button within MD//WORKS. For more details, please refer to [Appendix 2: Full-Screen Behavior and Browser Compatibility](#appendix-2-fullscreen-browser-compatibility).
+When using the AI sidebar, switching to full-screen mode is highly recommended to maximize your workspace. However, depending on your browser, you may experience better stability by using your browser's native full-screen shortcut rather than the "Full Screen" button within MD//WORKS. For more details, please refer to [Appendix 3: Full-Screen Behavior and Browser Compatibility](#appendix-2-fullscreen-browser-compatibility).
 
 ---
 
@@ -1081,9 +1081,30 @@ Configure the settings in the Brave browser to call the local model prepared in 
 3. Enter a prompt and verify that a response is successfully generated in your local environment.
 
 ---
+## Appendix 2. How to Share and Use a Local Server LLM (Chrome, Edge, Brave)
+
+This section provides an example of setting up an LLM environment, such as Ollama, on a local server (e.g., a Linux machine with the IP address `192.168.1.100`) and sharing it. This approach involves preparing a single dedicated AI server for shared use. The advantages are that it does not depend on the individual PC specifications of each user and allows for centralized version control. As a practical example, a Mac Pro M4 with 128GB of memory dedicated as an LLM server can be practically used by a group of about 100 people, even with 3 to 10 users accessing it simultaneously during peak times.
+
+### Appendix 2-1. Allowing External Access:
+
+By default, Ollama only accepts access from the server itself (localhost). However, by setting the environment variable `OLLAMA_HOST=0.0.0.0` before starting, it can accept connections from other PCs on the local network.
+
+* **CORS (Cross-Origin Resource Sharing) Configuration:** Since browser extensions will directly call the server's API, allowing CORS is also necessary. Start Ollama by specifying the environment variable `OLLAMA_ORIGINS="*"` (or your internal company domain).
+* **Considering HTTPS:** Due to browser security specifications, warnings may appear or requests may be blocked when calling an HTTP connection API. If possible, it is recommended to place a reverse proxy (such as Nginx) in front of the internal server, install an SSL certificate, and enable HTTPS (e.g., `https://ai.company.local`).
+* **Network Security:** Restrict access to the server exclusively to the local network (intranet) or via VPN, and appropriately configure firewalls to prevent external access.
+
+### Appendix 2-2. Client PC (Browser) Configurations
+
+On each PC, you simply need to change the "Connection URL" from the previous steps to your internal server's address.
+
+* **For Chrome / Edge (Page Assist Extension):** From the Page Assist settings screen, change the Ollama URL from the default `http://localhost:11434` to `http://192.168.1.100:11434` (*use your actual server IP or internal domain*) and save the settings.
+* **For Brave (Brave Leo Built-in Feature):** On the Settings > Leo > Add new model screen, register the "Server endpoint" as `http://192.168.1.100:11434/v1/chat/completions`.
+
+
+---
 <a id="appendix-2-fullscreen-browser-compatibility"></a>
 
-## Appendix 2: Full-Screen Behavior & Browser Compatibility**
+## Appendix 3: Full-Screen Behavior & Browser Compatibility**
 **Current Limitation on Brave, Edge, and Firefox**
 When the app's "Full Screen" button is activated, the **AI Sidebar (Leo)** and other browser UI elements are hidden on **Brave, Microsoft Edge, and Firefox**.
 
@@ -1101,7 +1122,7 @@ We are monitoring browser updates. If the behavior on Brave, Edge, or Firefox ch
 
 ---
 
-## Appendix 3: Uninstalling the Chrome App
+## Appendix 4: Uninstalling the Chrome App
 
 If you installed the editor as a Chrome App, uninstalling it directly from the app window might occasionally fail. **If the app does not uninstall properly or if the shortcut icon remains**, please try one of the manual removal methods below:
 
@@ -1119,22 +1140,22 @@ If you installed the editor as a Chrome App, uninstalling it directly from the a
 
 ---
 
-## Appendix 4: How to Install as an App and Uninstall on Various Browsers
+## Appendix 5: How to Install as an App and Uninstall on Various Browsers
 
 If you are using a browser other than Chrome, you can also install it as an app (launching in an independent window) as long as your environment, such as a PC/Mac, supports it.
 
-### Appendix 4-1. **<img src="./images/BraveIcon.jpg" alt="Image:icon" width="30">  For Brave**
+### Appendix 5-1. **<img src="./images/BraveIcon.jpg" alt="Image:icon" width="30">  For Brave**
 
 * **Installation:** Click the "Install" icon displayed at the right end of the address bar, or select the menu (≡) at the top right of the screen > "Save and share" > "Install page as app".
 * **Uninstallation:** Select "Uninstall MD//WORKS" from the top right menu (︙) of the app window, or enter `brave://apps` in the browser's address bar and delete it from the list.
 
-### Appendix 4-2. **<img src="./images/SafariIcon.png" alt="Image:icon" width="25"> For Safari (Mac / iPadOS)**
+### Appendix 5-2. **<img src="./images/SafariIcon.png" alt="Image:icon" width="25"> For Safari (Mac / iPadOS)**
 
 * **Installation (Mac):** With MD//WORKS open in Safari, select "File" > "Add to Dock" from the menu bar. You will then be able to launch it as an independent web app from the Dock (*macOS Sonoma or later).
 * **Installation (iPad / iPhone):** Select the Share button (the square icon with an upward arrow) at the top or bottom of the screen > "Add to Home Screen".
 * **Uninstallation:** For Mac, long-press the icon in Launchpad to delete it, or delete it from the "Applications" folder. For iPads and iPhones, long-press the icon on the home screen and select "Remove App" or "Delete Bookmark".
 
-### Appendix 4-3. **<img src="./images/EdgeIcon.png" alt="Image:icon" width="16"> For Microsoft Edge**
+### Appendix 5-3. **<img src="./images/EdgeIcon.png" alt="Image:icon" width="16"> For Microsoft Edge**
 
 * **Installation:** Select the menu (…) at the top right of the screen > "Apps" > "Install this site as an app".
 * **Uninstallation:** Uninstall from "App settings" in the top right menu (…) of the independent app window, or enter `edge://apps` in the browser's address bar and select "Remove" from the list.
@@ -1143,9 +1164,9 @@ If you are using a browser other than Chrome, you can also install it as an app 
 
 ---
 
-## Appendix 5.　AI-assisted re-writing for long context
+## Appendix 6.　AI-assisted re-writing for long context
 
-### Appendix 5-1. Example for liability risk management
+### Appendix 6-1. Example for liability risk management
 
 The documents being edited are:
 #1. Product Specification
@@ -1182,7 +1203,7 @@ RULES:
 
 ---
 
-### Appendix 5-2. Academic Proceedings Proofreading and Logical Consistency Review
+### Appendix 6-2. Academic Proceedings Proofreading and Logical Consistency Review
 
 The documents being edited are the draft chapters of an academic conference proceeding consisting of 10 chapters, co-authored by 10 different researchers.
 
