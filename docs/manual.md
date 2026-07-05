@@ -752,7 +752,7 @@ MD//WORKS can be used with several browser-based AI assistants. This section exp
 
 #### 11-1-3. Local LLM
 
-It is also possible to build a "completely local LLM environment" without sending any data to the internet. For detailed setup instructions, please refer to [Appendix 1:](#appendix-firefox-llm) in this document. 
+It is also possible to build a "completely local LLM environment" without sending any data to the internet. For detailed setup instructions, please refer to [Appendix 1 and 2:](#appendix-firefox-llm) in this document. 
 
 ### 11-2. Example Use Cases
 
