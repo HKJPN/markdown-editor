@@ -21,7 +21,7 @@ Depending on your browser or operating system, some shortcuts may conflict with 
 
 ## 1. Starting the App and Understanding the Screen Layout
 
-### 1-1. Starting the App**
+### 1-1. Starting the App
 
 MD//WORKS does not require installation; you can use it simply by opening the Editor's HTML file in a browser. It can also be launched directly from the [MD//WORKS Editor website](<https://hkjpn.github.io/markdown-editor/>). If unsaved data from a previous session remains, a restoration prompt may appear. If you wish to restore the data, select "Restore" on the confirmation screen.
 
@@ -424,7 +424,7 @@ Both **Private Storage** and **Save as Private App** use passphrases, but they s
 | Save as Private App | Exports the current document as a passphrase-protected HTML file | The exported HTML file |
 
 If you forget the passphrase, the protected data cannot be recovered.  
-For important documents, keep a separate Markdown backup (`.md`) in a secure location.
+For important documents, keep a separate Markdown backup (`.md`) in a secure location (see "12-3. Long-term access and compatibility of encrypted files" for details on managing passwords for long-term storage).
 
 ### 6-6. Restoring from History
 
@@ -495,15 +495,28 @@ Recipients of the file can instantly resume editing simply by opening it in a we
 > 
 > No password is needed to open and view a Restricted Viewer file. The password you set is only used when you **restore** the original Markdown back into MD//WORKS for re-editing — it is not required for viewing.
 <br clear="all">
-For important documents intended for long-term storage, please ensure you keep the original Markdown file, the password, and the HTML file of the MD//WORKS version used as a precaution. For more details, please refer to 'Troubleshooting: Long-term access and compatibility of encrypted files'.
+For important documents intended for long-term storage, see "12-3. Long-term access and compatibility of encrypted files" for guidance on keeping the original Markdown file, the password, and the HTML file of the MD//WORKS version used.
 
 
 ### 7-2. Printing or Saving as PDF
 
-Select **File > Print / Save as PDF** to open the browser print dialog based on the rendered preview.  
-Choose **Save as PDF** as the destination to generate a PDF file. **Turning off the Headers and footers option** in the advanced settings allows you to save it as a plain PDF file.
+Select **File > Print / Save as PDF...** to open the MD//WORKS Print / Save as PDF menu. From this menu, you can choose to print the rendered Preview, the Markdown source, or the Markdown source with line numbers.
 
-When creating PDFs for submission or distribution, always open the exported PDF and check for layout issues, missing tables, image problems, or awkward page breaks.
+To export as a PDF, choose **Save as PDF** as the destination in your browser’s print dialog. You can also turn off **Headers and footers** in the browser’s print settings to remove browser-generated information such as the URL, date, and page numbers, producing a cleaner output.
+
+- **Preview**  
+  Prints the rendered HTML view of your Markdown while preserving its formatting.
+
+- **Markdown Source**  
+  Prints the Markdown syntax as plain text. Use this option when printing HTML source files or code.
+
+- **Markdown Source ☑ Include Line Numbers**  
+  Prints the Markdown source with logical line numbers. This is useful for line-by-line review and comments on academic papers, patent drafts, code, and other long-form documents.
+
+> When printing or saving as PDF, use **File > Print / Save as PDF...** in MD//WORKS instead of the browser’s standard Ctrl+P shortcut. Ctrl+P prints the current browser screen directly, which may include the app UI or cause page breaks to differ from MD//WORKS’ optimized print output.
+>
+> If you open a `.html` / `.htm` file or HTML source code, Preview printing may interpret it as HTML and produce broken output. When printing HTML source or code, use **Markdown Source** or **Markdown Source ☑ Include Line Numbers** instead.
+
 
 ---
 
@@ -752,7 +765,7 @@ MD//WORKS can be used with several browser-based AI assistants. This section exp
 
 #### 11-1-3. Local LLM
 
-It is also possible to build a "completely local LLM environment" without sending any data to the internet. For detailed setup instructions, please refer to [Appendix 1 and 2:](#appendix-firefox-llm) in this document. 
+It is also possible to build a "completely local LLM environment" without sending any data to the internet. For detailed setup instructions, please refer to [Appendix 1 and 2](#appendix-1-2-local-llm) in this document.
 
 ### 11-2. Example Use Cases
 
@@ -812,11 +825,11 @@ Our testing confirms that MD//WORKS features high compatibility and seamless per
 
 #### For Strict Security and Corporate Policies
 
-In the case of Gemini in Chrome, it is protected under a Workspace agreement. Copilot allows for management based on Intune/DLP integration. If you prioritize security even more, we recommend using a local LLM or blocking AI.
+In the case of Gemini in Chrome, it is protected under a Workspace agreement. Copilot allows for management based on Intune/DLP integration. For guidance on handling confidential information and controlling AI access, see "11-3. Important Notes When Using Browser AI".
 
 ### 11-5. AI Sidebar and Full-Screen Mode Behavior
 
-When using the AI sidebar, switching to full-screen mode is highly recommended to maximize your workspace. However, depending on your browser, you may experience better stability by using your browser's native full-screen shortcut rather than the "Full Screen" button within MD//WORKS. For more details, please refer to [Appendix 3: Full-Screen Behavior and Browser Compatibility](#appendix-2-fullscreen-browser-compatibility).
+When using the AI sidebar, switching to full-screen mode is highly recommended to maximize your workspace. However, depending on your browser, you may experience better stability by using your browser's native full-screen shortcut rather than the "Full Screen" button within MD//WORKS. For more details, please refer to [Appendix 3: Full-Screen Behavior and Browser Compatibility](#appendix-3-fullscreen-browser-compatibility).
 
 ---
 
@@ -870,7 +883,7 @@ Do not store the password in plain text in the same location as the encrypted fi
 First, check your browser’s default Downloads folder.  
 Saving and export operations follow your browser’s download settings. Also confirm that the name in the file name field matches the downloaded file.
 
-Remember that **Auto encrypted** only protects drafts and history stored in the browser. It does not create a `.md` file on your computer. To keep a regular file, use **File > Save (Ctrl+S / ⌘S)**.
+Remember that **Auto encrypted** only protects drafts and history stored in the browser. It does not create a `.md` file on your computer (see "6-4. Understanding Local Draft Protection" for details). To keep a regular file, use **File > Save (Ctrl+S / ⌘S)**.
 
 ### 12-5. The title bar shows “Unsaved”
 
@@ -896,7 +909,7 @@ If drag-and-drop image insertion does not work, check the following:
 | The image is an SVG file | Convert it to PNG, JPEG, or WebP |
 | The file is not an image | Use a valid image file |
 
-To protect local storage capacity and improve security, MD//WORKS Editor does not accept images over 200 KB or SVG files.
+To protect local storage capacity and improve security, MD//WORKS Editor does not accept images over 300 KB or SVG files (see "3-2. Inserting Images" for details).
 
 ### 12-8. Preview is not displayed
 
@@ -935,10 +948,7 @@ For important documents, do not rely solely on Private Storage. Save a separate 
 
 ### 12-13. I forgot my Private App passphrase
 
-HTML files created with **File > Save as Private App** cannot be decrypted without the correct passphrase.
-
-If the passphrase is forgotten, the document cannot be recovered.  
-Before exporting a Private App, save the original Markdown document securely on your computer.
+HTML files created with **File > Save as Private App** cannot be decrypted without the correct passphrase. If the passphrase is forgotten, the document cannot be recovered, so be sure to save the original Markdown document securely on your computer before exporting a Private App (see "12-3" for general long-term storage guidance).
 
 ### 12-14. My Standalone HTML app does not open correctly
 
@@ -962,7 +972,7 @@ For submission-ready PDFs, always open the generated file and confirm that the l
 
 ---
 
-<div id="appendix-firefox-llm"></div>
+<div id="appendix-1-2-local-llm"></div>
 
 # Appendix 
 
@@ -993,7 +1003,7 @@ The method using "Page Assist" features grounding, which incorporates web search
 
 ---
 
-### 2. Firefox (Native Integration)<img src="./images/FirefoxIcon.jpg" alt="Image:icon" width="30">
+### Appendix 1-2. Firefox (Native Integration)<img src="./images/FirefoxIcon.jpg" alt="Image:icon" width="30">
 
 In Firefox, you can directly connect the browser's native sidebar feature with a local server (such as `llama.cpp`).
 
@@ -1033,7 +1043,7 @@ Once the configuration is complete, you can start using your local LLM.
 2. **"localhost"** will now appear under the chat provider options. Select it and click **"Continue."**
 3. Click the **"Summarize page"** button at the bottom left of the chat window. The content of your active web page will be sent to your local LLM, and a summary will be generated automatically.
 
-## Appendix 1-3. Brave<img src="./images/BraveIcon.jpg" alt="Image:icon" width="30"> 
+### Appendix 1-3. Brave<img src="./images/BraveIcon.jpg" alt="Image:icon" width="30"> 
 
 ### Appendix 1-3-1. Prerequisites
 This procedure uses Ollama, which is the easiest to implement.
@@ -1102,9 +1112,9 @@ On each PC, you simply need to change the "Connection URL" from the previous ste
 
 
 ---
-<a id="appendix-2-fullscreen-browser-compatibility"></a>
+<a id="appendix-3-fullscreen-browser-compatibility"></a>
 
-## Appendix 3: Full-Screen Behavior & Browser Compatibility**
+## Appendix 3: Full-Screen Behavior & Browser Compatibility
 **Current Limitation on Brave, Edge, and Firefox**
 When the app's "Full Screen" button is activated, the **AI Sidebar (Leo)** and other browser UI elements are hidden on **Brave, Microsoft Edge, and Firefox**.
 
