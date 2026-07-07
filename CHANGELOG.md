@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-07-07 - v1.5.9 candidate- Line Numbers and Print/PDF Improvements
+
+* **Added optional logical line numbers in the editor.**  
+* **Added a subtle current-line highlight.**  
+* **Reorganized Print / Save as PDF into a modal.**  
+* **Improved Preview printing stability.**  
+* **Added a warning for Preview printing of HTML source.**  
+* **Improved editor line-number alignment.**
+
 ## 2026-06-30 - v1.5.8 candidate - Academic Writing and Workflow Improvements
 
 * **Added footnote support:** Use `[^1]` syntax for citations and notes.
