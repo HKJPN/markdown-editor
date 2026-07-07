@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-07-07 - v1.5.9 candidate- Stabilize search result scrolling
+
+* **Stabilize search result scrolling** :Fixed intermittent failure to scroll the editor to the current search match. 
+
 ## 2026-07-07 - v1.5.9 candidate- Line Numbers and Print/PDF Improvements
 
 * **Added optional logical line numbers in the editor.**  
