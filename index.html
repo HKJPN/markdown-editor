@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://cdn.jsdelivr.net https://api.github.com; img-src 'self' data: blob:; object-src 'none'; base-uri 'none';">
 
 <title>MD//WORKS Editor</title>
-<link rel="icon" type="image/png" href="images/icon2t.png">
-<link rel="apple-touch-icon" href="images/icon2t.png">
+<link rel="icon" type="image/png" href="images/icon2.png">
+<link rel="apple-touch-icon" href="images/icon2.png">
 
 <script>
   (function() {
@@ -62,13 +62,22 @@
   --success:#5ad7a0;
   --warn:#ebb05b;
   --danger:#f17786;
-  --mono:'JetBrains Mono',monospace;
+  --mono:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --serif:'Noto Serif JP',serif;
   --sans:'Zen Kaku Gothic New',sans-serif;
   --shadow-lg:0 24px 64px rgba(0,0,0,.50);
   --shadow-md:0 14px 36px rgba(0,0,0,.34);
   --glow:0 0 0 1px rgba(210,203,255,.055) inset;
+  --editor-padding-top:30px;
+  --editor-padding-right:34px;
+  --editor-padding-bottom:30px;
+  --editor-padding-left:34px;
+  --line-number-gutter-width:4.8em;
+  --current-line-bg:rgba(143,130,255,.055);
+  --editor-font-size:14.5px;
+  --editor-line-height:26px;
 }
+
 
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
@@ -337,9 +346,15 @@ body #filename-display.locked:focus{
     linear-gradient(180deg, rgba(12,15,22,.82), rgba(10,13,19,.76));
 }
 #editor, #editor-backdrop{
-  font-family:var(--mono);font-size:14.5px;line-height:1.82;
-  padding:30px 34px;tab-size:2;white-space:pre-wrap;word-wrap:break-word;
+  font-family:var(--mono);font-size:var(--editor-font-size);line-height:var(--editor-line-height);
+  padding:var(--editor-padding-top) var(--editor-padding-right) var(--editor-padding-bottom) var(--editor-padding-left);tab-size:2;white-space:pre-wrap;word-wrap:break-word;
   overflow-wrap:break-word;width:100%;height:100%;border:none;outline:none;margin:0;
+  -webkit-text-size-adjust: 100%;
+}
+#editor{
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0;
 }
 #editor-backdrop{
   position:absolute;inset:0;color:transparent;pointer-events:none;z-index:1;
@@ -347,13 +362,48 @@ body #filename-display.locked:focus{
 }
 
 #editor-backdrop .editor-line{
+  position:relative;
   display:block;
-  min-height:1.82em;
+  min-height:var(--editor-line-height);
   margin: 0 -0.18em;
   padding: 0 0.18em;
   border-radius:8px;
 }
-#editor-backdrop .editor-line.blank{ min-height:1.82em; }
+#editor-backdrop .editor-line.blank{ min-height:var(--editor-line-height); }
+
+/* Current-line and logical line-number overlays stay in the Backdrop only. */
+body.show-line-numbers #editor,
+body.show-line-numbers #editor-backdrop{
+  padding-left:calc(var(--editor-padding-left) + var(--line-number-gutter-width));
+}
+#editor-backdrop .editor-line.current-line{
+  background:linear-gradient(90deg, var(--current-line-bg), transparent 92%);
+}
+#editor-backdrop .editor-line.task-open-line.current-line{
+  background:
+    linear-gradient(90deg, var(--current-line-bg), transparent 92%),
+    linear-gradient(90deg, rgba(235,176,91,.16), rgba(235,176,91,.045) 48%, transparent 84%);
+}
+#editor-backdrop .editor-line.task-done-line.current-line{
+  background:
+    linear-gradient(90deg, var(--current-line-bg), transparent 92%),
+    linear-gradient(90deg, rgba(90,215,160,.13), rgba(90,215,160,.04) 48%, transparent 84%);
+}
+#editor-backdrop .line-number{
+  position:absolute;
+  left:calc(-1 * var(--line-number-gutter-width));
+  top:0;
+  width:var(--line-number-gutter-width);
+  padding-right:1em;
+  text-align:right;
+  color:var(--text3);
+  opacity:.55;
+  user-select:none;
+  pointer-events:none;
+  font-family:var(--mono);
+  font-size:inherit;
+  line-height:inherit;
+}
 
 #editor-backdrop .task-open-line{
   background:linear-gradient(90deg, rgba(235,176,91,.16), rgba(235,176,91,.045) 48%, transparent 84%);
@@ -692,13 +742,15 @@ body.preview-focus-mode #preview h6 {
 #rn-modal,
 #doc-modal,
 #update-modal,
-#export-modal {
+#export-modal,
+#print-modal {
   position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:9999; display:none; align-items:center; justify-content:center; backdrop-filter:blur(4px);
 }
 #rn-modal.show,
 #doc-modal.show,
 #update-modal.show,
-#export-modal.show { display:flex; }
+#export-modal.show,
+#print-modal.show { display:flex; }
 .rn-content,
 .doc-content {
   background:linear-gradient(180deg, rgba(29,35,49,.98), rgba(17,21,31,.98));
@@ -749,11 +801,117 @@ body.preview-focus-mode #preview h6 {
 .update-head .update-btn.secondary:hover{color:var(--text)}
 
 
-.export-content{background:linear-gradient(180deg, rgba(29,35,49,.98), rgba(17,21,31,.98));border:1px solid rgba(255,255,255,.085);border-radius:18px;width:620px;max-width:92vw;max-height:88vh;display:flex;flex-direction:column;box-shadow:var(--shadow-lg), var(--glow);overflow:hidden}
-.export-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.2)}
-.export-head h3{font-size:15px;font-weight:700;color:var(--text);font-family:var(--sans);margin:0}.export-close-btn,.export-foot-btn{background:var(--surface3);color:var(--text2);border:1px solid var(--border);padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:600;font-family:var(--sans)}.export-close-btn:hover,.export-foot-btn:hover{color:var(--text);background:var(--accent-dim)}
-.export-body{padding:16px 20px;overflow-y:auto;display:grid;gap:0}.export-section + .export-section{margin-top:16px}.export-section h4{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin:0 0 8px}.export-grid{display:flex;flex-direction:column;gap:8px}.export-option{width:100%;min-height:44px;text-align:left;display:flex;flex-direction:column;padding:12px 16px;border-radius:12px;border:1px solid var(--border);background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02));color:var(--text);cursor:pointer;font-family:var(--sans);line-height:1.45;overflow-wrap:anywhere}.export-option:hover{border-color:rgba(124,106,247,.45);background:var(--accent-dim)}.export-option:active{border-color:var(--accent2);background:rgba(124,106,247,.18)}.export-option:focus-visible,.export-close-btn:focus-visible,.export-foot-btn:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}.export-option-title{margin-bottom:3px;font-weight:700;color:var(--text);font-size:14px}.export-option-description{color:var(--text2);font-size:13px;line-height:1.45}.export-foot{display:flex;justify-content:flex-end;align-items:center;padding:12px 20px;border-top:1px solid var(--border);background:rgba(0,0,0,.2)}
-@media (max-width:800px){.export-content{max-width:92vw;max-height:88vh}.export-body{padding:16px}.export-foot-btn{min-height:44px}}
+.print-content,
+.export-content {
+  background:linear-gradient(180deg, rgba(29,35,49,.98), rgba(17,21,31,.98));
+  border:1px solid rgba(255,255,255,.085);
+  border-radius:18px;
+  width:620px;
+  max-width:92vw;
+  max-height:88vh;
+  display:flex;
+  flex-direction:column;
+  box-shadow:var(--shadow-lg), var(--glow);
+  overflow:hidden;
+  color:var(--text);
+}
+.print-head,
+.export-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 20px;
+  border-bottom:1px solid var(--border);
+  background:rgba(0,0,0,.2);
+}
+.print-head h3,
+.export-head h3 {
+  font-size:15px;
+  font-weight:700;
+  color:var(--text);
+  font-family:var(--sans);
+  margin:0;
+}
+.print-close-btn,
+.print-foot-btn,
+.export-close-btn,
+.export-foot-btn {
+  background:var(--surface3);
+  color:var(--text2);
+  border:1px solid var(--border);
+  padding:8px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+  font-family:var(--sans);
+}
+.print-close-btn:hover,
+.print-foot-btn:hover,
+.export-close-btn:hover,
+.export-foot-btn:hover {
+  color:var(--text);
+  background:var(--accent-dim);
+}
+.print-body,
+.export-body {
+  padding:16px 20px;
+  overflow-y:auto;
+  display:grid;
+  gap:0;
+  color:var(--text2);
+}
+.print-body p {
+  margin:0 0 12px;
+  color:var(--text2);
+  font-family:var(--sans);
+  font-size:14px;
+  line-height:1.6;
+}
+.export-section + .export-section { margin-top:16px; }
+.export-section h4 { font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--text3); margin:0 0 8px; }
+.print-grid,
+.export-grid { display:flex; flex-direction:column; gap:8px; }
+.print-option,
+.export-option {
+  width:100%;
+  min-height:44px;
+  text-align:left;
+  display:flex;
+  flex-direction:column;
+  padding:12px 16px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02));
+  color:var(--text);
+  cursor:pointer;
+  font-family:var(--sans);
+  line-height:1.45;
+  overflow-wrap:anywhere;
+}
+.print-option:hover,
+.export-option:hover { border-color:rgba(124,106,247,.45); background:var(--accent-dim); }
+.print-option:active,
+.export-option:active { border-color:var(--accent2); background:rgba(124,106,247,.18); }
+.print-option:focus-visible,
+.print-close-btn:focus-visible,
+.print-foot-btn:focus-visible,
+.export-option:focus-visible,
+.export-close-btn:focus-visible,
+.export-foot-btn:focus-visible { outline:2px solid var(--accent2); outline-offset:2px; }
+.print-option-title,
+.export-option-title { margin-bottom:3px; font-weight:700; color:var(--text); font-size:14px; }
+.print-option-description,
+.export-option-description { color:var(--text2); font-size:13px; line-height:1.45; }
+.print-foot,
+.export-foot {
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  padding:12px 20px;
+  border-top:1px solid var(--border);
+  background:rgba(0,0,0,.2);
+}
+@media (max-width:800px){.print-content,.export-content{max-width:92vw;max-height:88vh}.print-body,.export-body{padding:16px}.print-foot-btn,.export-foot-btn{min-height:44px}}
 
 /* #endregion */
 
@@ -782,6 +940,7 @@ body.theme-paper {
   --shadow-lg:0 18px 44px rgba(30,41,59,.14);
   --shadow-md:0 10px 24px rgba(30,41,59,.10);
   --glow:0 0 0 1px rgba(15,23,42,.035) inset;
+  --current-line-bg:rgba(109,93,252,.055);
   background:
     radial-gradient(circle at 0% 0%, rgba(109,93,252,.06), transparent 26%),
     linear-gradient(180deg, #fbfcff 0%, #f5f7fb 100%);
@@ -803,10 +962,13 @@ body.theme-warm {
   --text3:#9a856b;
   --success:#4f7d3a;
   --warn:#a16207;
+  --current-line-bg:rgba(183,121,31,.055);
   --danger:#b45309;
   --shadow-lg:0 18px 44px rgba(92,64,38,.16);
   --shadow-md:0 10px 24px rgba(92,64,38,.11);
   --glow:0 0 0 1px rgba(92,64,38,.035) inset;
+  --editor-font-size:15.5px;
+  --editor-line-height:30px;
   background:
     radial-gradient(circle at 0% 0%, rgba(183,121,31,.08), transparent 28%),
     linear-gradient(180deg, #fff8ec 0%, #f3eadb 100%);
@@ -854,6 +1016,7 @@ body.theme-paper .hist-content,
 body.theme-paper .rn-content,
 body.theme-paper .doc-content,
 body.theme-paper .export-content,
+body.theme-paper .print-content,
 body.theme-warm .menu-dropdown,
 body.theme-warm #sr-panel,
 body.theme-warm #spell-panel,
@@ -861,7 +1024,8 @@ body.theme-warm #outline-panel,
 body.theme-warm .hist-content,
 body.theme-warm .rn-content,
 body.theme-warm .doc-content,
-body.theme-warm .export-content{
+body.theme-warm .export-content,
+body.theme-warm .print-content{
   background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(245,247,251,.97));
   border-color:var(--border);
   box-shadow:var(--shadow-lg), var(--glow);
@@ -873,8 +1037,71 @@ body.theme-warm #outline-panel,
 body.theme-warm .hist-content,
 body.theme-warm .rn-content,
 body.theme-warm .doc-content,
-body.theme-warm .export-content{
+body.theme-warm .export-content,
+body.theme-warm .print-content{
   background:linear-gradient(180deg, rgba(255,248,236,.98), rgba(247,237,220,.97));
+}
+
+body.theme-paper .print-option,
+body.theme-paper .export-option,
+body.theme-warm .print-option,
+body.theme-warm .export-option{
+  background:linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.44));
+  border-color:var(--border);
+  color:var(--text);
+  box-shadow:var(--glow);
+}
+body.theme-warm .print-option,
+body.theme-warm .export-option{
+  background:linear-gradient(180deg, rgba(255,248,236,.82), rgba(247,237,220,.50));
+}
+body.theme-paper .print-option:hover,
+body.theme-paper .export-option:hover,
+body.theme-warm .print-option:hover,
+body.theme-warm .export-option:hover{
+  background:var(--accent-dim);
+  border-color:var(--accent2);
+  color:var(--text);
+}
+body.theme-paper .print-head,
+body.theme-paper .print-foot,
+body.theme-paper .export-head,
+body.theme-paper .export-foot{
+  background:rgba(15,23,42,.035);
+}
+body.theme-warm .print-head,
+body.theme-warm .print-foot,
+body.theme-warm .export-head,
+body.theme-warm .export-foot{
+  background:rgba(92,64,38,.045);
+}
+body.theme-paper .print-close-btn,
+body.theme-paper .print-foot-btn,
+body.theme-paper .export-close-btn,
+body.theme-paper .export-foot-btn,
+body.theme-warm .print-close-btn,
+body.theme-warm .print-foot-btn,
+body.theme-warm .export-close-btn,
+body.theme-warm .export-foot-btn{
+  background:var(--surface3);
+  color:var(--text);
+  border-color:var(--border);
+}
+body.theme-paper .print-close-btn:hover,
+body.theme-paper .print-foot-btn:hover,
+body.theme-paper .export-close-btn:hover,
+body.theme-paper .export-foot-btn:hover,
+body.theme-warm .print-close-btn:hover,
+body.theme-warm .print-foot-btn:hover,
+body.theme-warm .export-close-btn:hover,
+body.theme-warm .export-foot-btn:hover{
+  background:var(--accent-dim);
+  color:var(--accent2);
+  border-color:var(--accent2);
+}
+body.theme-paper #print-modal,
+body.theme-warm #print-modal{
+  background:rgba(0,0,0,.38);
 }
 
 body.theme-paper #editor-wrap,
@@ -1066,12 +1293,6 @@ body.theme-paper #preview td,
 body.theme-warm #preview th,
 body.theme-warm #preview td{border-bottom-color:var(--border)}
 
-/* Warm is intentionally a little more relaxed for long-form writing. */
-body.theme-warm #editor,
-body.theme-warm #editor-backdrop{
-  font-size:15.5px;
-  line-height:1.9;
-}
 body.theme-warm #preview{
   font-size:15.5px;
   line-height:2.0;
@@ -1153,7 +1374,7 @@ body.ipad-safari-fullscreen #menubar {
     overflow:visible!important;
     background:#fff!important;
   }
-  #menubar,#titlebar,#toolbar,#statusbar,#editor-wrap,#splitter,#spell-panel,#toast,#sr-panel,#outline-panel,#history-modal,#rn-modal,#doc-modal,#update-modal,#export-modal{display:none!important}
+  #menubar,#titlebar,#toolbar,#statusbar,#editor-wrap,#splitter,#spell-panel,#toast,#sr-panel,#outline-panel,#history-modal,#rn-modal,#doc-modal,#update-modal,#export-modal,#print-modal{display:none!important}
   body{display:block!important;color:#000!important}
   #main-container{
     display:block!important;
@@ -1262,8 +1483,8 @@ body.zen-mode #zen-exit-btn { display: flex; }
       <div class="menu-entry" id="menu-export" tabindex="0" onclick="openExportModal()">
         <span id="m-export"></span>
       </div>
-      <div class="menu-entry" onclick="exportPdf()">
-        <span id="m-export-pdf"></span>
+      <div class="menu-entry" onclick="openPrintModal()">
+        <span id="m-print-modal"></span>
       </div>
       <div class="menu-sep-line"></div>
       
@@ -1344,6 +1565,12 @@ body.zen-mode #zen-exit-btn { display: flex; }
       </div>
       <div class="menu-entry" id="m-invis-entry" onclick="toggleInvisibles()">
         <span id="m-invis-label"></span><span class="menu-check" id="invis-check">✓</span>
+      </div>
+      <div class="menu-entry" id="m-line-numbers-entry" onclick="toggleLineNumbers()">
+        <span id="m-line-numbers-label"></span><span class="menu-check" id="line-numbers-check">✓</span>
+      </div>
+      <div class="menu-entry" id="m-current-line-entry" onclick="toggleCurrentLineHighlight()">
+        <span id="m-current-line-label"></span><span class="menu-check" id="current-line-check">✓</span>
       </div>
       <div class="menu-sep-line"></div>
       <div class="menu-section-label" id="m-theme-label"></div>
@@ -1594,6 +1821,32 @@ body.zen-mode #zen-exit-btn { display: flex; }
   </div>
 </div>
 
+<div id="print-modal" aria-hidden="true" data-state="closed" role="dialog" aria-modal="true" aria-labelledby="print-modal-title">
+  <div class="print-content">
+    <div class="print-head">
+      <h3 id="print-modal-title"></h3>
+      <button id="print-modal-close" class="print-close-btn" type="button" onclick="closePrintModal()" aria-label="Close">✕</button>
+    </div>
+    <div class="print-body">
+      <p id="print-modal-desc"></p>
+      <div class="print-grid">
+        <button class="print-option" type="button" onclick="runPrintAction(() => printPreviewFromModal())">
+          <span class="print-option-title" id="print-preview-title"></span>
+        </button>
+        <button class="print-option" type="button" onclick="runPrintAction(() => printMarkdownSource({ lineNumbers: false }))">
+          <span class="print-option-title" id="print-md-source-title"></span>
+        </button>
+        <button class="print-option" type="button" onclick="runPrintAction(() => printMarkdownSource({ lineNumbers: true }))">
+          <span class="print-option-title" id="print-md-source-lines-title"></span>
+        </button>
+      </div>
+    </div>
+    <div class="print-foot">
+      <button id="print-modal-close-foot" class="print-foot-btn" type="button" onclick="closePrintModal()"></button>
+    </div>
+  </div>
+</div>
+
 <div id="doc-modal" aria-hidden="true" data-state="closed" role="dialog" aria-modal="true" aria-labelledby="doc-title">
   <div class="doc-content">
     <div class="doc-head">
@@ -1657,7 +1910,8 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
-const APP_VERSION = '1.5.8';
+const APP_VERSION = '1.5.9';
+const APP_VERSION_LABEL = 'v1.5.9 Candidate';
 const LEGACY_DEFAULT_MARKDOWN_SAMPLES = [
   `# MD//WORKS エディタ
 
@@ -1730,7 +1984,7 @@ const T = {
   exportPasswordViewerTitle: isJa ? 'パスワード付きViewer' : 'Password-protected Viewer',
   exportPasswordViewerDescription: isJa ? '開くときにパスワードが必要なViewerです。' : 'Requires a password when the file is opened.',
   exportStandaloneTitle: isJa ? 'Standalone App' : 'Standalone App',
-  exportStandaloneDescription: isJa ? 'Editorを含み、ブラウザ上で編集できます。' : 'Includes the editor and remains editable in the browser.',
+  exportStandaloneDescription: isJa ? '編集中の文書とMD//WORKSアプリを、1つのHTMLファイルとして書き出します。' : 'Exports the current document together with the MD//WORKS app as a single HTML file.',
   exportPasswordAppTitle: isJa ? 'パスワード付きApp' : 'Password-protected App',
   exportPasswordAppDescription: isJa ? 'パスワードで保護された編集可能なAppです。' : 'A password-protected, editable Standalone App.',
   exportModalClose: isJa ? '閉じる' : 'Close',
@@ -1760,6 +2014,8 @@ const T = {
 
   menuOutline: isJa ? 'アウトライン表示' : 'Outline',
   menuInvisibles: isJa ? '不可視文字を表示' : 'Show Invisibles',
+  menuLineNumbers: isJa ? '行番号を表示' : 'Show Line Numbers',
+  menuCurrentLine: isJa ? 'カレント行をハイライト' : 'Highlight Current Line',
   menuFullscreen: isJa ? '全画面表示' : 'Fullscreen',
   menuZenMode: isJa ? 'Zenモード（集中モード）' : 'Zen Mode (Focus Mode)',
   zenExitTitle: isJa ? 'Zenモード解除' : 'Exit Zen Mode',
@@ -1831,6 +2087,15 @@ const T = {
   viewerOutline: isJa ? 'アウトライン' : 'Outline',
   viewerOutlineEmpty: isJa ? '見出しがありません' : 'No headings',
   exportPdf:   isJa ? '印刷 / PDF保存' : 'Print / Save as PDF',
+  printModalMenu: isJa ? '印刷 / PDF保存...' : 'Print / Save as PDF...',
+  printModalTitle: isJa ? '印刷 / PDF保存' : 'Print / Save as PDF',
+  printModalDesc: isJa
+    ? '次の印刷 / PDF保存が可能です。HTMLソースやコードを印刷する場合は、Markdownソースを選択してください。'
+    : 'Choose a print / PDF output. For HTML source or code, use Markdown Source.',
+  printPreviewOption: isJa ? 'プレビュー' : 'Preview',
+  printMarkdownSourceOption: isJa ? 'Markdownソース' : 'Markdown Source',
+  printMarkdownSourceWithLinesOption: isJa ? 'Markdownソース　☑ 行番号を含める' : 'Markdown Source  ☑ Include Line Numbers',
+  printModalClose: isJa ? '閉じる' : 'Close',
   confirmNew:  isJa ? '現在の内容を履歴に保存して、空白の新規ファイルを作成しますか？' : 'Save the current draft to history and create a blank new file?',
   newCreated: isJa ? '空白の新規ファイルを作成しました' : 'Blank new file created',
   processingPasteToast: isJa ? '大きなテキストを処理中...' : 'Processing large paste...',
@@ -2080,7 +2345,11 @@ MD//WORKS は、Markdown原稿を安全に書き、プレビューし、持ち�
 * **Update check**: MD//WORKSは、最新版の有無を確認するため、24時間に1回以下の頻度で公式GitHub Releasesへ接続します。文書内容、ファイル名、履歴、パスワードは送信されません。
 
 ### Version
-* MD//WORKS v${APP_VERSION}
+* MD//WORKS ${APP_VERSION_LABEL}
+
+### Build status
+* v1.5.9正式リリース前の候補版です。
+* PC / iPad / その他ブラウザ環境での実使用評価中です。
 ` : `
 ## About MD//WORKS
 
@@ -2093,48 +2362,70 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
 * **Update check**: MD//WORKS may connect to the official GitHub Releases endpoint at most once every 24 hours to check for updates. Document content, filenames, history, and passwords are not transmitted.
 
 ### Version
-* MD//WORKS v${APP_VERSION}
+* MD//WORKS ${APP_VERSION_LABEL}
+
+### Build status
+* Candidate build for v1.5.9 evaluation.
+* Desktop, iPad, and other browser environments are being tested before the final release.
 `,
 
-  releaseNotesTitle: isJa ? `v${APP_VERSION} の新機能` : `What's New in v${APP_VERSION}`,
+  releaseNotesTitle: isJa ? `${APP_VERSION_LABEL} の新機能` : `What's New in ${APP_VERSION_LABEL}`,
   releaseNotesIntro: isJa ? '今回の主な改善内容です。' : 'Here are the main improvements in this release.',
   releaseNotesClose: isJa ? '閉じる' : 'Close',
   releaseNotesContent: isJa ? `
 
-## v1.5.8 - 学術執筆と操作性の改善
+## v1.5.9 Candidate - 行番号と印刷/PDF保存の改善
 
-* **脚注記法に対応しました。**
-  論文の引用、参考文献、補足説明の記述に便利な脚注記法をサポートしました。\`[^1]\`と\`[^1]: 脚注本文\`の形式で記述し、Previewで確認できます。
+* **エディタ上で論理行番号を表示できるようにしました。**
+  Markdownレビュー、簡易コーディング、論文・特許明細書の確認作業で、行単位の指示や校正がしやすくなりました。行番号はViewメニューからON/OFFできます。
 
-* **Previewを3段階で切り替えられるようになりました。**
-  Previewボタンを押すことで、「編集とPreviewの分割表示」「Focus Preview」「編集画面へ戻る」を順に切り替えられます。
+* **カレント行ハイライトを追加しました。**
+  現在の編集位置を把握しやすくするため、編集中の行を控えめにハイライトします。長文編集中の迷子防止に役立ちます。
 
-* **上付き・下付き文字の記法を拡張しました。**
-  HTMLの\`<sup>上付き</sup>\`および\`<sub>下付き</sub>\`に加えて、Pandoc互換の\`^上付き^\`および\`~下付き~\`記法をサポートしました。
+* **印刷 / PDF保存をモーダルに整理しました。**
+  Preview、Markdownソース、行番号付きMarkdownソースを選択して印刷 / PDF保存できるようにしました。
 
-* **新しいバージョンのお知らせに対応しました。**
-  新しい正式版が公開されている場合、メニューバーの通知アイコンから現在のバージョンと最新版を確認できます。
+* **Preview印刷の安定性を改善しました。**
+  ブラウザごとの差を減らすため、Preview印刷を印刷専用レイアウトで出力する方式に変更しました。
 
-* **新しい文書を空白の状態から開始するようにしました。**
-  初回起動時の説明用サンプル文を廃止し、すぐに新しい文書を書き始められます。
-`:`
+* **HTMLソースのPreview印刷時に警告を表示するようにしました。**
+  HTMLファイルやコードを印刷する場合は、PreviewではなくMarkdownソース印刷を選択してください。
 
-## v1.5.8 - Academic Writing and Workflow Improvements
+* **エディタ行番号の表示安定性を改善しました。**
+  行高を整数pxで固定し、PCおよびiPadOS環境で行番号と本文の縦位置がずれにくくなるよう調整しました。
 
-* **Added footnote support.**
-  MD//WORKS now supports footnote syntax for citations, references, and additional notes. Use \`[^1]\` and \`[^1]: Footnote text\` to add footnotes that are rendered in Preview.
+### 評価中の注意
 
-* **Preview now supports a three-step viewing cycle.**
-  Use the Preview button to switch between the split editor and preview view, Focus Preview, and the editor-only view.
+* 印刷・PDF保存には、ブラウザ標準の Ctrl+P ではなく、MD//WORKSの「ファイル > 印刷 / PDF保存...」を使用してください。
+* iPadOSでは、ブラウザや共有シートの仕様により、印刷・PDF保存の挙動がPCと異なる場合があります。
+* この版は v1.5.9 候補版です。PC / iPad / その他環境での実使用評価後、正式版として調整する予定です。
+`: `
 
-* **Expanded superscript and subscript support.**
-  In addition to HTML \`<sup>superscript</sup>\` and \`<sub>subscript</sub>\` tags, MD//WORKS now supports the Pandoc-compatible \`^superscript^\` and \`~subscript~\` syntax.
+## v1.5.9 Candidate - Line Numbers and Print/PDF Improvements
 
-* **Added update notifications.**
-  A new notification icon in the menu bar displays the current and latest stable versions.
+* **Added optional logical line numbers in the editor.**
+  Line numbers make Markdown review, lightweight coding, academic writing, and patent-draft review easier by allowing line-based comments and corrections.
 
-* **Blank new documents.**
-  The initial sample text has been removed so new documents start completely blank, allowing users to begin writing immediately.
+* **Added a subtle current-line highlight.**
+  The current editing line is lightly highlighted to help you keep track of your position while working on long documents.
+
+* **Reorganized Print / Save as PDF into a modal.**
+  You can now choose Preview, Markdown Source, or Markdown Source with Line Numbers from a single Print / Save as PDF dialog.
+
+* **Improved Preview printing stability.**
+  Preview printing now uses a dedicated print layout to reduce browser-specific page break issues.
+
+* **Added a warning for Preview printing of HTML source.**
+  When printing HTML files or code, use Markdown Source instead of Preview.
+
+* **Improved editor line-number alignment.**
+  The editor line height is now fixed in integer pixels to reduce line-number drift across desktop and iPadOS environments.
+
+### Notes for testing
+
+* Use File > Print / Save as PDF... in MD//WORKS instead of the browser’s Ctrl+P.
+* On iPadOS, print and PDF behavior may differ from desktop browsers due to browser and share-sheet behavior.
+* This is a v1.5.9 candidate build for practical testing across desktop, iPad, and other environments before the final release.
 `};
 
 const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
@@ -2157,6 +2448,8 @@ set('m-format', T.menuFormat);
 set('m-insert-toc', T.insertToc);
 set('m-outline-label', T.menuOutline);
 set('m-invis-label', T.menuInvisibles);
+set('m-line-numbers-label', T.menuLineNumbers);
+set('m-current-line-label', T.menuCurrentLine);
 set('m-fullscreen-label', T.menuFullscreen);
 set('m-zen-label', T.menuZenMode);
 set('op-title', T.menuOutline);
@@ -2201,7 +2494,13 @@ set('export-password-viewer-title', T.exportPasswordViewerTitle); set('export-pa
 set('export-standalone-title', T.exportStandaloneTitle); set('export-standalone-desc', T.exportStandaloneDescription);
 set('export-password-app-title', T.exportPasswordAppTitle); set('export-password-app-desc', T.exportPasswordAppDescription);
 set('export-modal-close-foot', T.exportModalClose);
-set('m-export-pdf', T.exportPdf);
+set('m-print-modal', T.printModalMenu);
+set('print-modal-title', T.printModalTitle);
+set('print-modal-desc', T.printModalDesc);
+set('print-preview-title', T.printPreviewOption);
+set('print-md-source-title', T.printMarkdownSourceOption);
+set('print-md-source-lines-title', T.printMarkdownSourceWithLinesOption);
+set('print-modal-close-foot', T.printModalClose);
 set('m-preview-label', T.preview); set('m-fullscreen-label', T.menuFullscreen); set('m-spell-label', T.spellCheck);
 set('m-bold', T.bold); set('m-italic', T.italic);
 set('tb-list-btn', '─ ' + T.tbList); set('tb-olist-btn', '1. ' + T.tbOList);
@@ -2291,15 +2590,24 @@ const splitter = document.getElementById('splitter');
 const inlineSaveState = document.getElementById('inline-save-state');
 
 const INVISIBLES_STORAGE_KEY = 'mdworks_show_invisibles';
+const LINE_NUMBERS_STORAGE_KEY = 'mdworks_show_line_numbers';
+const CURRENT_LINE_STORAGE_KEY = 'mdworks_highlight_current_line';
 
 function getStoredShowInvisibles() {
   try { return localStorage.getItem(INVISIBLES_STORAGE_KEY) === '1'; } catch (e) { return false; }
 }
-
+function getStoredShowLineNumbers() {
+  try { return localStorage.getItem(LINE_NUMBERS_STORAGE_KEY) === '1'; } catch (e) { return false; }
+}
+function getStoredHighlightCurrentLine() {
+  try { return localStorage.getItem(CURRENT_LINE_STORAGE_KEY) !== '0'; } catch (e) { return true; }
+}
 let previewOpen = false;
 let outlineOpen = false;
 let spellEnabled = false;
 let showInvisibles = getStoredShowInvisibles();
+let showLineNumbers = getStoredShowLineNumbers();
+let highlightCurrentLine = getStoredHighlightCurrentLine();
 let customDict = new Set();
 let ignoredWords = new Set();
 let isDirty = false;
@@ -3309,6 +3617,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   await loadAutoSave();
+  renderLineViewMenuChecks();
   update();
   if (!isDirty) markSaved();
   
@@ -3351,6 +3660,36 @@ function renderInvisiblesMenuCheck() {
   const check = document.getElementById('invis-check');
   if (entry) entry.classList.toggle('active', showInvisibles);
   if (check) check.style.opacity = showInvisibles ? '1' : '0';
+}
+
+function renderLineViewMenuChecks() {
+  document.body.classList.toggle('show-line-numbers', showLineNumbers);
+  const lnEntry = document.getElementById('m-line-numbers-entry');
+  const lnCheck = document.getElementById('line-numbers-check');
+  const clEntry = document.getElementById('m-current-line-entry');
+  const clCheck = document.getElementById('current-line-check');
+  if (lnEntry) lnEntry.classList.toggle('active', showLineNumbers);
+  if (lnCheck) lnCheck.style.opacity = showLineNumbers ? '1' : '0';
+  if (clEntry) clEntry.classList.toggle('active', highlightCurrentLine);
+  if (clCheck) clCheck.style.opacity = highlightCurrentLine ? '1' : '0';
+}
+
+function toggleLineNumbers() {
+  if (!guardEditorCommand()) return;
+  showLineNumbers = !showLineNumbers;
+  try { localStorage.setItem(LINE_NUMBERS_STORAGE_KEY, showLineNumbers ? '1' : '0'); } catch (e) { console.warn('Line numbers setting save failed', e); }
+  renderLineViewMenuChecks();
+  refreshBackdrop();
+  closeMenus();
+}
+
+function toggleCurrentLineHighlight() {
+  if (!guardEditorCommand()) return;
+  highlightCurrentLine = !highlightCurrentLine;
+  try { localStorage.setItem(CURRENT_LINE_STORAGE_KEY, highlightCurrentLine ? '1' : '0'); } catch (e) { console.warn('Current-line setting save failed', e); }
+  renderLineViewMenuChecks();
+  updateCurrentLineHighlight();
+  closeMenus();
 }
 
 function toggleInvisibles() {
@@ -3965,7 +4304,7 @@ function update() {
 
 let isEditorComposing = false;
 editor.addEventListener('compositionstart', () => { isEditorComposing = true; });
-editor.addEventListener('compositionend', () => { isEditorComposing = false; });
+editor.addEventListener('compositionend', () => { isEditorComposing = false; updateCurrentLineHighlight(); });
 
 function refreshAfterEditorTabChange() {
   update();
@@ -4051,6 +4390,12 @@ function handleEditorTabKey(e) {
 }
 
 editor.addEventListener('keydown', handleEditorTabKey);
+editor.addEventListener('keyup', updateCurrentLineHighlight);
+editor.addEventListener('click', updateCurrentLineHighlight);
+editor.addEventListener('select', updateCurrentLineHighlight);
+document.addEventListener('selectionchange', () => {
+  if (document.activeElement === editor) updateCurrentLineHighlight();
+});
 
 editor.addEventListener('scroll', () => {
   backdrop.scrollTop = editor.scrollTop;
@@ -4434,10 +4779,26 @@ function getTaskLineKind(line) {
   return '';
 }
 
+function getCurrentLineIndex() {
+  const pos = editor.selectionStart || 0;
+  return editor.value.slice(0, pos).split('\n').length - 1;
+}
+
+function updateCurrentLineHighlight() {
+  const prev = backdrop.querySelector('.editor-line.current-line');
+  if (prev) prev.classList.remove('current-line');
+  if (!highlightCurrentLine) return;
+  const next = backdrop.children[getCurrentLineIndex()];
+  if (next) next.classList.add('current-line');
+}
+
 function refreshBackdrop() {
   const text = editor.value.replace(/\r/g, '');
+  const currentLineIndex = getCurrentLineIndex();
   if (text === '') {
-    backdrop.innerHTML = '<span class="editor-line blank">&#8203;</span>';
+    const currentClass = highlightCurrentLine ? ' current-line' : '';
+    const lineNumberHtml = showLineNumbers ? '<span class="line-number" aria-hidden="true">1</span>' : '';
+    backdrop.innerHTML = `<span class="editor-line blank${currentClass}">${lineNumberHtml}&#8203;</span>`;
     return;
   }
 
@@ -4513,8 +4874,10 @@ function refreshBackdrop() {
     if (line.length === 0) classes.push('blank');
     if (taskKind === 'open') classes.push('task-open-line');
     if (taskKind === 'done') classes.push('task-done-line');
+    if (highlightCurrentLine && i === currentLineIndex) classes.push('current-line');
 
-    lineHtml.push(`<span class="${classes.join(' ')}">${html}</span>`);
+    const lineNumberHtml = showLineNumbers ? `<span class="line-number" aria-hidden="true">${i + 1}</span>` : '';
+    lineHtml.push(`<span class="${classes.join(' ')}">${lineNumberHtml}${html}</span>`);
     globalPos = lineEnd + 1;
   }
 
@@ -7136,7 +7499,7 @@ function jumpToOffset(offset) {
   editor.focus();
   editor.setSelectionRange(offset, offset);
   const lineIndex = editor.value.substring(0, offset).split('\n').length - 1;
-  refreshBackdrop();
+  updateCurrentLineHighlight();
   requestAnimationFrame(() => {
     const lineEl = backdrop.children[lineIndex];
     if (lineEl) scrollToY(lineEl.offsetTop, 0.5);
@@ -7535,10 +7898,42 @@ function runExportAction(action) {
   if (typeof action === 'function') action();
 }
 
+function setPrintModalState(isOpen) {
+  const modal = document.getElementById('print-modal');
+  if (!modal) return;
+  modal.classList.toggle('show', isOpen);
+  modal.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+  modal.dataset.state = isOpen ? 'open' : 'closed';
+}
+
+function openPrintModal() {
+  if (!guardEditorCommand()) return;
+  closeMenus();
+  setPrintModalState(true);
+  const firstButton = document.getElementById('print-preview-title')?.closest('button');
+  if (firstButton) firstButton.focus({ preventScroll: true });
+}
+
+function closePrintModal() {
+  setPrintModalState(false);
+}
+
+function runPrintAction(action) {
+  closePrintModal();
+  if (typeof action === 'function') setTimeout(action, 50);
+}
+
 const exportModalEl = document.getElementById('export-modal');
 if (exportModalEl) {
   exportModalEl.addEventListener('click', e => {
     if (e.target === exportModalEl) closeExportModal();
+  });
+}
+
+const printModalEl = document.getElementById('print-modal');
+if (printModalEl) {
+  printModalEl.addEventListener('click', e => {
+    if (e.target === printModalEl) closePrintModal();
   });
 }
 
@@ -7554,6 +7949,12 @@ const closableUiRegistry = [
     priority: 108,
     isOpen: () => isElementVisibleByClass('#export-modal'),
     close: closeExportModal
+  },
+  {
+    name: 'print-modal',
+    priority: 107,
+    isOpen: () => isElementVisibleByClass('#print-modal'),
+    close: closePrintModal
   },
   {
     name: 'update-modal',
@@ -7685,6 +8086,218 @@ function exportHtml() {
 
 let printPrepState = null;
 
+function escapePrintSourceHtml(text) {
+  return String(text || '').replace(/[&<>]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ch]));
+}
+
+function buildPrintableMarkdownSourceHtml(text, withLineNumbers) {
+  const sourceText = String(text || '');
+  const lines = sourceText.split(/\r\n|\r|\n/);
+  const bodyHtml = withLineNumbers
+    ? lines.map((line, index) => (
+      `<div class="print-source-line"><span class="print-source-line-number">${index + 1}</span><span class="print-source-line-text">${escapePrintSourceHtml(line) || ' '}</span></div>`
+    )).join('')
+    : `<pre class="print-source-plain">${escapePrintSourceHtml(sourceText)}</pre>`;
+
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Markdown Source</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #fff; color: #000; }
+  body { font-family: "JetBrains Mono", Consolas, Menlo, monospace; font-size: 11pt; line-height: 1.45; }
+  .print-source-wrap { padding: 0; margin: 0; }
+  .print-source-plain { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-family: inherit; font-size: inherit; line-height: inherit; }
+  .print-source-line { display: flex; align-items: flex-start; break-inside: avoid; }
+  .print-source-line-number { flex: 0 0 4.5em; padding-right: 1em; text-align: right; color: #666; user-select: none; }
+  .print-source-line-text { flex: 1 1 auto; min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+  @page { margin: 16mm; }
+</style>
+</head>
+<body>
+  <div class="print-source-wrap">${bodyHtml}</div>
+</body>
+</html>`;
+}
+
+function escapePrintAttr(value) {
+  return String(value || '').replace(/[&"<>\n\r]/g, (ch) => ({
+    '&': '&amp;',
+    '"': '&quot;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '\n': '',
+    '\r': ''
+  }[ch] || ''));
+}
+
+function buildPrintablePreviewHtml() {
+  const rendered = safeMarkdownHtml(editor.value);
+  const baseHref = escapePrintAttr(window.location.href);
+
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base href="${baseHref}">
+<title>Preview</title>
+<style>
+  @page { margin: 16mm; }
+  html, body {
+    margin: 0; padding: 0; height: auto !important; min-height: 0 !important;
+    max-height: none !important; overflow: visible !important;
+    background: #fff !important; color: #000 !important;
+  }
+  body {
+    display: block !important;
+    font-family: "Noto Serif JP", "Yu Mincho", "Yu Gothic", "Hiragino Mincho ProN", serif;
+    font-size: 11.5pt; line-height: 1.75;
+  }
+  .print-preview {
+    display: block !important; width: auto !important; max-width: none !important;
+    height: auto !important; min-height: 0 !important; max-height: none !important;
+    overflow: visible !important; color: #000 !important; background: #fff !important;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Yu Gothic", "Hiragino Sans", sans-serif; color: #000 !important;
+    line-height: 1.35; page-break-after: avoid; break-after: avoid-page;
+  }
+  h1 { font-size: 20pt; border-bottom: 1px solid #999; padding-bottom: .25em; }
+  h2 { font-size: 16pt; border-bottom: 1px solid #ccc; padding-bottom: .2em; }
+  h3 { font-size: 13pt; }
+  p { margin: .65em 0; }
+  ul {
+    margin: .65em 0;
+    padding-left: 1.8em;
+    list-style-position: outside;
+  }
+  ol {
+    margin: .65em 0;
+    padding-left: 4.8em;
+    list-style-position: outside;
+  }
+  li {
+    margin: .2em 0;
+    break-inside: auto;
+    page-break-inside: auto;
+    overflow: visible;
+  }
+  ol > li { padding-left: .25em; }
+  ol > li::marker { font-variant-numeric: tabular-nums; }
+  a { color: #000 !important; text-decoration: underline; }
+  code {
+    font-family: Consolas, Menlo, monospace; font-size: 10.5pt; color: #000 !important;
+    background: transparent !important; border: 1px solid #ccc; padding: 0 .25em;
+  }
+  pre {
+    font-family: Consolas, Menlo, monospace; font-size: 10pt; line-height: 1.45;
+    white-space: pre-wrap; overflow-wrap: anywhere; border: 1px solid #ccc;
+    padding: 8px 10px; background: transparent !important; color: #000 !important;
+    page-break-inside: avoid; break-inside: avoid;
+  }
+  pre code { border: none; padding: 0; font-size: inherit; }
+  blockquote {
+    border-left: 4px solid #999; margin: 1em 0; padding: .2em 1em;
+    color: #333 !important; background: transparent !important;
+  }
+  table { width: 100%; border-collapse: collapse; page-break-inside: auto; }
+  th, td {
+    border: 1px solid #999; padding: 4px 6px; vertical-align: top;
+    color: #000 !important; background: #fff !important;
+  }
+  th {
+    background: #f0f0f0 !important; font-weight: bold;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  img, video { max-width: 100% !important; height: auto !important; page-break-inside: avoid; break-inside: avoid; }
+  .mdw-footnote-backref { display: none !important; }
+  input[type="checkbox"] { transform: scale(.9); }
+</style>
+</head>
+<body>
+  <main class="print-preview">
+    ${rendered}
+  </main>
+</body>
+</html>`;
+}
+
+function printHtmlInTemporaryFrame(html, options = {}) {
+  const iframe = document.createElement('iframe');
+  iframe.style.position = 'fixed'; iframe.style.right = '0'; iframe.style.bottom = '0';
+  iframe.style.width = '0'; iframe.style.height = '0'; iframe.style.border = '0';
+  iframe.style.visibility = 'hidden'; iframe.setAttribute('aria-hidden', 'true');
+
+  let cleanedUp = false;
+  let printed = false;
+  const cleanup = () => {
+    if (cleanedUp) return;
+    cleanedUp = true;
+    setTimeout(() => { try { iframe.remove(); } catch (e) {} }, 500);
+  };
+  const runPrintOnce = () => {
+    if (printed) return;
+    printed = true;
+    try {
+      const win = iframe.contentWindow;
+      if (!win) throw new Error('Print iframe window is unavailable.');
+      win.focus();
+      if ('onafterprint' in win) win.onafterprint = cleanup;
+      setTimeout(() => { win.print(); setTimeout(cleanup, 3000); }, options.delay || 150);
+    } catch (err) {
+      console.error('Print failed', err);
+      cleanup();
+      alert(options.errorMessage || (isJa ? '印刷に失敗しました。' : 'Failed to print.'));
+    }
+  };
+
+  try {
+    document.body.appendChild(iframe);
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    iframe.onload = runPrintOnce;
+    doc.open(); doc.write(html); doc.close();
+    setTimeout(runPrintOnce, options.fallbackDelay || 700);
+  } catch (err) {
+    console.error('Failed to prepare print frame', err);
+    cleanup();
+    alert(options.prepareErrorMessage || (isJa ? '印刷用ページの作成に失敗しました。' : 'Failed to prepare the print page.'));
+  }
+}
+
+function looksLikeHtmlSource(text, filename = '') {
+  const name = String(filename || '').toLowerCase();
+  const value = String(text || '').trimStart();
+
+  if (/\.(html?|xhtml)$/i.test(name)) return true;
+
+  return (
+    /^<!doctype\s+html\b/i.test(value) ||
+    /^<html[\s>]/i.test(value) ||
+    /<head[\s>]/i.test(value.slice(0, 2000)) ||
+    /<body[\s>]/i.test(value.slice(0, 4000)) ||
+    /<script[\s>]/i.test(value.slice(0, 4000)) ||
+    /<style[\s>]/i.test(value.slice(0, 4000))
+  );
+}
+
+function printPreviewDocument() {
+  if (!guardEditorCommand()) return;
+  closeMenus();
+
+  if (looksLikeHtmlSource(editor.value, filenameInput.value)) {
+    const message = isJa
+      ? 'この文書はHTMLソースのようです。Preview印刷ではHTMLとして解釈され、表示が崩れる可能性があります。\n\nHTMLソースを印刷する場合は、「Markdownソース」または「Markdownソース ☑ 行番号を含める」を使用してください。'
+      : 'This document looks like HTML source. Preview printing may interpret it as HTML and produce broken output.\n\nTo print the source code, use “Markdown Source” or “Markdown Source ☑ Include Line Numbers”.';
+
+    alert(message);
+    return;
+  }
+
+  const html = buildPrintablePreviewHtml();
+  printHtmlInTemporaryFrame(html, { delay: 150, fallbackDelay: 800 });
+}
+
 function preparePrintPreview() {
   if (printPrepState) return;
 
@@ -7746,11 +8359,26 @@ window.addEventListener('beforeprint', preparePrintPreview);
 window.addEventListener('afterprint', cleanupPrintPreview);
 
 function exportPdf() {
+  printPreviewDocument();
+}
+
+function printPreviewFromModal() {
+  printPreviewDocument();
+}
+
+function printMarkdownSource(options = {}) {
   if (!guardEditorCommand()) return;
   closeMenus();
-  preparePrintPreview();
-  requestAnimationFrame(() => window.print());
+
+  const withLineNumbers = !!options.lineNumbers;
+  const html = buildPrintableMarkdownSourceHtml(editor.value, withLineNumbers);
+  printHtmlInTemporaryFrame(html, {
+    delay: 100,
+    fallbackDelay: 700,
+    errorMessage: isJa ? 'Markdownソースの印刷に失敗しました。' : 'Failed to print Markdown source.'
+  });
 }
+
 //#endregion
 </script>
 </body>
