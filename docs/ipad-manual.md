@@ -1,7 +1,7 @@
 # MD//WORKS Editor User Manual (iPad)
 
 MD//WORKS Editor is a Markdown editor that runs entirely from a single HTML file. It supports document creation, Markdown preview, file saving, exporting to HTML or PDF, saving as a standalone HTML file, and integration with browser-based AI tools. On iPad, setting the theme to "Midnight" makes handwriting input with Apple Pencil even more comfortable. Also, by utilizing the 'Files' app, file saving and sharing is as convenient as on a Mac or PC, and even safer due to the automatic backup history.
-
+	
 ## Image Annotations Used in This Manual
 
 This manual uses visual annotations to indicate important areas of the screen.  
@@ -410,7 +410,7 @@ Both **Private Storage** and **Save as Private App** use passphrases, but they s
 
 If you forget the passphrase, the protected data cannot be recovered.
 
-For important documents, keep a separate Markdown backup (`.md`) in a secure location.
+For important documents, keep a separate Markdown backup (`.md`) in a secure location (see "12-3. Long-term access and compatibility of encrypted files" for details on managing passwords for long-term storage).
 
 ### 6-6. Restoring from History
 
@@ -428,8 +428,9 @@ MD//WORKS Editor is designed to work across various environments. The behavior f
 
 | OS / Platform | Safari | Firefox | Brave | Chrome / Edge |
 | ------------- | ------ | ------- | ----- | ------------- |
-| **macOS** | Cannot overwrite directly.<br>Downloaded as a new file with a **numbered suffix**.  | Same as **Safari**.| Can be **manually overwritten** using "Save As" to any folder. | **Direct overwrite** is available after the initial save. |
-| **iPadOS** | Cannot overwrite directly. Saved as a new file with a numbered suffix to **any folder** via the **Files app**. | | | |
+| **iPadOS** | Cannot overwrite directly. Saved as a new file with a numbered suffix to **any folder** via the **Files app**. | Same as **Safari**. | Same as **Safari**. | Same as **Safari**. |
+
+> 💡 On iPadOS, direct overwrite saving is unavailable regardless of which browser you use, due to OS-level security restrictions. Every browser saves a new numbered file in the same way.
 
 > 💡 **iPad File Management Tip (Pseudo-Overwrite Save)**
 > Due to iPad system constraints, "direct overwrite" is not possible. Instead, a new file with a numbered suffix (1, 2, etc.) is created each time you save. For PC-like file management, we recommend the following:
@@ -448,7 +449,7 @@ In addition to saving as a standard Markdown file, MD//WORKS Editor allows you t
 
 ### 7-1. Document Sharing and Protection via Flexible Export Features
 
-MD//WORKS features the ability to export your documents as a single HTML file. This enables **secure document sharin**g, collaborative writing, and **long-term archiving** in a format tailored to your purpose, without relying on the recipient's system environment.
+MD//WORKS features the ability to export your documents as a single HTML file. This enables **secure document sharing**, collaborative writing, and **long-term archiving** in a format tailored to your purpose, without relying on the recipient's system environment.
 
 You can choose from the following two categories of export formats based on your needs:
 
@@ -486,17 +487,31 @@ Recipients of the file can instantly resume editing simply by opening it in a we
 > No password is needed to open and view a Restricted Viewer file. The password you set is only used when you **restore** the original Markdown back into MD//WORKS for re-editing — it is not required for viewing.
 <br clear="all">
 
-For important documents intended for long-term storage, please ensure you keep the original Markdown file, the password, and the HTML file of the MD//WORKS version used as a precaution. For more details, please refer to 'Troubleshooting: Long-term access and compatibility of encrypted files'.
+For important documents intended for long-term storage, see "12-3. Long-term access and compatibility of encrypted files" for guidance on keeping the original Markdown file, the password, and the HTML file of the MD//WORKS version used.
 
 
 ### 7-2. Printing or Saving as PDF
 
-Select **File > Print / Save as PDF** to open the browser print dialog based on the rendered preview.  
-Choose **Save as PDF** as the destination to generate a PDF file. 
+Select **File > Print / Save as PDF...** to open the MD//WORKS Print / Save as PDF menu. From this menu, you can choose to print the rendered Preview, the Markdown source, or the Markdown source with line numbers.
 
-When creating PDFs for submission or distribution, always open the exported PDF and check for layout issues, missing tables, image problems, or awkward page breaks.
+To export as a PDF, choose **Save as PDF** as the destination in your browser’s print dialog. You can also turn off **Headers and footers** in the browser’s print settings to remove browser-generated information such as the URL, date, and page numbers, producing a cleaner output.
+
+- **Preview**  
+  Prints the rendered HTML view of your Markdown while preserving its formatting.
+
+- **Markdown Source**  
+  Prints the Markdown syntax as plain text. Use this option when printing HTML source files or code.
+
+- **Markdown Source ☑ Include Line Numbers**  
+  Prints the Markdown source with logical line numbers. This is useful for line-by-line review and comments on academic papers, patent drafts, code, and other long-form documents.
 
 > 💡 When exporting a PDF from the iPad's default browser, "Safari", browser specifications will cause a warning to appear asking for automatic printing permission, and the URL will be forcibly printed on the page. If you wish to create a plain PDF without headers and footers (URL text), please open this editor using a different browser app, such as Firefox or Brave, and perform the export.
+>
+> When printing or saving as PDF, use **File > Print / Save as PDF...** in MD//WORKS instead of the browser’s standard Ctrl+P shortcut. Ctrl+P prints the current browser screen directly, which may include the app UI or cause page breaks to differ from MD//WORKS’ optimized print output.
+>
+> If you open a `.html` / `.htm` file or HTML source code, Preview printing may interpret it as HTML and produce broken output. When printing HTML source or code, use **Markdown Source** or **Markdown Source ☑ Include Line Numbers** instead.
+
+
 
 ---
 
@@ -563,19 +578,15 @@ Selecting **Edit > Insert Table of Contents** automatically generates a clickabl
 
 The View menu lets you toggle Outline, Show Invisibles, Theme, Fullscreen, Spell (EN), and Zen Mode.
 
-### 9-1. Toggling Preview
-
-Select **View > Preview** to show or hide the preview pane. You can also use the **Preview** button on the title bar.
-
-### 9-2. Using Outline
+### 9-1. Using Outline
 
 Select **View > Outline** to display a list of headings in the document. In long documents, click a heading to jump directly to that section.
 
-### 9-3. Showing Invisible Characters
+### 9-2. Showing Invisible Characters
 
 Select **View > Show Invisibles** to reveal characters that are normally hidden (like Full-width spaces, Tabs, Trailing spaces, and Line breaks).
 
-### 9-4. Changing Themes
+### 9-3. Changing Themes
 
 Change the interface theme from the **View** menu.
 
@@ -590,7 +601,7 @@ Change the interface theme from the **View** menu.
 ![Image: Theame](<./images/theame.jpg>)
 
 
-### 9-5. Fullscreen Mode
+### 9-4. Fullscreen Mode
 
 Use **View > Fullscreen** or the fullscreen icon on the title bar to expand the browser to fullscreen mode.
 
@@ -599,11 +610,11 @@ Use **View > Fullscreen** or the fullscreen icon on the title bar to expand the 
 > 
 > 
 
-### 9-6. Using Spell (EN)
+### 9-5. Using Spell (EN)
 
 Enable the English spell checker with **View > Spell (EN)** or the **Spell (EN)** button on the title bar. This feature is intended for English text only and does not provide proofreading for Japanese or other languages.
 
-### 9-7. Focusing with Zen Mode
+### 9-6. Focusing with Zen Mode
 
 Select **View > Zen Mode** to hide menus, toolbars, and panels, creating a distraction-free writing environment.
 
@@ -691,6 +702,8 @@ When you use a browser-based AI assistant, the entire visible document or the se
 
 The following comparison illustrates how different AI browsers interact with MD//WORKS across operating systems (Based on June 2026 data).
 
+> 💡 The table below is a broader comparison, useful when you also use MD//WORKS on a PC. As the "AI support on iPad" row shows, **Brave (Leo) is currently the only option that works on iPad itself**. Copilot, Gemini, and Firefox AI controls are included here for reference regarding desktop use.
+
 | Item | Copilot in Edge | Gemini in Chrome | Brave Browser (Leo) | Firefox AI controls |
 | --- | --- | --- | --- | --- |
 | **AI integration with MD//WORKS** | 🚫 Mainly copy-and-paste based | ✅ **Analyzes document structure / selection** | ✅ **Analyzes document structure** | 🚫 Mainly copy-and-paste based |
@@ -752,7 +765,7 @@ Do not store the password in plain text in the same location as the encrypted fi
 
 Check your browser’s default Downloads folder or the "Files" app destination you selected.
 
-Remember that **Auto encrypted** only protects drafts stored in the browser; it does not permanently create a `.md` file. Always use **File > Save (⌘S)**.
+Remember that **Auto encrypted** only protects drafts stored in the browser; it does not permanently create a `.md` file (see "6-4. Understanding Local Draft Protection" for details). Always use **File > Save (⌘S)**.
 
 ### 12-5. The title bar shows “Unsaved”
 
@@ -784,11 +797,11 @@ Ensure the document contains English text. This feature is intended for English 
 
 ### 12-12. I forgot my Private Storage passphrase
 
-Drafts protected by Private Storage cannot be recovered without the passphrase. Always keep manual `.md` backups.
+Drafts protected by Private Storage cannot be recovered without the passphrase. Always keep manual `.md` backups (see "12-3" for general long-term storage guidance).
 
 ### 12-13. I forgot my Private App passphrase
 
-HTML files exported as Private Apps cannot be decrypted without the correct passphrase.
+HTML files exported as Private Apps cannot be decrypted without the correct passphrase. Before exporting a Private App, save the original Markdown document securely on your computer (see "12-3").
 
 ### 12-14. My Standalone HTML app does not open correctly
 
