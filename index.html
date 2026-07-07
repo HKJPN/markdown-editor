@@ -4419,6 +4419,46 @@ function scrollToY(targetY, screenRatio) {
   editor.scrollTop = Math.max(0, targetY - (editor.clientHeight * ratio));
 }
 
+function getLineIndexFromOffset(text, offset) {
+  const safeOffset = Math.max(0, Math.min(Number(offset) || 0, text.length));
+  let line = 0;
+
+  for (let i = 0; i < safeOffset; i += 1) {
+    if (text.charCodeAt(i) === 10) line += 1;
+  }
+
+  return line;
+}
+
+function getEditorLineHeightPx() {
+  const cssValue = getComputedStyle(editor).lineHeight;
+  const parsed = Number.parseFloat(cssValue);
+
+  if (Number.isFinite(parsed) && parsed > 0) return parsed;
+
+  const variableValue = getComputedStyle(document.documentElement)
+    .getPropertyValue('--editor-line-height');
+  const variableParsed = Number.parseFloat(variableValue);
+
+  if (Number.isFinite(variableParsed) && variableParsed > 0) return variableParsed;
+
+  return 26;
+}
+
+function scrollToSearchMatch(match, screenRatio = 0.4) {
+  if (!match) return;
+
+  const text = editor.value;
+  const lineIndex = getLineIndexFromOffset(text, match.start);
+  const lineHeight = getEditorLineHeightPx();
+  const targetY = lineIndex * lineHeight;
+
+  scrollToY(targetY, screenRatio);
+
+  backdrop.scrollTop = editor.scrollTop;
+  backdrop.scrollLeft = editor.scrollLeft;
+}
+
 const PASTE_SET_RANGE_TEXT_THRESHOLD = 10000;
 let suppressInputHandling = false;
 let pasteSuppressSeq = 0;
@@ -5086,7 +5126,7 @@ function performSearch(jumpToClosest = false) {
   if (!query) { srCount.textContent = ''; srCurrentIdx = -1; refreshBackdrop(); return; }
   const regex = buildRegex(true);
   if (!regex) { srError.style.display = 'block'; srCount.textContent = ''; srCurrentIdx = -1; refreshBackdrop(); return; }
-  const text = editor.value.replace(/\r/g, ''); 
+  const text = editor.value;
   let match;
   while ((match = regex.exec(text)) !== null) {
     if (match.index === regex.lastIndex) regex.lastIndex++;
@@ -5107,22 +5147,35 @@ function performSearch(jumpToClosest = false) {
 }
 
 function highlightCurrentMatch() {
-  if (srMatches.length === 0 || srCurrentIdx === -1) { refreshBackdrop(); return; }
+  if (srMatches.length === 0 || srCurrentIdx === -1) {
+    refreshBackdrop();
+    return;
+  }
+
   const m = srMatches[srCurrentIdx];
-  if (isComposing) { setSearchCount(); refreshBackdrop(); return; }
+
+  if (isComposing) {
+    setSearchCount();
+    refreshBackdrop();
+    return;
+  }
+
   const activeEl = document.activeElement;
   const shouldRestoreSearchFocus = activeEl && activeEl.closest('#sr-panel');
 
   editor.focus();
   editor.setSelectionRange(m.start, m.end);
-  if (shouldRestoreSearchFocus) activeEl.focus();
+
   setSearchCount();
   refreshBackdrop();
 
   requestAnimationFrame(() => {
-    const activeMark = backdrop.querySelector('mark.active');
-    if (activeMark) scrollToY(activeMark.offsetTop, 0.4);
-    if (shouldRestoreSearchFocus && document.contains(activeEl)) activeEl.focus();
+    scrollToSearchMatch(m, 0.4);
+    refreshBackdrop();
+
+    if (shouldRestoreSearchFocus && document.contains(activeEl)) {
+      activeEl.focus();
+    }
   });
 }
 
