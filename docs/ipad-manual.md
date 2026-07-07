@@ -576,7 +576,7 @@ Selecting **Edit > Insert Table of Contents** automatically generates a clickabl
 
 ## 9. Changing View Settings
 
-The View menu lets you toggle Outline, Show Invisibles, Theme, Fullscreen, Spell (EN), and Zen Mode.
+The View menu lets you toggle Outline, Show Invisibles, Show Line Numbers, Highlight Current Line, Theme, Fullscreen, Spell (EN), and Zen Mode.
 
 ### 9-1. Using Outline
 
@@ -586,7 +586,26 @@ Select **View > Outline** to display a list of headings in the document. In long
 
 Select **View > Show Invisibles** to reveal characters that are normally hidden (like Full-width spaces, Tabs, Trailing spaces, and Line breaks).
 
-### 9-3. Changing Themes
+### 9-3. Showing Line Numbers
+Select **View > Show Line Numbers** to display logical line numbers on the left side of the editor. This feature is disabled by default.
+
+Key features and considerations include:
+* **Logical Line Numbering**: Numbers are counted based on line breaks. If a long single line wraps into multiple visual lines on the screen, the line number will only appear at the beginning of that logical line.
+* **Display-Only Overlay**: Line numbers are strictly for visual reference. They are entirely excluded from file saving, text copying, searching, word/character counts, and spell checking.
+* **No Impact on Preview or Outputs**: Line numbers will not appear in the Preview panel, preview printing, or any exported Viewers and standalone applications.
+
+This is highly useful for organizing long documents, exchanging precise editing feedback (e.g., "please correct line X"), or doing light coding.
+
+### 9-4. Highlighting the Current Line
+Select **View > Highlight Current Line** to apply a subtle background highlight to the logical line where the cursor (input focus) is currently positioned. This feature is enabled by default.
+
+Key benefits and characteristics include:
+* **Never Lose Your Place**: Easily track your editing position at a glance, even after scrolling, jumping to search results, or during text input.
+* **Coexistence with Other Highlights**: The tint is designed to be extremely soft, ensuring it does not interfere with the visibility of search highlights, spell-check markers, task lines, or text selections.
+* **Independent Operation**: You can enable this highlight independently even when "Show Line Numbers" is turned off, allowing you to focus entirely on writing.
+* **No Impact on Outputs**: This highlight has absolutely no effect on the Preview, saved files, printouts, or any exported files.
+
+### 9-5. Changing Themes
 
 Change the interface theme from the **View** menu.
 
@@ -601,7 +620,7 @@ Change the interface theme from the **View** menu.
 ![Image: Theame](<./images/theame.jpg>)
 
 
-### 9-4. Fullscreen Mode
+### 9-6. Fullscreen Mode
 
 Use **View > Fullscreen** or the fullscreen icon on the title bar to expand the browser to fullscreen mode.
 
@@ -610,11 +629,11 @@ Use **View > Fullscreen** or the fullscreen icon on the title bar to expand the 
 > 
 > 
 
-### 9-5. Using Spell (EN)
+### 9-7. Using Spell (EN)
 
 Enable the English spell checker with **View > Spell (EN)** or the **Spell (EN)** button on the title bar. This feature is intended for English text only and does not provide proofreading for Japanese or other languages.
 
-### 9-6. Focusing with Zen Mode
+### 9-8. Focusing with Zen Mode
 
 Select **View > Zen Mode** to hide menus, toolbars, and panels, creating a distraction-free writing environment.
 
