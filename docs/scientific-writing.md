@@ -300,11 +300,7 @@ This renders the probability density function of a normal distribution with mean
 
 ## Appendix: MD//WORKS Support Status and Version Info
 
-The writing methods described in this guide can be easily applied using **MD//WORKS**, our dedicated Markdown editor.
-
-### Current Stable Version: v1.5.8
-
-MD//WORKS v1.5.8 supports standard Markdown specifications as well as most of representative extended syntax:
+The writing methods described in this guide can be easily applied using **MD//WORKS**, our dedicated Markdown editor.MD//WORKS v1.5.8 or later supports standard Markdown specifications as well as most of representative extended syntax:
 
 * Headings
 * Bulleted and numbered lists
