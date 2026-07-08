@@ -826,7 +826,7 @@ If you do not want Gemini in Chrome to access the content of your MD//WORKS tab,
 
 The following comparison is based on our own testing with MD//WORKS. The behavior of each AI assistant may change depending on the browser version, AI service updates, account settings, subscription plan, and organizational policy.
 
-| Item | Copilot in Edge<br>![Image: copiloticon](<images/Bcopilot.png>)  | Gemini in Chrome<br>![Image: askGemini](<images/BgemniE.jpg>)  | Brave Browser / Leo<br> ![Image: LeoImage](<images/Leoimage.png>) | Firefox AI Controls )<br>![Image: FirefoxAIcontorls](<images/FirefoxAIcontorls.png>) |
+| Item | Copilot in Edge<br>![Image: copiloticon](<images/Bcopilot.png>)  | Gemini in Chrome<br>![Image: askGemini](<images/BgemniE.jpg>)  | Brave Browser / Leo<br> ![Image: LeoImage](<images/Leoimage.png>) | Firefox AI Controls<br>![Image: FirefoxAIcontorls](<images/FirefoxAIcontorls.png>) |
 | :--- | :--- | :--- | :--- | :--- |
 | **AI integration with MD//WORKS** | 🚫 Mainly copy-and-paste based, even when the sidebar is available | ✅ **Can analyze the overall document structure or selected areas** | ✅ **Can analyze the overall document structure** | 🚫 Mainly copy-and-paste based, even when the sidebar is available |
 | **Real-time Context Awareness** | 🚫 **Limited**<br>Requires manual trigger; context updates only when panel is refreshed or explicitly instructed | ✅ **Full Real-time**<br>Directly monitors DOM & selection; updates instantly as you type or select | ⚠️ **Snapshot-based**<br>Captures state when opened; does not auto-sync with ongoing typing without reopening | 🚫 **None**<br>Relies on copy-paste or manual page summary|
@@ -884,7 +884,7 @@ To move to the beginning or end of the entire document, please use the following
 
 MD//WORKS uses widely adopted encryption methods and standard browser APIs. Encrypted files are therefore expected to remain accessible for the foreseeable future. However, permanent compatibility cannot be guaranteed because browser specifications, security requirements, operating systems, and device environments may change over time.
 
-The single-file HTML edition of MD//WORKS does not require installation or continued access to a specific online service. The exact version of the application used to create an encrypted file can be stored as a local file.Keeping the corresponding MD//WORKS HTML file together with the encrypted document reduces the risk of future application updates affecting compatibility. Decryption is performed locally in the browser, so access does not depend on the continued operation of an external decryption server or cloud service.
+The single-file HTML edition of MD//WORKS does not require installation or continued access to a specific online service. The exact version of the application used to create an encrypted file can be stored as a local file. Keeping the corresponding MD//WORKS HTML file together with the encrypted document reduces the risk of future application updates affecting compatibility. Decryption is performed locally in the browser, so access does not depend on the continued operation of an external decryption server or cloud service.
 
 For important long-term records, keep the following files and information together:
 
@@ -1317,4 +1317,4 @@ Table 3: Cross-Chapter Logical Contradictions
 
 ---
 
-Google, Google Chrome, and Gemini are trademarks of Google LLC. All other company, product, and service names mentioned are trademarks or registered trademarks of their respective owne.
+Google, Google Chrome, and Gemini are trademarks of Google LLC. All other company, product, and service names mentioned are trademarks or registered trademarks of their respective owners.
