@@ -1911,7 +1911,8 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
 const APP_VERSION = '1.5.9';
-const APP_VERSION_LABEL = 'v1.5.9 Candidate';
+const APP_VERSION_LABEL = 'v1.5.9';
+const RELEASE_NOTES_VERSION = '1.5.9-release';
 const LEGACY_DEFAULT_MARKDOWN_SAMPLES = [
   `# MD//WORKS エディタ
 
@@ -2347,9 +2348,6 @@ MD//WORKS は、Markdown原稿を安全に書き、プレビューし、持ち�
 ### Version
 * MD//WORKS ${APP_VERSION_LABEL}
 
-### Build status
-* v1.5.9正式リリース前の候補版です。
-* PC / iPad / その他ブラウザ環境での実使用評価中です。
 ` : `
 ## About MD//WORKS
 
@@ -2364,9 +2362,6 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
 ### Version
 * MD//WORKS ${APP_VERSION_LABEL}
 
-### Build status
-* Candidate build for v1.5.9 evaluation.
-* Desktop, iPad, and other browser environments are being tested before the final release.
 `,
 
   releaseNotesTitle: isJa ? `${APP_VERSION_LABEL} の新機能` : `What's New in ${APP_VERSION_LABEL}`,
@@ -2374,58 +2369,60 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
   releaseNotesClose: isJa ? '閉じる' : 'Close',
   releaseNotesContent: isJa ? `
 
-## v1.5.9 Candidate - 行番号と印刷/PDF保存の改善
+## 🎉 v1.5.9の新機能
 
-* **エディタ上で論理行番号を表示できるようにしました。**
-  Markdownレビュー、簡易コーディング、論文・特許明細書の確認作業で、行単位の指示や校正がしやすくなりました。行番号はViewメニューからON/OFFできます。
+### 行番号とカレント行ハイライト
 
-* **カレント行ハイライトを追加しました。**
-  現在の編集位置を把握しやすくするため、編集中の行を控えめにハイライトします。長文編集中の迷子防止に役立ちます。
+* **論理行番号を表示できるようになりました。**  
+  Markdownレビュー、簡易コーディング、論文・特許明細書などで、行単位の確認や修正がしやすくなりました。行番号はViewメニューからON/OFFできます。
 
-* **印刷 / PDF保存をモーダルに整理しました。**
-  Preview、Markdownソース、行番号付きMarkdownソースを選択して印刷 / PDF保存できるようにしました。
+* **カレント行ハイライトを追加しました。**  
+  現在編集中の行を控えめに表示し、長文編集中でも位置を把握しやすくしました。
 
-* **Preview印刷の安定性を改善しました。**
-  ブラウザごとの差を減らすため、Preview印刷を印刷専用レイアウトで出力する方式に変更しました。
+### 印刷・PDF保存の改善
 
-* **HTMLソースのPreview印刷時に警告を表示するようにしました。**
-  HTMLファイルやコードを印刷する場合は、PreviewではなくMarkdownソース印刷を選択してください。
+* **印刷・PDF保存の出力形式をモーダルから選べるようになりました。**  
+  Preview、Markdownソース、行番号付きMarkdownソースから選択できます。
 
-* **エディタ行番号の表示安定性を改善しました。**
-  行高を整数pxで固定し、PCおよびiPadOS環境で行番号と本文の縦位置がずれにくくなるよう調整しました。
+* **Preview印刷の安定性を改善しました。**  
+  印刷専用レイアウトを使用し、ブラウザによる出力差を抑えました。
 
-### 評価中の注意
+* **HTMLやコードの印刷時に、適切な出力方法を案内します。**  
+  Preview印刷に適さない場合は、Markdownソース印刷を案内します。
 
-* 印刷・PDF保存には、ブラウザ標準の Ctrl+P ではなく、MD//WORKSの「ファイル > 印刷 / PDF保存...」を使用してください。
-* iPadOSでは、ブラウザや共有シートの仕様により、印刷・PDF保存の挙動がPCと異なる場合があります。
-* この版は v1.5.9 候補版です。PC / iPad / その他環境での実使用評価後、正式版として調整する予定です。
-`: `
+### その他の改善
 
-## v1.5.9 Candidate - Line Numbers and Print/PDF Improvements
+* **行番号と本文の縦位置を安定させました。**
+* **Base64などの長い行を含む文書でも、検索結果へ正確に移動できるよう改善しました。**
 
-* **Added optional logical line numbers in the editor.**
-  Line numbers make Markdown review, lightweight coding, academic writing, and patent-draft review easier by allowing line-based comments and corrections.
+` : `
 
-* **Added a subtle current-line highlight.**
-  The current editing line is lightly highlighted to help you keep track of your position while working on long documents.
+## 🎉 What's New in v1.5.9
 
-* **Reorganized Print / Save as PDF into a modal.**
-  You can now choose Preview, Markdown Source, or Markdown Source with Line Numbers from a single Print / Save as PDF dialog.
+### Line Numbers and Current-Line Highlighting
 
-* **Improved Preview printing stability.**
-  Preview printing now uses a dedicated print layout to reduce browser-specific page break issues.
+* **Added optional logical line numbers.**  
+  Line-based review and revision are now easier for Markdown, lightweight coding, academic papers, patent drafts, and other structured documents. Line numbers can be toggled from the View menu.
 
-* **Added a warning for Preview printing of HTML source.**
-  When printing HTML files or code, use Markdown Source instead of Preview.
+* **Added current-line highlighting.**  
+  The line being edited is shown with a subtle highlight, making it easier to keep your place in long documents.
 
-* **Improved editor line-number alignment.**
-  The editor line height is now fixed in integer pixels to reduce line-number drift across desktop and iPadOS environments.
+### Improved Print and PDF Output
 
-### Notes for testing
+* **Print and PDF output formats can now be selected from a dedicated modal.**  
+  Choose Preview, Markdown Source, or Markdown Source with Line Numbers.
 
-* Use File > Print / Save as PDF... in MD//WORKS instead of the browser’s Ctrl+P.
-* On iPadOS, print and PDF behavior may differ from desktop browsers due to browser and share-sheet behavior.
-* This is a v1.5.9 candidate build for practical testing across desktop, iPad, and other environments before the final release.
+* **Improved Preview printing stability.**  
+  A dedicated print layout reduces browser-specific output differences.
+
+* **Added guidance for printing HTML and code.**  
+  When Preview printing is not suitable, MD//WORKS recommends Markdown Source printing.
+
+### Other Improvements
+
+* **Improved alignment between line numbers and editor text.**
+* **Improved search scrolling in documents containing extremely long lines, including embedded Base64 data.**
+
 `};
 
 const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
@@ -7740,7 +7737,7 @@ let availableUpdateVersion = '';
 let updateModalReturnFocus = null;
 
 function parseVersion(value) {
-  const match = String(value || '').trim().match(/^v?(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?$/i);
+  const match = String(value || '').trim().match(/^v?\.?(\d+)\.(\d+)\.(\d+)(?:\.(\d+))?$/i);
   if (!match) return null;
   return [
     Number(match[1]),
@@ -7915,7 +7912,7 @@ function setReleaseNotesModalState(isOpen) {
 
 function maybeShowReleaseNotes() {
   const seenVersion = localStorage.getItem(RELEASE_NOTES_STORAGE_KEY);
-  if (seenVersion !== APP_VERSION) {
+  if (seenVersion !== RELEASE_NOTES_VERSION) {
     openReleaseNotesModal();
   }
 }
@@ -7933,7 +7930,7 @@ ${T.releaseNotesContent}`);
 }
 
 function closeReleaseNotesModal() {
-  localStorage.setItem(RELEASE_NOTES_STORAGE_KEY, APP_VERSION);
+  localStorage.setItem(RELEASE_NOTES_STORAGE_KEY, RELEASE_NOTES_VERSION);
   setReleaseNotesModalState(false);
 }
 
