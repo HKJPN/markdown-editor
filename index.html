@@ -1643,7 +1643,7 @@ body.zen-mode #zen-exit-btn { display: flex; }
     <button class="title-btn" onclick="toggleSpell()" id="spell-toggle-title-btn">Spell</button>
   </div>
 
-  <input type="file" id="file-input" accept=".md,.txt,.markdown,.html,.htm">
+  <input type="file" id="file-input" accept=".md,.txt,.markdown,.html,.htm,.py,.js,.ts,.css,.json,.csv,.xml,.yml,.yaml,.sh,.bat,.ps1">
   <input type="file" id="word-input" accept=".docx" style="display:none">
 </div>
 
@@ -4445,15 +4445,39 @@ function getEditorLineHeightPx() {
   return 26;
 }
 
-function scrollToSearchMatch(match, screenRatio = 0.4) {
+const SEARCH_CONTEXT_LINES_BEFORE = 5;
+
+function getSearchContextLinesBefore() {
+  if (window.innerWidth <= 760) return 3;
+  return SEARCH_CONTEXT_LINES_BEFORE;
+}
+
+function scrollToSearchMatch(match) {
   if (!match) return;
 
-  const text = editor.value;
-  const lineIndex = getLineIndexFromOffset(text, match.start);
   const lineHeight = getEditorLineHeightPx();
-  const targetY = lineIndex * lineHeight;
+  const contextLines = getSearchContextLinesBefore();
+  const contextY = contextLines * lineHeight;
+  const activeMark = backdrop.querySelector('mark.active');
+  let targetY;
 
-  scrollToY(targetY, screenRatio);
+  if (activeMark) {
+    const markRect = activeMark.getBoundingClientRect();
+    const backdropRect = backdrop.getBoundingClientRect();
+    const markY = markRect.top - backdropRect.top + backdrop.scrollTop;
+
+    if (Number.isFinite(markY)) {
+      targetY = Math.max(0, markY - contextY);
+    }
+  }
+
+  if (!Number.isFinite(targetY)) {
+    const lineIndex = getLineIndexFromOffset(editor.value, match.start);
+    const targetLine = Math.max(0, lineIndex - contextLines);
+    targetY = targetLine * lineHeight;
+  }
+
+  scrollToY(targetY, 0);
 
   backdrop.scrollTop = editor.scrollTop;
   backdrop.scrollLeft = editor.scrollLeft;
@@ -5170,7 +5194,7 @@ function highlightCurrentMatch() {
   refreshBackdrop();
 
   requestAnimationFrame(() => {
-    scrollToSearchMatch(m, 0.4);
+    scrollToSearchMatch(m);
     refreshBackdrop();
 
     if (shouldRestoreSearchFocus && document.contains(activeEl)) {
@@ -6234,12 +6258,16 @@ document.getElementById('file-input').addEventListener('change', async (e) => {
   }
 });
 
-function ensureMarkdownFilename(name) {
+function ensureTextFilename(name) {
   const fallback = 'untitled.md';
   const value = String(name || '').trim().normalize('NFC');
   if (!value) return fallback;
-  if (/\.(md|markdown|txt)$/i.test(value)) return value;
+  if (/\.[^\\\/\.\s]{1,16}$/u.test(value)) return value;
   return `${value}.md`;
+}
+
+function ensureMarkdownFilename(name) {
+  return ensureTextFilename(name);
 }
 
 async function handleSave(isSaveAs = false) {
@@ -6262,14 +6290,18 @@ async function handleSave(isSaveAs = false) {
             suggestedName: saveFilename,
             types: [
               {
-                description: 'Markdown files',
+                description: 'Text and code files',
                 accept: {
-                  'text/markdown': ['.md', '.markdown'],
-                  'text/plain': ['.txt']
+                  'text/plain': [
+                    '.md', '.markdown', '.txt',
+                    '.py', '.js', '.ts', '.html', '.htm', '.css',
+                    '.json', '.csv', '.xml', '.yml', '.yaml',
+                    '.sh', '.bat', '.ps1'
+                  ]
                 }
               }
             ],
-            excludeAcceptAllOption: true
+            excludeAcceptAllOption: false
           };
           const startHandle = lastPickerStartHandle || fileHandle;
           if (startHandle) {
