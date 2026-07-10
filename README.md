@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.5.8 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.5.9 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
 <img src="./docs/images/rayoutE.jpg" alt="rayoutE.jpg" width="100%">
 <img src="./docs/images/rayout3.JPG" alt="rayout3.JPG" width="100%">
@@ -23,27 +23,37 @@ Try it instantly in your browser. 👉 **https://hkjpn.github.io/markdown-editor
 You are also free to host MD//WORKS on your own website under the MIT License. However, for security and performance reasons, we strongly recommend keeping your deployment updated to the latest version.
 
 ---
-## ✨ What's New in v1.5.8
 
-In this update, we've introduced powerful features to supercharge your academic and report writing, along with UI enhancements for a smoother workflow.
+## 🎉 What's New in v1.5.9
 
-* 📖 **Long-awaited Footnote Support!**<br>
-We've added native support for footnotes (`[^1]`), an essential tool for academic writing. Add annotations and references without breaking your flow. Beautifully cross-linked footnote lists are automatically generated in the Preview panel and exported Viewers.
-* 👀 **More Intuitive "3-Step" Preview**<br>
-Seamlessly cycle through "Split View (Real-time sync)", "Focus Preview (Distraction-free reading)", and "Editor Only" with a single click of the Preview button. Instantly switch to the perfect layout for whatever writing phase you're in.
-* 🧪 **Easier Superscripts & Subscripts**<br>
-In addition to traditional HTML tags (`<sup>`, `<sub>`), we now support the simple, easy-to-type Pandoc-compatible syntax (`^superscript^`, `~subscript~`)—perfect for chemical formulas and math equations.
-* ✍️ **Start Writing Instantly on a "Blank Slate"**<br>
-We've removed the default sample text on startup, providing you with a clean, blank slate. The moment you open the app, you can dive straight into capturing your ideas.
-* <img src="./images/icon2s.png" alt="Image:icon" width="30"> **App Launch Icon**: Added a dedicated app icon for a more native app-like experience, and updated the manual with detailed installation instructions.
-* 🛡️ **Privacy-First AI**<br>
- We've updated the manual with a guide on setting up a **local LLM** for users who are particularly concerned about information security.
+**~ Introducing Line Numbers & Enhanced Print/PDF Exports! ~**
 
+### 📝 Smoother Writing & Reviewing Experience!
 
+* **Line Number Support**
+You can now display logical line numbers directly in the editor! Whether you're reviewing Markdown, writing code snippets, or proofreading rigorous documents like academic papers and patents, **providing line-by-line feedback and making revisions is now drastically smoother.** (*Easily toggle this ON/OFF anytime via the `View` menu.*)
+* **Current Line Highlighting ✨**
+Never lose your place again. The line you are currently editing is now gently highlighted. Even when working on massive documents, you can avoid the "where was I?" moment and **stay completely focused on your writing.**
+
+### 🖨️ Smarter, More Reliable Print & PDF Exports!
+
+* **Streamlined Output Menu**
+We've reorganized the export options into a clean, intuitive modal. Seamlessly choose between "Preview", "Markdown Source", or "Markdown Source with Line Numbers" to perfectly match your needs without any guesswork.
+* **Beautiful & Stable Preview Printing**
+To minimize output variations across different browsers, we've implemented a dedicated print layout system. You can now rely on consistently beautiful and stable layouts every time you print or save to PDF.
+* **Smart Printing Navigation**
+Printing complex HTML sources directly from the Preview can sometimes cause layout breaks. To help you avoid this, the editor now provides a smart warning, guiding you to the more robust "Markdown Source" print option when appropriate.
+
+### 🛠️ Under-the-Hood Polish for Maximum Comfort
+
+* **Perfect Line Number Alignment:** We've locked the line height to exact integer pixels. Whether you're on a PC or iPadOS, the line numbers and your text will align flawlessly without any vertical shifting.
+* **Improved Search Scrolling:** Navigating through files with extremely long lines (such as embedded Base64 data) is now a breeze. Scrolling to your search hits is smoother and perfectly accurate.
+
+---
 
 ## ✨ Upcoming Features
 
-* **Line Numbers**: To assist with both basic coding and academic paper reviews, we will be rolling out features in stages, including logical line-based display, current line highlighting, line selection via the gutter, and disabling word wrap for coding mode.
+* **Line Numbers**: To further assist with both basic coding and academic paper reviews, we will be rolling out line selection via the gutter and an option to disable word wrap in coding mode.
 * **Math Equations**: We plan to support complex mathematical formulas used in fields like mathematics and engineering.
 * **Deep Edit Mode**: A planned feature that tracks a detailed history of your thought process and revisions.
 * **PWA Support**: We plan to support Progressive Web Apps (PWA), allowing you to install the editor directly on your device for a faster, seamless, native-app-like experience.
