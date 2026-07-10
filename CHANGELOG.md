@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-07-10 - v1.5.9　Official Release
+* Fixed update verification process.
+
 ## 2026-07-10 - v1.5.9 candidate- Stabilize search result scrolling#2
 
 * **Stabilize search result scrolling** :Fixed search match scroll position when long lines exist like base64. 
