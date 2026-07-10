@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-07-07 - v1.5.9 candidate- Stabilize search result scrolling#2
+
+* **Stabilize search result scrolling** :Fixed search match scroll position when long lines exist like base64. 
+
 ## 2026-07-07 - v1.5.9 candidate- Stabilize search result scrolling
 
 * **Stabilize search result scrolling** :Fixed intermittent failure to scroll the editor to the current search match. 
