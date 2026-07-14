@@ -2141,6 +2141,7 @@ const T = {
   nMatches:    isJa ? n => `${n} 件` : n => `${n} matches`,
   invalidRegex:isJa ? '正規表現が正しくありません' : 'Invalid regular expression',
   confirmRepAll:isJa ? n => `${n} 箇所すべて置換しますか？` : n => `Replace all ${n} occurrences?`,
+  replacingAll:isJa ? '置換しています...' : 'Replacing...',
   replacedN:   isJa ? n => `${n} 箇所を置換しました` : n => `Replaced ${n} occurrences`,
 
   preview:     isJa ? 'Preview' : 'Preview',
@@ -4514,6 +4515,18 @@ function yieldToBrowserPaint() {
   });
 }
 
+function waitForNextPaint() {
+  return new Promise(resolve => {
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(resolve);
+      });
+    } else {
+      setTimeout(resolve, 0);
+    }
+  });
+}
+
 function deferPasteTask(fn, preferIdle) {
   return new Promise((resolve, reject) => {
     const run = () => {
@@ -5236,7 +5249,35 @@ document.getElementById('sr-btn-replace').onclick = () => {
   performSearch(true);
 };
 
-document.getElementById('sr-btn-replace-all').onclick = () => {
+let replaceAllInProgress = false;
+
+const replaceAllControlIds = [
+  'sr-btn-replace',
+  'sr-btn-replace-all',
+  'sr-search-input',
+  'sr-replace-input',
+  'sr-opt-regex',
+  'sr-opt-case',
+  'sr-opt-word'
+];
+
+function setSearchReplaceControlsDisabled(disabled) {
+  const previousStates = new Map();
+  replaceAllControlIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    previousStates.set(el, el.disabled);
+    el.disabled = disabled;
+  });
+  return () => {
+    previousStates.forEach((wasDisabled, el) => {
+      el.disabled = wasDisabled;
+    });
+  };
+}
+
+document.getElementById('sr-btn-replace-all').onclick = async () => {
+  if (replaceAllInProgress) return;
   if (!guardEditorCommand()) return;
   if (srMatches.length === 0) return;
   const count = srMatches.length;
@@ -5245,16 +5286,40 @@ document.getElementById('sr-btn-replace-all').onclick = () => {
   if (!regex) return;
   const repStr = getReplacementString();
   const oldFullText = editor.value;
-  const newFullText = oldFullText.replace(regex, repStr);
   const scrollTop = editor.scrollTop;
-  editor.focus();
-  editor.setSelectionRange(0, oldFullText.length);
-  document.execCommand('insertText', false, newFullText);
-  editor.setSelectionRange(0, 0);
-  editor.scrollTop = scrollTop;
-  markDirty();
-  toast(T.replacedN(count));
-  performSearch(true);
+  const scrollLeft = editor.scrollLeft;
+
+  replaceAllInProgress = true;
+  const restoreSearchReplaceControls = setSearchReplaceControlsDisabled(true);
+  showLoader(T.replacingAll);
+
+  try {
+    await waitForNextPaint();
+
+    const newFullText = oldFullText.replace(regex, repStr);
+
+    editor.focus();
+    editor.setSelectionRange(0, oldFullText.length);
+    document.execCommand('insertText', false, newFullText);
+    editor.setSelectionRange(0, 0);
+    editor.scrollTop = scrollTop;
+    editor.scrollLeft = scrollLeft;
+    backdrop.scrollTop = editor.scrollTop;
+    backdrop.scrollLeft = editor.scrollLeft;
+    markDirty();
+    performSearch(true);
+
+    await waitForNextPaint();
+
+    toast(T.replacedN(count));
+  } catch (error) {
+    console.error('Replace all failed', error);
+    alert(isJa ? 'すべて置換に失敗しました。' : 'Replace All failed.');
+  } finally {
+    hideLoader();
+    restoreSearchReplaceControls();
+    replaceAllInProgress = false;
+  }
 };
 //#endregion
 
