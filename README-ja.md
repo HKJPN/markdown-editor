@@ -1,6 +1,6 @@
 # 🚀 MD//WORKS v1.5.9 — AIアシスタント融合スタンドアロン Markdown エディタ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:** [🇺🇸 English](README.md) or [🇯🇵 日本語](README-ja.md)
-<img src="./docs/images/rayoutJ.jpg" alt="rayoutJ.jpg" width="100%">
+<img src="./docs/images/rayoutJ1_9.jpg" alt="rayoutJ1_9.jpg" width="100%">
 <img src="./docs/images/rayout3.JPG" alt="rayout3.JPG" width="100%">
 
 * **完全ローカル、なのにAI対応**  
