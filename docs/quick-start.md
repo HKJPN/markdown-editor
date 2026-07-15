@@ -19,7 +19,7 @@ You can open `.md`, `.txt`, or `.markdown` files from **File > Open**.
 You can save your document as a Markdown file using **Save** or **Download**.
 
 ### Preview
-Click the Preview button to check how your Markdown will be rendered.
+Click the **Preview button** to check how your Markdown will be rendered.
 
 ### Wrap Lines
 Use **View > Wrap Lines** to switch between wrapped text and horizontal scrolling. Keep it on for regular writing, and turn it off when editing code, CSV, logs, or long Base64 lines.
