@@ -15,7 +15,7 @@ MD//WORKSは、ブラウザで動く多機能軽量Markdownエディタです。
 **File > New** から新しい文書を作成できます。
 
 ### ファイルを開く
-**File > Open** から `.md` や `.txt` ファイルを開けます。
+**File > Open** から `.md`、`.txt`や`.markdown`ファイル等を開けます。
 
 ### 保存
 **Save** または **Download** からMarkdownファイルとして保存できます。
