@@ -10,13 +10,13 @@ No installation needed. Get started immediately with the live demo:
 ## 3. Basic Operations
 
 ### Create a New Document
-You can create a new document from File > New.
+You can create a new document from **File > New**.
 
 ### Open a File
-You can open `.md`, `.txt`, or `.markdown` files from File > Open.
+You can open `.md`, `.txt`, or `.markdown` files from **File > Open**.
 
 ### Save
-You can save your document as a Markdown file using Save or Download.
+You can save your document as a Markdown file using **Save** or **Download**.
 
 ### Preview
 Click the Preview button to check how your Markdown will be rendered.
