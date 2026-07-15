@@ -1,8 +1,7 @@
 # MD//WORKS Quick Start Guide
 ## 1. Introduction
 
-MD//WORKS is a browser-based Markdown editor.
-Create, preview, save, and export Markdown documents as HTML files. You can also package the document and the editor together as a single self-contained HTML file.
+MD//WORKS is a browser-based Markdown editor. Create, preview, save, and export Markdown documents as HTML or PDF files. You can also package the document and the editor together as a single self-contained HTML file, and use browser-based AI tools for writing support.
 
 ## 2. Getting Started
 No installation needed. Get started immediately with the live demo:
@@ -14,13 +13,16 @@ No installation needed. Get started immediately with the live demo:
 You can create a new document from File > New.
 
 ### Open a File
-You can open `.md` or `.txt` files from File > Open.
+You can open `.md`, `.txt`, or `.markdown` files from File > Open.
 
 ### Save
 You can save your document as a Markdown file using Save or Download.
 
 ### Preview
 Click the Preview button to check how your Markdown will be rendered.
+
+### Wrap Lines
+Use **View > Wrap Lines** to switch between wrapped text and horizontal scrolling. Keep it on for regular writing, and turn it off when editing code, CSV, logs, or long Base64 lines.
 
 ## 4. Editing Features
 
@@ -34,6 +36,7 @@ Click the Preview button to check how your Markdown will be rendered.
 - Code blocks
 - Tables
 - Links
+- Wrap Lines
 
 ## 5.AI Writing Assistant
 Use your browser's built-in AI for writing support, such as proofreading and clarifying text. Follow the steps below for your browser:
