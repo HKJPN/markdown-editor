@@ -596,7 +596,7 @@ Selecting **Edit > Insert Table of Contents** automatically generates a clickabl
 
 
 
-The View menu lets you toggle Outline, Show Invisibles, Show Line Numbers, Highlight Current Line, Theme, Fullscreen, Spell (EN), and Zen Mode.
+The View menu lets you toggle Outline, Show Invisibles, Show Line Numbers, Highlight Current Line, Wrap Lines, Theme, Fullscreen, Spell (EN), and Zen Mode.
 
 ### 9-1. Using Outline
 
@@ -644,7 +644,23 @@ Key benefits and characteristics include:
 * **Independent Operation**: You can enable this highlight independently even when "Show Line Numbers" is turned off, allowing you to focus entirely on writing.
 * **No Impact on Outputs**: This highlight has absolutely no effect on the Preview, saved files, printouts, or any exported files.
 
-### 9-5. Changing Themes
+### 9-5. Toggling Line Wrapping (Wrap Lines)
+
+Use **[View] > [Wrap Lines]** to choose whether text in the editor wraps to fit the width of the editing area. Line wrapping is enabled by default.
+
+This setting changes only how the document is displayed in the editor. It does not insert or remove line breaks and does not alter the contents of the saved file.
+
+* **On (Wrap Lines) — Recommended for general writing**
+  This mode is well suited to long-form documents such as research papers, reports, and novels. Text automatically wraps at the right edge of the editor, allowing you to read and edit without horizontal scrolling.
+
+* **Off (No Wrap) — Recommended for code and long single-line data**
+  This mode is useful for source code such as Python or JavaScript, CSV data, log files, and embedded image data such as Base64. Long logical lines remain on a single line, making indentation and data structure easier to inspect. Text that extends beyond the width of the editor can be viewed using the horizontal scrollbar.
+
+Disabling line wrapping may also make it easier to keep the editor and preview positions aligned when working with documents that contain extremely long lines, such as Base64 data.
+
+When a search result is located beyond the right edge of the editor, MD//WORKS automatically scrolls horizontally to bring the matching text into view.
+
+### 9-6. Changing Themes
 
 
 
@@ -660,7 +676,7 @@ Choose a theme based on your working environment: **Paper** for reviewing, **War
 
 ![Image: Theame](<./images/theame.jpg>)
 
-### 9-6. Fullscreen Mode
+### 9-7. Fullscreen Mode
 
 
 
@@ -668,7 +684,7 @@ Use **View > Fullscreen** or the fullscreen icon on the title bar to expand the 
 
 This is useful when you want a wider workspace or need to review the document before a presentation.
 
-### 9-7. Using Spell (EN)
+### 9-8. Using Spell (EN)
 
 
 
@@ -678,7 +694,7 @@ When Spell (EN) is enabled, possible English spelling errors are detected. You c
 
 This feature is intended for English text only and does not provide proofreading for other languages.
 
-### 9-8. Focusing with Zen Mode
+### 9-9. Focusing with Zen Mode
 
 
 
