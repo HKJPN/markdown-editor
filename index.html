@@ -351,6 +351,23 @@ body #filename-display.locked:focus{
   overflow-wrap:break-word;width:100%;height:100%;border:none;outline:none;margin:0;
   -webkit-text-size-adjust: 100%;
 }
+body.editor-no-wrap #editor,
+body.editor-no-wrap #editor-backdrop{
+  white-space:pre;
+  word-wrap:normal;
+  overflow-wrap:normal;
+}
+body.editor-no-wrap #editor{
+  overflow-x:auto;
+  touch-action:pan-x pan-y;
+}
+body.editor-no-wrap #editor-backdrop{
+  overflow-x:hidden;
+}
+body.editor-no-wrap #editor-backdrop .editor-line{
+  width:max-content;
+  min-width:100%;
+}
 #editor{
   -webkit-appearance: none;
   appearance: none;
@@ -1572,6 +1589,9 @@ body.zen-mode #zen-exit-btn { display: flex; }
       <div class="menu-entry" id="m-current-line-entry" onclick="toggleCurrentLineHighlight()">
         <span id="m-current-line-label"></span><span class="menu-check" id="current-line-check">✓</span>
       </div>
+      <div class="menu-entry" id="m-wrap-lines-entry" onclick="toggleLineWrap()">
+        <span id="m-wrap-lines-label"></span><span class="menu-check" id="wrap-lines-check">✓</span>
+      </div>
       <div class="menu-sep-line"></div>
       <div class="menu-section-label" id="m-theme-label"></div>
       <div class="menu-entry" id="theme-midnight-entry" onclick="setTheme('midnight')">
@@ -2017,6 +2037,7 @@ const T = {
   menuInvisibles: isJa ? '不可視文字を表示' : 'Show Invisibles',
   menuLineNumbers: isJa ? '行番号を表示' : 'Show Line Numbers',
   menuCurrentLine: isJa ? 'カレント行をハイライト' : 'Highlight Current Line',
+  menuWrapLines: isJa ? '行を折り返す' : 'Wrap Lines',
   menuFullscreen: isJa ? '全画面表示' : 'Fullscreen',
   menuZenMode: isJa ? 'Zenモード（集中モード）' : 'Zen Mode (Focus Mode)',
   zenExitTitle: isJa ? 'Zenモード解除' : 'Exit Zen Mode',
@@ -2448,6 +2469,7 @@ set('m-outline-label', T.menuOutline);
 set('m-invis-label', T.menuInvisibles);
 set('m-line-numbers-label', T.menuLineNumbers);
 set('m-current-line-label', T.menuCurrentLine);
+set('m-wrap-lines-label', T.menuWrapLines);
 set('m-fullscreen-label', T.menuFullscreen);
 set('m-zen-label', T.menuZenMode);
 set('op-title', T.menuOutline);
@@ -2590,6 +2612,7 @@ const inlineSaveState = document.getElementById('inline-save-state');
 const INVISIBLES_STORAGE_KEY = 'mdworks_show_invisibles';
 const LINE_NUMBERS_STORAGE_KEY = 'mdworks_show_line_numbers';
 const CURRENT_LINE_STORAGE_KEY = 'mdworks_highlight_current_line';
+const WRAP_LINES_STORAGE_KEY = 'mdworks_wrap_lines';
 
 function getStoredShowInvisibles() {
   try { return localStorage.getItem(INVISIBLES_STORAGE_KEY) === '1'; } catch (e) { return false; }
@@ -2600,12 +2623,16 @@ function getStoredShowLineNumbers() {
 function getStoredHighlightCurrentLine() {
   try { return localStorage.getItem(CURRENT_LINE_STORAGE_KEY) !== '0'; } catch (e) { return true; }
 }
+function getStoredWrapLines() {
+  try { return localStorage.getItem(WRAP_LINES_STORAGE_KEY) !== '0'; } catch (e) { return true; }
+}
 let previewOpen = false;
 let outlineOpen = false;
 let spellEnabled = false;
 let showInvisibles = getStoredShowInvisibles();
 let showLineNumbers = getStoredShowLineNumbers();
 let highlightCurrentLine = getStoredHighlightCurrentLine();
+let wrapLinesEnabled = getStoredWrapLines();
 let customDict = new Set();
 let ignoredWords = new Set();
 let isDirty = false;
@@ -3616,6 +3643,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   await loadAutoSave();
   renderLineViewMenuChecks();
+  renderLineWrapState();
   update();
   if (!isDirty) markSaved();
   
@@ -3670,6 +3698,71 @@ function renderLineViewMenuChecks() {
   if (lnCheck) lnCheck.style.opacity = showLineNumbers ? '1' : '0';
   if (clEntry) clEntry.classList.toggle('active', highlightCurrentLine);
   if (clCheck) clCheck.style.opacity = highlightCurrentLine ? '1' : '0';
+}
+
+function renderLineWrapState() {
+  document.body.classList.toggle('editor-no-wrap', !wrapLinesEnabled);
+  editor.setAttribute('wrap', wrapLinesEnabled ? 'soft' : 'off');
+
+  const entry = document.getElementById('m-wrap-lines-entry');
+  const check = document.getElementById('wrap-lines-check');
+  if (entry) {
+    entry.classList.toggle('active', wrapLinesEnabled);
+    entry.setAttribute('aria-pressed', wrapLinesEnabled ? 'true' : 'false');
+  }
+  if (check) check.style.opacity = wrapLinesEnabled ? '1' : '0';
+}
+
+function toggleLineWrap() {
+  if (!guardEditorCommand()) return;
+
+  const selectionStart = editor.selectionStart;
+  const selectionEnd = editor.selectionEnd;
+  const selectionDirection = editor.selectionDirection;
+  const caretLineIndex = getLineIndexFromOffset(editor.value, selectionStart);
+  const previousScrollLeft = editor.scrollLeft;
+
+  wrapLinesEnabled = !wrapLinesEnabled;
+
+  try {
+    localStorage.setItem(WRAP_LINES_STORAGE_KEY, wrapLinesEnabled ? '1' : '0');
+  } catch (e) {
+    console.warn('Wrap-lines setting save failed', e);
+  }
+
+  renderLineWrapState();
+  refreshBackdrop();
+
+  requestAnimationFrame(() => {
+    editor.focus({ preventScroll: true });
+    editor.setSelectionRange(selectionStart, selectionEnd, selectionDirection || 'none');
+
+    if (wrapLinesEnabled) {
+      editor.scrollLeft = 0;
+    } else {
+      editor.scrollLeft = Math.min(
+        previousScrollLeft,
+        Math.max(0, editor.scrollWidth - editor.clientWidth)
+      );
+    }
+
+    const caretLine = backdrop.querySelectorAll('.editor-line')[caretLineIndex];
+    if (caretLine) {
+      const lineRect = caretLine.getBoundingClientRect();
+      const backdropRect = backdrop.getBoundingClientRect();
+      const lineY = lineRect.top - backdropRect.top + backdrop.scrollTop;
+      const maxScrollTop = Math.max(0, editor.scrollHeight - editor.clientHeight);
+      editor.scrollTop = Math.min(
+        maxScrollTop,
+        Math.max(0, lineY - editor.clientHeight * 0.3)
+      );
+    }
+
+    backdrop.scrollTop = editor.scrollTop;
+    backdrop.scrollLeft = editor.scrollLeft;
+  });
+
+  closeMenus();
 }
 
 function toggleLineNumbers() {
@@ -4476,6 +4569,21 @@ function scrollToSearchMatch(match) {
   }
 
   scrollToY(targetY, 0);
+
+  if (!wrapLinesEnabled && activeMark) {
+    const markRect = activeMark.getBoundingClientRect();
+    const backdropRect = backdrop.getBoundingClientRect();
+    const markX = markRect.left - backdropRect.left + backdrop.scrollLeft;
+    const horizontalContext = 40;
+    const maxScrollLeft = Math.max(0, editor.scrollWidth - editor.clientWidth);
+
+    if (Number.isFinite(markX)) {
+      editor.scrollLeft = Math.min(
+        maxScrollLeft,
+        Math.max(0, markX - horizontalContext)
+      );
+    }
+  }
 
   backdrop.scrollTop = editor.scrollTop;
   backdrop.scrollLeft = editor.scrollLeft;
