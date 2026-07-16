@@ -1930,9 +1930,9 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
-const APP_VERSION = '1.5.9';
-const APP_VERSION_LABEL = 'v1.5.9';
-const RELEASE_NOTES_VERSION = '1.5.9-release';
+const APP_VERSION = '1.6.0';
+const APP_VERSION_LABEL = 'v1.6.0';
+const RELEASE_NOTES_VERSION = '1.6.0-release';
 const LEGACY_DEFAULT_MARKDOWN_SAMPLES = [
   `# MD//WORKS エディタ
 
@@ -2163,6 +2163,10 @@ const T = {
   invalidRegex:isJa ? '正規表現が正しくありません' : 'Invalid regular expression',
   confirmRepAll:isJa ? n => `${n} 箇所すべて置換しますか？` : n => `Replace all ${n} occurrences?`,
   replacingAll:isJa ? '置換しています...' : 'Replacing...',
+  replacingAllStatus:isJa ? 'Replacing...' : 'Replacing...',
+  replaceAllFailed:isJa
+    ? 'すべて置換に失敗しました。'
+    : 'Replace All failed.',
   replacedN:   isJa ? n => `${n} 箇所を置換しました` : n => `Replaced ${n} occurrences`,
 
   preview:     isJa ? 'Preview' : 'Preview',
@@ -2391,59 +2395,35 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
   releaseNotesClose: isJa ? '閉じる' : 'Close',
   releaseNotesContent: isJa ? `
 
-## 🎉 v1.5.9の新機能
+## 🎉 v1.6.0の新機能
 
-### 行番号とカレント行ハイライト
+### 行の折り返し切り替え
 
-* **論理行番号を表示できるようになりました。**  
-  Markdownレビュー、簡易コーディング、論文・特許明細書などで、行単位の確認や修正がしやすくなりました。行番号はViewメニューからON/OFFできます。
+* **［表示］>［行を折り返す］から、Wrap／No Wrapを切り替えられるようになりました。**
+* コード、CSV、ログ、Base64などの長い1行は、折り返さず横スクロールで確認できます。
+* No Wrap時も、検索結果が見える位置まで横方向に自動移動します。
 
-* **カレント行ハイライトを追加しました。**  
-  現在編集中の行を控えめに表示し、長文編集中でも位置を把握しやすくしました。
+### 「すべて置換」の改善
 
-### 印刷・PDF保存の改善
-
-* **印刷・PDF保存の出力形式をモーダルから選べるようになりました。**  
-  Preview、Markdownソース、行番号付きMarkdownソースから選択できます。
-
-* **Preview印刷の安定性を改善しました。**  
-  印刷専用レイアウトを使用し、ブラウザによる出力差を抑えました。
-
-* **HTMLやコードの印刷時に、適切な出力方法を案内します。**  
-  Preview印刷に適さない場合は、Markdownソース印刷を案内します。
-
-### その他の改善
-
-* **行番号と本文の縦位置を安定させました。**
-* **Base64などの長い行を含む文書でも、検索結果へ正確に移動できるよう改善しました。**
+* 大量置換中に処理状況を表示し、重複操作を防止します。
+* 長文での置換後更新を整理し、安定性を改善しました。
+* Ctrl+Zで戻した際に、本文全体が選択される問題を修正しました。
 
 ` : `
 
-## 🎉 What's New in v1.5.9
+## 🎉 What's New in v1.6.0
 
-### Line Numbers and Current-Line Highlighting
+### Toggle Line Wrapping
 
-* **Added optional logical line numbers.**  
-  Line-based review and revision are now easier for Markdown, lightweight coding, academic papers, patent drafts, and other structured documents. Line numbers can be toggled from the View menu.
+* **You can now toggle between Wrap and No Wrap from [View] > [Wrap Lines].**
+* Long single lines (e.g., code, CSV, logs, and Base64 strings) can now be viewed using horizontal scrolling instead of wrapping.
+* Even in No Wrap mode, the editor automatically scrolls horizontally to ensure search results are visible.
 
-* **Added current-line highlighting.**  
-  The line being edited is shown with a subtle highlight, making it easier to keep your place in long documents.
+### "Replace All" Improvements
 
-### Improved Print and PDF Output
-
-* **Print and PDF output formats can now be selected from a dedicated modal.**  
-  Choose Preview, Markdown Source, or Markdown Source with Line Numbers.
-
-* **Improved Preview printing stability.**  
-  A dedicated print layout reduces browser-specific output differences.
-
-* **Added guidance for printing HTML and code.**  
-  When Preview printing is not suitable, MD//WORKS recommends Markdown Source printing.
-
-### Other Improvements
-
-* **Improved alignment between line numbers and editor text.**
-* **Improved search scrolling in documents containing extremely long lines, including embedded Base64 data.**
+* A progress indicator is now displayed during large bulk replacements to prevent accidental duplicate operations.
+* Optimized the update process after replacements in long documents, significantly improving stability.
+* Fixed an issue where the entire text would be selected when undoing an action with Ctrl+Z.
 
 `};
 
@@ -3583,7 +3563,7 @@ async function loadAutoSave() {
   const savedName = await secureGetItem(AUTOSAVE_NAME_KEY);
   if (savedTxt && savedTxt !== T.defaultMd && !isLegacyDefaultMarkdown(savedTxt) && savedTxt !== '') {
     if (confirm(T.restorePrompt)) {
-      editor.value = savedTxt;
+      setEditorDocumentValue(savedTxt);
       if (savedName) filenameInput.value = savedName;
       markDirty();
     } else {
@@ -3614,7 +3594,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (dataScript && dataScript.textContent.trim().length > 2) {
       const data = JSON.parse(dataScript.textContent);
       if (data.content !== undefined) {
-        editor.value = data.content;
+        setEditorDocumentValue(data.content);
         filenameInput.value = data.filename || 'untitled.md';
         hasStandaloneData = true;
         
@@ -4593,6 +4573,19 @@ const PASTE_SET_RANGE_TEXT_THRESHOLD = 10000;
 let suppressInputHandling = false;
 let pasteSuppressSeq = 0;
 let tocSuppressSeq = 0;
+let replaceAllSuppressSeq = 0;
+let isReplaceAllRunning = false;
+let pendingReplaceAllUndoRestore = null;
+let replaceAllUndoRestoreSeq = 0;
+
+function clearPendingReplaceAllUndoRestore() {
+  pendingReplaceAllUndoRestore = null;
+}
+
+function setEditorDocumentValue(value) {
+  clearPendingReplaceAllUndoRestore();
+  editor.value = value;
+}
 
 function shouldDeferPasteUpdate(pasteLength, nextLength) {
   return (
@@ -4633,6 +4626,44 @@ function waitForNextPaint() {
       setTimeout(resolve, 0);
     }
   });
+}
+
+function scheduleReplaceAllUndoSelectionRestore(snapshot) {
+  if (!snapshot) return;
+
+  const restore = () => {
+    const maxLength = editor.value.length;
+
+    const start = Math.max(0, Math.min(snapshot.start, maxLength));
+    const end = Math.max(start, Math.min(snapshot.end, maxLength));
+    const direction = ['forward', 'backward', 'none'].includes(snapshot.direction)
+      ? snapshot.direction
+      : 'none';
+
+    editor.focus({ preventScroll: true });
+    editor.setSelectionRange(start, end, direction);
+
+    const maxScrollTop = Math.max(0, editor.scrollHeight - editor.clientHeight);
+    const maxScrollLeft = Math.max(0, editor.scrollWidth - editor.clientWidth);
+
+    editor.scrollTop = Math.max(0, Math.min(snapshot.scrollTop, maxScrollTop));
+    editor.scrollLeft = Math.max(0, Math.min(snapshot.scrollLeft, maxScrollLeft));
+
+    backdrop.scrollTop = editor.scrollTop;
+    backdrop.scrollLeft = editor.scrollLeft;
+
+    if (typeof updateCurrentLineHighlight === 'function') {
+      updateCurrentLineHighlight();
+    }
+  };
+
+  if (typeof requestAnimationFrame === 'function') {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(restore);
+    });
+  } else {
+    setTimeout(restore, 0);
+  }
 }
 
 function deferPasteTask(fn, preferIdle) {
@@ -4762,14 +4793,33 @@ async function handlePlainTextPaste(text) {
 }
 
 let autoSaveTimeout;
-editor.addEventListener('input', () => {
-  if (suppressInputHandling) return;
+editor.addEventListener('input', event => {
+  const isHistoryUndo =
+    event && event.inputType === 'historyUndo';
+
+  let replaceAllUndoSnapshot = null;
+
+  if (isHistoryUndo && pendingReplaceAllUndoRestore) {
+    replaceAllUndoSnapshot = pendingReplaceAllUndoRestore;
+    pendingReplaceAllUndoRestore = null;
+  }
+
+  if (suppressInputHandling && !isHistoryUndo) return;
+
+  if (pendingReplaceAllUndoRestore && !isHistoryUndo && !suppressInputHandling) {
+    clearPendingReplaceAllUndoRestore();
+  }
+
   update();
   markDirty();
   if (spellEnabled) runSpellCheck();
   if (srPanelOpen) performSearch(false);
   clearTimeout(autoSaveTimeout);
   autoSaveTimeout = setTimeout(triggerAutoSave, 1500);
+
+  if (replaceAllUndoSnapshot) {
+    scheduleReplaceAllUndoSelectionRestore(replaceAllUndoSnapshot);
+  }
 });
 
 filenameInput.addEventListener('input', () => {
@@ -5357,8 +5407,6 @@ document.getElementById('sr-btn-replace').onclick = () => {
   performSearch(true);
 };
 
-let replaceAllInProgress = false;
-
 const replaceAllControlIds = [
   'sr-btn-replace',
   'sr-btn-replace-all',
@@ -5385,7 +5433,7 @@ function setSearchReplaceControlsDisabled(disabled) {
 }
 
 document.getElementById('sr-btn-replace-all').onclick = async () => {
-  if (replaceAllInProgress) return;
+  if (isReplaceAllRunning) return;
   if (!guardEditorCommand()) return;
   if (srMatches.length === 0) return;
   const count = srMatches.length;
@@ -5396,37 +5444,125 @@ document.getElementById('sr-btn-replace-all').onclick = async () => {
   const oldFullText = editor.value;
   const scrollTop = editor.scrollTop;
   const scrollLeft = editor.scrollLeft;
+  const replaceAllUndoSnapshot = {
+    token: ++replaceAllUndoRestoreSeq,
+    start: editor.selectionStart,
+    end: editor.selectionEnd,
+    direction: editor.selectionDirection || 'none',
+    scrollTop,
+    scrollLeft,
+    beforeLength: oldFullText.length
+  };
 
-  replaceAllInProgress = true;
+  let suppressSeq = 0;
+  let completed = false;
+  let failure = null;
+  let replaceAttempted = false;
+  let replaceAllCommitted = false;
   const restoreSearchReplaceControls = setSearchReplaceControlsDisabled(true);
+
+  isReplaceAllRunning = true;
   showLoader(T.replacingAll);
+  setStatusBadge(T.replacingAllStatus);
 
   try {
-    await waitForNextPaint();
+    await yieldToBrowserPaint();
 
     const newFullText = oldFullText.replace(regex, repStr);
 
-    editor.focus();
-    editor.setSelectionRange(0, oldFullText.length);
-    document.execCommand('insertText', false, newFullText);
-    editor.setSelectionRange(0, 0);
-    editor.scrollTop = scrollTop;
-    editor.scrollLeft = scrollLeft;
-    backdrop.scrollTop = editor.scrollTop;
-    backdrop.scrollLeft = editor.scrollLeft;
+    suppressSeq = ++replaceAllSuppressSeq;
+    suppressInputHandling = true;
+
+    try {
+      editor.focus();
+      editor.setSelectionRange(0, oldFullText.length);
+      const before = editor.value;
+      replaceAttempted = true;
+      document.execCommand('insertText', false, newFullText);
+
+      if (editor.value === before && newFullText !== oldFullText) {
+        editor.setRangeText(newFullText, 0, oldFullText.length, 'end');
+      }
+
+      replaceAllCommitted = editor.value === newFullText;
+      editor.setSelectionRange(0, 0);
+      editor.scrollTop = scrollTop;
+      editor.scrollLeft = scrollLeft;
+      backdrop.scrollTop = editor.scrollTop;
+      backdrop.scrollLeft = editor.scrollLeft;
+    } finally {
+      if (suppressSeq) {
+        // Some browsers dispatch execCommand's input event after the next task.
+        setTimeout(() => {
+          const release = () => {
+            if (suppressSeq === replaceAllSuppressSeq) {
+              suppressInputHandling = false;
+
+              if (replaceAllCommitted) {
+                pendingReplaceAllUndoRestore = replaceAllUndoSnapshot;
+              }
+            }
+          };
+
+          if (typeof requestAnimationFrame === 'function') {
+            requestAnimationFrame(release);
+          } else {
+            release();
+          }
+        }, 50);
+      }
+    }
+
     markDirty();
-    performSearch(true);
+    updateStatsOnly();
 
-    await waitForNextPaint();
+    const tasks = [];
+    const preferIdle = true;
 
-    toast(T.replacedN(count));
+    if (srPanelOpen) {
+      tasks.push(deferPasteTask(() => performSearch(true), preferIdle));
+    } else {
+      tasks.push(deferPasteTask(() => refreshBackdrop(), preferIdle));
+    }
+
+    if (previewOpen) {
+      tasks.push(deferPasteTask(() => renderPreview(), preferIdle));
+    }
+
+    if (outlineOpen) {
+      tasks.push(deferPasteTask(() => renderOutline(), preferIdle));
+    }
+
+    if (spellEnabled) {
+      tasks.push(deferPasteTask(() => runSpellCheck(), preferIdle));
+    }
+
+    clearTimeout(autoSaveTimeout);
+    autoSaveTimeout = setTimeout(triggerAutoSave, 1500);
+
+    await Promise.all(tasks);
+    completed = true;
   } catch (error) {
+    failure = error;
     console.error('Replace all failed', error);
-    alert(isJa ? 'すべて置換に失敗しました。' : 'Replace All failed.');
+    if (replaceAttempted) {
+      console.error('Replace all may have partially modified the document.', {
+        originalLength: oldFullText.length,
+        currentLength: editor.value.length,
+        expectedMatches: count
+      });
+    }
   } finally {
     hideLoader();
+    renderStorageBadge();
     restoreSearchReplaceControls();
-    replaceAllInProgress = false;
+    isReplaceAllRunning = false;
+  }
+
+  if (completed) {
+    toast(T.replacedN(count));
+  } else if (failure) {
+    alert(T.replaceAllFailed);
   }
 };
 //#endregion
@@ -6113,7 +6249,7 @@ document.getElementById('word-input').addEventListener('change', async (e) => {
     showLoader(T.loadingWordConvert);
     if (!md || !md.trim()) throw new Error('Converted markdown is empty.');
     await saveToHistoryList(filenameInput.value, editor.value);
-    editor.value = md;
+    setEditorDocumentValue(md);
     filenameInput.value = file.name.replace(/\.docx$/i, '.md');
     fileHandle = null;
     syncFilenameInputState();
@@ -6266,7 +6402,7 @@ async function importRestrictedViewerHtml(htmlText, sourceName) {
     showLoader(T.viewerRestoringMarkdown);
     await yieldToBrowserPaint();
 
-    editor.value = payload.markdown.normalize('NFC');
+    setEditorDocumentValue(payload.markdown.normalize('NFC'));
     filenameInput.value = ensureMarkdownFilename(payload.filename || payload.title || restrictedViewerSourceToMarkdownName(sourceName));
     fileHandle = null;
     syncFilenameInputState();
@@ -6331,7 +6467,7 @@ async function importPrivateViewerHtml(htmlText, sourceName) {
     showLoader(T.viewerRestoringMarkdown);
     await yieldToBrowserPaint();
 
-    editor.value = payload.markdown.normalize('NFC');
+    setEditorDocumentValue(payload.markdown.normalize('NFC'));
     filenameInput.value = ensureMarkdownFilename(payload.title || String(sourceName || '').replace(/\.(private\.)?view\.html?$/i, '') || 'document');
     fileHandle = null;
     syncFilenameInputState();
@@ -6386,7 +6522,7 @@ async function handleOpen() {
       fileHandle = handle;
       syncFilenameInputState();
       filenameInput.value = file.name;
-      editor.value = text.normalize('NFC');
+      setEditorDocumentValue(text.normalize('NFC'));
       update(); markSaved(); triggerAutoSave();
       toast(T.opened(file.name));
     } catch (e) {
@@ -6411,7 +6547,7 @@ document.getElementById('file-input').addEventListener('change', async (e) => {
     if (await importPrivateViewerHtml(text, file.name)) return;
 
     filenameInput.value = file.name;
-    editor.value = text.normalize('NFC');
+    setEditorDocumentValue(text.normalize('NFC'));
     fileHandle = null;
     syncFilenameInputState();
 
@@ -7787,7 +7923,7 @@ async function openHistory() {
     const date = document.createElement('div'); date.className = 'hist-date';
     date.textContent = new Date(h.date).toLocaleString();
     div.append(name, date);
-    div.onclick = () => { editor.value = h.content; filenameInput.value = h.filename; update(); closeHistory(); };
+    div.onclick = () => { setEditorDocumentValue(h.content); filenameInput.value = h.filename; update(); closeHistory(); };
     container.appendChild(div);
   });
   document.getElementById('history-modal').classList.add('show');
@@ -8307,7 +8443,7 @@ async function newFile() {
   clearPreviewSession();
   if (isDirty && !confirm(T.confirmNew)) return;
   await saveToHistoryList(filenameInput.value, editor.value);
-  editor.value = '';
+  setEditorDocumentValue('');
   resetDocumentIdentity();
   update();
   markSaved();
@@ -8322,7 +8458,7 @@ async function closeFile() {
   clearPreviewSession();
   if (isDirty && !confirm(T.confirmClose)) return;
   await saveToHistoryList(filenameInput.value, editor.value);
-  editor.value = ''; resetDocumentIdentity(); update(); markSaved();
+  setEditorDocumentValue(''); resetDocumentIdentity(); update(); markSaved();
   secureRemoveItem(AUTOSAVE_TXT_KEY);
   secureRemoveItem(AUTOSAVE_NAME_KEY);
   toast(T.closedToast);
