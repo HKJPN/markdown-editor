@@ -800,7 +800,7 @@ MD//WORKS can be used with several browser-based AI assistants. This section exp
 
 #### 11-1-3. Local LLM
 
-It is also possible to build a "completely local LLM environment" without sending any data to the internet. For detailed setup instructions, please refer to [Appendix 1 and 2](#appendix-1-2-local-llm) in this document.
+It is also possible to build a "completely local LLM environment" without sending any data to the internet. For local setup instructions, please refer to [Appendix 1 and 2](#appendix-1-2-local-llm) in this document. If you want to use an OpenAI-compatible external cloud API from a browser assistant instead of a local model, see [Appendix 1-4](#appendix-1-4-how-to-use-openai-compatible-cloud-apis-eg-muse-spark-11-with-brave-leo-or-page-assist).
 
 ### 11-2. Example Use Cases
 
@@ -876,10 +876,10 @@ This section covers common issues and how to resolve them.
 
 **Cause**
 
-MD//WORKS intentionally does not support direct cloud integration. This is a deliberate design choice to ensure the long-term safety, privacy, and reliability of your data:
+MD//WORKS intentionally does not support direct cloud storage integration. This is a deliberate design choice to ensure the long-term safety, privacy, and reliability of your data:
 
 * **Privacy:** All processing remains strictly within your browser. By not connecting to external servers, the risk of data leaks is eliminated.
-* **Longevity:** Avoiding reliance on external cloud APIs prevents the application from breaking if those services suddenly change or shut down.
+* **Longevity:** Avoiding built-in reliance on external cloud storage or AI APIs prevents the application from breaking if those services suddenly change or shut down.
 * **Reliability:** Official desktop sync apps are much more stable and less prone to file corruption from network errors compared to direct browser uploads.
 
 **Workaround**
@@ -1011,9 +1011,9 @@ For submission-ready PDFs, always open the generated file and confirm that the l
 
 # Appendix 
 
-## Appendix 1: How to Use Local LLMs in Various Browsers
+## Appendix 1: How to Use Local LLMs and OpenAI-Compatible APIs in Various Browsers
 
-This section explains the steps to connect your browser with a local LLM server running on your PC.
+This section explains the steps to connect your browser with a local LLM server running on your PC, and how to optionally point compatible browser tools to external OpenAI-compatible cloud APIs.
 
 ### Appendix 1-1. Chrome<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">/Edge<img src="./images/EdgeIcon.png" alt="Image:icon" width="16">
 
@@ -1124,6 +1124,61 @@ Configure the settings in the Brave browser to call the local model prepared in 
 1. Open "Leo" from the Brave browser's sidebar.
 2. Open the model selection menu near the chat input field and select the label you configured in Phase 2 (e.g., `Local Llama 3`).
 3. Enter a prompt and verify that a response is successfully generated in your local environment.
+
+---
+
+### Appendix 1-4. How to Use OpenAI-Compatible Cloud APIs (e.g., Muse Spark 1.1) with Brave Leo or Page Assist
+
+This section explains the advanced steps for using external cloud APIs provided by Meta and other providers directly from your browser, as an alternative to local environments such as Ollama. This uses the same basic idea as the connection URL changes described in Appendices 1-1 and 1-3, but the request is sent to an external provider instead of to `localhost`.
+
+> **Important:** MD//WORKS itself does not store or call these API keys. The API key is entered only in the browser feature or extension that you choose to use. Before entering sensitive documents into an AI sidebar, review the provider's terms, privacy policy, regional availability, pricing, and any organizational rules that apply to your work.
+
+#### 1. General Preparation: Obtaining API Information
+
+First, obtain the necessary connection information from the API provider's website. The Meta Model API is used as an example here.
+
+1. Register as a developer at [dev.meta.ai](https://dev.meta.ai) and generate an API key. At the time of writing, new Meta Model API accounts may receive **$20 in free credits**, but credit campaigns, availability, and eligible regions can change. Always confirm the current conditions on the provider's official dashboard.
+2. On the provider dashboard, note the following information:
+   * **Base URL**: for example, `https://api.llama.com/compat/v1`
+   * **Model ID**: for example, `muse-spark-1.1` or `Llama-4-Maverick`
+   * **API Key**: the secret key generated for your account
+
+#### 2. Configuration by Browser
+
+Follow the configuration that matches your environment.
+
+##### [A] Brave: Registering the Model in the Built-in Leo Feature
+
+Add the model directly from Brave's settings screen.
+
+1. Open **Settings** > **Leo** from the Brave menu.
+2. Click **Bring your own model** > **Add new model**.
+3. Enter the following details, then click **Add model** to save:
+   * **Label**: `Muse Spark 1.1` or any display name you want to show in Leo's model menu
+   * **Model request name**: the **Model ID** you noted earlier
+   * **Server endpoint**: the **Base URL** you noted earlier, with `/chat/completions` appended to the end
+     * Example: `https://api.llama.com/compat/v1/chat/completions`
+   * **API Key**: the generated **API Key**
+4. After registering the model, select it from Leo's model selection menu.
+
+> 💡 **Brave-specific note:** Similar to Chrome's Gemini integration, Brave Leo can provide a smooth browser-sidebar experience while you work in MD//WORKS. In environments where Leo can read the current page or selected text, changing the selection can make it easier to ask questions about the relevant part of the document. Availability and behavior may differ by Brave version, platform, region, and Leo settings, including on iPad.
+
+##### [B] Chrome / Edge: Using the Page Assist Extension
+
+Complete the basic Page Assist setup in Appendix 1-1 first.
+
+1. Open the **Settings** screen in Page Assist.
+2. Change the provider to **OpenAI Compatible**, **Custom**, or the equivalent option shown by your Page Assist version.
+3. Enter the **Base URL**, **Model ID**, and **API Key** you noted earlier into their respective fields, then save the settings.
+4. Open Page Assist from the sidebar, select the added model, and start a chat.
+
+#### Important Notes Before Use
+
+* **Security management:** Never share your API key. Do not write it directly into MD//WORKS, shared Markdown files, screenshots, sample documents, or prompt examples. If a key is exposed, revoke or rotate it immediately from the provider dashboard.
+* **Data transmission:** Unlike local LLMs that run entirely on your PC or internal server, cloud APIs send your prompts, selected text, and other request data to external servers. Do not send confidential, regulated, or personal information unless your organization and the provider's terms explicitly allow it.
+* **Usage fees and rate limits:** Billing, free credits, rate limits, model availability, and regional restrictions depend on each API provider. Set budget alerts or usage caps where available before using a paid API.
+* **Endpoint format:** Brave Leo generally expects a full chat-completions endpoint such as `/chat/completions`, while some extensions ask for only the base URL and add the endpoint internally. If a request fails, check whether `/chat/completions` has been duplicated or omitted.
+* **Compatibility:** OpenAI-compatible APIs are not always perfectly identical. Some models may not support every parameter, tool-call feature, attachment type, or context length expected by the browser tool.
 
 ---
 ## Appendix 2. How to Share and Use a Local Server LLM (Chrome, Edge, Brave)
