@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-07-16 - v1.6.0　Official Release
+### Line Wrapping
+* Toggle text wrapping via **[View] > [Wrap Lines]**.
+* Support horizontal scrolling for long lines (e.g., code, logs).
+* Auto-scrolls horizontally to show search results in No Wrap mode.
+
+### "Replace All" Improvements
+* Added a progress indicator for large bulk replacements.
+* Improved processing speed and stability in long documents.
+* Fixed a bug where `Ctrl+Z` (Undo) selected the entire text.
+
+
 ## 2026-07-10 - v1.5.9　Official Release
 * Fixed update verification process.
 
