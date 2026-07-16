@@ -1001,7 +1001,7 @@ PDF出力（**ファイル > 印刷 / PDF保存**）は、ブラウザの印刷�
 
 # 付録
 
-## 付録1：各種ブラウザでローカルLLMを使う方法
+## 付録1：各種ブラウザでローカルLLM等を使う方法
 
 ### 付録1-1. Chrome<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">/Edge<img src="./images/EdgeIcon.png" alt="Image:icon" width="16">
 
