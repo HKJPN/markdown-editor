@@ -739,14 +739,14 @@ The following comparison illustrates how different AI browsers interact with MD/
 
 > 💡 The table below is a broader comparison, useful when you also use MD//WORKS on a PC. As the "AI support on iPad" row shows, **Brave (Leo) is currently the only option that works on iPad itself**. Copilot, Gemini, and Firefox AI controls are included here for reference regarding desktop use.
 
-| Item | Copilot in Edge | Gemini in Chrome | Brave Browser (Leo) | Firefox AI controls |
-| --- | --- | --- | --- | --- |
-| **AI integration with MD//WORKS** | 🚫 Mainly copy-and-paste based | ✅ **Analyzes document structure / selection** | ✅ **Analyzes document structure** | 🚫 Mainly copy-and-paste based |
-| **Real-time Context Awareness** | 🚫 **Limited** | ✅ **Full Real-time** | ⚠️ **Snapshot-based** | 🚫 **None** |
-| **AI support on iPad** | 🚫 Not available | 🚫 Not available | **✅ Available** | 🚫 Not available |
-| **Model selection** | 🚫 Not available | 🚫 Not available (Pro/Flash only) | **✅ Available** | **✅ Available** |
-| **Security / privacy** | Best for MS 365 environments; ✅local LLM usage is also possible | Depends on Google Workspace and account settings; ✅local LLM usage is also possible| Minimizes data sharing; ✅local LLM usage is also possible | ✅Can block AI access; ✅local LLM usage is also possible |
-| **Recommended use** | Organizations utilizing **MS365** | Writing with **frontier models** | Proofreading, **mobile/iPad use**, model selection | Users who want **strict AI control** |
+| Item | Copilot in Edge<br>![Image: copiloticon](<images/Bcopilot.png>)  | Gemini in Chrome<br>![Image: askGemini](<images/BgemniE.jpg>)  | Brave Browser / Leo<br> ![Image: LeoImage](<images/Leoimage.png>) | Firefox AI Controls<br>![Image: FirefoxAIcontorls](<images/FirefoxAIcontorls.png>) |
+| :--- | :--- | :--- | :--- | :--- |
+| **AI integration with MD//WORKS** | 🚫 Mainly copy-and-paste based, even when the sidebar is available | ✅ **Can analyze the overall document structure or selected areas** | ✅ **Can analyze the overall document structure** | 🚫 Mainly copy-and-paste based, even when the sidebar is available |
+| **Real-time Context Awareness** | 🚫 **Limited**<br>Requires manual trigger; context updates only when panel is refreshed or explicitly instructed | ✅ **Full Real-time**<br>Directly monitors DOM & selection; updates instantly as you type or select | ⚠️ **Snapshot-based**<br>Captures state when opened; does not auto-sync with ongoing typing without reopening | 🚫 **None**<br>Relies on copy-paste or manual page summary|
+| **AI support on iPad** | 🚫 Not available | 🚫 Not available | ✅ **Available** | 🚫 Not available |
+| **Model selection** | 🚫 Not available | 🚫 Not available (Limited to Pro and Flash) | ✅ **Available** | ✅ Available when using a local or configurable AI setup |
+| **Security / privacy orientation** | Best suited for managed Microsoft 365 environments; ✅**local LLM** usage is also possible | Depends on Google Workspace and account settings; ✅**local LLM** usage is also possible  | Minimizes unnecessary data sharing and offers privacy-oriented controls; ✅**local LLM** usage is also possible | ✅Can **block AI** access; ✅**local LLM** usage is also possible |
+| **Recommended use** | Organizations that prioritize **Microsoft 365 governance** | Writing, proofreading, and review using **powerful AI models** | Writing, proofreading, **mobile use**, and **model selection** | Users who want **strict AI control**, AI blocking, or a fully local AI option |
 
 #### For users looking for smooth mobile integration
 
