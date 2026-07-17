@@ -59,7 +59,7 @@ MD//WORKS is compatible with almost all environments that can run a modern web b
 
 ### 1-3. Screen Layout
 
-![Image: Overall screen layout with numbers ① to ⑥ indicating each area](<./images/overall-screen-layout.jpg>)
+	![Image: Overall screen layout with numbers ① to ⑥ indicating each area](<./images/overall-screen-layout.jpg>)
 
 * **① Menu Bar**  
   Provides access to the File, Edit, View, Help, and Latest Version Notification menus. Use it to create new files, save, export, switch views, and access help.
@@ -331,6 +331,8 @@ Each time you click/tap one of the following, the display cycles through three s
 
 - The **Preview** button on the title bar
 - **View > Preview** in the menu bar
+- 
+![Image: Split view and Focus preview ](<./images/splitviewE.jpg>)
 
 #### 5-1-1. Split View (Editor & Preview)
 
@@ -513,6 +515,8 @@ To export as a PDF, choose **Save as PDF** as the destination in your browser’
 - **Markdown Source ☑ Include Line Numbers**  
   Prints the Markdown source with logical line numbers. This is useful for line-by-line review and comments on academic papers, patent drafts, code, and other long-form documents.
 
+![Image: Print Menu](<./images/printE.jpg>)
+
 > When printing or saving as PDF, use **File > Print / Save as PDF...** in MD//WORKS instead of the browser’s standard Ctrl+P shortcut. Ctrl+P prints the current browser screen directly, which may include the app UI or cause page breaks to differ from MD//WORKS’ optimized print output.
 >
 > If you open a `.html` / `.htm` file or HTML source code, Preview printing may interpret it as HTML and produce broken output. When printing HTML source or code, use **Markdown Source** or **Markdown Source ☑ Include Line Numbers** instead.
@@ -525,8 +529,6 @@ MD//WORKS Editor provides tools to search and replace text strings across your d
 
 ### 8-1. Finding Text
 
-
-
 To search within the document, select **Edit > Find (Ctrl+F / ⌘F)** from the menu bar.
 
 #### Steps
@@ -536,6 +538,10 @@ To search within the document, select **Edit > Find (Ctrl+F / ⌘F)** from the m
 3. Enter the text you want to find.
 4. Matching text is highlighted in the editor.
 5. Use the **↑ / ↓** buttons to move between results.
+
+![Image: Find Menu](<./images/findE.jpg>)
+
+
 
 ### 8-2. Replacing Text
 
@@ -550,6 +556,8 @@ To replace text, select **Edit > Replace (Ctrl+H / ⌘H)**.
 3. Enter the replacement text in the lower field.
 4. Click **Replace** to replace one match at a time.
 5. Click **Replace All** to replace all matches at once.
+
+![Image: Replace Menu](<./images/replaceE.jpg>)
 
 ### 8-3. Using Search Options
 
@@ -576,6 +584,9 @@ Selecting **Edit > Insert Table of Contents** automatically generates a clickabl
 > 💡 **Tip: Choosing the Right Tool**
 > For navigating your document while editing in MD//WORKS, we recommend using the **Outline View** on the right side of the screen.
 > This "Insert Table of Contents" feature is designed for the **final polishing stage** of your document—such as right before handing a Markdown file over to someone else or exporting it to HTML/PDF.
+
+![Image: TOC and Outlin](<./images/TOCandOutlineE.jpg>)
+
 
 ### Usage and Important Notes
 * **Inserting for the First Time**
