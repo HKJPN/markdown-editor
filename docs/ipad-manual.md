@@ -325,6 +325,8 @@ Each time you click/tap one of the following, the display cycles through three s
 - The **Preview** button on the title bar
 - **View > Preview** in the menu bar
 
+![Image: Split view and Focus preview ](<./images/splitviewE.jpg>)
+
 #### 5-1-1. Split View (Editor & Preview)
 
 The Markdown editor is displayed on the left side of the screen, and the Preview is displayed on the right side.
@@ -496,6 +498,8 @@ Select **File > Print / Save as PDF...** to open the MD//WORKS Print / Save as P
 
 To export as a PDF, choose **Save as PDF** as the destination in your browser’s print dialog. You can also turn off **Headers and footers** in the browser’s print settings to remove browser-generated information such as the URL, date, and page numbers, producing a cleaner output.
 
+![Image: Print Menu](<./images/printE.jpg>)
+
 - **Preview**  
   Prints the rendered HTML view of your Markdown while preserving its formatting.
 
@@ -528,6 +532,8 @@ To search within the document, select **Edit > Find (⌘F)** from the menu bar.
 4. Matching text is highlighted in the editor.
 5. Use the **↑ / ↓** buttons to move between results.
 
+![Image: Find Menu](<./images/findE.jpg>)
+
 ### 8-2. Replacing Text
 
 To replace text, select **Edit > Replace (⌘H)**.
@@ -537,6 +543,8 @@ To replace text, select **Edit > Replace (⌘H)**.
 3. Enter the replacement text in the lower field.
 4. Click **Replace** to replace one match at a time.
 5. Click **Replace All** to replace all matches at once.
+
+![Image: Replace Menu](<./images/replaceE.jpg>)
 
 ### 8-3. Using Search Options
 
@@ -554,6 +562,8 @@ Select **Edit > Format Markdown** to clean up excessive blank lines and trailing
 
 ### 8-5. Inserting a Table of Contents
 Selecting **Edit > Insert Table of Contents** automatically generates a clickable, linked table of contents based on the headings (`#` to `###` / H1 to H3) in your document.
+
+![Image: TOC and Outlin](<./images/TOCandOutlineE.jpg>)
 
 > 💡 **Tip: Choosing the Right Tool**
 > For navigating your document while editing in MD//WORKS, we recommend using the **Outline View** on the right side of the screen.
