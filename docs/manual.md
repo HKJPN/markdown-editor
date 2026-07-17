@@ -59,7 +59,7 @@ MD//WORKS is compatible with almost all environments that can run a modern web b
 
 ### 1-3. Screen Layout
 
-	![Image: Overall screen layout with numbers ① to ⑥ indicating each area](<./images/overall-screen-layout.jpg>)
+![Image: Overall screen layout with numbers ① to ⑥ indicating each area](<./images/overall-screen-layout.jpg>)
 
 * **① Menu Bar**  
   Provides access to the File, Edit, View, Help, and Latest Version Notification menus. Use it to create new files, save, export, switch views, and access help.
