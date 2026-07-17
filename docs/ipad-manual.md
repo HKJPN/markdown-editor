@@ -728,10 +728,19 @@ For everyday proofreading, summarizing, terminology checks, and basic structural
 * Explain the processing logic of the specified JavaScript function so that even a beginner can understand it.
 * Rewrite the specifications being edited as an implementation prompt for Codex.
 
- 
+#### Long-Form Text Rewriting Support
+
+When reviewing long documents, ask Leo or another AI assistant to output suggested revisions as a table. This makes it easier to use MD//WORKS search and replace features to apply only the changes you approve. For very long documents, consider asking the AI to list issues chapter by chapter rather than rewriting the entire text at once.
+
+For advanced prompt examples for technical reports, quality assurance documents, and academic proceedings, see [Appendix 6 in the general MD//WORKS manual](./manual.md#appendix-6-ai-prompt-examples-for-comprehensive-document-revision).
+
 ### 11-3. Important Notes When Using Browser AI
 
 When you use a browser-based AI assistant, the entire visible document or the selected area may be processed by the AI service. If you are working with confidential information or internal company documents, always check what information is being shared and how your browser manages AI access.
+
+If you configure a custom or OpenAI-compatible cloud API through a browser AI feature, never write API keys in MD//WORKS documents, shared Markdown files, screenshots, or prompt examples. Also remember that prompts and selected text may be sent to the external provider, and usage fees or rate limits may apply.
+
+If your organization or your own PC/Mac provides a local or private AI endpoint, you may be able to access it through compatible browser AI tools such as Brave Leo. iPad itself is usually not the place where a local LLM server is installed, so check your network, browser, and organization settings before sending confidential documents.
 
 ### 11-4. Differences Between Browser AI Assistants
 
