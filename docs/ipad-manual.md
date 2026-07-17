@@ -552,7 +552,7 @@ The Find and Replace panel provides the following options:
 
 | Option | Description |
 | --- | --- |
-| RegExp | Enables regular expression search |
+| [RegExp](regex-recipes.md) | Enables [regular expression](regex-recipes.md) search |
 | Case Sensitive | Matches uppercase and lowercase letters exactly |
 | Whole Word | Matches complete words only |
 
