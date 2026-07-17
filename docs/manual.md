@@ -331,7 +331,7 @@ Each time you click/tap one of the following, the display cycles through three s
 
 - The **Preview** button on the title bar
 - **View > Preview** in the menu bar
-- 
+
 ![Image: Split view and Focus preview ](<./images/splitviewE.jpg>)
 
 #### 5-1-1. Split View (Editor & Preview)
