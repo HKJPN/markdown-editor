@@ -57,7 +57,7 @@ MD//WORKS Editor works comfortably in the following iPad environments:
   Provides access to the File, Edit, View, Help, and Latest Version Notification menus. Use it to create new files, save, export, switch views, and access help.
 
 * **② Title Bar**  
-This section displays the app name, file name, save status, and primary operation buttons. On iPad, **specifying a file name here allows you** to save (share) the file under any desired name via the "Files" app. You can quickly perform operations such as opening and saving files, toggling the Preview, entering full-screen mode, and using Spell (EN).
+This section displays the app name, file name, save status, and primary operation buttons. **On iPad, specifying a file name here allows you to save (share) the file under any desired name via the "Files" app**. You can quickly perform operations such as opening and saving files, toggling the Preview, entering full-screen mode, and using Spell (EN).
 
 * **③ Toolbar**  
   Lets you insert headings, bold text, italics, strikethrough, superscript, subscript, lists, numbered lists, tasks, quotes, code, links, and tables with a single click.  
