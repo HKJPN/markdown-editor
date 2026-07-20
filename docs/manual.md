@@ -634,7 +634,7 @@ Examples include:
 | Line breaks (`↵`) | Confirming paragraph and list spacing |
 
 In Markdown, the positions of spaces and line breaks can affect the display results. Full-width spaces, tabs, trailing spaces, and line break positions are displayed very faintly in any screen mode as shown below.
-<img src="./images/invisivlecharac.jpg" alt="invisible character" width="30%">
+<img src="./images/invisivlecharac.jpg" alt="invisible character" width="50%">
 
 ### 9-3. Showing Line Numbers
 Select **View > Show Line Numbers** to display logical line numbers on the left side of the editor. This feature is disabled by default.
