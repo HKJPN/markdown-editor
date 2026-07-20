@@ -642,7 +642,7 @@ MD//WORKS Editorでは、文書内の文字列を検索したり、特定の語�
 
 Markdownでは、スペースや改行の位置が表示結果に影響することがあります。  全角スペース、タブ、行末スペース、改行位置は、いずれの画面モードでも次のようにごく薄く表示されます。
 
-![Image: invisible character ](<./docs/images/invisivlecharac.jpg>  width="30%")
+![Image: invisible character](<./docs/images/invisivlecharac.jpg>  width="30%")
 
 ### 9-3. 行番号を表示する
 **表示 > 行番号を表示** を選択すると、エディタの左側に論理行番号を表示できます。デフォルトはオフになっています。
