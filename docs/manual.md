@@ -628,13 +628,13 @@ Examples include:
 
 | Character | Use case |
 | --- | --- |
-| Full-width spaces | Checking accidental spaces or inconsistencies |
-| Tabs | Checking indentation |
-| Trailing spaces | Identifying causes of Markdown formatting issues |
-| Line breaks | Confirming paragraph and list spacing |
+| Full-width spaces (`□`)| Checking accidental spaces or inconsistencies |
+| Tabs  (`→`) | Checking indentation |
+| Trailing spaces (`·`)| Identifying causes of Markdown formatting issues |
+| Line breaks (`↵`) | Confirming paragraph and list spacing |
 
-In Markdown, spaces and line breaks can affect the rendered result.  
-This feature is useful when fine-tuning the document layout.
+In Markdown, the positions of spaces and line breaks can affect the display results. Full-width spaces, tabs, trailing spaces, and line break positions are displayed very faintly in any screen mode as shown below.
+<img src="./images/invisivlecharac.jpg" alt="invisible character" width="30%">
 
 ### 9-3. Showing Line Numbers
 Select **View > Show Line Numbers** to display logical line numbers on the left side of the editor. This feature is disabled by default.
