@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-07-16 - v1.6.0.1  Security and dependency updates
+
+Updated the external libraries used for Markdown preview, HTML sanitization, and Word import.
+
+- Marked: 18.0.3 → 18.0.6
+- DOMPurify: 3.4.5 → 3.4.12
+- Mammoth: 1.11.0 → 1.12.0
+- Turndown: 7.2.4（unchanged)
+
+
 ## 2026-07-16 - v1.6.0　Official Release
 ### Line Wrapping
 * Toggle text wrapping via **[View] > [Wrap Lines]**.
