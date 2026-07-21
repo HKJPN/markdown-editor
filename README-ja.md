@@ -10,11 +10,11 @@
 
 ブラウザAIを執筆支援ツールとして**積極活用**する方法や、逆にブラウザAIを使用せず**安全性重視で運用**する方法について[取扱説明書の「11. AI支援執筆」](https://github.com/HKJPN/markdown-editor/blob/main/docs/manual-ja.md#11-ai%E6%94%AF%E6%8F%B4%E5%9F%B7%E7%AD%86--)にて解説しています。
 
-# 🚀 インストール不要で即実行可能
+# インストール不要で即実行可能
 
 👉 **https://hkjpn.github.io/markdown-editor/**
 
-- [クイックスタート（はじめに）](docs/quick-start-ja.md)
+- [🚀 クイックスタート（はじめに）](docs/quick-start-ja.md)
 - [📖 取扱説明書(汎用)](docs/manual-ja.md)
 - [📱 iPad向け 取扱説明書](docs/ipad-manual-ja.md)
 - [🎓Scientific Writing Guide](docs/scientific-writing-ja.md).
