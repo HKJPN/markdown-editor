@@ -42,6 +42,14 @@ Edit massive documents with complete confidence and better stability.
 * **Rock-Solid Stability:** We've heavily optimized the post-replacement update process, delivering a noticeably smoother and more stable experience when handling long documents.
 * **Seamless Undo:** Fixed an annoying quirk where undoing a replacement (`Ctrl+Z`) would select your entire document. Now, it reverts smoothly to exactly where you left off.
 
+### 🛡️ Security and dependency updates
+
+Updated the external libraries used for Markdown preview, HTML sanitization, and Word import.
+
+- Marked: 18.0.3 → 18.0.6
+- DOMPurify: 3.4.5 → 3.4.12
+- Mammoth: 1.11.0 → 1.12.0
+- Turndown: 7.2.4（unchanged)
 
 ---
 
