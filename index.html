@@ -20,9 +20,9 @@
   })();
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/marked@18.0.3/lib/marked.umd.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@18.0.6/lib/marked.umd.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/encoding-japanese@2.0.0/encoding.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.5/dist/purify.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.12/dist/purify.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/typo-js@1.2.3/typo.js" crossorigin="anonymous"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1930,9 +1930,9 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
-const APP_VERSION = '1.6.0';
-const APP_VERSION_LABEL = 'v1.6.0';
-const RELEASE_NOTES_VERSION = '1.6.0-release';
+const APP_VERSION = '1.6.0.1';
+const APP_VERSION_LABEL = 'v1.6.0.1';
+const RELEASE_NOTES_VERSION = '1.6.0.1-release';
 const LEGACY_DEFAULT_MARKDOWN_SAMPLES = [
   `# MD//WORKS エディタ
 
@@ -2395,7 +2395,7 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
   releaseNotesClose: isJa ? '閉じる' : 'Close',
   releaseNotesContent: isJa ? `
 
-## 🎉 v1.6.0の新機能
+## 🎉 v1.6.0.1の新機能
 
 ### 行の折り返し切り替え
 
@@ -2409,10 +2409,16 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
 * 長文での置換後更新を整理し、安定性を改善しました。
 * Ctrl+Zで戻した際に、本文全体が選択される問題を修正しました。
 
+### セキュリティアップデート
+
+* Marked: 18.0.3 → 18.0.6
+* DOMPurify: 3.4.5 → 3.4.12
+* Mammoth: 1.11.0 → 1.12.0
+* Turndown: 7.2.4（unchanged)
+
 ` : `
 
-## 🎉 What's New in v1.6.0
-
+## 🎉 What's New in v1.6.0.1
 ### Toggle Line Wrapping
 
 * **You can now toggle between Wrap and No Wrap from [View] > [Wrap Lines].**
@@ -2424,6 +2430,14 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
 * A progress indicator is now displayed during large bulk replacements to prevent accidental duplicate operations.
 * Optimized the update process after replacements in long documents, significantly improving stability.
 * Fixed an issue where the entire text would be selected when undoing an action with Ctrl+Z.
+
+### Security and dependency updates
+
+Updated the external libraries used for Markdown preview, HTML sanitization, and Word import.
+* Marked: 18.0.3 → 18.0.6
+* DOMPurify: 3.4.5 → 3.4.12
+* Mammoth: 1.11.0 → 1.12.0
+* Turndown: 7.2.4（unchanged)
 
 `};
 
@@ -6311,8 +6325,8 @@ function getWordImportSandboxSrcdoc() {
     });
   };
   return `<!doctype html><html><head><meta charset="utf-8"></head><body>
-    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.11.0/mammoth.browser.min.js"><\/script>
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.5/dist/purify.min.js"><\/script>
+    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.12.0/mammoth.browser.min.js"><\/script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.12/dist/purify.min.js"><\/script>
     <script src="https://cdn.jsdelivr.net/npm/turndown@7.2.4/lib/turndown.browser.umd.min.js"><\/script>
     <script>(${runner})();<\/script></body></html>`;
 }
