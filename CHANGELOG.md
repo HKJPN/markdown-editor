@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2026-07-16 - v1.6.0.1  Security and dependency updates
+## 2026-07-21 - v1.6.0.1  Security and dependency updates
 
 Updated the external libraries used for Markdown preview, HTML sanitization, and Word import.
 
