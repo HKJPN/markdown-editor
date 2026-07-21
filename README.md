@@ -24,7 +24,7 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 
 ---
 
-## 🎉 What's New in v1.6.0
+## 🎉 What's New in v1.6.0.1 
 
 ### 🔄 Flexible Text Viewing: Toggle Line Wrapping
 
