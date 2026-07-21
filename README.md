@@ -9,11 +9,11 @@
 
 For more information about AI integration, see ["11. AI-Assisted Writing" in the manual](https://github.com/HKJPN/markdown-editor/blob/main/docs/manual.md#11-ai-assisted-writing-).
 
-# 🚀 Live Demo
+# Live Demo
 
 Try it instantly in your browser. 👉 **https://hkjpn.github.io/markdown-editor/**
 
-- [Quick Start ](docs/quick-start.md)
+- [🚀 Quick Start ](docs/quick-start.md)
 - [📖 User Manual (General) ](docs/manual.md)
 - [📱 User Manual for iPad](docs/ipad-manual.md).
 - [🎓Scientific Writing Guide](docs/scientific-writing.md)
