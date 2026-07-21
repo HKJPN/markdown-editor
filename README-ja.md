@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.6.0 — AIアシスタント融合スタンドアロン Markdown エディタ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.6.0.1 — AIアシスタント融合スタンドアロン Markdown エディタ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:** [🇺🇸 English](README.md) or [🇯🇵 日本語](README-ja.md)
 <img src="./docs/images/rayout1_5_8Jjpg" alt="rayout1_5_8Jjpg" width="100%">
 <img src="./docs/images/rayout3.JPG" alt="rayout3.JPG" width="100%">
