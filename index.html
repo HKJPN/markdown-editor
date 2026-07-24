@@ -1029,6 +1029,7 @@ body.theme-paper .menu-dropdown,
 body.theme-paper #sr-panel,
 body.theme-paper #spell-panel,
 body.theme-paper #outline-panel,
+body.theme-paper #deep-log-panel,
 body.theme-paper .hist-content,
 body.theme-paper .rn-content,
 body.theme-paper .doc-content,
@@ -1038,6 +1039,7 @@ body.theme-warm .menu-dropdown,
 body.theme-warm #sr-panel,
 body.theme-warm #spell-panel,
 body.theme-warm #outline-panel,
+body.theme-warm #deep-log-panel,
 body.theme-warm .hist-content,
 body.theme-warm .rn-content,
 body.theme-warm .doc-content,
@@ -1051,6 +1053,7 @@ body.theme-warm .menu-dropdown,
 body.theme-warm #sr-panel,
 body.theme-warm #spell-panel,
 body.theme-warm #outline-panel,
+body.theme-warm #deep-log-panel,
 body.theme-warm .hist-content,
 body.theme-warm .rn-content,
 body.theme-warm .doc-content,
@@ -1451,8 +1454,25 @@ body.preview-focus-mode #preview-focus-exit-btn{display:flex}
 @media (max-width:760px){body.preview-focus-mode #preview{padding:28px}#preview-focus-exit-btn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
 @media print{#preview-focus-exit-btn{display:none!important}}
 
+#deep-edit-title-btn{color:var(--warn);border-color:rgba(235,176,91,.22);background:rgba(235,176,91,.025);opacity:.48}
+#deep-edit-title-btn:hover{opacity:.78;color:var(--warn);border-color:rgba(235,176,91,.42);background:rgba(235,176,91,.08)}
+#deep-edit-title-btn.active{opacity:1;color:#ffe2a6;border-color:rgba(235,176,91,.68);background:linear-gradient(180deg,rgba(235,176,91,.26),rgba(235,176,91,.10));box-shadow:inset 0 2px 8px rgba(0,0,0,.24),0 0 14px rgba(235,176,91,.16)}
+body.theme-paper #deep-edit-title-btn.active,body.theme-warm #deep-edit-title-btn.active{color:#7c4a03}
+#deep-log-panel{position:absolute;right:16px;top:16px;width:min(420px,calc(100vw - 32px));max-height:calc(100% - 32px);display:none;flex-direction:column;background:rgba(20,24,34,.94);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-lg);z-index:40;overflow:hidden;backdrop-filter:blur(16px)}
+#deep-log-panel.show{display:flex}
+#deep-log-panel .deep-head{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--border)}
+#deep-log-panel h3{font-size:12px;color:var(--text3);font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase}
+#deep-log-scroll{min-height:0;flex:1 1 auto;overflow:auto;padding:12px}
+#deep-log-scroll:focus{outline:none}
+#deep-log-json:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+#deep-log-body{font-size:12px;color:var(--text2);display:flex;flex-direction:column;gap:10px;padding:0;overflow:visible}
+#deep-log-actions{flex:0 0 auto;display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px;border-top:1px solid var(--border);background:rgba(20,24,34,.96)}
+body.theme-paper #deep-log-actions,body.theme-warm #deep-log-actions{background:rgba(255,252,245,.96)}
+.deep-log-btn{border:1px solid var(--border);border-radius:8px;background:rgba(255,255,255,.05);color:var(--text2);padding:6px 9px;cursor:pointer}.deep-log-btn:disabled{opacity:.45;cursor:not-allowed}.deep-event{border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px;background:rgba(255,255,255,.035)}.deep-event-title{color:var(--text);font-weight:650}.deep-meta,.deep-change-value{color:var(--text3);white-space:pre-wrap}.deep-change-label{color:var(--text2);font-weight:650;margin-top:6px}.deep-json{max-height:220px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:8px;white-space:pre-wrap;color:var(--text2);background:rgba(0,0,0,.18);margin:10px 0 0}
+@media (max-width:760px){#deep-log-panel{right:10px;left:10px;width:auto;max-height:50vh}}
+
 /* Zen Mode (Focus Mode) */
-body.zen-mode #menubar, body.zen-mode #titlebar, body.zen-mode #toolbar, body.zen-mode #statusbar, body.zen-mode #splitter, body.zen-mode #preview-wrap { display: none !important; }
+body.zen-mode #menubar, body.zen-mode #titlebar, body.zen-mode #toolbar, body.zen-mode #statusbar, body.zen-mode #splitter, body.zen-mode #preview-wrap, body.zen-mode #deep-log-panel { display: none !important; }
 body.zen-mode #main-container { height: 100vh; }
 body.zen-mode #editor-wrap { max-width: 840px; margin: 0 auto; border-left: 1px solid rgba(255,255,255,.05); border-right: 1px solid rgba(255,255,255,.05); }
 
@@ -1580,6 +1600,10 @@ body.zen-mode #zen-exit-btn { display: flex; }
       <div class="menu-entry" id="m-outline-entry" onclick="toggleOutline()">
         <span id="m-outline-label"></span><span class="menu-check" id="outline-check">✓</span>
       </div>
+      <div class="menu-entry" id="m-deep-log-entry" onclick="toggleDeepLogPanel()">
+        <span id="m-deep-log-label"></span><span class="menu-check" id="deep-log-check">✓</span>
+      </div>
+      <div class="menu-sep-line"></div>
       <div class="menu-entry" id="m-invis-entry" onclick="toggleInvisibles()">
         <span id="m-invis-label"></span><span class="menu-check" id="invis-check">✓</span>
       </div>
@@ -1591,6 +1615,10 @@ body.zen-mode #zen-exit-btn { display: flex; }
       </div>
       <div class="menu-entry" id="m-wrap-lines-entry" onclick="toggleLineWrap()">
         <span id="m-wrap-lines-label"></span><span class="menu-check" id="wrap-lines-check">✓</span>
+      </div>
+      <div class="menu-sep-line"></div>
+      <div class="menu-entry" id="m-deep-edit-entry" onclick="toggleDeepEditMode()" role="button" aria-pressed="false">
+        <span class="menu-label-with-icon"><span class="menu-icon">🧠</span><span id="m-deep-edit-label"></span></span><span class="menu-check" id="deep-edit-check">✓</span>
       </div>
       <div class="menu-sep-line"></div>
       <div class="menu-section-label" id="m-theme-label"></div>
@@ -1658,6 +1686,7 @@ body.zen-mode #zen-exit-btn { display: flex; }
   <div class="title-actions">
     <button class="title-btn" onclick="handleOpen()" id="open-btn">Open</button>
     <button class="title-btn primary" onclick="handleSave(false)" id="save-btn">Save</button>
+    <button id="deep-edit-title-btn" class="title-btn deep-edit-title-btn notranslate" type="button" aria-pressed="false" translate="no" onclick="toggleDeepEditMode()"><span class="notranslate" translate="no">DEEP</span></button>
     <button class="title-btn" onclick="togglePreview()" id="preview-toggle-btn">Preview</button>
     <button class="title-btn icon-only" onclick="toggleFullscreen()" id="fullscreen-toggle-title-btn" title="Fullscreen" aria-label="Fullscreen"><span aria-hidden="true">⛶</span></button>
     <button class="title-btn" onclick="toggleSpell()" id="spell-toggle-title-btn">Spell</button>
@@ -1745,6 +1774,21 @@ body.zen-mode #zen-exit-btn { display: flex; }
       <button id="outline-close" onclick="toggleOutline()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;">✕</button>
     </div>
     <div id="outline-list"></div>
+  </div>
+  <div id="deep-log-panel">
+    <div class="deep-head">
+      <h3 id="deep-log-title"></h3>
+      <button onclick="toggleDeepLogPanel()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;">✕</button>
+    </div>
+    <div id="deep-log-scroll" tabindex="-1">
+      <div id="deep-log-body"></div>
+      <pre id="deep-log-json" class="deep-json" tabindex="0" hidden></pre>
+    </div>
+    <div id="deep-log-actions" class="deep-log-actions">
+      <button id="deep-log-copy-btn" class="deep-log-btn" type="button"></button>
+      <button id="deep-log-clear-btn" class="deep-log-btn" type="button"></button>
+      <button id="deep-log-json-btn" class="deep-log-btn" type="button" aria-pressed="false"></button>
+    </div>
   </div>
 </div>
 
@@ -1920,6 +1964,7 @@ body.zen-mode #zen-exit-btn { display: flex; }
    [JS-15] OUTLINE, HISTORY & LINTER
    [JS-16] RELEASE NOTES LOGIC
    [JS-17] SHORTCUTS, EXPORTS & UTILS
+   [JS-18] DEEP EDIT MODE — PHASE 1
    ========================================================================== */
 
 //#region [JS-01] ENVIRONMENT & I18N (DICTIONARY)
@@ -1930,9 +1975,9 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
-const APP_VERSION = '1.6.0.1';
-const APP_VERSION_LABEL = 'v1.6.0.1';
-const RELEASE_NOTES_VERSION = '1.6.0.1-release';
+const APP_VERSION = '1.6.1';
+const APP_VERSION_LABEL = 'v1.6.1';
+const RELEASE_NOTES_VERSION = '1.6.1-release';
 const LEGACY_DEFAULT_MARKDOWN_SAMPLES = [
   `# MD//WORKS エディタ
 
@@ -2034,6 +2079,28 @@ const T = {
   errPaste:    isJa ? 'メニューからの貼り付けはブロックされました。Ctrl+V を使用してください。' : 'Pasting from menu is blocked. Please use Ctrl+V.',
 
   menuOutline: isJa ? 'アウトライン表示' : 'Outline',
+  menuDeepEdit: isJa ? 'Deep編集モード' : 'Deep Edit Mode',
+  menuDeepLog: isJa ? 'Deep編集ログ' : 'Deep Edit Log',
+  deepEditOn: isJa ? 'Deep編集モードを開始しました' : 'Deep Edit Mode started',
+  deepEditOff: isJa ? 'Deep編集モードを終了しました' : 'Deep Edit Mode stopped',
+  deepEditMemoryOnly: isJa ? '試験機能：ログはメモリ上だけに保持され、再読み込みすると消去されます。' : 'Experimental: Logs are kept in memory only and are lost when the page reloads.',
+  deepEditClear: isJa ? 'ログを消去' : 'Clear Log',
+  deepEditCopy: isJa ? 'ログをコピー' : 'Copy Log',
+  deepEditCopied: isJa ? 'Deep編集ログをコピーしました' : 'Deep Edit Log copied',
+  deepEditCopyFailed: isJa ? 'Deep編集ログをコピーできませんでした' : 'Could not copy the Deep Edit Log',
+  deepEditViewJson: isJa ? 'JSONを確認' : 'View JSON',
+  deepEditClearConfirm: isJa ? 'Deep編集ログを消去しますか？\nログは復元できません。' : 'Clear the current Deep Edit Log?\nThe log cannot be restored.',
+  deepEditClearConfirmContinuing: isJa ? '現在のDeep編集ログを消去しますか？\n\nログは復元できません。\nDeep編集モードは停止せず、新しい空のセッションで記録を継続します。' : 'Clear the current Deep Edit Log?\n\nThe log cannot be restored.\nDeep Edit Mode will remain active and continue with a new empty session.',
+  deepEditLogCleared: isJa ? 'Deep編集ログを消去しました' : 'Deep Edit Log cleared',
+  deepEditLogClearedContinuing: isJa ? 'ログを消去しました。Deep編集モードは継続中です' : 'Log cleared. Deep Edit Mode is still active',
+  deepEditEmpty: isJa ? '記録された編集はありません。' : 'No edits have been recorded.',
+  deepEditLimitReached: isJa ? 'Deep編集ログの記録上限に達しました。' : 'The Deep Edit Log limit has been reached.',
+  deepEditStoppedForDocumentChange: isJa ? '文書が切り替わったためDeep編集モードを終了しました。' : 'Deep Edit Mode was stopped because the document changed.',
+  deepEditContinuing: isJa ? 'Deep編集モードが継続中です' : 'Deep Edit Mode is still active',
+  deepEditContinuedForNewDocument: isJa ? 'Deep編集モードを新しい文書で継続' : 'Deep Edit Mode continued for the new document',
+  deepEditStartConfirm: isJa ? 'Deep編集モードを開始します。\n\n編集内容の概要がメモリ上に記録されます。\n削除した文章の一部もログに含まれる場合があります。\nログは再読み込みすると消去され、外部には送信されません。' : 'Start Deep Edit Mode?\n\nA summary of edits will be recorded in memory.\nParts of deleted text may be included in the log.\nLogs are lost on reload and are not sent externally.',
+  deepEditReplaceSessionConfirm: isJa ? '既存のDeep編集ログを消去して新しいセッションを開始しますか？' : 'Clear the existing Deep Edit Log and start a new session?',
+
   menuInvisibles: isJa ? '不可視文字を表示' : 'Show Invisibles',
   menuLineNumbers: isJa ? '行番号を表示' : 'Show Line Numbers',
   menuCurrentLine: isJa ? 'カレント行をハイライト' : 'Highlight Current Line',
@@ -2395,49 +2462,41 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
   releaseNotesClose: isJa ? '閉じる' : 'Close',
   releaseNotesContent: isJa ? `
 
-## 🎉 v1.6.0.1の新機能
+## 🎉 v1.6.1の新機能
 
-### 行の折り返し切り替え
+### 「Deep編集モード」を追加しました
 
-* **［表示］>［行を折り返す］から、Wrap／No Wrapを切り替えられるようになりました。**
-* コード、CSV、ログ、Base64などの長い1行は、折り返さず横スクロールで確認できます。
-* No Wrap時も、検索結果が見える位置まで横方向に自動移動します。
+文書の完成内容だけでなく、途中で消し去った迷いや試行錯誤などを、文書とは別の時系列ログとして記録し、あとから確認できる機能です。
 
-### 「すべて置換」の改善
+* 初期状態はオフです。
+* タイトルバーの［DEEP］ボタン、または［表示］>［Deep編集モード］から開始できます。
+* ［表示］>［Deep編集ログ］から、記録された編集過程を確認できます。
+* 画面内容を参照できるブラウザAIを利用して、自分の執筆過程を第三者の視点から分析することもできます。
 
-* 大量置換中に処理状況を表示し、重複操作を防止します。
-* 長文での置換後更新を整理し、安定性を改善しました。
-* Ctrl+Zで戻した際に、本文全体が選択される問題を修正しました。
+次のような編集や操作が記録されます。
 
-### セキュリティアップデート
-
-* Marked: 18.0.3 → 18.0.6
-* DOMPurify: 3.4.5 → 3.4.12
-* Mammoth: 1.11.0 → 1.12.0
-* Turndown: 7.2.4（unchanged)
+* 連続した通常入力（最後の入力から約5秒後にまとめて記録）
+* 大きな削除、貼り付け、すべて置換、Undo／Redoなど
+* ファイルを開く、Wordから変換、作業履歴から復元した操作
 
 ` : `
 
-## 🎉 What's New in v1.6.0.1
-### Toggle Line Wrapping
+## 🎉 What’s New in v1.6.1
 
-* **You can now toggle between Wrap and No Wrap from [View] > [Wrap Lines].**
-* Long single lines (e.g., code, CSV, logs, and Base64 strings) can now be viewed using horizontal scrolling instead of wrapping.
-* Even in No Wrap mode, the editor automatically scrolls horizontally to ensure search results are visible.
+### Deep Edit Mode
 
-### "Replace All" Improvements
+Deep Edit Mode records not only the finished document, but also the ideas, revisions, and trial-and-error that were removed along the way. These actions are stored separately from the document as a chronological log that can be reviewed later.
 
-* A progress indicator is now displayed during large bulk replacements to prevent accidental duplicate operations.
-* Optimized the update process after replacements in long documents, significantly improving stability.
-* Fixed an issue where the entire text would be selected when undoing an action with Ctrl+Z.
+* Deep Edit Mode is off by default.
+* Start it from the [DEEP] button in the title bar or [View] > [Deep Edit Mode].
+* Review the chronological log from [View] > [Deep Edit Log].
+* Browser-based AI that can access the visible page may also help analyze your writing process from an independent perspective.
 
-### Security and dependency updates
+The following edits and actions are recorded:
 
-Updated the external libraries used for Markdown preview, HTML sanitization, and Word import.
-* Marked: 18.0.3 → 18.0.6
-* DOMPurify: 3.4.5 → 3.4.12
-* Mammoth: 1.11.0 → 1.12.0
-* Turndown: 7.2.4（unchanged)
+* Continuous normal editing, grouped about five seconds after the last input
+* Large deletions, paste operations, Replace All, Undo, Redo, and similar actions
+* Opening files, converting Word documents, and restoring documents from work history
 
 `};
 
@@ -2460,6 +2519,7 @@ set('m-history', T.menuHistory);
 set('m-format', T.menuFormat);
 set('m-insert-toc', T.insertToc);
 set('m-outline-label', T.menuOutline);
+set('m-deep-edit-label', T.menuDeepEdit); set('m-deep-log-label', T.menuDeepLog); set('deep-log-title', T.menuDeepLog);
 set('m-invis-label', T.menuInvisibles);
 set('m-line-numbers-label', T.menuLineNumbers);
 set('m-current-line-label', T.menuCurrentLine);
@@ -3554,14 +3614,40 @@ let historyCache = [];
 
 //#region [JS-04] BOOTSTRAP & AUTO-SAVE LOGIC
 let isSaving = false;
+let pendingDeepFilenameChange = null;
+let suppressDeepFilenameLogging = false;
+function setFilenameProgrammatically(filename) {
+  suppressDeepFilenameLogging = true;
+  try {
+    filenameInput.value = filename;
+  } finally {
+    suppressDeepFilenameLogging = false;
+  }
+}
+function getDeepFilenameChangeBase() {
+  return deepEditSession?.document?.currentFilename ||
+    deepEditSession?.document?.filename ||
+    filenameInput.value ||
+    'untitled.md';
+}
+function beginPendingDeepFilenameChange() {
+  if (!deepEditEnabled || !deepEditSession || filenameInput.readOnly || suppressDeepFilenameLogging) return;
+  if (!pendingDeepFilenameChange) {
+    pendingDeepFilenameChange = { previousFilename: getDeepFilenameChangeBase() };
+  }
+}
 async function triggerAutoSave() {
   if (isSaving) return;
   isSaving = true;
   try {
     await secureSetItem(AUTOSAVE_TXT_KEY, editor.value);
-    await secureSetItem(AUTOSAVE_NAME_KEY, filenameInput.value);
-  } catch (e) {}
-  isSaving = false;
+    const nameSaved = await secureSetItem(AUTOSAVE_NAME_KEY, filenameInput.value);
+    if (nameSaved) commitPendingDeepFilenameChange();
+  } catch (e) {
+    console.warn('Auto save failed', e);
+  } finally {
+    isSaving = false;
+  }
 }
 
 async function loadAutoSave() {
@@ -3578,7 +3664,7 @@ async function loadAutoSave() {
   if (savedTxt && savedTxt !== T.defaultMd && !isLegacyDefaultMarkdown(savedTxt) && savedTxt !== '') {
     if (confirm(T.restorePrompt)) {
       setEditorDocumentValue(savedTxt);
-      if (savedName) filenameInput.value = savedName;
+      if (savedName) setFilenameProgrammatically(savedName);
       markDirty();
     } else {
       secureRemoveItem(AUTOSAVE_TXT_KEY);
@@ -3609,7 +3695,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const data = JSON.parse(dataScript.textContent);
       if (data.content !== undefined) {
         setEditorDocumentValue(data.content);
-        filenameInput.value = data.filename || 'untitled.md';
+        setFilenameProgrammatically(data.filename || 'untitled.md');
         hasStandaloneData = true;
         
         const standaloneKeySuffix = getStandaloneAutosaveSuffix(data.filename, data.content);
@@ -3637,6 +3723,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   await loadAutoSave();
   renderLineViewMenuChecks();
+  renderDeepEditState();
   renderLineWrapState();
   update();
   if (!isDirty) markSaved();
@@ -4388,8 +4475,28 @@ function update() {
 }
 
 let isEditorComposing = false;
-editor.addEventListener('compositionstart', () => { isEditorComposing = true; });
-editor.addEventListener('compositionend', () => { isEditorComposing = false; updateCurrentLineHighlight(); });
+editor.addEventListener('compositionstart', () => {
+  isEditorComposing = true;
+  try {
+    if (!deepEditEnabled || suppressInputHandling || deepEditExplicitOperationDepth > 0) return;
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    if (Math.max(0, end - start) < DEEP_LARGE_DELETE_THRESHOLD) return;
+    const context = getDeepAdjacentLineContext(editor.value, start);
+    deepEditCompositionReplacement = {
+      inputType:'insertCompositionText',
+      start,
+      end,
+      beforeLength:editor.value.length,
+      selectedText:sanitizeDeepSnippet(editor.value.slice(start, end)),
+      offset:start,
+      previousLine:context.previousLine,
+      nextLine:context.nextLine,
+      contextKey:context.contextKey
+    };
+  } catch (error) { console.error('Deep Edit logging failed', error); }
+});
+editor.addEventListener('compositionend', () => { isEditorComposing = false; updateCurrentLineHighlight(); if (deepEditEnabled && deepEditPendingBatch) scheduleDeepInputBatchFlush(); });
 
 function refreshAfterEditorTabChange() {
   update();
@@ -4723,6 +4830,8 @@ async function handlePlainTextPaste(text) {
   const start = editor.selectionStart;
   const end = editor.selectionEnd;
   const currentLength = editor.value.length;
+  const beforeValueReference = editor.value;
+  const deepPasteContext = getDeepAdjacentLineContext(editor.value, start);
   const nextLength = currentLength - (end - start) + pasteLength;
 
   const useSetRangeText = pasteLength >= PASTE_SET_RANGE_TEXT_THRESHOLD;
@@ -4738,6 +4847,7 @@ async function handlePlainTextPaste(text) {
   const suppressSeq = ++pasteSuppressSeq;
   suppressInputHandling = true;
   const tasks = [];
+  beginDeepExplicitOperation();
 
   try {
     if (useSetRangeText) {
@@ -4777,7 +4887,12 @@ async function handlePlainTextPaste(text) {
 
     clearTimeout(autoSaveTimeout);
     autoSaveTimeout = setTimeout(triggerAutoSave, 1500);
+
+    if (deepEditEnabled && editor.value !== beforeValueReference) {
+      recordDeepEditEvent({ type:'paste', summary:isJa?'文字列を貼り付け':'Text pasted', heading:getDeepHeadingAtOffset(start), charDelta:normalizedText.length - (end - start), afterSnippet:normalizedText, meta:{ insertedCharacters:normalizedText.length, replacedCharacters:end - start, containsEmbeddedData:/data:[^;,]+;base64,/i.test(normalizedText), previousLine:deepPasteContext.previousLine, nextLine:deepPasteContext.nextLine, contextBasis:'before-edit' } });
+    }
   } finally {
+    endDeepExplicitOperation();
     // Some browsers dispatch execCommand's input event after the next task.
     setTimeout(() => {
       const release = () => {
@@ -4807,6 +4922,26 @@ async function handlePlainTextPaste(text) {
 }
 
 let autoSaveTimeout;
+editor.addEventListener('beforeinput', event => {
+  try {
+    if (!deepEditEnabled) return;
+    if (suppressInputHandling) return;
+    if (deepEditExplicitOperationDepth > 0) return;
+    if (isEditorComposing || event?.isComposing) return;
+    const context = getDeepAdjacentLineContext(editor.value, editor.selectionStart);
+    deepEditBeforeInput = {
+      inputType: event.inputType || '',
+      start: editor.selectionStart,
+      end: editor.selectionEnd,
+      beforeLength: editor.value.length,
+      selectedText: sanitizeDeepSnippet(editor.value.slice(editor.selectionStart, editor.selectionEnd)),
+      offset: editor.selectionStart,
+      previousLine: context.previousLine,
+      nextLine: context.nextLine,
+      contextKey: context.contextKey
+    };
+  } catch (error) { console.error('Deep Edit logging failed', error); }
+});
 editor.addEventListener('input', event => {
   const isHistoryUndo =
     event && event.inputType === 'historyUndo';
@@ -4817,6 +4952,8 @@ editor.addEventListener('input', event => {
     replaceAllUndoSnapshot = pendingReplaceAllUndoRestore;
     pendingReplaceAllUndoRestore = null;
   }
+
+  collectDeepGenericInput(event);
 
   if (suppressInputHandling && !isHistoryUndo) return;
 
@@ -4836,11 +4973,15 @@ editor.addEventListener('input', event => {
   }
 });
 
+filenameInput.addEventListener('focus', beginPendingDeepFilenameChange);
+
 filenameInput.addEventListener('input', () => {
   if (filenameInput.readOnly) {
-    filenameInput.value = fileHandle?.name || filenameInput.value;
+    setFilenameProgrammatically(fileHandle?.name || filenameInput.value);
+    pendingDeepFilenameChange = null;
     return;
   }
+  beginPendingDeepFilenameChange();
   markDirty();
   clearTimeout(autoSaveTimeout);
   autoSaveTimeout = setTimeout(triggerAutoSave, 800);
@@ -4907,6 +5048,9 @@ editor.addEventListener("drop", async (e) => {
 
   isImageDropProcessing = true;
   const dropSelection = getPos();
+  const replacedLength = dropSelection.e - dropSelection.s;
+  const beforeValueReference = editor.value;
+  beginDeepExplicitOperation();
   const snippets = [];
   const skipped = [];
 
@@ -4947,11 +5091,15 @@ editor.addEventListener("drop", async (e) => {
       setRange(dropSelection.s, dropSelection.e);
       ins(markdown, false);
       update();
+      if (deepEditEnabled && editor.value !== beforeValueReference) {
+        recordDeepEditEvent({ type:'image-drop', summary:isJa?'埋め込み画像を追加':'Embedded image added', heading:getDeepHeadingAtOffset(dropSelection.s), charDelta:markdown.length - replacedLength, afterSnippet:'[embedded image data omitted]', meta:{ imageCount:snippets.length, totalBytes:files.filter(file => file.type.startsWith('image/') && file.type !== 'image/svg+xml' && file.size <= IMAGE_DROP_MAX_BYTES).reduce((sum, file) => sum + file.size, 0), embeddedDataOmitted:true } });
+      }
       if (spellEnabled) runSpellCheck();
       if (srPanelOpen) performSearch(false);
       await yieldToBrowserPaint();
     }
   } finally {
+    endDeepExplicitOperation();
     isImageDropProcessing = false;
     hideLoader();
     renderStorageBadge();
@@ -5452,6 +5600,9 @@ document.getElementById('sr-btn-replace-all').onclick = async () => {
   if (srMatches.length === 0) return;
   const count = srMatches.length;
   if (!confirm(T.confirmRepAll(count))) return;
+  if (deepEditEnabled) {
+    flushDeepInputBatch();
+  }
   const regex = buildRegex(true);
   if (!regex) return;
   const repStr = getReplacementString();
@@ -5473,8 +5624,11 @@ document.getElementById('sr-btn-replace-all').onclick = async () => {
   let failure = null;
   let replaceAttempted = false;
   let replaceAllCommitted = false;
+  let replaceAllDeepRecorded = false;
+  let replaceAllDeepSnapshot = null;
   const restoreSearchReplaceControls = setSearchReplaceControlsDisabled(true);
 
+  beginDeepExplicitOperation();
   isReplaceAllRunning = true;
   showLoader(T.replacingAll);
   setStatusBadge(T.replacingAllStatus);
@@ -5483,6 +5637,16 @@ document.getElementById('sr-btn-replace-all').onclick = async () => {
     await yieldToBrowserPaint();
 
     const newFullText = oldFullText.replace(regex, repStr);
+    replaceAllDeepSnapshot = {
+      searchText: srInput.value,
+      replacementText: repStr,
+      replacementCount: count,
+      oldLength: oldFullText.length,
+      newLength: newFullText.length,
+      regex: document.getElementById('sr-opt-regex').checked,
+      caseSensitive: document.getElementById('sr-opt-case').checked,
+      wholeWord: document.getElementById('sr-opt-word').checked
+    };
 
     suppressSeq = ++replaceAllSuppressSeq;
     suppressInputHandling = true;
@@ -5498,7 +5662,27 @@ document.getElementById('sr-btn-replace-all').onclick = async () => {
         editor.setRangeText(newFullText, 0, oldFullText.length, 'end');
       }
 
-      replaceAllCommitted = editor.value === newFullText;
+      replaceAllCommitted = oldFullText !== newFullText && editor.value === newFullText;
+      if (replaceAllCommitted && deepEditEnabled && deepEditSession && !replaceAllDeepRecorded && replaceAllDeepSnapshot) {
+        recordDeepEditEvent({
+          type:'replace-all',
+          source:'user',
+          summary:isJa?'すべて置換':'Replace All',
+          heading:'',
+          charDelta:replaceAllDeepSnapshot.newLength - replaceAllDeepSnapshot.oldLength,
+          beforeSnippet:replaceAllDeepSnapshot.searchText,
+          afterSnippet:replaceAllDeepSnapshot.replacementText,
+          meta:{
+            replacementCount:replaceAllDeepSnapshot.replacementCount,
+            regex:replaceAllDeepSnapshot.regex,
+            caseSensitive:replaceAllDeepSnapshot.caseSensitive,
+            wholeWord:replaceAllDeepSnapshot.wholeWord,
+            beforeLength:replaceAllDeepSnapshot.oldLength,
+            afterLength:replaceAllDeepSnapshot.newLength
+          }
+        });
+        replaceAllDeepRecorded = true;
+      }
       editor.setSelectionRange(0, 0);
       editor.scrollTop = scrollTop;
       editor.scrollLeft = scrollLeft;
@@ -5571,6 +5755,7 @@ document.getElementById('sr-btn-replace-all').onclick = async () => {
     renderStorageBadge();
     restoreSearchReplaceControls();
     isReplaceAllRunning = false;
+    endDeepExplicitOperation();
   }
 
   if (completed) {
@@ -5975,9 +6160,12 @@ async function insertOrUpdateToc() {
   if (!guardEditorCommand()) return;
   closeMenus();
   const text = editor.value;
+  const beforeValueReference = editor.value;
+  const beforeLength = text.length;
   const existing = findTocBlockRange(text);
   if (existing && !confirm(T.tocUpdateConfirm)) return;
 
+  beginDeepExplicitOperation();
   let tocLoaderVisible = false;
   const showTocLoader = async () => {
     if (tocLoaderVisible) return;
@@ -6072,8 +6260,12 @@ async function insertOrUpdateToc() {
       Promise.all(tasks).catch(error => console.warn('Deferred TOC update failed', error));
     }
 
+    if (deepEditEnabled && editor.value !== beforeValueReference) {
+      recordDeepEditEvent({ type:'toc-update', summary:isJa?'目次を挿入または更新':'Table of contents inserted or updated', charDelta:editor.value.length - beforeLength, meta:{ headingCount:headings.length } });
+    }
     toast(existing ? T.tocUpdated : T.tocInserted);
   } finally {
+    endDeepExplicitOperation();
     if (tocLoaderVisible) {
       hideLoader();
       renderStorageBadge();
@@ -6263,11 +6455,19 @@ document.getElementById('word-input').addEventListener('change', async (e) => {
     showLoader(T.loadingWordConvert);
     if (!md || !md.trim()) throw new Error('Converted markdown is empty.');
     await saveToHistoryList(filenameInput.value, editor.value);
+    const convertedFilename = file.name.replace(/\.docx$/i, '.md');
+    const previousFilename = deepEditSession?.document?.currentFilename || deepEditSession?.document?.filename || filenameInput.value || 'untitled.md';
+    prepareDeepEditForTrackedDocumentOpen({
+      type: 'word-import',
+      summary: isJa ? 'Wordファイルを開きました' : 'Word file imported',
+      meta: { previousFilename, sourceFilename: file.name, convertedFilename, method: 'word-import' }
+    });
     setEditorDocumentValue(md);
-    filenameInput.value = file.name.replace(/\.docx$/i, '.md');
+    setFilenameProgrammatically(convertedFilename);
     fileHandle = null;
     syncFilenameInputState();
     update(); markDirty(); triggerAutoSave();
+    finalizeDeepEditAfterTrackedDocumentOpen(convertedFilename);
     hideLoader();
     toast(mammothMessages.length > 0 ? T.warnMammoth : T.importSuccess);
   } catch (error) {
@@ -6399,7 +6599,7 @@ function restrictedViewerSourceToMarkdownName(sourceName) {
     .replace(/\.html?$/i, '') || 'document');
 }
 
-async function importRestrictedViewerHtml(htmlText, sourceName) {
+async function importRestrictedViewerHtml(htmlText, sourceName, openMethod = '') {
   const box = parseRestrictedViewerBoxFromHtml(htmlText);
   if (!box) return false;
 
@@ -6407,6 +6607,7 @@ async function importRestrictedViewerHtml(htmlText, sourceName) {
   if (!passphrase) return true;
 
   let error = null;
+  let continuedSessionId = null;
   showLoader(T.viewerImportDecrypting);
   await yieldToBrowserPaint();
 
@@ -6416,14 +6617,17 @@ async function importRestrictedViewerHtml(htmlText, sourceName) {
     showLoader(T.viewerRestoringMarkdown);
     await yieldToBrowserPaint();
 
+    // 文書切り替え：Restricted Viewerからの復元
+    const continueDeepEdit = prepareDeepEditForFreshDocumentContext();
     setEditorDocumentValue(payload.markdown.normalize('NFC'));
-    filenameInput.value = ensureMarkdownFilename(payload.filename || payload.title || restrictedViewerSourceToMarkdownName(sourceName));
+    setFilenameProgrammatically(ensureMarkdownFilename(payload.filename || payload.title || restrictedViewerSourceToMarkdownName(sourceName)));
     fileHandle = null;
     syncFilenameInputState();
     update();
     markDirty();
     await triggerAutoSave();
     if (spellEnabled) runSpellCheck();
+    continuedSessionId = resumeDeepEditForFreshDocumentContext(continueDeepEdit, 'restricted-viewer-restore');
     await yieldToBrowserPaint();
   } catch (err) {
     console.error(err);
@@ -6434,6 +6638,7 @@ async function importRestrictedViewerHtml(htmlText, sourceName) {
   }
 
   toast(error ? T.restrictedViewerImportError : T.restrictedViewerImported);
+  if (!error) scheduleDeepEditContinuationToast(continuedSessionId);
   return true;
 }
 
@@ -6464,7 +6669,7 @@ async function decryptPrivateViewerPayload(box, passphrase) {
 }
 
 // --- NEW: importPrivateViewerHtml ---
-async function importPrivateViewerHtml(htmlText, sourceName) {
+async function importPrivateViewerHtml(htmlText, sourceName, openMethod = '') {
   const box = parsePrivateViewerBoxFromHtml(htmlText);
   if (!box) return false;
 
@@ -6472,6 +6677,7 @@ async function importPrivateViewerHtml(htmlText, sourceName) {
   if (!passphrase) return true;
 
   let error = null;
+  let continuedSessionId = null;
   showLoader(T.viewerImportDecrypting);
   await yieldToBrowserPaint();
 
@@ -6481,14 +6687,17 @@ async function importPrivateViewerHtml(htmlText, sourceName) {
     showLoader(T.viewerRestoringMarkdown);
     await yieldToBrowserPaint();
 
+    // 文書切り替え：Private Viewerからの復元
+    const continueDeepEdit = prepareDeepEditForFreshDocumentContext();
     setEditorDocumentValue(payload.markdown.normalize('NFC'));
-    filenameInput.value = ensureMarkdownFilename(payload.title || String(sourceName || '').replace(/\.(private\.)?view\.html?$/i, '') || 'document');
+    setFilenameProgrammatically(ensureMarkdownFilename(payload.title || String(sourceName || '').replace(/\.(private\.)?view\.html?$/i, '') || 'document'));
     fileHandle = null;
     syncFilenameInputState();
     update();
-    markSaved();
+    markDirty();
     await triggerAutoSave();
     if (spellEnabled) runSpellCheck();
+    continuedSessionId = resumeDeepEditForFreshDocumentContext(continueDeepEdit, 'private-viewer-restore');
     await yieldToBrowserPaint();
   } catch (err) {
     console.error(err);
@@ -6503,6 +6712,7 @@ async function importPrivateViewerHtml(htmlText, sourceName) {
     : error
       ? (T.privateViewerImportError || T.viewerPassphraseError)
       : T.privateViewerImported);
+  if (!error) scheduleDeepEditContinuationToast(continuedSessionId);
   return true;
 }
 
@@ -6531,13 +6741,21 @@ async function handleOpen() {
       const file = await handle.getFile();
       await saveToHistoryList(filenameInput.value, editor.value);
       const text = await file.text();
-      if (await importRestrictedViewerHtml(text, file.name)) return;
-      if (await importPrivateViewerHtml(text, file.name)) return;
+      if (await importRestrictedViewerHtml(text, file.name, 'file-system-access')) return;
+      if (await importPrivateViewerHtml(text, file.name, 'file-system-access')) return;
+      // 文書切り替え：File System Access APIで通常ファイルを開く
+      const previousFilename = deepEditSession?.document?.currentFilename || deepEditSession?.document?.filename || filenameInput.value || 'untitled.md';
+      prepareDeepEditForTrackedDocumentOpen({
+        type: 'file-open',
+        summary: isJa ? 'ファイルを開きました' : 'File opened',
+        meta: { previousFilename, openedFilename: file.name, method: 'file-system-access' }
+      });
+      setEditorDocumentValue(text.normalize('NFC'));
       fileHandle = handle;
       syncFilenameInputState();
-      filenameInput.value = file.name;
-      setEditorDocumentValue(text.normalize('NFC'));
+      setFilenameProgrammatically(file.name);
       update(); markSaved(); triggerAutoSave();
+      finalizeDeepEditAfterTrackedDocumentOpen(file.name);
       toast(T.opened(file.name));
     } catch (e) {
       notifyFileSystemError(isJa ? 'ファイルを開く処理' : 'Open file', e);
@@ -6557,17 +6775,25 @@ document.getElementById('file-input').addEventListener('change', async (e) => {
     await saveToHistoryList(filenameInput.value, editor.value);
 
     const text = await file.text();
-    if (await importRestrictedViewerHtml(text, file.name)) return;
-    if (await importPrivateViewerHtml(text, file.name)) return;
+    if (await importRestrictedViewerHtml(text, file.name, 'file-input')) return;
+    if (await importPrivateViewerHtml(text, file.name, 'file-input')) return;
 
-    filenameInput.value = file.name;
+    // 文書切り替え：file-inputで通常ファイルを開く
+    const previousFilename = deepEditSession?.document?.currentFilename || deepEditSession?.document?.filename || filenameInput.value || 'untitled.md';
+    prepareDeepEditForTrackedDocumentOpen({
+      type: 'file-open',
+      summary: isJa ? 'ファイルを開きました' : 'File opened',
+      meta: { previousFilename, openedFilename: file.name, method: 'file-input' }
+    });
     setEditorDocumentValue(text.normalize('NFC'));
+    setFilenameProgrammatically(file.name);
     fileHandle = null;
     syncFilenameInputState();
 
     update();
     markSaved();
     triggerAutoSave();
+    finalizeDeepEditAfterTrackedDocumentOpen(file.name);
 
     if (spellEnabled) runSpellCheck();
 
@@ -6593,14 +6819,15 @@ function ensureMarkdownFilename(name) {
 async function handleSave(isSaveAs = false) {
   if (previewFocusOpen && isSaveAs) { closeMenus(); return; }
   closeMenus();
+  const deepSaveSnapshot = prepareDeepFileSave();
   await saveToHistoryList(filenameInput.value, editor.value);
   const saveFilename = ensureMarkdownFilename(filenameInput.value);
   if (isMobile) {
     const filename = saveFilename;
     const file = new File([editor.value], filename, { type: 'text/markdown' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try { await navigator.share({ files: [file], title: filename }); filenameInput.value = filename; markSaved(); } catch (e) {}
-    } else fallbackDownload();
+      try { await navigator.share({ files: [file], title: filename }); setFilenameProgrammatically(filename); markSaved(); commitDeepFileSave(deepSaveSnapshot, filename, 'share', isSaveAs); } catch (e) {}
+    } else { const downloadedFilename = fallbackDownload(); if (downloadedFilename) commitDeepFileSave(deepSaveSnapshot, downloadedFilename, 'download', isSaveAs); }
   } else {
     if (window.showSaveFilePicker) {
       try {
@@ -6638,18 +6865,19 @@ async function handleSave(isSaveAs = false) {
         const writable = await fileHandle.createWritable();
         await writable.write(editor.value);
         await writable.close();
-        filenameInput.value = fileHandle.name;
+        setFilenameProgrammatically(fileHandle.name);
         markSaved(); toast(T.saved);
+        commitDeepFileSave(deepSaveSnapshot, fileHandle.name, 'file-system-access', isSaveAs);
       } catch (e) {
         notifyFileSystemError(isJa ? 'ファイルの保存' : 'Save file', e);
       }
-    } else fallbackDownload();
+    } else { const downloadedFilename = fallbackDownload(); if (downloadedFilename) commitDeepFileSave(deepSaveSnapshot, downloadedFilename, 'download', isSaveAs); }
   }
 }
 
 function fallbackDownload() {
   const filename = ensureMarkdownFilename(filenameInput.value);
-  filenameInput.value = filename;
+  setFilenameProgrammatically(filename);
   const blob = new Blob([editor.value], { type: 'text/markdown;charset=utf-8' });
   const url = URL.createObjectURL(blob);
 
@@ -6663,6 +6891,7 @@ function fallbackDownload() {
   markSaved();
   toast(T.downloaded);
   syncFilenameInputState();
+  return filename;
 }
 
 // --- NEW: escapeHtml ---
@@ -7937,7 +8166,27 @@ async function openHistory() {
     const date = document.createElement('div'); date.className = 'hist-date';
     date.textContent = new Date(h.date).toLocaleString();
     div.append(name, date);
-    div.onclick = () => { setEditorDocumentValue(h.content); filenameInput.value = h.filename; update(); closeHistory(); };
+    div.onclick = async () => {
+      await saveToHistoryList(filenameInput.value, editor.value);
+      const previousFilename = deepEditSession?.document?.currentFilename || deepEditSession?.document?.filename || filenameInput.value || 'untitled.md';
+      const restoredFilename = h.filename || 'untitled.md';
+      prepareDeepEditForTrackedDocumentOpen({
+        type: 'history-restore',
+        summary: isJa ? '作業履歴から復元しました' : 'Restored from work history',
+        meta: { previousFilename, restoredFilename, method: 'work-history' }
+      });
+      setEditorDocumentValue(typeof h.content === 'string' ? h.content : '');
+      setFilenameProgrammatically(restoredFilename);
+      fileHandle = null;
+      syncFilenameInputState();
+      update();
+      markDirty();
+      await triggerAutoSave();
+      if (spellEnabled) runSpellCheck();
+      finalizeDeepEditAfterTrackedDocumentOpen(restoredFilename);
+      closeHistory();
+      editor.focus();
+    };
     container.appendChild(div);
   });
   document.getElementById('history-modal').classList.add('show');
@@ -7946,9 +8195,498 @@ function closeHistory() { document.getElementById('history-modal').classList.rem
 
 function formatDoc() {
   if (!guardEditorCommand()) return;
-  editor.value = editor.value.replace(/\n{3,}/g, '\n\n').split('\n').map(l => l.trimEnd()).join('\n');
-  update(); toast(T.formatDone);
+  const originalText = editor.value;
+  beginDeepExplicitOperation();
+  try {
+    const formattedText = originalText.replace(/\n{3,}/g, '\n\n').split('\n').map(l => l.trimEnd()).join('\n');
+    editor.value = formattedText;
+    update();
+    if (deepEditEnabled && formattedText !== originalText) {
+      recordDeepEditEvent({ type:'format-markdown', summary:isJa?'Markdownを整形':'Format Markdown', charDelta:formattedText.length - originalText.length, meta:{ beforeLength:originalText.length, afterLength:formattedText.length } });
+    }
+    toast(T.formatDone);
+  } finally {
+    endDeepExplicitOperation();
+  }
 }
+//#endregion
+
+
+//#region [JS-18] DEEP EDIT MODE — PHASE 1
+const DEEP_EDIT_SCHEMA_VERSION = 1;
+const DEEP_EDIT_MAX_EVENTS = 500;
+const DEEP_EDIT_MAX_SNIPPET_CHARS = 500;
+const DEEP_EDIT_INPUT_BATCH_DELAY_MS = 5000;
+const DEEP_LARGE_DELETE_THRESHOLD = 100;
+const DEEP_HEADING_LOOKBACK_CHARS = 20000;
+const DEEP_HEADING_LOOKBACK_LINES = 200;
+const DEEP_VISIBLE_EVENTS = 200;
+const DEEP_EDIT_MAX_CONTEXT_LINE_CHARS = 300;
+const DEEP_ALLOWED_EVENT_TYPES = new Set(['session-start','session-stop','typing','paste','delete','replace-all','format-markdown','toc-update','undo','redo','system-note','image-drop','save','save-as','download','file-open','word-import','history-restore','document-rename']);
+const DEEP_FILE_EVENT_TYPES = new Set(['save','save-as','download','file-open','word-import','history-restore','document-rename']);
+let deepEditEnabled = false;
+let deepEditPanelOpen = false;
+let deepEditSession = null;
+let deepEditBeforeInput = null;
+let deepEditCompositionReplacement = null;
+let deepEditPendingBatch = null;
+let deepEditBatchTimer = null;
+let deepEditLimitNotified = false;
+let deepEditExplicitOperationDepth = 0;
+let deepEditRenderRaf = null;
+let deepEditShowJson = false;
+let deepEditLastKnownLength = 0;
+let deepEditContinuationToastTimer = null;
+
+function createDeepSessionId(){ if (window.crypto && typeof crypto.randomUUID === 'function') return `deep-${crypto.randomUUID()}`; return `deep-${Date.now()}-${Math.random().toString(36).slice(2,10)}`; }
+function createDeepEventId(){ return `event-${Date.now()}-${Math.random().toString(36).slice(2,8)}`; }
+function sanitizeDeepText(value){ const text = String(value || ''); return text.length > 300 ? `${text.slice(0,300)}…` : text; }
+function sanitizeDeepSnippet(value){ const text = String(value || ''); if (/data:[^;,\s]{1,100};base64,/i.test(text)) return '[embedded data omitted]'; if (text.length <= DEEP_EDIT_MAX_SNIPPET_CHARS) return text; return text.slice(0, DEEP_EDIT_MAX_SNIPPET_CHARS) + `… [${text.length - DEEP_EDIT_MAX_SNIPPET_CHARS} characters omitted]`; }
+function sanitizeDeepContextLine(value){ const text = String(value || ''); if (/data:[^;,\s]{1,100};base64,/i.test(text)) return '[embedded data omitted]'; if (text.length <= DEEP_EDIT_MAX_CONTEXT_LINE_CHARS) return text; return text.slice(0, DEEP_EDIT_MAX_CONTEXT_LINE_CHARS) + `… [${text.length - DEEP_EDIT_MAX_CONTEXT_LINE_CHARS} characters omitted]`; }
+function getDeepAdjacentLineContext(text, offset){
+  const source = String(text || ''); const safeOffset = Math.max(0, Math.min(Number(offset) || 0, source.length));
+  const currentLineStart = source.lastIndexOf('\n', Math.max(0, safeOffset - 1)) + 1;
+  const previousLineEnd = currentLineStart > 0 ? currentLineStart - 1 : -1;
+  const previousLineStart = previousLineEnd >= 0 ? source.lastIndexOf('\n', Math.max(0, previousLineEnd - 1)) + 1 : -1;
+  let currentLineEnd = source.indexOf('\n', safeOffset); if (currentLineEnd < 0) currentLineEnd = source.length;
+  const nextLineStart = currentLineEnd < source.length ? currentLineEnd + 1 : -1;
+  let nextLineEnd = nextLineStart >= 0 ? source.indexOf('\n', nextLineStart) : -1; if (nextLineStart >= 0 && nextLineEnd < 0) nextLineEnd = source.length;
+  return { previousLine: previousLineStart >= 0 ? sanitizeDeepContextLine(source.slice(previousLineStart, previousLineEnd)) : '', nextLine: nextLineStart >= 0 ? sanitizeDeepContextLine(source.slice(nextLineStart, nextLineEnd)) : '', contextKey: currentLineStart };
+}
+function sanitizeDeepMeta(meta){
+  const out = {}; if (!meta || typeof meta !== 'object' || Array.isArray(meta)) return out;
+  Object.keys(meta).slice(0, 24).forEach(key => {
+    const value = meta[key];
+    if (typeof value === 'string') out[key] = sanitizeDeepSnippet(value);
+    else if (typeof value === 'number' && Number.isFinite(value)) out[key] = value;
+    else if (typeof value === 'boolean') out[key] = value;
+    else if (Array.isArray(value)) out[key] = value.slice(0, 12).map(item => typeof item === 'string' ? sanitizeDeepSnippet(item) : (typeof item === 'number' && Number.isFinite(item)) || typeof item === 'boolean' ? item : String(item || '').slice(0,80));
+  });
+  return out;
+}
+function beginDeepExplicitOperation(){ deepEditExplicitOperationDepth += 1; }
+function endDeepExplicitOperation(){ deepEditExplicitOperationDepth = Math.max(0, deepEditExplicitOperationDepth - 1); }
+function getDeepFilename(){ return filenameInput?.value || fileHandle?.name || 'untitled.md'; }
+function getDeepSessionFilenameSnapshot(){ return deepEditSession?.document?.currentFilename || deepEditSession?.document?.filename || filenameInput?.value || 'untitled.md'; }
+function createDeepSession(){ const startingFilename = getDeepFilename(); return { schemaVersion: DEEP_EDIT_SCHEMA_VERSION, sessionId: createDeepSessionId(), startedAt: new Date().toISOString(), stoppedAt: null, document: { filename: startingFilename, currentFilename: startingFilename, initialLength: editor.value.length }, events: [] }; }
+function recordDeepEditEvent(eventData){
+  try {
+    if (!deepEditEnabled || !deepEditSession) return false;
+    if (deepEditSession.events.length >= DEEP_EDIT_MAX_EVENTS) { if (!deepEditLimitNotified) { deepEditLimitNotified = true; toast(T.deepEditLimitReached); renderDeepEditState(); } return false; }
+    const rawType = String(eventData?.type || 'system-note');
+    const event = { id: createDeepEventId(), timestamp: new Date().toISOString(), type: DEEP_ALLOWED_EVENT_TYPES.has(rawType) ? rawType : 'system-note', source: String(eventData?.source || 'user'), heading: sanitizeDeepText(eventData?.heading || ''), summary: sanitizeDeepText(eventData?.summary || ''), charDelta: Number.isFinite(eventData?.charDelta) ? eventData.charDelta : 0, beforeSnippet: sanitizeDeepSnippet(eventData?.beforeSnippet || ''), afterSnippet: sanitizeDeepSnippet(eventData?.afterSnippet || ''), meta: sanitizeDeepMeta(eventData?.meta) };
+    deepEditSession.events.push(event); deepEditLastKnownLength = editor.value.length; if (deepEditPanelOpen) scheduleDeepLogRender(); return true;
+  } catch (error) { console.error('Deep Edit logging failed', error); return false; }
+}
+function renderDeepEditState(){
+  const titleBtn = document.getElementById('deep-edit-title-btn');
+  if (titleBtn) { titleBtn.classList.toggle('active', deepEditEnabled); titleBtn.setAttribute('aria-pressed', deepEditEnabled ? 'true' : 'false'); titleBtn.title = deepEditEnabled ? (isJa ? 'Deep編集モードを終了' : 'Stop Deep Edit Mode') : (isJa ? 'Deep編集モードを開始' : 'Start Deep Edit Mode'); }
+  const editEntry = document.getElementById('m-deep-edit-entry'); const editCheck = document.getElementById('deep-edit-check');
+  if (editEntry) { editEntry.classList.toggle('active', deepEditEnabled); editEntry.setAttribute('aria-pressed', deepEditEnabled ? 'true' : 'false'); }
+  if (editCheck) editCheck.style.opacity = deepEditEnabled ? '1' : '0';
+  const logEntry = document.getElementById('m-deep-log-entry'); const logCheck = document.getElementById('deep-log-check');
+  if (logEntry) logEntry.classList.toggle('active', deepEditPanelOpen); if (logCheck) logCheck.style.opacity = deepEditPanelOpen ? '1' : '0';
+}
+function toggleDeepEditMode(){ closeMenus(); if (deepEditEnabled) { stopDeepEditMode(false); return; } if (deepEditSession?.events?.length && !confirm(T.deepEditReplaceSessionConfirm)) return; if (!confirm(T.deepEditStartConfirm)) return; clearDeepInputBatch(); deepEditSession = createDeepSession(); deepEditEnabled = true; deepEditLimitNotified = false; deepEditLastKnownLength = editor.value.length; recordDeepEditEvent({ type:'session-start', source:'system', summary: isJa ? 'Deep編集モード開始' : 'Deep Edit Mode started', meta:{ schemaVersion: DEEP_EDIT_SCHEMA_VERSION } }); renderDeepEditState(); toast(T.deepEditOn); }
+function stopDeepEditMode(silent){ if (!deepEditEnabled) return; pendingDeepFilenameChange = null; flushDeepInputBatch(); recordDeepEditEvent({ type:'session-stop', source:'system', summary: isJa ? 'Deep編集モード終了' : 'Deep Edit Mode stopped' }); if (deepEditSession) deepEditSession.stoppedAt = new Date().toISOString(); deepEditEnabled = false; deepEditBeforeInput = null; deepEditCompositionReplacement = null; clearDeepInputBatch(); renderDeepEditState(); if (!silent) toast(T.deepEditOff); if (deepEditPanelOpen) scheduleDeepLogRender(); }
+function prepareDeepEditForTrackedDocumentOpen(details = {}){
+  if (!deepEditEnabled || !deepEditSession) return false;
+  pendingDeepFilenameChange = null;
+  flushDeepInputBatch();
+  const type = String(details.type || 'file-open');
+  const summary = details.summary || (isJa ? 'ファイルを開きました' : 'File opened');
+  recordDeepEditEvent({ type, source:'user', summary, heading:'', charDelta:0, meta:details.meta || {} });
+  deepEditBeforeInput = null;
+  deepEditCompositionReplacement = null;
+  clearDeepInputBatch();
+  deepEditExplicitOperationDepth = 0;
+  return true;
+}
+function finalizeDeepEditAfterTrackedDocumentOpen(filename){
+  if (!deepEditEnabled || !deepEditSession) return;
+  pendingDeepFilenameChange = null;
+  deepEditBeforeInput = null;
+  deepEditCompositionReplacement = null;
+  clearDeepInputBatch();
+  deepEditExplicitOperationDepth = 0;
+  deepEditLastKnownLength = editor.value.length;
+  if (deepEditSession.document) deepEditSession.document.currentFilename = sanitizeDeepText(filename || filenameInput.value || 'untitled.md');
+  renderDeepEditState();
+  if (deepEditPanelOpen) scheduleDeepLogRender();
+}
+function resetDeepEditForNewDocumentContext(){
+  pendingDeepFilenameChange = null;
+  clearDeepInputBatch();
+  deepEditEnabled = false;
+  deepEditSession = null;
+  deepEditBeforeInput = null;
+  deepEditCompositionReplacement = null;
+  deepEditExplicitOperationDepth = 0;
+  deepEditLimitNotified = false;
+  deepEditShowJson = false;
+  deepEditLastKnownLength = 0;
+  renderDeepEditState();
+  if (deepEditPanelOpen) scheduleDeepLogRender();
+}
+function prepareDeepEditForFreshDocumentContext(){
+  const shouldContinue = deepEditEnabled === true;
+  pendingDeepFilenameChange = null;
+  clearDeepInputBatch();
+  deepEditSession = null;
+  deepEditBeforeInput = null;
+  deepEditCompositionReplacement = null;
+  deepEditExplicitOperationDepth = 0;
+  deepEditLimitNotified = false;
+  deepEditShowJson = false;
+  deepEditLastKnownLength = 0;
+  deepEditEnabled = shouldContinue;
+  renderDeepEditState();
+  if (deepEditPanelOpen) scheduleDeepLogRender();
+  return shouldContinue;
+}
+function resumeDeepEditForFreshDocumentContext(shouldContinue, reason = ''){
+  if (!shouldContinue) {
+    deepEditEnabled = false;
+    deepEditSession = null;
+    deepEditLastKnownLength = 0;
+    renderDeepEditState();
+    if (deepEditPanelOpen) scheduleDeepLogRender();
+    return null;
+  }
+  deepEditEnabled = true;
+  deepEditSession = createDeepSession();
+  deepEditLimitNotified = false;
+  deepEditLastKnownLength = editor.value.length;
+  recordDeepEditEvent({
+    type:'session-start',
+    source:'system',
+    summary:T.deepEditContinuedForNewDocument,
+    charDelta:0,
+    meta:{ reason }
+  });
+  renderDeepEditState();
+  if (deepEditPanelOpen) scheduleDeepLogRender();
+  return deepEditSession.sessionId;
+}
+function scheduleDeepEditContinuationToast(sessionId, delay = 2100){
+  clearTimeout(deepEditContinuationToastTimer);
+  if (!sessionId) {
+    deepEditContinuationToastTimer = null;
+    return;
+  }
+  deepEditContinuationToastTimer = setTimeout(() => {
+    deepEditContinuationToastTimer = null;
+    if (!deepEditEnabled || !deepEditSession || deepEditSession.sessionId !== sessionId) return;
+    toast(T.deepEditContinuing);
+  }, delay);
+}
+function clearDeepInputBatch(){ clearTimeout(deepEditBatchTimer); deepEditBatchTimer = null; deepEditPendingBatch = null; }
+function scheduleDeepInputBatchFlush(){ clearTimeout(deepEditBatchTimer); deepEditBatchTimer = setTimeout(flushDeepInputBatch, DEEP_EDIT_INPUT_BATCH_DELAY_MS); }
+function isDeepDeleteInput(inputType){ return ['deleteContentBackward','deleteContentForward','deleteWordBackward','deleteWordForward','deleteSoftLineBackward','deleteSoftLineForward','deleteHardLineBackward','deleteHardLineForward','deleteByCut','deleteByDrag'].includes(inputType); }
+function getDeepHeadingAtOffset(offset){
+  const end = Math.max(0, Math.min(offset || 0, editor.value.length)); const start = Math.max(0, end - DEEP_HEADING_LOOKBACK_CHARS); const slice = editor.value.slice(start, end); const lines = slice.split('\n'); const begin = Math.max(0, lines.length - DEEP_HEADING_LOOKBACK_LINES); let inFence = false;
+  for (let i = begin; i < lines.length; i += 1) { if (/^ {0,3}(```|~~~)/.test(lines[i])) inFence = !inFence; }
+  if (inFence) return '';
+  for (let i = lines.length - 1; i >= begin; i -= 1) { const line = lines[i]; if (/^ {0,3}(```|~~~)/.test(line)) return ''; const m = line.match(/^ {0,3}#{1,6}[ \t]+(.+)$/); if (m) return sanitizeDeepText(m[1].replace(/[ \t]+#+[ \t]*$/, '').trim()); }
+  return '';
+}
+function mergeIntoDeepInputBatch(data){
+  const now = new Date().toISOString(); const headingKey = data.offset;
+  if (deepEditPendingBatch && data.contextKey !== null && data.contextKey !== undefined && deepEditPendingBatch.contextKey !== null && deepEditPendingBatch.contextKey !== data.contextKey) flushDeepInputBatch();
+  if (!deepEditPendingBatch) deepEditPendingBatch = { charDelta:0, operations:0, insertedCharacters:0, deletedCharacters:0, startedAt:now, endedAt:now, beforeSnippet:'', afterSnippet:'', firstOffset: headingKey, approximate:false, previousLine:'', nextLine:'', contextKey:null };
+  deepEditPendingBatch.operations += 1; deepEditPendingBatch.charDelta += data.charDelta; deepEditPendingBatch.endedAt = now;
+  if (data.charDelta > 0) deepEditPendingBatch.insertedCharacters += data.charDelta; else deepEditPendingBatch.deletedCharacters += Math.abs(data.charDelta);
+  if (!deepEditPendingBatch.beforeSnippet && data.beforeSnippet) deepEditPendingBatch.beforeSnippet = data.beforeSnippet;
+  if (data.afterSnippet) deepEditPendingBatch.afterSnippet = data.afterSnippet;
+  if (!deepEditPendingBatch.previousLine && data.previousLine) deepEditPendingBatch.previousLine = data.previousLine;
+  if (!deepEditPendingBatch.nextLine && data.nextLine) deepEditPendingBatch.nextLine = data.nextLine;
+  if (deepEditPendingBatch.contextKey === null && data.contextKey !== null && data.contextKey !== undefined) deepEditPendingBatch.contextKey = data.contextKey;
+  if (data.meta?.approximate) deepEditPendingBatch.approximate = true;
+}
+function flushDeepInputBatch(){ if (!deepEditPendingBatch) return; if (isEditorComposing) { scheduleDeepInputBatchFlush(); return; } clearTimeout(deepEditBatchTimer); deepEditBatchTimer = null; const b = deepEditPendingBatch; deepEditPendingBatch = null; recordDeepEditEvent({ type:'typing', summary:isJa?'通常編集':'Typing', heading:getDeepHeadingAtOffset(b.firstOffset || editor.selectionStart), charDelta:b.charDelta, beforeSnippet:b.beforeSnippet, afterSnippet:b.afterSnippet, meta:{ operations:b.operations, insertedCharacters:b.insertedCharacters, deletedCharacters:b.deletedCharacters, startedAt:b.startedAt, endedAt:b.endedAt, approximate:b.approximate, previousLine:b.previousLine, nextLine:b.nextLine, contextBasis:'before-edit' } }); }
+function collectDeepGenericInput(event){
+  try {
+    if (!deepEditEnabled) return; if (suppressInputHandling) return; if (deepEditExplicitOperationDepth > 0) return;
+    const before = deepEditBeforeInput; deepEditBeforeInput = null; const inputType = event?.inputType || before?.inputType || '';
+    const charDelta = before ? editor.value.length - before.beforeLength : editor.value.length - deepEditLastKnownLength;
+    deepEditLastKnownLength = editor.value.length;
+    if (inputType === 'historyUndo' || inputType === 'historyRedo') { deepEditCompositionReplacement = null; flushDeepInputBatch(); recordDeepEditEvent({ type: inputType === 'historyUndo' ? 'undo' : 'redo', summary: inputType === 'historyUndo' ? 'Undo' : 'Redo', heading:getDeepHeadingAtOffset(before?.offset || editor.selectionStart), charDelta, meta: before ? {} : { approximate:true } }); return; }
+    if (!before && deepEditCompositionReplacement && !isDeepDeleteInput(inputType)) {
+      const compositionBefore = deepEditCompositionReplacement;
+      const compositionSelectedLength = Math.max(0, compositionBefore.end - compositionBefore.start);
+      const compositionInsertedLength = Math.max(0, editor.value.length - compositionBefore.beforeLength + compositionSelectedLength);
+      if (compositionSelectedLength >= DEEP_LARGE_DELETE_THRESHOLD && compositionInsertedLength > 0) {
+        deepEditCompositionReplacement = null;
+        flushDeepInputBatch();
+        recordDeepEditEvent({ type:'delete', summary:isJa?'大きな文字列を削除':'Large deletion', heading:getDeepHeadingAtOffset(compositionBefore.offset), charDelta:-compositionSelectedLength, beforeSnippet:compositionBefore.selectedText, afterSnippet:'', meta:{ deletedCharacters:compositionSelectedLength, replacement:true, inputType } });
+        mergeIntoDeepInputBatch({ inputType, offset:compositionBefore.offset, charDelta:compositionInsertedLength, beforeSnippet:'', afterSnippet:editor.value.slice(compositionBefore.start, compositionBefore.start + compositionInsertedLength), previousLine:compositionBefore.previousLine, nextLine:compositionBefore.nextLine, contextKey:compositionBefore.contextKey, meta:{ replacementOfLargeSelection:true } });
+        scheduleDeepInputBatchFlush();
+        return;
+      }
+    }
+    if (!before) { mergeIntoDeepInputBatch({ inputType, offset: editor.selectionStart, charDelta, beforeSnippet:'', afterSnippet:'', meta:{ approximate:true } }); scheduleDeepInputBatchFlush(); return; }
+    const selectedLength = Math.max(0, before.end - before.start);
+    const insertedLength = Math.max(0, charDelta + selectedLength);
+    const insertedText = insertedLength > 0 ? editor.value.slice(before.start, before.start + insertedLength) : '';
+    const isLargeSelectionReplacement = selectedLength >= DEEP_LARGE_DELETE_THRESHOLD && insertedLength > 0 && !isDeepDeleteInput(inputType);
+    if (isLargeSelectionReplacement) {
+      flushDeepInputBatch();
+      recordDeepEditEvent({
+        type:'delete',
+        summary:isJa?'大きな文字列を削除':'Large deletion',
+        heading:getDeepHeadingAtOffset(before.offset),
+        charDelta:-selectedLength,
+        beforeSnippet:before.selectedText,
+        afterSnippet:'',
+        meta:{ deletedCharacters:selectedLength, replacement:true, inputType }
+      });
+      mergeIntoDeepInputBatch({
+        inputType,
+        offset:before.offset,
+        charDelta:insertedLength,
+        beforeSnippet:'',
+        afterSnippet:insertedText,
+        previousLine:before.previousLine,
+        nextLine:before.nextLine,
+        contextKey:before.contextKey,
+        meta:{ replacementOfLargeSelection:true }
+      });
+      scheduleDeepInputBatchFlush();
+      deepEditCompositionReplacement = null;
+      return;
+    }
+    if (isDeepDeleteInput(inputType) && selectedLength >= DEEP_LARGE_DELETE_THRESHOLD) {
+      const deletedCharacters = selectedLength > 0 ? selectedLength : Math.abs(charDelta);
+      flushDeepInputBatch();
+      recordDeepEditEvent({ type:'delete', summary:isJa?'大きな文字列を削除':'Large deletion', heading:getDeepHeadingAtOffset(before.offset), charDelta:-deletedCharacters, beforeSnippet:before.selectedText, afterSnippet:'', meta:{ deletedCharacters } });
+      return;
+    }
+    mergeIntoDeepInputBatch({ inputType, offset: before.offset, charDelta, beforeSnippet: before.selectedText, afterSnippet: insertedText, previousLine: insertedLength > 0 ? before.previousLine : '', nextLine: insertedLength > 0 ? before.nextLine : '', contextKey: insertedLength > 0 ? before.contextKey : null }); scheduleDeepInputBatchFlush();
+  } catch (error) { console.error('Deep Edit logging failed', error); }
+}
+
+function getDeepEventDisplayName(ev){ return ev?.summary || ev?.type || ''; }
+function getDeepLogLabels(){ return isJa ? { startedAs:'開始時のファイル', currentFile:'現在のファイル', started:'開始時刻', events:'イベント数', heading:'見出し', characters:'文字数', operations:'操作数', replacements:'置換件数', previousLine:'前の行', nextLine:'次の行', from:'変更前', to:'保存名', openedFile:'開いたファイル', wordFile:'Wordファイル', convertedFile:'変換後', restoredFile:'復元後', renamedFile:'変更後', method:'方法' } : { startedAs:'Started as', currentFile:'Current file', started:'Started', events:'Events', heading:'Heading', characters:'Characters', operations:'Operations', replacements:'Replacements', previousLine:'Previous line', nextLine:'Next line', from:'From', to:'To', openedFile:'To', wordFile:'Word file', convertedFile:'Converted to', restoredFile:'Restored to', renamedFile:'To', method:'Method' }; }
+function getDeepSessionDocumentNames(){ const doc = deepEditSession?.document || {}; const started = sanitizeDeepContextLine(doc.filename || ''); return { startedFilename: started, currentFilename: sanitizeDeepContextLine(doc.currentFilename || doc.filename || '') }; }
+function getDeepEventChangeDisplay(event){
+  if (!event || DEEP_FILE_EVENT_TYPES.has(event.type) || ['undo','redo','session-start','session-stop','system-note'].includes(event.type)) return null;
+  const before = sanitizeDeepSnippet(event.beforeSnippet || ''); const after = sanitizeDeepSnippet(event.afterSnippet || '');
+  const label = (kind) => isJa ? ({inserted:'挿入',deleted:'削除',replaced:'置換'}[kind]) : ({inserted:'Inserted',deleted:'Deleted',replaced:'Replaced'}[kind]);
+  if (event.type === 'paste' || event.type === 'image-drop') return after ? { kind:'inserted', label:label('inserted'), value:after } : null;
+  if (event.type === 'delete' || event.type === 'large-delete') return before ? { kind:'deleted', label:label('deleted'), value:before } : null;
+  if (event.type === 'replace-all') { if (!before && !after) return null; return { kind:'replaced', label:label('replaced'), value: before && after ? `${before} → ${after}` : before || after }; }
+  if (before && after) return { kind:'replaced', label:label('replaced'), value:`${before} → ${after}` };
+  if (after) return { kind:'inserted', label:label('inserted'), value:after };
+  if (before) return { kind:'deleted', label:label('deleted'), value:before };
+  return null;
+}
+function buildDeepEditLogClipboardText(){
+  if (!deepEditSession || !Array.isArray(deepEditSession.events) || deepEditSession.events.length === 0) return '';
+  const labels = getDeepLogLabels(); const names = getDeepSessionDocumentNames();
+  const lines = ['# Deep Edit Log', '', `${labels.startedAs}: ${names.startedFilename}`, `${labels.currentFile}: ${names.currentFilename}`, `${labels.started}: ${new Date(deepEditSession.startedAt).toLocaleString()}`, `${labels.events}: ${deepEditSession.events.length}`];
+  deepEditSession.events.forEach(ev => {
+    const meta = ev.meta || {}; lines.push('', `## ${new Date(ev.timestamp).toLocaleTimeString()} ${getDeepEventDisplayName(ev)}`);
+    if (ev.heading) lines.push(`${labels.heading}: ${sanitizeDeepContextLine(ev.heading)}`);
+    if (!DEEP_FILE_EVENT_TYPES.has(ev.type)) lines.push(`${labels.characters}: ${ev.charDelta >= 0 ? '+' : ''}${ev.charDelta}`);
+    if (meta.operations) lines.push(`${labels.operations}: ${meta.operations}`);
+    if (meta.replacementCount) lines.push(`${labels.replacements}: ${meta.replacementCount}`);
+    const changeDisplay = getDeepEventChangeDisplay(ev);
+    if (changeDisplay) { lines.push(`${changeDisplay.label}:`); lines.push(changeDisplay.value); }
+    if (meta.previousLine) lines.push(`${labels.previousLine}: ${sanitizeDeepContextLine(meta.previousLine)}`);
+    if (meta.nextLine) lines.push(`${labels.nextLine}: ${sanitizeDeepContextLine(meta.nextLine)}`);
+    if (['save','save-as','download'].includes(ev.type)) { if (meta.previousFilename) lines.push(`${labels.from}: ${sanitizeDeepText(meta.previousFilename)}`); if (meta.savedFilename) lines.push(`${labels.to}: ${sanitizeDeepText(meta.savedFilename)}`); if (meta.method) lines.push(`${labels.method}: ${sanitizeDeepText(meta.method)}`); }
+    if (ev.type === 'document-rename') { if (meta.previousFilename) lines.push(`${labels.from}: ${sanitizeDeepText(meta.previousFilename)}`); if (meta.renamedFilename) lines.push(`${labels.renamedFile}: ${sanitizeDeepText(meta.renamedFilename)}`); if (meta.method) lines.push(`${labels.method}: ${sanitizeDeepText(meta.method)}`); }
+    if (ev.type === 'file-open') { if (meta.previousFilename) lines.push(`${labels.from}: ${sanitizeDeepText(meta.previousFilename)}`); if (meta.openedFilename) lines.push(`${labels.openedFile}: ${sanitizeDeepText(meta.openedFilename)}`); if (meta.method) lines.push(`${labels.method}: ${sanitizeDeepText(meta.method)}`); }
+    if (ev.type === 'word-import') { if (meta.previousFilename) lines.push(`${labels.from}: ${sanitizeDeepText(meta.previousFilename)}`); if (meta.sourceFilename) lines.push(`${labels.wordFile}: ${sanitizeDeepText(meta.sourceFilename)}`); if (meta.convertedFilename) lines.push(`${labels.convertedFile}: ${sanitizeDeepText(meta.convertedFilename)}`); if (meta.method) lines.push(`${labels.method}: ${sanitizeDeepText(meta.method)}`); }
+    if (ev.type === 'history-restore') { if (meta.previousFilename) lines.push(`${labels.from}: ${sanitizeDeepText(meta.previousFilename)}`); if (meta.restoredFilename) lines.push(`${labels.restoredFile}: ${sanitizeDeepText(meta.restoredFilename)}`); if (meta.method) lines.push(`${labels.method}: ${sanitizeDeepText(meta.method)}`); }
+  });
+  return lines.join('\n');
+}
+async function copyDeepEditLog(){
+  try {
+    if (!deepEditSession || !deepEditSession.events?.length) { toast(T.deepEditEmpty); return; }
+    const text = buildDeepEditLogClipboardText(); if (!text) { toast(T.deepEditEmpty); return; }
+    try { if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(text); toast(T.deepEditCopied); return; } } catch (error) {}
+    const active = document.activeElement; const selectionStart = editor.selectionStart; const selectionEnd = editor.selectionEnd; const scrollTop = editor.scrollTop; const scrollLeft = editor.scrollLeft;
+    const textarea = document.createElement('textarea'); textarea.value = text; textarea.setAttribute('readonly', ''); textarea.style.position = 'fixed'; textarea.style.left = '-9999px'; textarea.style.top = '0'; document.body.appendChild(textarea);
+    try { textarea.select(); textarea.setSelectionRange(0, textarea.value.length); if (!document.execCommand('copy')) throw new Error('copy failed'); } finally { textarea.remove(); if (active?.focus) active.focus(); editor.selectionStart = selectionStart; editor.selectionEnd = selectionEnd; editor.scrollTop = scrollTop; editor.scrollLeft = scrollLeft; }
+    toast(T.deepEditCopied);
+  } catch (error) { console.error('Deep Edit log copy failed', error); toast(T.deepEditCopyFailed); }
+}
+
+function commitPendingDeepFilenameChange(){
+  if (!deepEditEnabled || !deepEditSession) {
+    pendingDeepFilenameChange = null;
+    return;
+  }
+  if (filenameInput.readOnly || suppressDeepFilenameLogging) {
+    pendingDeepFilenameChange = null;
+    return;
+  }
+  const previousFilename = pendingDeepFilenameChange?.previousFilename || deepEditSession.document?.currentFilename || deepEditSession.document?.filename || 'untitled.md';
+  const currentFilename = filenameInput.value.trim() || 'untitled.md';
+  if (previousFilename === currentFilename) {
+    pendingDeepFilenameChange = null;
+    return;
+  }
+  flushDeepInputBatch();
+  recordDeepEditEvent({ type:'document-rename', source:'user', summary:isJa?'文書名を変更':'Document renamed', heading:'', charDelta:0, meta:{ previousFilename, renamedFilename:currentFilename, method:'auto-save' } });
+  deepEditSession.document.currentFilename = sanitizeDeepText(currentFilename);
+  pendingDeepFilenameChange = null;
+}
+
+function recordDeepSaveAsEvent(previousFilename, savedFilename, method){
+  if (!deepEditEnabled || !deepEditSession) return;
+  try { flushDeepInputBatch(); recordDeepEditEvent({ type:'save-as', source:'user', summary:isJa?'名前を付けて保存':'Save As', heading:'', charDelta:0, meta:{ previousFilename:sanitizeDeepText(previousFilename), savedFilename:sanitizeDeepText(savedFilename), method:sanitizeDeepText(method) } }); deepEditSession.document.currentFilename = sanitizeDeepText(savedFilename); pendingDeepFilenameChange = null; } catch (error) { console.error('Deep Edit logging failed', error); }
+}
+function prepareDeepFileSave(){ if (!deepEditEnabled || !deepEditSession) return null; flushDeepInputBatch(); return { previousFilename: getDeepSessionFilenameSnapshot() }; }
+function commitDeepFileSave(snapshot, savedFilename, method, isSaveAs){
+  if (!snapshot || !deepEditEnabled || !deepEditSession) return;
+  try {
+    const previousFilename = sanitizeDeepText(snapshot.previousFilename);
+    const cleanSavedFilename = sanitizeDeepText(savedFilename);
+    const isDownload = method === 'download' && !isSaveAs;
+    const eventType = isDownload ? 'download' : (isSaveAs || previousFilename !== cleanSavedFilename ? 'save-as' : 'save');
+    const summary = eventType === 'download' ? (isJa?'ダウンロード':'Download') : (eventType === 'save-as' ? (isJa?'名前を付けて保存':'Save As') : (isJa?'保存':'Save'));
+    recordDeepEditEvent({ type:eventType, source:'user', summary, heading:'', charDelta:0, meta:{ previousFilename, savedFilename:cleanSavedFilename, method:sanitizeDeepText(method) } });
+    deepEditSession.document.currentFilename = cleanSavedFilename;
+    pendingDeepFilenameChange = null;
+  } catch (error) { console.error('Deep Edit logging failed', error); }
+}
+function prepareDeepFileOpen(){ if (!deepEditEnabled || !deepEditSession) return null; flushDeepInputBatch(); return { previousFilename: getDeepSessionFilenameSnapshot() }; }
+function commitDeepFileOpen(snapshot, openedFilename, method){
+  if (!snapshot || !deepEditEnabled || !deepEditSession) return;
+  try { recordDeepEditEvent({ type:'file-open', source:'user', summary:isJa?'ファイルを開く':'File Open', heading:'', charDelta:0, meta:{ previousFilename:sanitizeDeepText(snapshot.previousFilename), openedFilename:sanitizeDeepText(openedFilename), method:sanitizeDeepText(method) } }); deepEditSession.document.currentFilename = sanitizeDeepText(openedFilename); pendingDeepFilenameChange = null; } catch (error) { console.error('Deep Edit logging failed', error); }
+}
+
+function focusElementWithoutScroll(element){
+  if (!element) return;
+  try { element.focus({ preventScroll: true }); }
+  catch { element.focus(); }
+}
+function toggleDeepLogPanel(){ deepEditPanelOpen = !deepEditPanelOpen; const panel = document.getElementById('deep-log-panel'); if (panel) panel.classList.toggle('show', deepEditPanelOpen); renderDeepEditState(); if (deepEditPanelOpen) { scheduleDeepLogRender(); requestAnimationFrame(() => { focusElementWithoutScroll(document.getElementById('deep-log-scroll')); }); } closeMenus(); }
+function selectElementContents(element){
+  if (!element) return false;
+  const selection = window.getSelection();
+  if (!selection) return false;
+  const range = document.createRange();
+  range.selectNodeContents(element);
+  selection.removeAllRanges();
+  selection.addRange(range);
+  return true;
+}
+function selectDeepLogContents(){
+  const body = document.getElementById('deep-log-body');
+  if (!body || !deepEditSession) return false;
+  return selectElementContents(body);
+}
+function selectDeepLogJsonContents(){
+  const jsonElement = document.getElementById('deep-log-json');
+  if (!jsonElement || jsonElement.hidden || !deepEditShowJson || !deepEditSession) return false;
+  return selectElementContents(jsonElement);
+}
+function scheduleDeepLogRender(){ if (!deepEditPanelOpen || deepEditRenderRaf) return; deepEditRenderRaf = requestAnimationFrame(() => { deepEditRenderRaf = null; renderDeepLogPanel(); }); }
+function appendDeepLine(parent, label, value){ if (value === undefined || value === null || value === '') return; const div = document.createElement('div'); div.textContent = label ? `${label}${value}` : String(value); parent.appendChild(div); }
+function renderDeepLogActionState(){
+  const hasSession = Boolean(deepEditSession);
+  const copyBtn = document.getElementById('deep-log-copy-btn'); const clearBtn = document.getElementById('deep-log-clear-btn'); const jsonBtn = document.getElementById('deep-log-json-btn');
+  if (copyBtn) { copyBtn.textContent = T.deepEditCopy; copyBtn.disabled = !hasSession; }
+  if (clearBtn) { clearBtn.textContent = T.deepEditClear; clearBtn.disabled = !hasSession; }
+  if (jsonBtn) { jsonBtn.disabled = !hasSession; if (!deepEditShowJson || !hasSession) jsonBtn.textContent = T.deepEditViewJson; }
+}
+function renderDeepLogJson(){
+  const pre = document.getElementById('deep-log-json'); const button = document.getElementById('deep-log-json-btn'); if (!pre || !button) return;
+  const canShow = Boolean(deepEditSession);
+  if (!deepEditShowJson || !canShow) { pre.hidden = true; pre.textContent = ''; button.textContent = T.deepEditViewJson; button.setAttribute('aria-pressed','false'); return; }
+  try { pre.textContent = JSON.stringify(deepEditSession, null, 2); pre.hidden = false; button.textContent = isJa ? 'JSONを閉じる' : 'Hide JSON'; button.setAttribute('aria-pressed','true'); }
+  catch (error) { console.error('Deep Edit JSON rendering failed', error); pre.hidden = true; pre.textContent = ''; deepEditShowJson = false; }
+}
+function toggleDeepLogJson(){
+  if (!deepEditSession) { toast(T.deepEditEmpty); return; }
+  deepEditShowJson = !deepEditShowJson;
+  renderDeepLogJson();
+  renderDeepLogActionState();
+  requestAnimationFrame(() => {
+    if (deepEditShowJson) {
+      const jsonElement = document.getElementById('deep-log-json');
+      if (jsonElement && !jsonElement.hidden) focusElementWithoutScroll(jsonElement);
+      return;
+    }
+    focusElementWithoutScroll(document.getElementById('deep-log-scroll'));
+  });
+}
+function renderDeepLogPanel(){
+  const body = document.getElementById('deep-log-body'); if (!body) return; body.textContent = ''; const frag = document.createDocumentFragment(); appendDeepLine(frag, '', T.deepEditMemoryOnly);
+  if (!deepEditSession) { appendDeepLine(frag, '', T.deepEditEmpty); body.appendChild(frag); renderDeepLogJson(); renderDeepLogActionState(); return; }
+  const names = getDeepSessionDocumentNames();
+  appendDeepLine(frag, isJa?'セッション開始: ':'Session started: ', new Date(deepEditSession.startedAt).toLocaleString()); appendDeepLine(frag, isJa?'開始時のファイル: ':'Started as: ', names.startedFilename); appendDeepLine(frag, isJa?'現在のファイル: ':'Current file: ', names.currentFilename); appendDeepLine(frag, isJa?'イベント件数: ':'Events: ', `${deepEditSession.events.length} / ${DEEP_EDIT_MAX_EVENTS}`);
+  const events = deepEditSession.events; const omitted = Math.max(0, events.length - DEEP_VISIBLE_EVENTS); if (omitted) appendDeepLine(frag, '', isJa ? `古い${omitted}件は表示を省略しています` : `${omitted} older events are omitted`);
+  events.slice(-DEEP_VISIBLE_EVENTS).forEach(ev => { const item=document.createElement('div'); item.className='deep-event'; const title=document.createElement('div'); title.className='deep-event-title'; title.textContent=`${new Date(ev.timestamp).toLocaleTimeString()}　${ev.summary || ev.type}`; item.appendChild(title); appendDeepLine(item, isJa?'見出し: ':'Heading: ', ev.heading); if (!DEEP_FILE_EVENT_TYPES.has(ev.type)) appendDeepLine(item, isJa?'文字数: ':'Characters: ', `${ev.charDelta >= 0 ? '+' : ''}${ev.charDelta}`); if (ev.meta?.operations) appendDeepLine(item, isJa?'操作数: ':'Operations: ', ev.meta.operations); if (ev.meta?.replacementCount) appendDeepLine(item, '', isJa ? `${ev.meta.replacementCount}か所` : `${ev.meta.replacementCount} replacements`); if (['save','save-as','download'].includes(ev.type)) { appendDeepLine(item, isJa?'変更前: ':'From: ', ev.meta?.previousFilename); appendDeepLine(item, isJa?'保存名: ':'To: ', ev.meta?.savedFilename); appendDeepLine(item, isJa?'方法: ':'Method: ', ev.meta?.method); } if (ev.type === 'file-open') { appendDeepLine(item, isJa?'変更前: ':'From: ', ev.meta?.previousFilename); appendDeepLine(item, isJa?'開いたファイル: ':'To: ', ev.meta?.openedFilename); appendDeepLine(item, isJa?'方法: ':'Method: ', ev.meta?.method); } if (ev.type === 'word-import') { appendDeepLine(item, isJa?'変更前: ':'From: ', ev.meta?.previousFilename); appendDeepLine(item, isJa?'Wordファイル: ':'Word file: ', ev.meta?.sourceFilename); appendDeepLine(item, isJa?'変換後: ':'Converted to: ', ev.meta?.convertedFilename); appendDeepLine(item, isJa?'方法: ':'Method: ', ev.meta?.method); } if (ev.type === 'history-restore') { appendDeepLine(item, isJa?'変更前: ':'From: ', ev.meta?.previousFilename); appendDeepLine(item, isJa?'復元後: ':'Restored to: ', ev.meta?.restoredFilename); appendDeepLine(item, isJa?'方法: ':'Method: ', ev.meta?.method); } if (ev.type === 'document-rename') { appendDeepLine(item, isJa?'変更前: ':'From: ', ev.meta?.previousFilename); appendDeepLine(item, isJa?'変更後: ':'To: ', ev.meta?.renamedFilename); appendDeepLine(item, isJa?'方法: ':'Method: ', ev.meta?.method); } if (ev.meta?.previousLine) appendDeepLine(item, isJa?'前の行: ':'Previous line: ', ev.meta.previousLine); if (ev.meta?.nextLine) appendDeepLine(item, isJa?'次の行: ':'Next line: ', ev.meta.nextLine); const changeDisplay = getDeepEventChangeDisplay(ev); if (changeDisplay) { const label=document.createElement('div'); label.className='deep-change-label'; label.textContent=`${changeDisplay.label}:`; const value=document.createElement('div'); value.className='deep-change-value'; value.textContent=changeDisplay.value; item.append(label,value); } frag.appendChild(item); });
+  body.appendChild(frag); renderDeepLogJson(); renderDeepLogActionState();
+}
+function clearDeepEditLog(){
+  if (!deepEditSession) {
+    if (deepEditEnabled) {
+      deepEditSession = createDeepSession();
+      deepEditLastKnownLength = editor.value.length;
+      renderDeepEditState();
+      if (deepEditPanelOpen) scheduleDeepLogRender();
+    }
+    toast(T.deepEditEmpty);
+    return;
+  }
+
+  const shouldContinue = deepEditEnabled === true;
+  if (!deepEditSession.events?.length) {
+    toast(T.deepEditEmpty);
+    return;
+  }
+
+  const confirmed = confirm(shouldContinue ? T.deepEditClearConfirmContinuing : T.deepEditClearConfirm);
+  if (!confirmed) return;
+
+  clearDeepInputBatch();
+  pendingDeepFilenameChange = null;
+  deepEditBeforeInput = null;
+  deepEditCompositionReplacement = null;
+  deepEditExplicitOperationDepth = 0;
+  deepEditLimitNotified = false;
+  deepEditShowJson = false;
+  deepEditSession = null;
+
+  if (shouldContinue) {
+    deepEditEnabled = true;
+    deepEditSession = createDeepSession();
+    deepEditLastKnownLength = editor.value.length;
+  } else {
+    deepEditEnabled = false;
+    deepEditLastKnownLength = 0;
+  }
+
+  renderDeepEditState();
+  if (deepEditPanelOpen) scheduleDeepLogRender();
+  toast(shouldContinue ? T.deepEditLogClearedContinuing : T.deepEditLogCleared);
+}
+document.getElementById('deep-log-copy-btn')?.addEventListener('click', copyDeepEditLog);
+document.getElementById('deep-log-clear-btn')?.addEventListener('click', clearDeepEditLog);
+document.getElementById('deep-log-json-btn')?.addEventListener('click', toggleDeepLogJson);
+const deepLogJsonElement = document.getElementById('deep-log-json');
+deepLogJsonElement?.addEventListener('pointerdown', () => { focusElementWithoutScroll(deepLogJsonElement); });
+const deepLogPanelElement = document.getElementById('deep-log-panel');
+deepLogPanelElement?.addEventListener('keydown', event => {
+  if (event.isComposing || event.keyCode === 229) return;
+  const modifier = event.ctrlKey || event.metaKey;
+  if (!modifier || event.key.toLowerCase() !== 'a') return;
+  const jsonElement = document.getElementById('deep-log-json');
+  const activeElement = document.activeElement;
+  const eventTarget = event.target instanceof Element ? event.target : null;
+  const jsonHasFocus = Boolean(jsonElement && !jsonElement.hidden && (activeElement === jsonElement || eventTarget?.closest('#deep-log-json')));
+  const selected = jsonHasFocus ? selectDeepLogJsonContents() : selectDeepLogContents();
+  if (!selected) return;
+  event.preventDefault();
+  event.stopPropagation();
+});
+renderDeepLogActionState();
 //#endregion
 
 function toast(msg) {
@@ -8404,6 +9142,12 @@ const closableUiRegistry = [
     close: closeOutlinePanel
   },
   {
+    name: 'deep-edit-log-panel',
+    priority: 40,
+    isOpen: () => isElementVisibleByClass('#deep-log-panel'),
+    close: toggleDeepLogPanel
+  },
+  {
     name: 'preview-focus-mode',
     priority: 10,
     isOpen: () => previewFocusOpen,
@@ -8446,7 +9190,7 @@ window.addEventListener('keydown', e => {
 });
 
 function resetDocumentIdentity(filename = 'untitled.md') {
-  filenameInput.value = filename;
+  setFilenameProgrammatically(filename);
   fileHandle = null;
   syncFilenameInputState();
 }
@@ -8457,13 +9201,16 @@ async function newFile() {
   clearPreviewSession();
   if (isDirty && !confirm(T.confirmNew)) return;
   await saveToHistoryList(filenameInput.value, editor.value);
+  const continueDeepEdit = prepareDeepEditForFreshDocumentContext();
   setEditorDocumentValue('');
   resetDocumentIdentity();
   update();
   markSaved();
   await triggerAutoSave();
   editor.focus();
+  const continuedSessionId = resumeDeepEditForFreshDocumentContext(continueDeepEdit, 'new-file');
   toast(T.newCreated);
+  scheduleDeepEditContinuationToast(continuedSessionId);
 }
 
 async function closeFile() {
@@ -8472,10 +9219,13 @@ async function closeFile() {
   clearPreviewSession();
   if (isDirty && !confirm(T.confirmClose)) return;
   await saveToHistoryList(filenameInput.value, editor.value);
+  const continueDeepEdit = prepareDeepEditForFreshDocumentContext();
   setEditorDocumentValue(''); resetDocumentIdentity(); update(); markSaved();
   secureRemoveItem(AUTOSAVE_TXT_KEY);
   secureRemoveItem(AUTOSAVE_NAME_KEY);
+  const continuedSessionId = resumeDeepEditForFreshDocumentContext(continueDeepEdit, 'file-close');
   toast(T.closedToast);
+  scheduleDeepEditContinuationToast(continuedSessionId);
 }
 
 async function execEdit(action) {
