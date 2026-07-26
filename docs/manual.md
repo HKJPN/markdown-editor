@@ -426,7 +426,7 @@ Both **Private Storage** and **Save as Private App** use passphrases, but they s
 | Save as Private App | Exports the current document as a passphrase-protected HTML file | The exported HTML file |
 
 If you forget the passphrase, the protected data cannot be recovered.  
-For important documents, keep a separate Markdown backup (`.md`) in a secure location (see "12-3. Long-term access and compatibility of encrypted files" for details on managing passwords for long-term storage).
+For important documents, keep a separate Markdown backup (`.md`) in a secure location (see "13-3. Long-term access and compatibility of encrypted files" for details on managing passwords for long-term storage).
 
 ### 6-6. Restoring from History
 
@@ -497,7 +497,7 @@ Recipients of the file can instantly resume editing simply by opening it in a we
 > 
 > No password is needed to open and view a Restricted Viewer file. The password you set is only used when you **restore** the original Markdown back into MD//WORKS for re-editing — it is not required for viewing.
 <br clear="all">
-For important documents intended for long-term storage, see "12-3. Long-term access and compatibility of encrypted files" for guidance on keeping the original Markdown file, the password, and the HTML file of the MD//WORKS version used.
+For important documents intended for long-term storage, see "13-3. Long-term access and compatibility of encrypted files" for guidance on keeping the original Markdown file, the password, and the HTML file of the MD//WORKS version used.
 
 
 ### 7-2. Printing or Saving as PDF
@@ -716,14 +716,87 @@ To exit, click the **✕** button in the upper-right corner of the screen.
 
 ---
 
-## 10. Help and Keyboard Shortcuts
+## 10. Recording the Editing Process with Deep Edit Mode
+
+Deep Edit mode is a feature that separately records the "process" of your editing in the browser's temporary memory, alongside the final "result" of the document. Because it allows you to review the flow of your edits—including significant additions and deletions—in chronological order, it is highly useful when performing complex revisions on reports, novels, and long manuscripts.
+
+Because the Deep Edit log is kept completely separate from the main text, it does not affect your Markdown source, saved files, Auto Save, work history, or Undo/Redo history. However, the log is only saved temporarily in the browser's memory and will be erased when the page is reloaded. Please copy and save any necessary logs in advance.
+
+### 10-1. Start and Stop
+
+* **Start:** Press the **DEEP** button on the title bar or select **View > Deep Edit Mode**. A Deep Edit session will start, and the **DEEP** button will light up. If an existing Deep Edit log remains in memory, you will be prompted to confirm whether to clear it and start a new session.
+* **Stop:** Press the **DEEP** button again or select **View > Deep Edit Mode** once more to turn it off. Recording of new events will stop, but the existing log will be retained temporarily until the page is reloaded.
+
+### 10-2. How Editing and Recording Works
+
+Edit your document as usual. Deep Edit mode does not directly alter your text; rather, it silently records your editing process in the background. Continuous typing—including spaces, punctuation, and standard backspacing—is grouped into normal edit events with a short delay to keep the log readable.
+
+If a selected text range of 100 characters or more is replaced through normal text input, it will be recorded intelligently as two separate events: a large deletion followed by an input event.
+
+### 10-3. Checking and Utilizing Logs
+
+Open the log panel from **View > Deep Edit Log**. After making significant changes, reviewing the log helps you retrace your thought process and decide whether to make further revisions or save the document as a new version.
+
+* **Display Contents:** The log shows the operation time, event type, edited location (e.g., previous heading, previous/next line), and character count changes (e.g., `+128`, `-340`). For save/file operation events, the saved name or opened file name is also displayed.
+* **Copy Log:** Use the **Copy Log** button to copy the entire log to your clipboard.
+* **View JSON:** Use the **View JSON** button to display the raw internal Deep Edit log data in JSON format. You can then select and copy it manually if needed.
+
+### 10-4. Using AI to Review the Editing Process
+
+The Deep Edit log can be used not only for reviewing the editing process yourself, but also for having a browser AI capable of referencing screen content, such as Gemini or Leo, analyze your writing process from an objective third-party perspective.
+
+With the Deep Edit log open, you can enter a prompt like the following into your AI assistant:
+
+> Please review the document currently being edited along with the DEEP EDIT LOG, and summarize the following 4 points:
+> 1. The main changes and shifts in focus made during this session.
+> 2. Any important information or context that was deleted.
+> 3. Revisions or sections that appear to be incomplete.
+> 4. Overall quality concerns or suggestions for the document.
+
+For instructions on how to set up AI writing assistance, please refer to "12. AI-Assisted Writing" later in this manual.
+
+### 10-5. Clearing the Log
+
+Use the **Clear Log** button to delete the current log. If you clear the log while Deep Edit mode is still ON, the mode will continue, and recording will seamlessly resume in a new empty session.
+
+*Note: Clearing the log does not affect the main manuscript text, saved files, Auto Save, work history, or Undo/Redo history.*
+
+### 10-6. Limitations
+
+* The Deep Edit log is strictly for you or an AI to review your edit history; it does not have a feature to automatically restore the main text to a previous state.
+* It does not display color-coded inline diffs (like Track Changes in Microsoft Word).
+* There is no feature to individually "Accept" or "Reject" recorded changes.
+* It is not intended as a substitute for a complete audit trail or a dedicated version control system (like Git).
+* Logs are strictly retained in the browser's temporary memory and will be permanently cleared when the page is reloaded.
+* Log recording is capped at a maximum of 500 events per session. Once this limit is reached, you will be notified and no further events will be logged, though you can continue editing your document without interruption.
+
+### 10-7. Main Recorded Events
+
+* **Editing:** Normal edits (grouped after a short delay), large deletions (100+ characters), overwriting a selection of 100+ characters through normal text input (recorded separately as deletion and input), and pasting.
+* **Operations:** Replace all, Format Markdown, Update TOC, Add image, and Rename document.
+* **File:** Save, Save as, Download, Open file (Markdown / Word / Normal Viewer HTML), Open Word file, and Restore from work history.
+* **Other:** Undo / Redo executions.
+
+### 10-8. Excluded / Unrecorded Events
+
+* Character-by-character input (keystrokes are grouped into batches after a short delay to prevent log clutter).
+* The actual Base64 image/file data (omitted as `[embedded data omitted]` or `[embedded image data omitted]` to save memory).
+
+### 10-9. Behavior When Switching Documents
+
+* **Retain Log:** When restoring from an existing file, importing a Word file, or restoring from work history, the log is retained and recording continues.
+* **Clear Log:** When creating a new file, closing a file, restoring from a Restricted Viewer, or restoring from a Private Viewer, the previous log is cleared. If Deep Edit mode was active, recording continues in a new empty session. If you wish to keep the previous log, please save it in advance using **Copy Log**.
+
+---
+
+## 11. Help and Keyboard Shortcuts
 
 
 
 The Help menu provides access to Quick Start, Keyboard Shortcuts, the GitHub page, and app information.  
 Because the help content is embedded in the app, it can be viewed offline.
 
-### 10-1. Quick Start
+### 11-1. Quick Start
 
 
 
@@ -740,7 +813,7 @@ Quick Start covers:
 * Formatting Markdown
 * Working offline
 
-### 10-2. Keyboard Shortcuts
+### 11-2. Keyboard Shortcuts
 
 
 Select **Help > Keyboard Shortcuts** to view available shortcuts.
@@ -765,7 +838,7 @@ Common shortcuts include:
 
 When the Preview area is selected, you can use **Ctrl+A / ⌘A** to select all preview content. Rich copy is also supported.
 
-### 10-3. GitHub / About MD//WORKS
+### 11-3. GitHub / About MD//WORKS
 
 
 
@@ -774,7 +847,7 @@ To check the app version and core concepts, select **Help > About MD//WORKS**.
 
 ---
 
-## 11. AI-Assisted Writing<img src="images/BgemniE.jpg" alt="Image: askGemini" width="120"> ![Image: LeoImage](<images/Leoimage.png>)
+## 12. AI-Assisted Writing<img src="images/BgemniE.jpg" alt="Image: askGemini" width="120"> ![Image: LeoImage](<images/Leoimage.png>)
 
 MD//WORKS is not only a plain text and Markdown editor. It can also be used together with browser-based AI assistants, such as Gemini in Chrome and Leo in Brave, to support a wider range of writing tasks.
 
@@ -782,11 +855,11 @@ AI features are not built directly into MD//WORKS itself. However, when used alo
 
 By offloading these supporting tasks to AI, you can reduce the cognitive burden of writing and focus more on the creative and substantive aspects of your work. This chapter explains how to prepare your browser AI environment, how to use it effectively, and what to keep in mind when using AI assistants with MD//WORKS.
 
-### 11-1. Preparing to Use AI Writing Assistance
+### 12-1. Preparing to Use AI Writing Assistance
 
 MD//WORKS can be used with several browser-based AI assistants. This section explains the basic setup for using Gemini in Google Chrome and Leo in Brave Browser.
 
-#### 11-1-1. Google Chrome: Using Gemini<img src="images/BgemniE.jpg" alt="Image: askGemini" width="120"> 
+#### 12-1-1. Google Chrome: Using Gemini<img src="images/BgemniE.jpg" alt="Image: askGemini" width="120">
 
 1. **Sign in to your Google Account**  
    Make sure you are signed in to your Google Account in Chrome.
@@ -799,7 +872,7 @@ MD//WORKS can be used with several browser-based AI assistants. This section exp
 
 > Note: The availability and behavior of Gemini in Chrome may vary depending on your Chrome version, Google Account, region, plan, and organizational settings.
 
-#### 11-1-2. Brave Browser: Using Leo ![Image: LeoImage](<images/Leoimage.png>)
+#### 12-1-2. Brave Browser: Using Leo ![Image: LeoImage](<images/Leoimage.png>)
 
 1. **Open Leo from Brave Browser**  
    No login is required. Click the AI chat icon on the right side of the address bar, or open it from the “…” menu.
@@ -809,11 +882,11 @@ MD//WORKS can be used with several browser-based AI assistants. This section exp
 
 > In our testing, Leo worked smoothly with MD//WORKS, including on mobile environments such as iPad. It was able to read the page structure with a level of accuracy close to the desktop version, even when the HTML structure was relatively complex or imperfect. Brave may therefore be a useful option when you want AI assistance without relying on a Google account, or when you want a more privacy-oriented browser environment.
 
-#### 11-1-3. Local LLM
+#### 12-1-3. Local LLM
 
 It is also possible to build a "completely local LLM environment" without sending any data to the internet. For local setup instructions, please refer to [Appendix 1 and 2](#appendix-1-2-local-llm) in this document. If you want to use an OpenAI-compatible external cloud API from a browser assistant instead of a local model, see [Appendix 1-4](#appendix-1-4-how-to-use-openai-compatible-cloud-apis-eg-muse-spark-11-with-brave-leo-or-page-assist).
 
-### 11-2. Example Use Cases
+### 12-2. Example Use Cases
 
 In addition to everyday text proofreading, summarization, terminology consistency checks, and simple coding support, it can also perform tasks such as "identifying inconsistencies in quality assurance documents" and "reviewing the overall structure of long documents." Examples of specific prompts are provided.
 
@@ -841,7 +914,7 @@ In addition to everyday text proofreading, summarization, terminology consistenc
 
 We have verified that MD//WORKS is capable of assisting with the rewriting of large documents (ranging from tens of thousands to a hundred thousand characters) when used in conjunction with top-tier AI models (frontier models). When targeting long documents, it is convenient to request a list of all rewrite suggestions in a single response. Please refer to Appendix 6 for a compilation of useful prompt examples.
 
-### 11-3. Important Notes When Using Browser AI
+### 12-3. Important Notes When Using Browser AI
 
 When you use a browser-based AI assistant, the entire visible document or the selected area may be processed by the AI service. If you are working with confidential information, personal data, or internal company documents, always check what information is being shared and how your browser or organization manages AI access.
 
@@ -849,7 +922,7 @@ For documents that should not be shared with AI services, consider using a brows
 
 If you do not want Gemini in Chrome to access the content of your MD//WORKS tab, avoid sharing that tab with Gemini, or use a browser such as Firefox where AI access can be blocked or more tightly controlled.
 
-### 11-4. Differences Between Browser AI Assistants
+### 12-4. Differences Between Browser AI Assistants
 
 The following comparison is based on our own testing with MD//WORKS. The behavior of each AI assistant may change depending on the browser version, AI service updates, account settings, subscription plan, and organizational policy.
 
@@ -871,19 +944,19 @@ Our testing confirms that MD//WORKS features high compatibility and seamless per
 
 #### For Strict Security and Corporate Policies
 
-In the case of Gemini in Chrome, it is protected under a Workspace agreement. Copilot allows for management based on Intune/DLP integration. For guidance on handling confidential information and controlling AI access, see "11-3. Important Notes When Using Browser AI".
+In the case of Gemini in Chrome, it is protected under a Workspace agreement. Copilot allows for management based on Intune/DLP integration. For guidance on handling confidential information and controlling AI access, see "12-3. Important Notes When Using Browser AI".
 
-### 11-5. AI Sidebar and Full-Screen Mode Behavior
+### 12-5. AI Sidebar and Full-Screen Mode Behavior
 
 When using the AI sidebar, switching to full-screen mode is highly recommended to maximize your workspace. However, depending on your browser, you may experience better stability by using your browser's native full-screen shortcut rather than the "Full Screen" button within MD//WORKS. For more details, please refer to [Appendix 3: Full-Screen Behavior and Browser Compatibility](#appendix-3-fullscreen-browser-compatibility).
 
 ---
 
-## 12. Troubleshooting
+## 13. Troubleshooting
 
 This section covers common issues and how to resolve them.
 
-### 12-1. Cannot Save Directly to the Cloud
+### 13-1. Cannot Save Directly to the Cloud
 
 **Cause**
 
@@ -897,7 +970,7 @@ MD//WORKS intentionally does not support direct cloud storage integration. This 
 
 To sync your documents to the cloud, please save your files directly into your local cloud sync folder (such as OneDrive, Google Drive, iCloud, or Dropbox) on your device. Your cloud provider's desktop application will automatically and safely handle the synchronization.
 
-### 12-2. Pressing the Home / End keys in the editor does not move the cursor to the beginning or end of the document.
+### 13-2. Pressing the Home / End keys in the editor does not move the cursor to the beginning or end of the document.
 
 In the editor, the Home / End keys are assigned to **move the cursor to the beginning or end of the current line** to allow for smoother text input and editing. (Note: In the Preview screen, they will move to the beginning or end of the entire document.)
 
@@ -907,7 +980,7 @@ To move to the beginning or end of the entire document, please use the following
 * **Ctrl + End** – Go to the end of the document
 * For Mac / iPad: **⌘ + ↑** / **⌘ + ↓**
 
-### 12-3. Long-term access and compatibility of encrypted files
+### 13-3. Long-term access and compatibility of encrypted files
 
 MD//WORKS uses widely adopted encryption methods and standard browser APIs. Encrypted files are therefore expected to remain accessible for the foreseeable future. However, permanent compatibility cannot be guaranteed because browser specifications, security requirements, operating systems, and device environments may change over time.
 
@@ -924,14 +997,14 @@ For important long-term records, keep the following files and information togeth
 
 Do not store the password in plain text in the same location as the encrypted file.
 
-### 12-4. I saved the document, but I cannot find the file
+### 13-4. I saved the document, but I cannot find the file
 
 First, check your browser’s default Downloads folder.  
 Saving and export operations follow your browser’s download settings. Also confirm that the name in the file name field matches the downloaded file.
 
 Remember that **Auto encrypted** only protects drafts and history stored in the browser. It does not create a `.md` file on your computer (see "6-4. Understanding Local Draft Protection" for details). To keep a regular file, use **File > Save (Ctrl+S / ⌘S)**.
 
-### 12-5. The title bar shows “Unsaved”
+### 13-5. The title bar shows “Unsaved”
 
 
 
@@ -940,12 +1013,12 @@ Before ending your work session, save the document using the **Save** button or 
 
 After the file is saved, the indicator returns to **Saved**.
 
-### 12-6. I cannot paste from the menu
+### 13-6. I cannot paste from the menu
 
 Browser security restrictions may block paste operations from custom menus.  
 If this happens, use the keyboard shortcut **Ctrl+V / ⌘V**.
 
-### 12-7. I cannot insert an image
+### 13-7. I cannot insert an image
 
 If drag-and-drop image insertion does not work, check the following:
 
@@ -957,20 +1030,20 @@ If drag-and-drop image insertion does not work, check the following:
 
 To protect local storage capacity and improve security, MD//WORKS Editor does not accept images over 300 KB or SVG files (see "3-2. Inserting Images" for details).
 
-### 12-8. Preview is not displayed
+### 13-8. Preview is not displayed
 
 If Preview does not appear, make sure it is enabled by clicking the **Preview** button on the title bar or selecting **View > Preview**.
 
 On narrow screens, Preview may appear as a full-width pane or may be out of view.  
 When Preview is active, you can drag the central divider to adjust the width of the editor and preview panes.
 
-### 12-9. Search returns no results
+### 13-9. Search returns no results
 
 If search returns no results, check the search options, such as **Case Sensitive**, **Whole Word**, and **RegExp**.
 
 The issue may also be caused by full-width/half-width character differences or invisible spaces. Turn on **View > Show Invisibles** to inspect the text if necessary.
 
-### 12-10. “Invalid regular expression” appears
+### 13-10. “Invalid regular expression” appears
 
 
 
@@ -979,24 +1052,24 @@ If the syntax is invalid, an error appears.
 
 If you do not intend to use regular expressions, turn off **RegExp**.
 
-### 12-11. Spell (EN) is not working
+### 13-11. Spell (EN) is not working
 
 Spell (EN) is designed for English text only and does not proofread other languages.
 
 Make sure Spell (EN) is enabled and that the document contains English text.  
 Depending on your network environment, the dictionary data may take a few seconds to load.
 
-### 12-12. I forgot my Private Storage passphrase
+### 13-12. I forgot my Private Storage passphrase
 
 If you forget your Private Storage passphrase, drafts and history protected by Private Storage cannot be recovered.
 
 For important documents, do not rely solely on Private Storage. Save a separate Markdown file (`.md`) to your computer.
 
-### 12-13. I forgot my Private App passphrase
+### 13-13. I forgot my Private App passphrase
 
-HTML files created with **File > Save as Private App** cannot be decrypted without the correct passphrase. If the passphrase is forgotten, the document cannot be recovered, so be sure to save the original Markdown document securely on your computer before exporting a Private App (see "12-3" for general long-term storage guidance).
+HTML files created with **File > Save as Private App** cannot be decrypted without the correct passphrase. If the passphrase is forgotten, the document cannot be recovered, so be sure to save the original Markdown document securely on your computer before exporting a Private App (see "13-3" for general long-term storage guidance).
 
-### 12-14. My Standalone HTML app does not open correctly
+### 13-14. My Standalone HTML app does not open correctly
 
 If a Standalone App or Private App does not open correctly, check the following:
 
@@ -1009,7 +1082,7 @@ If a Standalone App or Private App does not open correctly, check the following:
 
 Creating and decrypting Private Apps works best in the latest desktop versions of Google Chrome or Microsoft Edge.
 
-### 12-15. PDF export does not work correctly
+### 13-15. PDF export does not work correctly
 
 PDF export (**File > Print / Save as PDF**) relies on the browser’s print function.  
 Make sure the print destination is set to **Save as PDF**, and check the paper size and margins.
