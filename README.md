@@ -26,10 +26,10 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 
 ## 🎉 What's New in v1.6.1 
 
-### Deep Edit Mode
+### 🧠 Deep Edit Mode
 See not only what you wrote, but how you got there. Deep Edit Mode records deleted ideas, revisions, and trial-and-error as a separate chronological log, helping you reflect on your writing and thinking process.
 
-### Improved File Opening
+### 📁 Improved File Opening
 Password-protected Apps can now be reopened directly from **File > Open**. All supported MD//WORKS files can be opened from the same menu, while standalone Apps continue to support self-extraction.
 
 ---
