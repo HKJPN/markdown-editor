@@ -947,6 +947,13 @@ Ensure your browser is up-to-date and no corporate restrictions are blocking the
 
 Ensure your print destination is set to "Save as PDF". Always review the output file layout manually.
 
+### 13-16. Word Cannot Open a `.md` File
+
+A `.md` file is a plain-text Markdown file, not a Microsoft Word document. Open it in MD//WORKS to view or edit the content. To use it in Word, copy the formatted content from **Preview** and paste it into Word, or convert the file to `.docx` using Pandoc.
+
+For detailed instructions, see “Using Markdown Documents in Microsoft Word” at the end of Manual  (General).
+
+
 ---
 
 *Google, Google Chrome, and Gemini are trademarks of Google LLC. All other company, product, and service names mentioned are trademarks or registered trademarks of their respective owners.*
