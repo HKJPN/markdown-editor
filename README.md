@@ -9,7 +9,7 @@
 For more information about AI integration, see ["11. AI-Assisted Writing" in the manual](https://github.com/HKJPN/markdown-editor/blob/main/docs/manual.md#11-ai-assisted-writing-).
 
 <img src="./docs/images/theame.jpg" alt="theame.jpg" width="100%"><br>
-Choose a theme based on your working environment: **Midnight** for focused editing**Paper** for reviewing, and **Warm** for long writing sessions.
+Choose a theme based on your working environment: **Midnight** for focused editing, **Paper** for reviewing, and **Warm** for long writing sessions.
 
 
 
