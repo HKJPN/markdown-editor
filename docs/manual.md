@@ -1089,6 +1089,12 @@ Make sure the print destination is set to **Save as PDF**, and check the paper s
 
 For submission-ready PDFs, always open the generated file and confirm that the layout is correct.
 
+### 13-16. Word Cannot Open a `.md` File
+
+A `.md` file is a plain-text Markdown file, not a Microsoft Word document. Open it in MD//WORKS to view or edit the content. To use it in Word, copy the formatted content from **Preview** and paste it into Word, or convert the file to `.docx` using Pandoc.
+
+For detailed instructions, see “Using Markdown Documents in Microsoft Word” at the end of this manual.
+
 ---
 
 <div id="appendix-1-2-local-llm"></div>
