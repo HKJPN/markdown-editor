@@ -32,7 +32,7 @@ See not only what you wrote, but how you got there. Deep Edit Mode records delet
 ### 📁 Improved File Opening
 Password-protected Apps can now be reopened directly from **File > Open**. All supported MD//WORKS files can be opened from the same menu, while standalone Apps continue to support self-extraction.
 
-## 📝 From Markdown to Word
+### 📝 From Markdown to Word
 * Added a new manual section explaining how to use `.md` files in Microsoft Word, including copying formatted content from Preview and converting documents to `.docx` with Pandoc.
 
 ---
