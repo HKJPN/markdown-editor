@@ -1475,6 +1475,53 @@ Table 3: Cross-Chapter Logical Contradictions
 | :--- | :--- | :--- | :--- | :--- |
 
 ```
+## Appendix 7: Using Markdown Documents in Microsoft Word
+
+### Appendix 7-1. Quick Method
+
+For a quick transfer to Word, you do not need to convert the `.md` file directly.
+
+#### Copy from Preview
+
+1. Open the Markdown file in MD//WORKS.
+2. Display the document in **Preview**.
+3. Select and copy the formatted content.
+4. Paste it into Microsoft Word.
+
+Headings, bold text, lists, links, and tables are generally preserved when pasted from Preview. If Word displays paste options, choose **Keep Source Formatting** to retain more of the original appearance.
+
+This method is convenient for occasional use. For a complete and repeatable conversion to a `.docx` file, use Pandoc as described below.
+
+### Appendix 7-2. Using Pandoc
+
+To work with the document as a Word file, convert the Markdown file to `.docx` using a document conversion tool such as **Pandoc**.
+
+After installing Pandoc, open PowerShell or Command Prompt and run:
+
+```powershell
+pandoc "document.md" -o "document.docx"
+```
+
+A file named `document.docx` will be created in the same folder as `document.md`.
+
+Using quotation marks around file paths is recommended, especially when filenames or folder names contain spaces.
+
+### Appendix 7-2. Notes About Conversion
+
+Markdown and Word support different formatting systems, so the converted document may not look exactly the same as the MD//WORKS Preview.
+
+After conversion, check the following elements carefully:
+
+* Tables
+* Footnotes
+* Superscript and subscript text
+* Code blocks
+* Images
+* Custom formatting written in HTML
+
+When images are referenced using relative paths, keep the Markdown file and its image folders in the same relative locations during conversion.
+
+For documents containing confidential information, avoid uploading files to unknown online conversion services. Use MD//WORKS or a locally installed copy of Pandoc instead.
 
 ---
 
