@@ -1,16 +1,16 @@
 # 🚀 MD//WORKS v1.6.1 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
 
-<img src="./docs/images/rayoutE1_9.jpg" alt="rayoutE1_9.jpg" width="100%">
-
+<img src="./docs/images/rayoutE1_9.jpg" alt="rayoutE1_9.jpg" width="100%"><br>
 * **100% Local, yet AI-Ready:** MD//WORKS is entirely local and **cloud-free**. Keep your data fully secure on your device, while still leveraging your browser's native **AI sidebars** for **seamless assistance** without copy-pasting. Of course, it also offers full support for local LLMs.
 
-<img src="./docs/images/deepEditModeE.jpg" alt="deepEditModeE.jpg" width="100%">
-
+<img src="./docs/images/deepEditModeE.jpg" alt="deepEditModeE.jpg" width="100%"><br>
 *  **Deep Edit Mode - Your editing, remembered:** Not just what you wrote, but what you deleted. Batches typing every 5 seconds, tracks large deletions, pastes, replace-all, and formatting with heading context. 500 events max, memory-only, never sent, Base64 omitted. The DEEP badge glows quietly while it listens.  You can also leverage AI to analyze your editing process from an objective, third-person perspective (Planned for v1.6.1 or later).
+For more information about AI integration, see ["11. AI-Assisted Writing" in the manual](https://github.com/HKJPN/markdown-editor/blob/main/docs/manual.md#11-ai-assisted-writing-).
+
 <img src="./docs/images/theame.jpg" alt="theame.jpg" width="100%">
 
-For more information about AI integration, see ["11. AI-Assisted Writing" in the manual](https://github.com/HKJPN/markdown-editor/blob/main/docs/manual.md#11-ai-assisted-writing-).
+
 
 # Live Demo
 
