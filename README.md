@@ -63,6 +63,21 @@ Ideal for turning Word drafts, manuals, reports, and meeting notes into clean Ma
 
 ---
 
+### 🧠 Deep Edit Mode
+
+See not only what you wrote, but how your ideas developed along the way.
+
+* **UI**: Start recording from the **DEEP** button or **View › Deep Edit Mode**
+* Records edits as a chronological log stored separately from the document
+* Captures continuous writing, deleted passages, paste operations, Replace All, Undo, and Redo
+* Also records document-opening actions, Word imports, and history restoration
+* Keeps removed ideas and revisions available for later review
+* Logs remain in memory only and are not included in saved or exported documents
+
+Ideal for reviewing revisions, understanding your writing process, and using browser-based AI to analyze how a document evolved—not just the final result.
+
+---
+
 ### 📝 Full Transparency for Full Security
 
 MD//WORKS is fully open-source—no exceptions. Although it runs in the browser as an HTML app, your documents are processed locally on your device. Editing, saving, exporting, and encryption are performed in the browser, and your document data is not uploaded to a server. 
