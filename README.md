@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.6.0.1 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.6.1 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
 <img src="./docs/images/rayoutE1_9.jpg" alt="rayoutE1_9.jpg" width="100%">
 <img src="./docs/images/rayout3.JPG" alt="rayout3.JPG" width="100%">
@@ -24,38 +24,18 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 
 ---
 
-## 🎉 What's New in v1.6.0.1 
+## 🎉 What's New in v1.6.1 
 
-### 🔄 Flexible Text Viewing: Toggle Line Wrapping
+### Deep Edit Mode
+See not only what you wrote, but how you got there. Deep Edit Mode records deleted ideas, revisions, and trial-and-error as a separate chronological log, helping you reflect on your writing and thinking process.
 
-Experience cleaner, more readable document formatting tailored to your workflow!
-
-* **Easy Toggling:** Instantly switch between **Wrap** and **No Wrap** modes via `[View] > [Wrap Lines]`.
-* **Perfect for Code & Logs:** Keep your workspace tidy. Long single lines—like code snippets, CSVs, system logs, and Base64 strings—can now be viewed neatly with horizontal scrolling instead of cluttered wrapping.
-* **Smart Search Tracking:** Never lose track of your findings. Even in No Wrap mode, the editor automatically scrolls horizontally to keep your search results perfectly in view.
-
-### ⚡ Enhanced Performance: Smarter "Replace All"
-
-Edit massive documents with complete confidence and better stability.
-
-* **Real-time Progress Indicator:** A new progress bar during large bulk replacements keeps you informed and prevents accidental duplicate operations.
-* **Rock-Solid Stability:** We've heavily optimized the post-replacement update process, delivering a noticeably smoother and more stable experience when handling long documents.
-* **Seamless Undo:** Fixed an annoying quirk where undoing a replacement (`Ctrl+Z`) would select your entire document. Now, it reverts smoothly to exactly where you left off.
-
-### 🛡️ Security and dependency updates
-
-Updated the external libraries used for Markdown preview, HTML sanitization, and Word import.
-
-- Marked: 18.0.3 → 18.0.6
-- DOMPurify: 3.4.5 → 3.4.12
-- Mammoth: 1.11.0 → 1.12.0
-- Turndown: 7.2.4（unchanged)
+### Improved File Opening
+Password-protected Apps can now be reopened directly from **File > Open**. All supported MD//WORKS files can be opened from the same menu, while standalone Apps continue to support self-extraction.
 
 ---
 
 ## ✨ Upcoming Features
 
-* **Deep Edit Mode**: A planned feature that tracks a detailed history of your thought process and revisions.
 * **Math Equations**: We plan to support complex mathematical formulas used in fields like mathematics and engineering.
 * **PWA Support**: We plan to support Progressive Web Apps (PWA), allowing you to install the editor directly on your device for a faster, seamless, native-app-like experience.
 
