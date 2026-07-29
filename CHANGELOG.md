@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-07-29 -v1.6.1  Official Release
+- Added support for reopening Password-protected Apps directly from File > Open.
+
+## 2026-07-24 - v1.6.1 Deep Edit Mode
+- Added Deep Edit Mode to record and review the editing process as a chronological log.
+
 ## 2026-07-21 - v1.6.0.1  Security and dependency updates
 
 Updated the external libraries used for Markdown preview, HTML sanitization, and Word import.
