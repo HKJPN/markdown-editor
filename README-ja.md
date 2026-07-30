@@ -5,12 +5,12 @@
   MD//WORKSはクラウドに依存しない完全なローカル環境で動作します。データは手元のデバイスに安全に保管したまま、ブラウザ標準のAIサイドバーと連携。面倒なコピペ作業なしで、シームレスにAIを活用できます。もちろん、ローカルLLMもフルサポートされます。ブラウザAIを執筆支援ツールとして**積極活用**する方法や、逆にブラウザAIを使用せず**安全性重視で運用**する方法について[取扱説明書の「11. AI支援執筆」](https://github.com/HKJPN/markdown-editor/blob/main/docs/manual-ja.md#11-ai%E6%94%AF%E6%8F%B4%E5%9F%B7%E7%AD%86--)にて解説しています。
 <img src="./docs/images/rayout1_5_8Jjpg" alt="rayout1_5_8Jjpg" width="120%">
 
-
+**Deep Edit Mode—— 思考の軌跡まで、すべて記憶する**<br>
 書いた言葉だけでなく、「消し去った迷いや試行錯誤」まで記憶。5秒ごとのタイピング集計から、大幅な削除、貼り付け、一括置換、見出しごとの書式変更まで、編集の足跡を余すことなく追跡します。画面の片隅で「DEEP」バッジが静かに点灯している間、最大500件の操作を文書とは別に記録。蓄積された履歴をもとに、AIを活用して自分の執筆プロセスを客観的な第三者視点から分析することも可能です。
 
 <img src="./docs/images/deepEditModeJ.jpg" alt="deepEditModeJ.jpg" width="100%"><br>
-**Deep Edit Mode—— 思考の軌跡まで、すべて記憶する**<br>
 
+**画面モード**
 集中して編集したいときは **Midnight**、文書作成やレビュー時は **Paper**、長時間の執筆時は **Warm** など、用途や気分に応じて切り替えできます。
 <img src="./docs/images/theame.jpg" alt="theame.jpg" width="100%"><br>
 
