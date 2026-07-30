@@ -1,5 +1,5 @@
 # 🚀 MD//WORKS v1.6.1 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
-**Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) 
+**Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) <br>
 **100% Local, yet AI-Ready:** MD//WORKS is entirely local and **cloud-free**. Keep your data fully secure on your device, while still leveraging your browser's native **AI sidebars** for **seamless assistance** without copy-pasting. Of course, it also offers full support for local LLMs.
 
 <img src="./docs/images/rayoutE1_9.jpg" alt="rayoutE1_9.jpg" width="100%"><br>
