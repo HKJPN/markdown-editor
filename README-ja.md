@@ -10,8 +10,8 @@
 
 <img src="./docs/images/deepEditModeJ.jpg" alt="deepEditModeJ.jpg" width="100%"><br>
 
-**画面モード**<br>
-集中して編集したいときは **Midnight**、文書作成やレビュー時は **Paper**、長時間の執筆時は **Warm** など、用途や気分に応じて切り替えできます。
+**画面テーマ**<br>
+集中して編集したいときは **Midnight**、文書作成やレビュー時は **Paper**、長時間の執筆時は **Warm** など、用途や気分に応じて画面テーマを切り替えできます。
 <img src="./docs/images/theame.jpg" alt="theame.jpg" width="100%"><br>
 
 # インストール不要で即実行可能
