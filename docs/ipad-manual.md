@@ -311,11 +311,37 @@ You can add notes, supplementary explanations, or references to your text. This 
 **💡 How they are displayed**<br>
 In the Preview panel and exported files (such as Viewers), footnotes are automatically sequentially numbered (1, 2...) based on their first appearance in the body text, regardless of the label used. They are collected at the bottom of the page, creating bi-directional links that allow you to jump between the reference and the footnote content.
 
+### 4-7. Insert equations
+
+You can insert mathematical equations used in mathematics, physics, chemistry, and other technical fields by using LaTeX notation. Equations are formatted for clear display in the Preview pane.
+
+* **Inline equations:** To insert an equation within a sentence, enclose it in single dollar signs (`$`).
+
+  Example:
+
+  ```markdown
+  The equivalence of mass and energy is expressed as $E=mc^2$.
+  ```
+
+* **Block equations:** To display an equation as a separate block, place it between two lines containing double dollar signs (`$$`).
+
+  Example:
+
+  ```markdown
+  $$
+  x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+  $$
+  ```
+
+> **Note:** Not every LaTeX command or optional package is supported. After entering an equation, check the result in the Preview pane.
+
+> **Offline display:** If the equation-rendering library cannot be loaded, the rest of the document will still appear in Preview, while equations will be shown in their original LaTeX notation. When the device reconnects and the library is loaded successfully, the displayed equations automatically switch to formatted output.
+
 ---
 
 ## 5. Verifying with Preview
 
-The Preview feature allows you to see exactly how the Markdown text entered in the editor will look when rendered. In addition to basic styling like headings and bold text, you can check elements that tend to have complex structures—such as tables, footnotes, superscripts, and subscripts. Verifying your document in Preview makes it easy to spot syntax errors or layout glitches.
+The Preview feature allows you to see exactly how the Markdown text entered in the editor will look when rendered. In addition to basic styling like headings and bold text, you can check elements that tend to have complex structures—such as tables, footnotes, superscript and subscript text, and equations. Verifying your document in Preview makes it easy to spot syntax errors or layout glitches.
 
 ### 5-1. Displaying the Preview
 
@@ -952,6 +978,23 @@ Ensure your print destination is set to "Save as PDF". Always review the output 
 A `.md` file is a plain-text Markdown file, not a Microsoft Word document. Open it in MD//WORKS to view or edit the content. To use it in Word, copy the formatted content from **Preview** and paste it into Word, or convert the file to `.docx` using Pandoc.
 
 For detailed instructions, see “Using Markdown Documents in Microsoft Word” at the end of Manual  (General).
+
+### 13-17. Equations are not displayed correctly in Preview
+
+The equation-rendering library used to format equations is loaded from the internet, or from the browser cache if it has already been downloaded.
+
+When MD//WORKS is opened completely offline for the first time, or after the browser cache has been cleared, the equation-rendering library may not be available. In this case, the regular Markdown content will still appear in Preview, while equations will be displayed in their original LaTeX notation.
+
+When the internet connection is restored, MD//WORKS automatically attempts to load the equation-rendering library again. If the download succeeds, the equations currently displayed in Preview will switch to formatted output without requiring the page to be reloaded.
+
+If the equations do not switch to formatted output, check the following:
+
+* Confirm that the device is connected to the internet.
+* Check whether access to the external CDN is blocked by the browser, security software, or your organization’s network.
+* Confirm that the equation is enclosed correctly in half-width `$...$` or `$$...$$` delimiters.
+* Confirm that the LaTeX notation you are using is supported by the equation-rendering library.
+
+If the connection has been restored but the equations are still not displayed correctly, close and reopen Preview. If the issue continues, save the document and restart MD//WORKS.
 
 
 ---
