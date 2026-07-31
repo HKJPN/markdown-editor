@@ -255,7 +255,7 @@ Specifying a language (like `python`, `r`, `bash`) enables syntax highlighting i
 
 ## 7. Mathematical Equations
 
-In Markdown environments supporting MathJax, KaTeX, or Pandoc, you can render equations using LaTeX syntax.
+In Markdown environments supporting MathJax, KaTeX, or Pandoc, you can render equations using  [LaTeX notation](<BasicExamplesMathFormulasE.md>).
 
 ### Inline Math
 
@@ -314,12 +314,12 @@ The writing methods described in this guide can be easily applied using **MD//WO
 * Footnote preview rendering
 * Automatic footnote numbering
 * Descriptive text labels in footnotes
+*[LaTeX math](<BasicExamplesMathFormulasE.md>) rendering
 
 ### Future Extensions Under Consideration
 
 Future updates, including a "Deep Editing Mode" for long-form writing, may explore:
 
-* LaTeX math rendering
 * Advanced table creation
 * Figure/table captions and auto-numbering
 * Cross-referencing within the document
