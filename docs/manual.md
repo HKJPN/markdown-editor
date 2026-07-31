@@ -321,7 +321,7 @@ In the Preview panel and exported files (such as Viewers), footnotes are automat
 
 ### 4-7. Insert equations
 
-You can insert mathematical equations used in mathematics, physics, chemistry, and other technical fields by using LaTeX notation. Equations are formatted for clear display in the Preview pane.
+You can insert mathematical equations used in mathematics, physics, chemistry, and other technical fields by using  [LaTeX notation](<BasicExamplesMathFormulasE.md>). Equations are formatted for clear display in the Preview pane.
 
 * **Inline equations:** To insert an equation within a sentence, enclose it in single dollar signs (`$`).
 
