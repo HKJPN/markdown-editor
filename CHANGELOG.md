@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-07-31 -v1.6.2  LaTeX Math Rendering
+
+- Added Preview support for inline math using `$...$` and display math using `$$...$$` in LaTeX notation.
+- Extended equation rendering to Viewer, Restricted Viewer, Password-protected Viewer, Standalone App, and Password-protected App.
+- Bundled Marked 18.0.7 and DOMPurify 3.4.12 directly into the app, allowing regular Markdown Preview to remain available even when MD//WORKS is opened offline for the first time.
+- When KaTeX cannot be loaded, equations remain visible in their original LaTeX notation and automatically switch to formatted math after the internet connection is restored.
+
 ## 2026-07-29 -v1.6.1  Official Release
 - Added support for reopening Password-protected Apps directly from File > Open.
 
