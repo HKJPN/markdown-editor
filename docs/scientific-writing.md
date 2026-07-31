@@ -314,7 +314,7 @@ The writing methods described in this guide can be easily applied using **MD//WO
 * Footnote preview rendering
 * Automatic footnote numbering
 * Descriptive text labels in footnotes
-*[LaTeX math](<BasicExamplesMathFormulasE.md>) rendering
+* [LaTeX math](<BasicExamplesMathFormulasE.md>) rendering
 
 ### Future Extensions Under Consideration
 
