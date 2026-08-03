@@ -50,6 +50,7 @@ Added a new manual section explaining how to use `.md` files in Microsoft Word, 
 ## ✨ Upcoming Features
 
 * **Math Equations**: We plan to support complex mathematical formulas used in fields like mathematics and engineering.
+* **Persistent Search Highlights**: We plan to keep search highlights visible after closing the find panel, with highlights staying in sync as you edit. Press Esc again to clear them.
 * **PWA Support**: We plan to support Progressive Web Apps (PWA), allowing you to install the editor directly on your device for a faster, seamless, native-app-like experience.
 
 ## 💡 **Handy Companion Tools**
