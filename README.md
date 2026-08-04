@@ -165,6 +165,18 @@ Perfect for checking structure, readability, and final output while drafting.
 
 ---
 
+### Σ LaTeX Math Rendering
+
+Write and preview mathematical equations for technical fields directly in your Markdown documents.
+
+* **Intuitive Syntax:** Use ``$...$`` for inline equations and ``$$...$$`` for block equations.
+* **Seamless Output:** Equations are fully supported in the Live Preview, exported Viewers, Standalone Apps, printing, and PDF output.
+* **Offline Fallback:** If the rendering library cannot load while offline, equations safely remain readable in their original LaTeX notation.
+
+Perfect for drafting technical reports, scientific papers, and academic documents.
+
+---
+
 ### 🧭 Outline Navigation
 
 Long documents are easier to manage with the built-in outline panel.
