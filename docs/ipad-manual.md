@@ -437,7 +437,7 @@ Both **Private Storage** and **Save as Private App** use passphrases, but they s
 
 If you forget the passphrase, the protected data cannot be recovered.
 
-For important documents, keep a separate Markdown backup (`.md`) in a secure location (see "13-3. Long-term access and compatibility of encrypted files" for details on managing passwords for long-term storage).
+For important documents, keep a separate Markdown backup (`.md`) in a secure location (see "13-18. Long-term access and compatibility of encrypted files" for details on managing passwords for long-term storage).
 
 ### 6-6. Restoring from History
 
@@ -514,7 +514,7 @@ Recipients of the file can instantly resume editing simply by opening it in a we
 > No password is needed to open and view a Restricted Viewer file. The password you set is only used when you **restore** the original Markdown back into MD//WORKS for re-editing — it is not required for viewing.
 <br clear="all">
 
-For important documents intended for long-term storage, see "13-3. Long-term access and compatibility of encrypted files" for guidance on keeping the original Markdown file, the password, and the HTML file of the MD//WORKS version used.
+For important documents intended for long-term storage, see "13-18. Long-term access and compatibility of encrypted files" for guidance on keeping the original Markdown file, the password, and the HTML file of the MD//WORKS version used.
 
 
 ### 7-2. Printing or Saving as PDF
@@ -885,19 +885,17 @@ In our testing, **Leo in Brave Browser** provides the most seamless and effectiv
 
 This section covers common issues and how to resolve them.
 
-### 13-1. About MD//WORKS Markdown Compatibility
+### 13-1. The title bar shows “Unsaved”
 
-MD//WORKS is based primarily on GitHub Flavored Markdown (GFM). It supports common Markdown features such as headings, bold and italic text, lists, links, images, tables, task lists, strikethrough, and fenced code blocks. It also extends the syntax with features useful for scientific and technical documents, including footnotes, superscript and subscript text, and LaTeX math. For this reason, MD//WORKS is best described as **GFM-based Markdown with MD//WORKS extensions**, rather than as a strict implementation of GFM or Pandoc Markdown. Basic Markdown syntax is generally compatible with other Markdown editors. However, advanced features such as footnotes, equations, superscript, and subscript may be displayed differently depending on the capabilities of the other application.
+This means the document has been modified since the last save. Save the document before ending your session.
 
-| Syntax family | Supported examples |
-|---|---|
-| Standard Markdown | Headings, bold, italics, blockquotes, links, images, and code |
-| GitHub Flavored Markdown–style features | Tables, strikethrough, task lists, and fenced code blocks |
-| MD//WORKS-specific extensions | Footnotes and LaTeX math |
-| Pandoc-style syntax | `^superscript^` and `~subscript~` |
-| Selected HTML | `<sup>`, `<sub>`, `<video>`, and other sanitized tags |
+### 13-2. I saved the document, but I cannot find the file
 
-### 13-2. Cannot Save Directly to the Cloud
+Check your browser’s default Downloads folder or the "Files" app destination you selected.
+
+Remember that **Auto encrypted** only protects drafts stored in the browser; it does not permanently create a `.md` file (see "6-4. Understanding Local Draft Protection" for details). Always use **File > Save (⌘S)**.
+
+### 13-3. Cannot Save Directly to the Cloud
 
 **Cause**
 
@@ -911,87 +909,38 @@ MD//WORKS intentionally does not support direct cloud integration. This is a del
 
 To sync your documents to the cloud, please save your files directly into your local cloud sync folder (such as OneDrive, Google Drive, iCloud, or Dropbox) on your device. Your cloud provider's desktop application will automatically and safely handle the synchronization.
 
-### 13-3. Pressing the ⌘ + ↑ / ⌘ + ↓ keys does not move the cursor
+### 13-4. I cannot paste from the menu
 
-In the editor, the Home/End equivalent keys are mapped to smoothly edit text. To move to the absolute beginning or end of the document on iPad, use:
+Browser security restrictions may block paste operations from custom menus. Use the keyboard shortcut **⌘V**.
+
+### 13-5. Pressing the Home / End keys does not move the cursor to the beginning or end of the document
+
+In the editor, the Home / End keys move the cursor to the beginning or end of the current line. To move to the beginning or end of the entire document on iPad, use:
 
 * **⌘ + ↑** – Go to the beginning of the document
 * **⌘ + ↓** – Go to the end of the document
 
-### 13-4. Long-term access and compatibility of encrypted files
-
-MD//WORKS uses widely adopted encryption methods and standard browser APIs. Encrypted files are therefore expected to remain accessible for the foreseeable future. However, permanent compatibility cannot be guaranteed because browser specifications, security requirements, operating systems, and device environments may change over time.
-
-The single-file HTML edition of MD//WORKS does not require installation or continued access to a specific online service. The exact version of the application used to create an encrypted file can be stored as a local file. Keeping the corresponding MD//WORKS HTML file together with the encrypted document reduces the risk of future application updates affecting compatibility. Decryption is performed locally in the browser, so access does not depend on the continued operation of an external decryption server or cloud service.
-
-For important long-term records, keep the following files and information together:
-
-* The encrypted Viewer or App file
-* The original Markdown file
-* The MD//WORKS HTML file or release package used to create the encrypted file
-* The version number of MD//WORKS
-* The SHA-256 hash of the MD//WORKS file, when available
-* A record of how and where the password is securely managed
-
-Do not store the password in plain text in the same location as the encrypted file.
-
-### 13-5. I saved the document, but I cannot find the file
-
-Check your browser’s default Downloads folder or the "Files" app destination you selected.
-
-Remember that **Auto encrypted** only protects drafts stored in the browser; it does not permanently create a `.md` file (see "6-4. Understanding Local Draft Protection" for details). Always use **File > Save (⌘S)**.
-
-### 13-6. The title bar shows “Unsaved”
-
-This means the document has been modified since the last save. Save the document before ending your session.
-
-### 13-7. I cannot paste from the menu
-
-Browser security restrictions may block paste operations from custom menus. Use the keyboard shortcut **⌘V**.
-
-### 13-8. I cannot insert an image
+### 13-6. I cannot insert an image
 
 Ensure the image is under 300 KB and is a PNG, JPEG, or WebP. SVG files and large files are restricted for security and storage reasons.
 
-### 13-9. Preview is not displayed
+### 13-7. Preview is not displayed
 
 Ensure Preview is toggled on. If the screen is narrow, use the central divider to adjust pane widths.
 
-### 13-10. Search returns no results
+### 13-8. Search returns no results
 
 Check search options like "Case Sensitive" or "Whole Word". Ensure there are no invisible spaces causing mismatches by toggling **View > Show Invisibles**.
 
-### 13-11. “Invalid regular expression” appears
+### 13-9. “Invalid regular expression” appears
 
 If you do not intend to use regular expressions, turn off the **RegExp** search option.
 
-### 13-12. Spell (EN) is not working
+### 13-10. Spell (EN) is not working
 
 Ensure the document contains English text. This feature is intended for English spelling only.
 
-### 13-13. I forgot my Private Storage passphrase
-
-Drafts protected by Private Storage cannot be recovered without the passphrase. Always keep manual `.md` backups (see "13-4" for general long-term storage guidance).
-
-### 13-14. I forgot my Private App passphrase
-
-HTML files exported as Private Apps cannot be decrypted without the correct passphrase. Before exporting a Private App, save the original Markdown document securely on your computer (see "13-4").
-
-### 13-15. My Standalone HTML app does not open correctly
-
-Ensure your browser is up-to-date and no corporate restrictions are blocking the file.
-
-### 13-16. PDF export does not work correctly
-
-Ensure your print destination is set to "Save as PDF". Always review the output file layout manually.
-
-### 13-17. Word Cannot Open a `.md` File
-
-A `.md` file is a plain-text Markdown file, not a Microsoft Word document. Open it in MD//WORKS to view or edit the content. To use it in Word, copy the formatted content from **Preview** and paste it into Word, or convert the file to `.docx` using Pandoc.
-
-For detailed instructions, see “Using Markdown Documents in Microsoft Word” at the end of Manual  (General).
-
-### 13-18. Equations are not displayed correctly in Preview
+### 13-11. Equations are not displayed correctly in Preview
 
 The equation-rendering library used to format equations is loaded from the internet, or from the browser cache if it has already been downloaded.
 
@@ -1008,11 +957,57 @@ If the equations do not switch to formatted output, check the following:
 
 If the connection has been restored but the equations are still not displayed correctly, close and reopen Preview. If the issue continues, save the document and restart MD//WORKS.
 
+### 13-12. PDF export does not work correctly
+
+Ensure your print destination is set to "Save as PDF". Always review the output file layout manually.
+
+### 13-13. Word cannot open a `.md` file
+
+A `.md` file is a plain-text Markdown file, not a Microsoft Word document. Open it in MD//WORKS to view or edit the content. To use it in Word, copy the formatted content from **Preview** and paste it into Word, or convert the file to `.docx` using Pandoc.
+
+For detailed instructions, see “Using Markdown Documents in Microsoft Word” at the end of the general manual.
+
+### 13-14. About MD//WORKS Markdown Compatibility
+
+MD//WORKS is based primarily on GitHub Flavored Markdown (GFM). It supports common Markdown features such as headings, bold and italic text, lists, links, images, tables, task lists, strikethrough, and fenced code blocks. It also extends the syntax with features useful for scientific and technical documents, including footnotes, superscript and subscript text, and LaTeX math. For this reason, MD//WORKS is best described as **GFM-based Markdown with MD//WORKS extensions**, rather than as a strict implementation of GFM or Pandoc Markdown. Basic Markdown syntax is generally compatible with other Markdown editors. However, advanced features such as footnotes, equations, superscript, and subscript may be displayed differently depending on the capabilities of the other application.
+
+| Syntax family | Supported examples |
+|---|---|
+| Standard Markdown | Headings, bold, italics, blockquotes, links, images, and code |
+| GitHub Flavored Markdown–style features | Tables, strikethrough, task lists, and fenced code blocks |
+| MD//WORKS-specific extensions | Footnotes and LaTeX math |
+| Pandoc-style syntax | `^superscript^` and `~subscript~` |
+| Selected HTML | `<sup>`, `<sub>`, `<video>`, and other sanitized tags |
+
+### 13-15. My Standalone HTML app does not open correctly
+
+Ensure your browser is up-to-date and no corporate restrictions are blocking the file.
+
+### 13-16. I forgot my Private Storage passphrase
+
+Drafts protected by Private Storage cannot be recovered without the passphrase. Always keep manual `.md` backups (see "13-18" for general long-term storage guidance).
+
+### 13-17. I forgot my Private App passphrase
+
+HTML files exported as Private Apps cannot be decrypted without the correct passphrase. Before exporting a Private App, save the original Markdown document securely on your computer (see "13-18").
+
+### 13-18. Long-term access and compatibility of encrypted files
+
+MD//WORKS uses widely adopted encryption methods and standard browser APIs. Encrypted files are therefore expected to remain accessible for the foreseeable future. However, permanent compatibility cannot be guaranteed because browser specifications, security requirements, operating systems, and device environments may change over time.
+
+The single-file HTML edition of MD//WORKS does not require installation or continued access to a specific online service. The exact version of the application used to create an encrypted file can be stored as a local file. Keeping the corresponding MD//WORKS HTML file together with the encrypted document reduces the risk of future application updates affecting compatibility. Decryption is performed locally in the browser, so access does not depend on the continued operation of an external decryption server or cloud service.
+
+For important long-term records, keep the following files and information together:
+
+* The encrypted Viewer or App file
+* The original Markdown file
+* The MD//WORKS HTML file or release package used to create the encrypted file
+* The version number of MD//WORKS
+* The SHA-256 hash of the MD//WORKS file, when available
+* A record of how and where the password is securely managed
+
+Do not store the password in plain text in the same location as the encrypted file.
 
 ---
 
 *Google, Google Chrome, and Gemini are trademarks of Google LLC. All other company, product, and service names mentioned are trademarks or registered trademarks of their respective owners.*
-
-```
-
-```
