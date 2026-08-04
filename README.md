@@ -172,6 +172,7 @@ Write and preview mathematical equations for technical fields directly in your M
 * **Intuitive Syntax:** Use ``$...$`` for inline equations and ``$$...$$`` for block equations.
 * **Seamless Output:** Equations are fully supported in the Live Preview, exported Viewers, Standalone Apps, printing, and PDF output.
 * **Offline Fallback:** If the rendering library cannot load while offline, equations safely remain readable in their original LaTeX notation.
+* **Beginner-Friendly**: [Basic examples](</docs/BasicExamplesMathFormulasE.md>) are provided, allowing you to learn and master the syntax starting from simple equations.
 
 Perfect for drafting technical reports, scientific papers, and academic documents.
 
