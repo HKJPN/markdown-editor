@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.6.1 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.6.2 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) <br>
 
 
@@ -34,22 +34,28 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 
 ---
 
-## 🎉 What's New in v1.6.1 
+## 🎉 What’s New in v1.6.2
 
-### 🧠 Deep Edit Mode
-See not only what you wrote, but how you got there. Deep Edit Mode records deleted ideas, revisions, and trial-and-error as a separate chronological log, helping you reflect on your writing and thinking process.
+### Σ LaTeX Math Rendering
 
-### 📁 Improved File Opening
-Password-protected Apps can now be reopened directly from **File > Open**. All supported MD//WORKS files can be opened from the same menu, while standalone Apps continue to support self-extraction.
+You can now write and preview mathematical equations used in mathematics, physics, chemistry, and other technical fields directly in Markdown documents.
 
-### 📝 From Markdown to Word
-Added a new manual section explaining how to use `.md` files in Microsoft Word, including copying formatted content from Preview and converting documents to `.docx` with Pandoc.
+* Use \`$...$\` for inline equations.
+* Use \`$$...$$\` for equations displayed as separate blocks.
+* Equations are supported in Preview, exported viewers, Standalone Apps, printing, and PDF output.
+
+### 🖥️ More Reliable Offline Preview
+
+The core Markdown Preview components are now bundled directly with MD//WORKS, allowing regular Markdown content to remain available even when the app is opened offline for the first time.
+
+* The document body remains visible if the equation-rendering library cannot be loaded.
+* Equations are shown in their original LaTeX notation as a readable fallback.
+* When the connection returns and the library loads successfully, displayed equations automatically switch to formatted output.
 
 ---
 
 ## ✨ Upcoming Features
 
-* **Math Equations**: We plan to support complex mathematical formulas used in fields like mathematics and engineering.
 * **Persistent Search Highlights**: We plan to keep search highlights visible after closing the find panel, with highlights staying in sync as you edit. Press Esc again to clear them.
 * **PWA Support**: We plan to support Progressive Web Apps (PWA), allowing you to install the editor directly on your device for a faster, seamless, native-app-like experience.
 
