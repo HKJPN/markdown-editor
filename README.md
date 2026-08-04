@@ -57,6 +57,7 @@ The core Markdown Preview components are now bundled directly with MD//WORKS, al
 ## ✨ Upcoming Features
 
 * **Persistent Search Highlights**: We plan to keep search highlights visible after closing the find panel, with highlights staying in sync as you edit. Press Esc again to clear them.
+* **Mermaid diagrams**:  We plan to support for previewing Mermaid diagrams, including flowcharts and sequence diagrams, directly from Markdown. The implementation will prioritize secure SVG rendering, readable source fallback when offline, and reliable output in viewers, print, and PDF.
 * **PWA Support**: We plan to support Progressive Web Apps (PWA), allowing you to install the editor directly on your device for a faster, seamless, native-app-like experience.
 
 ## 💡 **Handy Companion Tools**
