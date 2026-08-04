@@ -885,7 +885,19 @@ In our testing, **Leo in Brave Browser** provides the most seamless and effectiv
 
 This section covers common issues and how to resolve them.
 
-### 13-1. Cannot Save Directly to the Cloud
+### 13-1. About MD//WORKS Markdown Compatibility
+
+MD//WORKS is based primarily on GitHub Flavored Markdown (GFM). It supports common Markdown features such as headings, bold and italic text, lists, links, images, tables, task lists, strikethrough, and fenced code blocks. It also extends the syntax with features useful for scientific and technical documents, including footnotes, superscript and subscript text, and LaTeX math. For this reason, MD//WORKS is best described as **GFM-based Markdown with MD//WORKS extensions**, rather than as a strict implementation of GFM or Pandoc Markdown. Basic Markdown syntax is generally compatible with other Markdown editors. However, advanced features such as footnotes, equations, superscript, and subscript may be displayed differently depending on the capabilities of the other application.
+
+| Syntax family | Supported examples |
+|---|---|
+| Standard Markdown | Headings, bold, italics, blockquotes, links, images, and code |
+| GitHub Flavored Markdown–style features | Tables, strikethrough, task lists, and fenced code blocks |
+| MD//WORKS-specific extensions | Footnotes and LaTeX math |
+| Pandoc-style syntax | `^superscript^` and `~subscript~` |
+| Selected HTML | `<sup>`, `<sub>`, `<video>`, and other sanitized tags |
+
+### 13-2. Cannot Save Directly to the Cloud
 
 **Cause**
 
@@ -899,14 +911,14 @@ MD//WORKS intentionally does not support direct cloud integration. This is a del
 
 To sync your documents to the cloud, please save your files directly into your local cloud sync folder (such as OneDrive, Google Drive, iCloud, or Dropbox) on your device. Your cloud provider's desktop application will automatically and safely handle the synchronization.
 
-### 13-2. Pressing the ⌘ + ↑ / ⌘ + ↓ keys does not move the cursor
+### 13-3. Pressing the ⌘ + ↑ / ⌘ + ↓ keys does not move the cursor
 
 In the editor, the Home/End equivalent keys are mapped to smoothly edit text. To move to the absolute beginning or end of the document on iPad, use:
 
 * **⌘ + ↑** – Go to the beginning of the document
 * **⌘ + ↓** – Go to the end of the document
 
-### 13-3. Long-term access and compatibility of encrypted files
+### 13-4. Long-term access and compatibility of encrypted files
 
 MD//WORKS uses widely adopted encryption methods and standard browser APIs. Encrypted files are therefore expected to remain accessible for the foreseeable future. However, permanent compatibility cannot be guaranteed because browser specifications, security requirements, operating systems, and device environments may change over time.
 
@@ -923,63 +935,63 @@ For important long-term records, keep the following files and information togeth
 
 Do not store the password in plain text in the same location as the encrypted file.
 
-### 13-4. I saved the document, but I cannot find the file
+### 13-5. I saved the document, but I cannot find the file
 
 Check your browser’s default Downloads folder or the "Files" app destination you selected.
 
 Remember that **Auto encrypted** only protects drafts stored in the browser; it does not permanently create a `.md` file (see "6-4. Understanding Local Draft Protection" for details). Always use **File > Save (⌘S)**.
 
-### 13-5. The title bar shows “Unsaved”
+### 13-6. The title bar shows “Unsaved”
 
 This means the document has been modified since the last save. Save the document before ending your session.
 
-### 13-6. I cannot paste from the menu
+### 13-7. I cannot paste from the menu
 
 Browser security restrictions may block paste operations from custom menus. Use the keyboard shortcut **⌘V**.
 
-### 13-7. I cannot insert an image
+### 13-8. I cannot insert an image
 
 Ensure the image is under 300 KB and is a PNG, JPEG, or WebP. SVG files and large files are restricted for security and storage reasons.
 
-### 13-8. Preview is not displayed
+### 13-9. Preview is not displayed
 
 Ensure Preview is toggled on. If the screen is narrow, use the central divider to adjust pane widths.
 
-### 13-9. Search returns no results
+### 13-10. Search returns no results
 
 Check search options like "Case Sensitive" or "Whole Word". Ensure there are no invisible spaces causing mismatches by toggling **View > Show Invisibles**.
 
-### 13-10. “Invalid regular expression” appears
+### 13-11. “Invalid regular expression” appears
 
 If you do not intend to use regular expressions, turn off the **RegExp** search option.
 
-### 13-11. Spell (EN) is not working
+### 13-12. Spell (EN) is not working
 
 Ensure the document contains English text. This feature is intended for English spelling only.
 
-### 13-12. I forgot my Private Storage passphrase
+### 13-13. I forgot my Private Storage passphrase
 
-Drafts protected by Private Storage cannot be recovered without the passphrase. Always keep manual `.md` backups (see "13-3" for general long-term storage guidance).
+Drafts protected by Private Storage cannot be recovered without the passphrase. Always keep manual `.md` backups (see "13-4" for general long-term storage guidance).
 
-### 13-13. I forgot my Private App passphrase
+### 13-14. I forgot my Private App passphrase
 
-HTML files exported as Private Apps cannot be decrypted without the correct passphrase. Before exporting a Private App, save the original Markdown document securely on your computer (see "13-3").
+HTML files exported as Private Apps cannot be decrypted without the correct passphrase. Before exporting a Private App, save the original Markdown document securely on your computer (see "13-4").
 
-### 13-14. My Standalone HTML app does not open correctly
+### 13-15. My Standalone HTML app does not open correctly
 
 Ensure your browser is up-to-date and no corporate restrictions are blocking the file.
 
-### 13-15. PDF export does not work correctly
+### 13-16. PDF export does not work correctly
 
 Ensure your print destination is set to "Save as PDF". Always review the output file layout manually.
 
-### 13-16. Word Cannot Open a `.md` File
+### 13-17. Word Cannot Open a `.md` File
 
 A `.md` file is a plain-text Markdown file, not a Microsoft Word document. Open it in MD//WORKS to view or edit the content. To use it in Word, copy the formatted content from **Preview** and paste it into Word, or convert the file to `.docx` using Pandoc.
 
 For detailed instructions, see “Using Markdown Documents in Microsoft Word” at the end of Manual  (General).
 
-### 13-17. Equations are not displayed correctly in Preview
+### 13-18. Equations are not displayed correctly in Preview
 
 The equation-rendering library used to format equations is loaded from the internet, or from the browser cache if it has already been downloaded.
 
