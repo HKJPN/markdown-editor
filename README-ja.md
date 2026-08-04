@@ -1,8 +1,8 @@
 # 🚀 MD//WORKS v1.6.2 — AIアシスタント融合スタンドアロン Markdown エディタ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:** [🇺🇸 English](README.md) or [🇯🇵 日本語](README-ja.md)
 
-**完全ローカル、インストール不要、なのにAI対応**  
-  MD//WORKSはクラウドに依存しない完全なローカル環境で動作します。データは手元のデバイスに安全に保管したまま、ブラウザ標準のAIサイドバーと連携。面倒なコピペ作業なしで、シームレスにAIを活用できます。もちろん、ローカルLLMもフルサポートされます。しかも基本的にはインストール不要です。ブラウザAIを執筆支援ツールとして**積極活用**する方法や、逆にブラウザAIを使用せず**安全性重視で運用**する方法について[取扱説明書の「11. AI支援執筆」](https://github.com/HKJPN/markdown-editor/blob/main/docs/manual-ja.md#11-ai%E6%94%AF%E6%8F%B4%E5%9F%B7%E7%AD%86--)にて解説しています。
+**完全ローカルでインストール不要、なのにAI対応**  
+  MD//WORKSはクラウドに依存しない完全なローカル環境で動作します。データは手元のデバイスに安全に保管したまま、ブラウザ標準のAIサイドバーと連携。面倒なコピペ作業なしで、シームレスにAIを活用できます。もちろん、ローカルLLMもフルサポートされます。ブラウザAIを執筆支援ツールとして**積極活用**する方法や、逆にブラウザAIを使用せず**安全性重視で運用**する方法について[取扱説明書の「11. AI支援執筆」](https://github.com/HKJPN/markdown-editor/blob/main/docs/manual-ja.md#11-ai%E6%94%AF%E6%8F%B4%E5%9F%B7%E7%AD%86--)にて解説しています。
 <img src="./docs/images/rayout1_5_8J.jpg" alt="rayout1_5_8J.jpg" width="120%">
 
 **Deep Edit Mode—— 思考の軌跡まで、すべて記憶する**<br>
