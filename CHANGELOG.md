@@ -2,7 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2026-07-31 -v1.6.2  LaTeX Math Rendering
+## 2026-08-06 - v1.6.2　Official Release
+
+## 2026-07-31 - v1.6.2　LaTeX Math Rendering
 
 - Added Preview support for inline math using `$...$` and display math using `$$...$$` in LaTeX notation.
 - Extended equation rendering to Viewer, Restricted Viewer, Password-protected Viewer, Standalone App, and Password-protected App.
