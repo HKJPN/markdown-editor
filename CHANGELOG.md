@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-08-07 - v1.6.3　Candidate - Smarter, Safer Editing
+
+- Improved multi-tab editing with isolated Auto Save/work history, safer duplicated tabs, filename-based tab titles, and correct filenames in history.   
+- Improved Deep Edit Mode logging for typing, line breaks, and previous-line context.  
+- Search highlights now remain after closing Find/Replace and can be cleared with a second Esc. 
+- Heading, quote, and horizontal-rule insertion now preserves the cursor position and text selection. 
+- Improved File > Open detection for protected/restricted HTML formats, preventing normal HTML and Markdown files from being misidentified.  
+
 ## 2026-08-06 - v1.6.2　Official Release
 
 ## 2026-07-31 - v1.6.2　LaTeX Math Rendering
