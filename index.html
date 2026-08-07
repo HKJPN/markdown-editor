@@ -2064,9 +2064,9 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
-const APP_VERSION = '1.6.2';
-const APP_VERSION_LABEL = 'v1.6.2';
-const RELEASE_NOTES_VERSION = '1.6.2-release';
+const APP_VERSION = '1.6.3';
+const APP_VERSION_LABEL = 'v1.6.3';
+const RELEASE_NOTES_VERSION = '1.6.3-release';
 const LEGACY_DEFAULT_MARKDOWN_SAMPLES = [
   `# MD//WORKS エディタ
 
@@ -2158,6 +2158,12 @@ const T = {
     ? '保護された下書き・履歴を完全に削除しますか？\n現在のエディタ内容は画面上には残ります。'
     : 'Delete protected local drafts and history?\nThe current editor content will remain on screen.',
   localDataCleared: isJa ? 'ローカル保存データを削除しました' : 'Local saved data has been cleared',
+  duplicatedTabSeparated: isJa
+    ? filename => `複製タブを「${filename}」として分離しました`
+    : filename => `Duplicated tab separated as “${filename}”`,
+  duplicatedTabSeparatedWithWarning: isJa
+    ? filename => `複製タブを「${filename}」として分離しました（一部履歴はコピーできませんでした）`
+    : filename => `Duplicated tab separated as “${filename}” (some history could not be copied)`,
   
   undo:        isJa ? '元に戻す' : 'Undo',
   redo:        isJa ? 'やり直し' : 'Redo',
@@ -2177,6 +2183,8 @@ const T = {
   deepEditCopy: isJa ? 'ログをコピー' : 'Copy Log',
   deepEditCopied: isJa ? 'Deep編集ログをコピーしました' : 'Deep Edit Log copied',
   deepEditCopyFailed: isJa ? 'Deep編集ログをコピーできませんでした' : 'Could not copy the Deep Edit Log',
+  deepEditNewLine: isJa ? '［改行］' : '[New line]',
+  deepEditNewLines: isJa ? '［改行 × {count}］' : '[New lines × {count}]',
   deepEditViewJson: isJa ? 'JSONを確認' : 'View JSON',
   deepEditClearConfirm: isJa ? 'Deep編集ログを消去しますか？\nログは復元できません。' : 'Clear the current Deep Edit Log?\nThe log cannot be restored.',
   deepEditClearConfirmContinuing: isJa ? '現在のDeep編集ログを消去しますか？\n\nログは復元できません。\nDeep編集モードは停止せず、新しい空のセッションで記録を継続します。' : 'Clear the current Deep Edit Log?\n\nThe log cannot be restored.\nDeep Edit Mode will remain active and continue with a new empty session.',
@@ -3639,6 +3647,267 @@ const AUTO_KEY_ID = "auto-aes-key";
 const FALLBACK_AUTO_JWK_KEY = "mdworks_auto_key_jwk_fallback";
 const LEGACY_TEXT_KEY = "md_editor_draft_text"; // old plaintext
 const LEGACY_NAME_KEY = "md_editor_draft_name";
+const WORKSPACE_STORAGE_PREFIX = "mdworks_workspace_v1";
+const WORKSPACE_SESSION_KEY_PREFIX = "mdworks_workspace_id_v1";
+const WORKSPACE_CHANNEL_PREFIX = "mdworks_workspace_channel_v1";
+const WORKSPACE_DEFAULT_SCOPE = "editor";
+const WORKSPACE_PROBE_TIMEOUT_MS = 280;
+const WORKSPACE_FILENAME_TIMEOUT_MS = 220;
+const WORKSPACE_FORK_TIMEOUT_MS = 700;
+const WORKSPACE_MESSAGES = Object.freeze({
+  PROBE: 'workspace-probe',
+  OCCUPIED: 'workspace-occupied',
+  FILENAME_REQUEST: 'workspace-filename-request',
+  FILENAME_RESPONSE: 'workspace-filename-response',
+  FORK_REQUEST: 'workspace-fork-request',
+  FORK_READY: 'workspace-fork-ready',
+  FORK_FAILED: 'workspace-fork-failed',
+  STORAGE_PAUSE: 'workspace-storage-pause',
+  STORAGE_RESUME: 'workspace-storage-resume',
+  DATA_CLEARED: 'workspace-data-cleared'
+});
+let workspaceScope = WORKSPACE_DEFAULT_SCOPE;
+let workspaceId = null;
+let workspaceChannel = null;
+let workspaceChannelActive = false;
+let workspaceStoragePaused = false;
+let pendingWorkspaceAutoSave = false;
+let pendingWorkspaceHistorySave = false;
+const tabInstanceId = createSecureId('tab');
+const tabStartedAt = Date.now();
+
+function createSecureId(prefix = 'workspace') {
+  if (window.crypto?.randomUUID) return `${prefix}-${crypto.randomUUID()}`;
+  if (window.crypto?.getRandomValues) {
+    const bytes = crypto.getRandomValues(new Uint8Array(16));
+    return `${prefix}-${Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('')}`;
+  }
+  return `${prefix}-${Date.now().toString(36)}`;
+}
+function createWorkspaceId() { return createSecureId('workspace'); }
+function getWorkspaceSessionKey(scope = workspaceScope) { return `${WORKSPACE_SESSION_KEY_PREFIX}:${scope}`; }
+function getWorkspaceStorageKeys(id = workspaceId, scope = workspaceScope) {
+  const prefix = `${WORKSPACE_STORAGE_PREFIX}:${scope}:${id}`;
+  return { text: `${prefix}:text`, name: `${prefix}:name`, history: `${prefix}:history` };
+}
+function getAllWorkspaceStorageKeys() {
+  const keys = [];
+  for (let i = 0; i < localStorage.length; i += 1) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith(`${WORKSPACE_STORAGE_PREFIX}:`)) keys.push(key);
+  }
+  return keys;
+}
+function normalizeActiveFilename(value) {
+  const normalized = String(value || '').normalize('NFC').trim() || 'untitled.md';
+  return normalized.toLocaleLowerCase();
+}
+function splitDuplicateFilename(filename) {
+  const value = String(filename || '').normalize('NFC').trim() || 'untitled.md';
+  const slash = Math.max(value.lastIndexOf('/'), value.lastIndexOf('\\'));
+  const dot = value.lastIndexOf('.');
+  const hasExtension = dot > slash && dot < value.length - 1;
+  const stem = hasExtension ? value.slice(0, dot) : value;
+  const ext = hasExtension ? value.slice(dot) : '';
+  const match = stem.match(/^(.*)\((\d+)\)$/u);
+  if (match && Number(match[2]) >= 2) return { base: match[1], ext, start: Number(match[2]) + 1 };
+  return { base: stem, ext, start: 2 };
+}
+function createDuplicateFilename(originalFilename, activeFilenames = []) {
+  const used = new Set(activeFilenames.map(normalizeActiveFilename));
+  const parts = splitDuplicateFilename(originalFilename);
+  for (let n = Math.max(2, parts.start); n < parts.start + 1000; n += 1) {
+    const candidate = `${parts.base}(${n})${parts.ext}`;
+    if (!used.has(normalizeActiveFilename(candidate))) return candidate;
+  }
+  const stamp = new Date().toISOString().replace(/[-:T.Z]/g, '').slice(0, 14);
+  return `${parts.base}(${stamp})${parts.ext}`;
+}
+function postWorkspaceMessage(message) {
+  if (!workspaceChannel) return false;
+  try { workspaceChannel.postMessage({ ...message, instanceId: tabInstanceId }); return true; }
+  catch (err) { console.warn('Workspace BroadcastChannel post failed', err); return false; }
+}
+function setupWorkspaceChannel() {
+  if (!('BroadcastChannel' in window)) {
+    console.warn('BroadcastChannel unavailable; workspace duplicate-tab detection is disabled.');
+    return;
+  }
+  try {
+    workspaceChannel = new BroadcastChannel(`${WORKSPACE_CHANNEL_PREFIX}:${workspaceScope}`);
+    workspaceChannelActive = true;
+    workspaceChannel.onmessage = event => { handleWorkspaceMessage(event.data); };
+  } catch (err) {
+    workspaceChannel = null;
+    workspaceChannelActive = false;
+    console.warn('Workspace BroadcastChannel unavailable', err);
+  }
+}
+function closeWorkspaceChannel() {
+  workspaceChannelActive = false;
+  if (workspaceChannel) {
+    try { workspaceChannel.close(); } catch (err) { console.warn('Workspace BroadcastChannel close failed', err); }
+    workspaceChannel = null;
+  }
+}
+window.addEventListener('pagehide', closeWorkspaceChannel);
+function waitForWorkspaceMessage(match, timeoutMs) {
+  return new Promise(resolve => {
+    if (!workspaceChannel) { resolve(null); return; }
+    const previous = workspaceChannel.onmessage;
+    const timer = setTimeout(() => { workspaceChannel.onmessage = previous; resolve(null); }, timeoutMs);
+    workspaceChannel.onmessage = event => {
+      const data = event.data;
+      if (data?.instanceId === tabInstanceId) return;
+      if (match(data)) { clearTimeout(timer); workspaceChannel.onmessage = previous; resolve(data); return; }
+      if (typeof previous === 'function') previous(event);
+    };
+  });
+}
+async function collectActiveWorkspaceFilenames() {
+  const filenames = [filenameInput.value || 'untitled.md'];
+  if (!workspaceChannel) return filenames;
+  const requestId = createSecureId('names');
+  return new Promise(resolve => {
+    const previous = workspaceChannel.onmessage;
+    const timer = setTimeout(() => { workspaceChannel.onmessage = previous; resolve(filenames); }, WORKSPACE_FILENAME_TIMEOUT_MS);
+    workspaceChannel.onmessage = event => {
+      const data = event.data;
+      if (data?.instanceId === tabInstanceId) return;
+      if (data?.type === WORKSPACE_MESSAGES.FILENAME_RESPONSE && data.requestId === requestId && data.filename) filenames.push(data.filename);
+      if (typeof previous === 'function') previous(event);
+    };
+    postWorkspaceMessage({ type: WORKSPACE_MESSAGES.FILENAME_REQUEST, requestId });
+  });
+}
+async function probeWorkspaceCollision() {
+  if (!workspaceId || !workspaceChannel) return null;
+  const requestId = createSecureId('probe');
+  postWorkspaceMessage({ type: WORKSPACE_MESSAGES.PROBE, workspaceId, startedAt: tabStartedAt, requestId });
+  return waitForWorkspaceMessage(data => data?.type === WORKSPACE_MESSAGES.OCCUPIED && data.requestId === requestId && data.workspaceId === workspaceId, WORKSPACE_PROBE_TIMEOUT_MS);
+}
+function shouldForkForWorkspaceCollision(occupied) {
+  if (!occupied) return false;
+  if (occupied.startedAt < tabStartedAt) return true;
+  if (occupied.startedAt > tabStartedAt) return false;
+  return String(occupied.instanceId || '') < tabInstanceId;
+}
+async function readWorkspaceHistory(id = workspaceId, scope = workspaceScope) {
+  const raw = await secureGetItem(getWorkspaceStorageKeys(id, scope).history);
+  try { const parsed = JSON.parse(raw || '[]'); return Array.isArray(parsed) ? parsed : []; }
+  catch { return []; }
+}
+async function writeWorkspaceHistory(hist, id = workspaceId, scope = workspaceScope) {
+  return secureSetItem(getWorkspaceStorageKeys(id, scope).history, JSON.stringify(Array.isArray(hist) ? hist : []));
+}
+async function migrateLegacySharedDataToWorkspace() {
+  if (!workspaceId) return;
+  const keys = getWorkspaceStorageKeys();
+  const hasWorkspaceData = localStorage.getItem(keys.text) || localStorage.getItem(keys.name) || localStorage.getItem(keys.history);
+  if (hasWorkspaceData) return;
+  const sharedText = await secureGetItem(AUTOSAVE_TXT_KEY);
+  const sharedName = await secureGetItem(AUTOSAVE_NAME_KEY);
+  const sharedHistory = await secureGetItem(HISTORY_KEY);
+  const legacyText = sharedText == null ? localStorage.getItem(LEGACY_TEXT_KEY) : null;
+  const legacyName = sharedName == null ? localStorage.getItem(LEGACY_NAME_KEY) : null;
+  let migrated = false;
+  if (sharedText != null || sharedName != null || sharedHistory != null || legacyText != null || legacyName != null) {
+    const okText = (sharedText != null || legacyText != null) ? await secureSetItem(keys.text, sharedText ?? legacyText ?? '') : true;
+    const okName = (sharedName != null || legacyName != null) ? await secureSetItem(keys.name, sharedName ?? legacyName ?? 'untitled.md') : true;
+    const okHistory = sharedHistory != null ? await secureSetItem(keys.history, sharedHistory) : true;
+    migrated = okText && okName && okHistory;
+  }
+  if (migrated) [AUTOSAVE_TXT_KEY, AUTOSAVE_NAME_KEY, HISTORY_KEY, LEGACY_TEXT_KEY, LEGACY_NAME_KEY].forEach(k => localStorage.removeItem(k));
+}
+async function initializeWorkspace() {
+  const sessionKey = getWorkspaceSessionKey();
+  workspaceId = sessionStorage.getItem(sessionKey);
+  const hadSessionWorkspace = Boolean(workspaceId);
+  if (!workspaceId) {
+    workspaceId = createWorkspaceId();
+    sessionStorage.setItem(sessionKey, workspaceId);
+  }
+  setupWorkspaceChannel();
+  if (hadSessionWorkspace) {
+    const occupied = await probeWorkspaceCollision();
+    if (shouldForkForWorkspaceCollision(occupied)) await forkDuplicatedWorkspace(occupied?.filename);
+  }
+  await migrateLegacySharedDataToWorkspace();
+}
+async function requestWorkspaceFork(sourceWorkspaceId, targetWorkspaceId, targetFilename) {
+  if (!workspaceChannel) throw new Error('BroadcastChannel unavailable');
+  const requestId = createSecureId('fork');
+  postWorkspaceMessage({ type: WORKSPACE_MESSAGES.FORK_REQUEST, requestId, sourceWorkspaceId, targetWorkspaceId, targetFilename, requesterInstanceId: tabInstanceId });
+  const reply = await waitForWorkspaceMessage(data => [WORKSPACE_MESSAGES.FORK_READY, WORKSPACE_MESSAGES.FORK_FAILED].includes(data?.type) && data.requestId === requestId && data.targetWorkspaceId === targetWorkspaceId, WORKSPACE_FORK_TIMEOUT_MS);
+  if (!reply) throw new Error('Workspace fork timed out');
+  if (reply.type === WORKSPACE_MESSAGES.FORK_FAILED) throw new Error(reply.message || 'Workspace fork failed');
+  return reply;
+}
+async function applyForkedWorkspace(forkData, targetWorkspaceId, targetFilename, fallbackContent = editor.value) {
+  workspaceId = targetWorkspaceId;
+  sessionStorage.setItem(getWorkspaceSessionKey(), workspaceId);
+  setEditorDocumentValue(typeof forkData?.content === 'string' ? forkData.content : fallbackContent);
+  resetDocumentIdentity(targetFilename);
+  historyCache = await readWorkspaceHistory(targetWorkspaceId);
+  update();
+  markDirty();
+  updateBrowserTabTitle();
+  await triggerAutoSave();
+}
+async function forkDuplicatedWorkspace(sourceFilename = filenameInput.value || 'untitled.md') {
+  const sourceWorkspaceId = workspaceId;
+  const targetWorkspaceId = createWorkspaceId();
+  const activeFilenames = await collectActiveWorkspaceFilenames();
+  const targetFilename = createDuplicateFilename(sourceFilename || filenameInput.value || 'untitled.md', activeFilenames);
+  let forkData = null;
+  let warning = false;
+  try {
+    forkData = await requestWorkspaceFork(sourceWorkspaceId, targetWorkspaceId, targetFilename);
+  } catch (err) {
+    warning = true;
+    console.warn('Workspace fork failed; separating current tab with visible document only', err);
+    const sourceKeys = getWorkspaceStorageKeys(sourceWorkspaceId);
+    const targetKeys = getWorkspaceStorageKeys(targetWorkspaceId);
+    try {
+      const rawHistory = await secureGetItem(sourceKeys.history);
+      await secureSetItem(targetKeys.history, rawHistory || '[]');
+    } catch (historyErr) { console.warn('Workspace history copy failed', historyErr); }
+    await secureSetItem(targetKeys.text, editor.value);
+    await secureSetItem(targetKeys.name, targetFilename);
+    forkData = { content: editor.value, targetFilename };
+  }
+  await applyForkedWorkspace(forkData, targetWorkspaceId, targetFilename);
+  toast(warning ? T.duplicatedTabSeparatedWithWarning(targetFilename) : T.duplicatedTabSeparated(targetFilename));
+}
+async function handleWorkspaceMessage(data) {
+  if (!workspaceChannelActive || !data || data.instanceId === tabInstanceId) return;
+  if (data.type === WORKSPACE_MESSAGES.PROBE && data.workspaceId === workspaceId) {
+    postWorkspaceMessage({ type: WORKSPACE_MESSAGES.OCCUPIED, workspaceId, startedAt: tabStartedAt, filename: filenameInput.value || 'untitled.md', requestId: data.requestId });
+  } else if (data.type === WORKSPACE_MESSAGES.FILENAME_REQUEST) {
+    postWorkspaceMessage({ type: WORKSPACE_MESSAGES.FILENAME_RESPONSE, requestId: data.requestId, workspaceId, filename: filenameInput.value || 'untitled.md' });
+  } else if (data.type === WORKSPACE_MESSAGES.FORK_REQUEST && data.sourceWorkspaceId === workspaceId) {
+    try {
+      const targetKeys = getWorkspaceStorageKeys(data.targetWorkspaceId);
+      const sourceHistory = await readWorkspaceHistory(workspaceId);
+      const clonedHistory = JSON.parse(JSON.stringify(sourceHistory));
+      await secureSetItem(targetKeys.text, editor.value);
+      await secureSetItem(targetKeys.name, data.targetFilename || 'untitled.md');
+      await secureSetItem(targetKeys.history, JSON.stringify(clonedHistory));
+      postWorkspaceMessage({ type: WORKSPACE_MESSAGES.FORK_READY, requestId: data.requestId, sourceWorkspaceId: workspaceId, targetWorkspaceId: data.targetWorkspaceId, originalFilename: filenameInput.value || 'untitled.md', targetFilename: data.targetFilename, content: editor.value, historyCount: clonedHistory.length });
+    } catch (err) {
+      postWorkspaceMessage({ type: WORKSPACE_MESSAGES.FORK_FAILED, requestId: data.requestId, sourceWorkspaceId: workspaceId, targetWorkspaceId: data.targetWorkspaceId, message: err?.message || String(err) });
+    }
+  } else if (data.type === WORKSPACE_MESSAGES.STORAGE_PAUSE) {
+    workspaceStoragePaused = true;
+  } else if (data.type === WORKSPACE_MESSAGES.STORAGE_RESUME) {
+    workspaceStoragePaused = false;
+    if (pendingWorkspaceAutoSave) { pendingWorkspaceAutoSave = false; triggerAutoSave(); }
+    if (pendingWorkspaceHistorySave) { pendingWorkspaceHistorySave = false; saveToHistoryList(filenameInput.value, editor.value); }
+  } else if (data.type === WORKSPACE_MESSAGES.DATA_CLEARED) {
+    historyCache = [];
+  }
+}
+
 
 let privateSession = { passphrase: null, key: null };
 let secureStoreUnavailable = false;
@@ -3800,10 +4069,23 @@ let historyCache = [];
 let isSaving = false;
 let pendingDeepFilenameChange = null;
 let suppressDeepFilenameLogging = false;
+function updateBrowserTabTitle() {
+  const rawFilename = String(filenameInput?.value || '')
+    .replace(/[\u0000-\u001f\u007f]+/g, ' ')
+    .trim()
+    .normalize('NFC');
+  const filename = rawFilename || 'untitled.md';
+  const dirtyPrefix = isDirty ? '● ' : '';
+  const nextTitle = `${dirtyPrefix}${filename} — MD//WORKS`;
+  if (document.title !== nextTitle) {
+    document.title = nextTitle;
+  }
+}
 function setFilenameProgrammatically(filename) {
   suppressDeepFilenameLogging = true;
   try {
     filenameInput.value = filename;
+    updateBrowserTabTitle();
   } finally {
     suppressDeepFilenameLogging = false;
   }
@@ -3821,12 +4103,15 @@ function beginPendingDeepFilenameChange() {
   }
 }
 async function triggerAutoSave() {
+  if (workspaceStoragePaused) { pendingWorkspaceAutoSave = true; return; }
+  const savingWorkspaceId = workspaceId;
+  const keys = getWorkspaceStorageKeys(savingWorkspaceId);
   if (isSaving) return;
   isSaving = true;
   try {
-    await secureSetItem(AUTOSAVE_TXT_KEY, editor.value);
-    const nameSaved = await secureSetItem(AUTOSAVE_NAME_KEY, filenameInput.value);
-    if (nameSaved) commitPendingDeepFilenameChange();
+    await secureSetItem(keys.text, editor.value);
+    const nameSaved = await secureSetItem(keys.name, filenameInput.value);
+    if (nameSaved && savingWorkspaceId === workspaceId) commitPendingDeepFilenameChange();
   } catch (e) {
     console.warn('Auto save failed', e);
   } finally {
@@ -3835,24 +4120,18 @@ async function triggerAutoSave() {
 }
 
 async function loadAutoSave() {
-  // Legacy migration check
-  if (localStorage.getItem(LEGACY_TEXT_KEY)) {
-    await secureSetItem(AUTOSAVE_TXT_KEY, localStorage.getItem(LEGACY_TEXT_KEY));
-    await secureSetItem(AUTOSAVE_NAME_KEY, localStorage.getItem(LEGACY_NAME_KEY) || 'untitled.md');
-    localStorage.removeItem(LEGACY_TEXT_KEY);
-    localStorage.removeItem(LEGACY_NAME_KEY);
-  }
-
-  const savedTxt = await secureGetItem(AUTOSAVE_TXT_KEY);
-  const savedName = await secureGetItem(AUTOSAVE_NAME_KEY);
+  const loadingWorkspaceId = workspaceId;
+  const keys = getWorkspaceStorageKeys(loadingWorkspaceId);
+  const savedTxt = await secureGetItem(keys.text);
+  const savedName = await secureGetItem(keys.name);
   if (savedTxt && savedTxt !== T.defaultMd && !isLegacyDefaultMarkdown(savedTxt) && savedTxt !== '') {
     if (confirm(T.restorePrompt)) {
       setEditorDocumentValue(savedTxt);
       if (savedName) setFilenameProgrammatically(savedName);
       markDirty();
     } else {
-      secureRemoveItem(AUTOSAVE_TXT_KEY);
-      secureRemoveItem(AUTOSAVE_NAME_KEY);
+      secureRemoveItem(keys.text);
+      secureRemoveItem(keys.name);
     }
   }
 }
@@ -3883,8 +4162,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         hasStandaloneData = true;
         
         const standaloneKeySuffix = getStandaloneAutosaveSuffix(data.filename, data.content);
-        AUTOSAVE_TXT_KEY = `md_editor_standalone_text_${standaloneKeySuffix}`;
-        AUTOSAVE_NAME_KEY = `md_editor_standalone_name_${standaloneKeySuffix}`;
+        workspaceScope = `standalone:${standaloneKeySuffix}`;
       }
     }
   } catch (e) {
@@ -3905,6 +4183,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     applyTheme('midnight', { persist: false });
   }
 
+  await initializeWorkspace();
   await loadAutoSave();
   renderLineViewMenuChecks();
   renderDeepEditState();
@@ -3918,6 +4197,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderFullscreenMenuCheck();
   setupLayoutResizeObserver();
   syncFilenameInputState();
+  updateBrowserTabTitle();
   maybeShowReleaseNotes(); // 起動時の復元・初期描画後に、このバージョン未表示なら表示
   scheduleUpdateCheck();
 });
@@ -4300,45 +4580,70 @@ function setTheme(theme) {
 
 // -- Storage Security Menu Functions --
 async function getCurrentHistoryForMigration() {
-  const payload = localStorage.getItem(HISTORY_KEY);
-  if (!payload) return { ok: true, history: [] };
+  return { ok: true, history: await readWorkspaceHistory() };
+}
 
-  try {
-    const raw = payload.startsWith('{')
-      ? await decryptString(payload, await getActiveKey())
-      : payload;
-    const parsed = JSON.parse(raw || '[]');
-    return { ok: true, history: Array.isArray(parsed) ? parsed : [] };
-  } catch (err) {
-    console.warn('Failed to read history before storage migration', err);
-    if (currentMode() === "private") privateSession = { passphrase: null, key: null };
-    return { ok: false, history: null, error: err };
+async function getAllWorkspaceDataForMigration() {
+  const keys = getAllWorkspaceStorageKeys();
+  const cryptoKey = await getActiveKey();
+  const data = [];
+  for (const key of keys) {
+    const payload = localStorage.getItem(key);
+    if (!payload) continue;
+    try {
+      const value = payload.startsWith('{') ? await decryptString(payload, cryptoKey) : payload;
+      data.push({ key, value });
+    } catch (err) {
+      console.warn('Failed to read workspace data before storage migration', key, err);
+      if (currentMode() === "private") privateSession = { passphrase: null, key: null };
+      return { ok: false, data: null, error: err };
+    }
   }
+  const currentKeys = getWorkspaceStorageKeys();
+  const upsertMigrationItem = (key, value) => {
+    const existing = data.find(item => item.key === key);
+    if (existing) existing.value = value;
+    else data.push({ key, value });
+  };
+  upsertMigrationItem(currentKeys.text, editor.value);
+  upsertMigrationItem(currentKeys.name, filenameInput.value || 'untitled.md');
+  upsertMigrationItem(currentKeys.history, JSON.stringify(historyCache || []));
+  return { ok: true, data };
 }
 
 async function migrateToMode(mode, passphrase = null) {
-  const currentText = editor.value;
-  const currentName = filenameInput.value || "untitled.md";
-  const historyResult = await getCurrentHistoryForMigration();
-  if (!historyResult.ok) {
-    throw new Error('Failed to decrypt current history. Storage mode was not changed.');
-  }
-  const currentHistory = historyResult.history;
-
-  if (mode === "private") {
-    const salt = crypto.getRandomValues(new Uint8Array(16));
-    setMeta({ mode: "private", privateSalt: bytesToB64(salt) });
-    privateSession.passphrase = passphrase;
-    privateSession.key = await derivePrivateKey(passphrase, bytesToB64(salt));
-  } else {
-    setMeta({ mode: "auto" });
-    privateSession = { passphrase: null, key: null };
+  postWorkspaceMessage({ type: WORKSPACE_MESSAGES.STORAGE_PAUSE });
+  const previousMeta = getMeta();
+  const previousPrivateSession = { ...privateSession };
+  const allDataResult = await getAllWorkspaceDataForMigration();
+  if (!allDataResult.ok) {
+    postWorkspaceMessage({ type: WORKSPACE_MESSAGES.STORAGE_RESUME });
+    throw new Error('Failed to decrypt workspace data. Storage mode was not changed.');
   }
 
-  await secureSetItem(AUTOSAVE_TXT_KEY, currentText);
-  await secureSetItem(AUTOSAVE_NAME_KEY, currentName);
-  await secureSetItem(HISTORY_KEY, JSON.stringify(currentHistory));
-  historyCache = currentHistory;
+  try {
+    if (mode === "private") {
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      setMeta({ mode: "private", privateSalt: bytesToB64(salt) });
+      privateSession.passphrase = passphrase;
+      privateSession.key = await derivePrivateKey(passphrase, bytesToB64(salt));
+    } else {
+      setMeta({ mode: "auto" });
+      privateSession = { passphrase: null, key: null };
+    }
+
+    for (const item of allDataResult.data) {
+      const ok = await secureSetItem(item.key, item.value);
+      if (!ok) throw new Error(`Failed to write ${item.key}`);
+    }
+    historyCache = await readWorkspaceHistory();
+  } catch (err) {
+    setMeta(previousMeta);
+    privateSession = previousPrivateSession;
+    throw err;
+  } finally {
+    postWorkspaceMessage({ type: WORKSPACE_MESSAGES.STORAGE_RESUME });
+  }
 }
 
 async function togglePrivateStorage() {
@@ -4372,8 +4677,9 @@ async function clearProtectedStorage() {
   closeMenus();
   const ok = confirm(T.confirmClearLocalData);
   if (!ok) return;
-  [AUTOSAVE_TXT_KEY, AUTOSAVE_NAME_KEY, HISTORY_KEY, LEGACY_TEXT_KEY, LEGACY_NAME_KEY].forEach((k) => localStorage.removeItem(k));
+  [...getAllWorkspaceStorageKeys(), AUTOSAVE_TXT_KEY, AUTOSAVE_NAME_KEY, HISTORY_KEY, LEGACY_TEXT_KEY, LEGACY_NAME_KEY].forEach((k) => localStorage.removeItem(k));
   historyCache = [];
+  postWorkspaceMessage({ type: WORKSPACE_MESSAGES.DATA_CLEARED });
   toast(T.localDataCleared);
 }
 
@@ -4630,6 +4936,8 @@ function markDirty() {
     saveBtn.classList.remove('active');
     saveBtn.setAttribute('aria-pressed', 'false');
   }
+
+  updateBrowserTabTitle();
 }
 
 function markSaved() {
@@ -4643,6 +4951,8 @@ function markSaved() {
     saveBtn.classList.add('active');
     saveBtn.setAttribute('aria-pressed', 'true');
   }
+
+  updateBrowserTabTitle();
 }
 
 function update() {
@@ -4672,6 +4982,7 @@ editor.addEventListener('compositionstart', () => {
       start,
       end,
       beforeLength:editor.value.length,
+      beforeValue:editor.value,
       selectedText:sanitizeDeepSnippet(editor.value.slice(start, end)),
       offset:start,
       previousLine:context.previousLine,
@@ -4686,7 +4997,7 @@ function refreshAfterEditorTabChange() {
   update();
   markDirty();
   if (spellEnabled) runSpellCheck();
-  if (srPanelOpen) performSearch(false);
+  if (shouldTrackSearchHighlights()) performSearch(false);
   clearTimeout(autoSaveTimeout);
   autoSaveTimeout = setTimeout(triggerAutoSave, 1500);
 }
@@ -4890,6 +5201,7 @@ function clearPendingReplaceAllUndoRestore() {
 function setEditorDocumentValue(value) {
   clearPendingReplaceAllUndoRestore();
   editor.value = value;
+  resetSearchForDocumentSwitch();
 }
 
 function shouldDeferPasteUpdate(pasteLength, nextLength) {
@@ -4898,7 +5210,7 @@ function shouldDeferPasteUpdate(pasteLength, nextLength) {
     nextLength >= 30000 ||
     (previewOpen && nextLength >= 20000) ||
     (showInvisibles && nextLength >= 20000) ||
-    ((spellEnabled || srPanelOpen) && nextLength >= 15000)
+    ((spellEnabled || shouldTrackSearchHighlights()) && nextLength >= 15000)
   );
 }
 
@@ -5061,7 +5373,7 @@ async function handlePlainTextPaste(text) {
       tasks.push(deferPasteTask(() => renderOutline(), preferIdle));
     }
 
-    if (srPanelOpen) {
+    if (shouldTrackSearchHighlights()) {
       tasks.push(deferPasteTask(() => performSearch(false), preferIdle));
     }
 
@@ -5118,6 +5430,7 @@ editor.addEventListener('beforeinput', event => {
       start: editor.selectionStart,
       end: editor.selectionEnd,
       beforeLength: editor.value.length,
+      beforeValue: editor.value,
       selectedText: sanitizeDeepSnippet(editor.value.slice(editor.selectionStart, editor.selectionEnd)),
       offset: editor.selectionStart,
       previousLine: context.previousLine,
@@ -5148,7 +5461,7 @@ editor.addEventListener('input', event => {
   update();
   markDirty();
   if (spellEnabled) runSpellCheck();
-  if (srPanelOpen) performSearch(false);
+  if (shouldTrackSearchHighlights()) performSearch(false);
   clearTimeout(autoSaveTimeout);
   autoSaveTimeout = setTimeout(triggerAutoSave, 1500);
 
@@ -5160,6 +5473,7 @@ editor.addEventListener('input', event => {
 filenameInput.addEventListener('focus', beginPendingDeepFilenameChange);
 
 filenameInput.addEventListener('input', () => {
+  updateBrowserTabTitle();
   if (filenameInput.readOnly) {
     setFilenameProgrammatically(fileHandle?.name || filenameInput.value);
     pendingDeepFilenameChange = null;
@@ -5279,7 +5593,7 @@ editor.addEventListener("drop", async (e) => {
         recordDeepEditEvent({ type:'image-drop', summary:isJa?'埋め込み画像を追加':'Embedded image added', heading:getDeepHeadingAtOffset(dropSelection.s), charDelta:markdown.length - replacedLength, afterSnippet:'[embedded image data omitted]', meta:{ imageCount:snippets.length, totalBytes:files.filter(file => file.type.startsWith('image/') && file.type !== 'image/svg+xml' && file.size <= IMAGE_DROP_MAX_BYTES).reduce((sum, file) => sum + file.size, 0), embeddedDataOmitted:true } });
       }
       if (spellEnabled) runSpellCheck();
-      if (srPanelOpen) performSearch(false);
+      if (shouldTrackSearchHighlights()) performSearch(false);
       await yieldToBrowserPaint();
     }
   } finally {
@@ -5518,7 +5832,7 @@ function refreshBackdrop() {
   }
 
   const lines = text.split('\n');
-  const showSearch = srPanelOpen && srMatches.length > 0;
+  const showSearch = srHighlightActive && srMatches.length > 0;
   const showSpell = spellEnabled && spellMatches.length > 0; 
 
   let globalPos = 0;
@@ -5623,6 +5937,7 @@ function replaceSelectedLines(transformer) {
   editor.setSelectionRange(lineStart, lineStart + nextBlock.length);
   update();
   markDirty();
+  if (shouldTrackSearchHighlights()) performSearch(false);
   triggerAutoSave();
   editor.focus();
 }
@@ -5710,6 +6025,7 @@ const srCount = document.getElementById('sr-count');
 const srError = document.getElementById('sr-error');
 
 let srPanelOpen = false;
+let srHighlightActive = false;
 let srMode = 'find';
 let srMatches = [];
 let srCurrentIdx = -1;
@@ -5722,6 +6038,7 @@ function openSearchPanel(mode) {
   if (!guardEditorCommand()) return;
   closeMenus();
   srPanelOpen = true;
+  srHighlightActive = true;
   srMode = mode;
   srPanel.classList.add('show');
   if (mode === 'find') {
@@ -5743,10 +6060,33 @@ function openSearchPanel(mode) {
 function closeSearchPanel() {
   srPanelOpen = false;
   srPanel.classList.remove('show');
-  srMatches = [];
-  srCurrentIdx = -1;
   refreshBackdrop();
   editor.focus();
+}
+
+function shouldTrackSearchHighlights() {
+  return srPanelOpen || srHighlightActive;
+}
+
+function clearSearchHighlights() {
+  const currentMatch = srMatches[srCurrentIdx];
+  srHighlightActive = false;
+  if (currentMatch &&
+      editor.selectionStart === currentMatch.start &&
+      editor.selectionEnd === currentMatch.end) {
+    editor.setSelectionRange(currentMatch.end, currentMatch.end);
+  }
+  refreshBackdrop();
+  editor.focus();
+}
+
+function resetSearchForDocumentSwitch() {
+  srPanelOpen = false;
+  srHighlightActive = false;
+  srMatches = [];
+  srCurrentIdx = -1;
+  srPanel.classList.remove('show');
+  refreshBackdrop();
 }
 
 document.getElementById('tab-find').onclick = () => openSearchPanel('find');
@@ -5798,9 +6138,10 @@ function performSearch(jumpToClosest = false) {
   srMatches = [];
   srError.style.display = 'none';
   const query = srInput.value;
-  if (!query) { srCount.textContent = ''; srCurrentIdx = -1; refreshBackdrop(); return; }
+  if (!query) { srHighlightActive = false; srCount.textContent = ''; srCurrentIdx = -1; refreshBackdrop(); return; }
   const regex = buildRegex(true);
-  if (!regex) { srError.style.display = 'block'; srCount.textContent = ''; srCurrentIdx = -1; refreshBackdrop(); return; }
+  if (!regex) { srHighlightActive = false; srError.style.display = 'block'; srCount.textContent = ''; srCurrentIdx = -1; refreshBackdrop(); return; }
+  srHighlightActive = true;
   const text = editor.value;
   let match;
   while ((match = regex.exec(text)) !== null) {
@@ -5855,6 +6196,7 @@ function highlightCurrentMatch() {
 }
 
 function navMatch(dir) {
+  srHighlightActive = true;
   if (srMatches.length === 0) return;
   srCurrentIdx += dir;
   if (srCurrentIdx >= srMatches.length) srCurrentIdx = 0;
@@ -6038,7 +6380,7 @@ document.getElementById('sr-btn-replace-all').onclick = async () => {
     const tasks = [];
     const preferIdle = true;
 
-    if (srPanelOpen) {
+    if (shouldTrackSearchHighlights()) {
       tasks.push(deferPasteTask(() => performSearch(true), preferIdle));
     } else {
       tasks.push(deferPasteTask(() => refreshBackdrop(), preferIdle));
@@ -6569,7 +6911,7 @@ async function insertOrUpdateToc() {
     tasks.push(deferPasteTask(() => refreshBackdrop(), isLargeToc));
     if (previewOpen) tasks.push(deferPasteTask(() => renderPreview(), isLargeToc));
     if (outlineOpen) tasks.push(deferPasteTask(() => renderOutline(), isLargeToc));
-    if (srPanelOpen) tasks.push(deferPasteTask(() => performSearch(false), isLargeToc));
+    if (shouldTrackSearchHighlights()) tasks.push(deferPasteTask(() => performSearch(false), isLargeToc));
     if (spellEnabled) tasks.push(deferPasteTask(() => runSpellCheck(), isLargeToc));
 
     clearTimeout(autoSaveTimeout);
@@ -6603,14 +6945,31 @@ function setRange(s, e) {
 }
 function ins(text, lineStart) {
   if (!guardEditorCommand()) return;
-  const { s } = getPos();
+  const s = editor.selectionStart;
+  const e = editor.selectionEnd;
   if (lineStart) {
+    const direction = editor.selectionDirection || 'none';
+    const scrollTop = editor.scrollTop;
+    const scrollLeft = editor.scrollLeft;
     const val = editor.value;
-    const ls = val.lastIndexOf('\n', s - 1) + 1;
+    const ls = val.lastIndexOf('\n', Math.max(0, s - 1)) + 1;
+
+    editor.focus();
     editor.setSelectionRange(ls, ls);
+    document.execCommand('insertText', false, text);
+
+    const insertedLength = editor.value.length - val.length;
+    if (insertedLength > 0) {
+      editor.setSelectionRange(s + insertedLength, e + insertedLength, direction);
+    } else {
+      editor.setSelectionRange(s, e, direction);
+    }
+    editor.scrollTop = scrollTop;
+    editor.scrollLeft = scrollLeft;
+  } else {
+    editor.focus();
+    document.execCommand('insertText', false, text);
   }
-  editor.focus();
-  document.execCommand('insertText', false, text);
   markDirty();
   triggerAutoSave();
 }
@@ -6889,6 +7248,10 @@ function isUserAbortError(err) {
   return err && (err.name === 'AbortError' || err.code === 20);
 }
 
+function isHtmlOpenCandidate(filename) {
+  return /\.html?$/i.test(String(filename || '').trim());
+}
+
 
 const RESTRICTED_VIEWER_FORMAT = 'mdworks-restricted-viewer';
 const RESTRICTED_VIEWER_VERSION = 1;
@@ -6921,6 +7284,8 @@ function restrictedViewerSourceToMarkdownName(sourceName) {
 }
 
 async function importRestrictedViewerHtml(htmlText, sourceName, openMethod = '') {
+  if (!isHtmlOpenCandidate(sourceName)) return false;
+
   const box = parseRestrictedViewerBoxFromHtml(htmlText);
   if (!box) return false;
 
@@ -6991,6 +7356,8 @@ async function decryptPrivateViewerPayload(box, passphrase) {
 
 // --- NEW: importPrivateViewerHtml ---
 async function importPrivateViewerHtml(htmlText, sourceName, openMethod = '') {
+  if (!isHtmlOpenCandidate(sourceName)) return false;
+
   const box = parsePrivateViewerBoxFromHtml(htmlText);
   if (!box) return false;
 
@@ -7068,26 +7435,46 @@ function extractPrivateAppPayloadJson(source) {
     : null;
 }
 
-function parsePrivateAppPayloadFromHtml(htmlText) {
-  const source = String(htmlText || '');
-  if (!source.includes('mdworks-private-app') && !source.includes('PRIVATE_APP_PAYLOAD')) return null;
-
-  const doc = new DOMParser().parseFromString(source, 'text/html');
-  const jsonScript = doc.getElementById('mdworks-private-app-payload');
-  const jsonText = jsonScript
-    ? jsonScript.textContent || '{}'
-    : extractPrivateAppPayloadJson(source);
-  if (!jsonText) return null;
-  const payload = JSON.parse(jsonText);
-  if (payload?.v !== 1 || payload?.type !== 'mdworks-private-app') return null;
-  return payload;
-}
-
 function isValidPrivateAppBox(box, expectedLabel) {
   return Boolean(box && box.v === 1 && box.label === expectedLabel &&
     box.alg === 'AES-GCM' && box.kdf === 'PBKDF2' && box.hash === 'SHA-256' &&
     Number.isInteger(box.iterations) && box.iterations > 0 &&
     typeof box.salt === 'string' && typeof box.iv === 'string' && typeof box.data === 'string');
+}
+
+function parsePrivateAppPayloadFromHtml(htmlText) {
+  const source = String(htmlText || '');
+  const doc = new DOMParser().parseFromString(source, 'text/html');
+  const jsonScript = doc.getElementById('mdworks-private-app-payload');
+  const hasLegacyLoader = ['passphrase', 'unlock-btn', 'launch-btn', 'rescue-btn']
+    .every(id => doc.getElementById(id));
+
+  if (!jsonScript && !hasLegacyLoader) {
+    return { status: 'not-private-app' };
+  }
+
+  try {
+    let jsonText = jsonScript?.textContent || '';
+    if (!jsonScript) {
+      for (const script of doc.querySelectorAll('script')) {
+        jsonText = extractPrivateAppPayloadJson(script.textContent || '');
+        if (jsonText) break;
+      }
+    }
+    if (!jsonText) throw new Error('Private App payload not found');
+
+    const payload = JSON.parse(jsonText);
+    if (payload?.v !== 1 || payload?.type !== 'mdworks-private-app') {
+      throw new Error('Invalid Private App payload format');
+    }
+    if (!isValidPrivateAppBox(payload.primary, 'primary') &&
+        !isValidPrivateAppBox(payload.backup, 'backup')) {
+      throw new Error('No valid Private App box');
+    }
+    return { status: 'valid', payload };
+  } catch (error) {
+    return { status: 'invalid', error };
+  }
 }
 
 async function decryptPrivateAppPayload(payload, passphrase) {
@@ -7134,22 +7521,16 @@ function extractStandaloneDocument(standaloneHtml, privateAppPayload = null) {
 }
 
 async function importPrivateAppHtml(htmlText, sourceName, openMethod = '') {
-  const source = String(htmlText || '');
-  const looksLikePrivateApp = source.includes('mdworks-private-app') || source.includes('PRIVATE_APP_PAYLOAD');
-  if (!looksLikePrivateApp) return false;
+  if (!isHtmlOpenCandidate(sourceName)) return false;
 
-  let payload;
-  try {
-    payload = parsePrivateAppPayloadFromHtml(source);
-  } catch (error) {
-    console.error(error);
+  const inspection = parsePrivateAppPayloadFromHtml(htmlText);
+  if (inspection.status === 'not-private-app') return false;
+  if (inspection.status === 'invalid') {
+    console.error(inspection.error);
     toast(T.privateAppImportError);
     return true;
   }
-  if (!payload) {
-    toast(T.privateAppImportError);
-    return true;
-  }
+  const payload = inspection.payload;
 
   const passphrase = prompt(T.privateAppImportPrompt) || '';
   if (!passphrase) return true;
@@ -7313,14 +7694,29 @@ async function handleSave(isSaveAs = false) {
   if (previewFocusOpen && isSaveAs) { closeMenus(); return; }
   closeMenus();
   const deepSaveSnapshot = prepareDeepFileSave();
-  await saveToHistoryList(filenameInput.value, editor.value);
+  const savingWorkspaceId = workspaceId;
+  const historyWriteResult = await saveToHistoryList(filenameInput.value, editor.value, savingWorkspaceId);
   const saveFilename = ensureMarkdownFilename(filenameInput.value);
   if (isMobile) {
     const filename = saveFilename;
     const file = new File([editor.value], filename, { type: 'text/markdown' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try { await navigator.share({ files: [file], title: filename }); setFilenameProgrammatically(filename); markSaved(); commitDeepFileSave(deepSaveSnapshot, filename, 'share', isSaveAs); } catch (e) {}
-    } else { const downloadedFilename = fallbackDownload(); if (downloadedFilename) commitDeepFileSave(deepSaveSnapshot, downloadedFilename, 'download', isSaveAs); }
+      try {
+        await navigator.share({ files: [file], title: filename });
+        try { await updateSavedHistoryFilename(historyWriteResult, filename); }
+        catch (error) { console.warn('Failed to update saved history filename', error); }
+        setFilenameProgrammatically(filename);
+        markSaved();
+        commitDeepFileSave(deepSaveSnapshot, filename, 'share', isSaveAs);
+      } catch (e) {}
+    } else {
+      const downloadedFilename = fallbackDownload();
+      if (downloadedFilename) {
+        try { await updateSavedHistoryFilename(historyWriteResult, downloadedFilename); }
+        catch (error) { console.warn('Failed to update saved history filename', error); }
+        commitDeepFileSave(deepSaveSnapshot, downloadedFilename, 'download', isSaveAs);
+      }
+    }
   } else {
     if (window.showSaveFilePicker) {
       try {
@@ -7358,13 +7754,22 @@ async function handleSave(isSaveAs = false) {
         const writable = await fileHandle.createWritable();
         await writable.write(editor.value);
         await writable.close();
+        try { await updateSavedHistoryFilename(historyWriteResult, fileHandle.name); }
+        catch (error) { console.warn('Failed to update saved history filename', error); }
         setFilenameProgrammatically(fileHandle.name);
         markSaved(); toast(T.saved);
         commitDeepFileSave(deepSaveSnapshot, fileHandle.name, 'file-system-access', isSaveAs);
       } catch (e) {
         notifyFileSystemError(isJa ? 'ファイルの保存' : 'Save file', e);
       }
-    } else { const downloadedFilename = fallbackDownload(); if (downloadedFilename) commitDeepFileSave(deepSaveSnapshot, downloadedFilename, 'download', isSaveAs); }
+    } else {
+      const downloadedFilename = fallbackDownload();
+      if (downloadedFilename) {
+        try { await updateSavedHistoryFilename(historyWriteResult, downloadedFilename); }
+        catch (error) { console.warn('Failed to update saved history filename', error); }
+        commitDeepFileSave(deepSaveSnapshot, downloadedFilename, 'download', isSaveAs);
+      }
+    }
   }
 }
 
@@ -8703,17 +9108,56 @@ function jumpToOffset(offset) {
   });
 }
 
-async function saveToHistoryList(filename, content) {
-  if (!content || content.trim() === '' || content === T.defaultMd || isLegacyDefaultMarkdown(content)) return;
-  let hist = JSON.parse((await secureGetItem(HISTORY_KEY)) || '[]');
-  hist = [{ filename, content, date: Date.now() }, ...hist.filter(h => h.filename !== filename)].slice(0, 10);
-  await secureSetItem(HISTORY_KEY, JSON.stringify(hist));
+async function saveToHistoryList(filename, content, targetWorkspaceId = workspaceId) {
+  if (workspaceStoragePaused) { pendingWorkspaceHistorySave = true; return null; }
+  if (!content || content.trim() === '' || content === T.defaultMd || isLegacyDefaultMarkdown(content)) return null;
+  const savingWorkspaceId = targetWorkspaceId || workspaceId;
+  let hist = await readWorkspaceHistory(savingWorkspaceId);
+  const entry = { filename, content, date: Date.now() };
+  hist = [entry, ...hist.filter(h => h.filename !== filename)].slice(0, 10);
+  await writeWorkspaceHistory(hist, savingWorkspaceId);
+  if (savingWorkspaceId === workspaceId) historyCache = hist;
+  return {
+    workspaceId: savingWorkspaceId,
+    historyKey: getWorkspaceStorageKeys(savingWorkspaceId).history,
+    entry,
+    entryIndex: hist.indexOf(entry),
+    entryTimestamp: entry.date,
+    originalFilename: filename,
+    content
+  };
+}
+
+async function updateSavedHistoryFilename(historyWriteResult, confirmedFilename) {
+  if (!historyWriteResult) return;
+  const normalizedFilename = ensureMarkdownFilename(confirmedFilename);
+  if (historyWriteResult.originalFilename === normalizedFilename) return;
+  const targetWorkspaceId = historyWriteResult.workspaceId;
+  if (!targetWorkspaceId) return;
+  const hist = await readWorkspaceHistory(targetWorkspaceId);
+  const isTargetEntry = item => item &&
+    item.date === historyWriteResult.entryTimestamp &&
+    item.filename === historyWriteResult.originalFilename &&
+    item.content === historyWriteResult.content;
+  let entryIndex = Number.isInteger(historyWriteResult.entryIndex) &&
+    isTargetEntry(hist[historyWriteResult.entryIndex])
+      ? historyWriteResult.entryIndex
+      : hist.findIndex(isTargetEntry);
+  if (entryIndex < 0) return;
+  hist[entryIndex].filename = normalizedFilename;
+  await writeWorkspaceHistory(hist, targetWorkspaceId);
+  if (targetWorkspaceId === workspaceId) {
+    historyCache = hist;
+    const historyModal = document.getElementById('history-modal');
+    if (historyModal?.classList.contains('show')) await openHistory();
+  }
 }
 
 async function openHistory() {
   if (!guardEditorCommand()) return;
   closeMenus();
-  const hist = JSON.parse((await secureGetItem(HISTORY_KEY)) || '[]');
+  const hist = await readWorkspaceHistory();
+  historyCache = hist;
   const container = document.getElementById('hist-list');
   container.innerHTML = '';
   if (!hist.length) {
@@ -8764,6 +9208,7 @@ function formatDoc() {
     const formattedText = originalText.replace(/\n{3,}/g, '\n\n').split('\n').map(l => l.trimEnd()).join('\n');
     editor.value = formattedText;
     update();
+    if (shouldTrackSearchHighlights()) performSearch(false);
     if (deepEditEnabled && formattedText !== originalText) {
       recordDeepEditEvent({ type:'format-markdown', summary:isJa?'Markdownを整形':'Format Markdown', charDelta:formattedText.length - originalText.length, meta:{ beforeLength:originalText.length, afterLength:formattedText.length } });
     }
@@ -8799,6 +9244,7 @@ let deepEditExplicitOperationDepth = 0;
 let deepEditRenderRaf = null;
 let deepEditShowJson = false;
 let deepEditLastKnownLength = 0;
+let deepEditLastKnownValue = '';
 let deepEditContinuationToastTimer = null;
 
 function createDeepSessionId(){ if (window.crypto && typeof crypto.randomUUID === 'function') return `deep-${crypto.randomUUID()}`; return `deep-${Date.now()}-${Math.random().toString(36).slice(2,10)}`; }
@@ -8806,6 +9252,21 @@ function createDeepEventId(){ return `event-${Date.now()}-${Math.random().toStri
 function sanitizeDeepText(value){ const text = String(value || ''); return text.length > 300 ? `${text.slice(0,300)}…` : text; }
 function sanitizeDeepSnippet(value){ const text = String(value || ''); if (/data:[^;,\s]{1,100};base64,/i.test(text)) return '[embedded data omitted]'; if (text.length <= DEEP_EDIT_MAX_SNIPPET_CHARS) return text; return text.slice(0, DEEP_EDIT_MAX_SNIPPET_CHARS) + `… [${text.length - DEEP_EDIT_MAX_SNIPPET_CHARS} characters omitted]`; }
 function sanitizeDeepContextLine(value){ const text = String(value || ''); if (/data:[^;,\s]{1,100};base64,/i.test(text)) return '[embedded data omitted]'; if (text.length <= DEEP_EDIT_MAX_CONTEXT_LINE_CHARS) return text; return text.slice(0, DEEP_EDIT_MAX_CONTEXT_LINE_CHARS) + `… [${text.length - DEEP_EDIT_MAX_CONTEXT_LINE_CHARS} characters omitted]`; }
+function getDeepLineBreakDisplay(count){ return count === 1 ? T.deepEditNewLine : T.deepEditNewLines.replace('{count}', count); }
+function formatDeepSnippetForDisplay(rawValue){
+  const text = String(rawValue ?? '').replace(/\r\n?/g, '\n');
+  if (!text) return '';
+  if (/^\n+$/.test(text)) return getDeepLineBreakDisplay(text.length);
+  const leadingLineBreaks = text.match(/^\n*/)?.[0].length || 0;
+  const trailingLineBreaks = text.match(/\n*$/)?.[0].length || 0;
+  const contentEnd = text.length - trailingLineBreaks;
+  const content = text.slice(leadingLineBreaks, contentEnd);
+  const parts = [];
+  if (leadingLineBreaks > 1) parts.push(getDeepLineBreakDisplay(leadingLineBreaks - 1));
+  parts.push(content);
+  if (trailingLineBreaks > 0) parts.push(getDeepLineBreakDisplay(trailingLineBreaks));
+  return parts.join('\n');
+}
 function getDeepAdjacentLineContext(text, offset){
   const source = String(text || ''); const safeOffset = Math.max(0, Math.min(Number(offset) || 0, source.length));
   const currentLineStart = source.lastIndexOf('\n', Math.max(0, safeOffset - 1)) + 1;
@@ -8838,7 +9299,7 @@ function recordDeepEditEvent(eventData){
     if (deepEditSession.events.length >= DEEP_EDIT_MAX_EVENTS) { if (!deepEditLimitNotified) { deepEditLimitNotified = true; toast(T.deepEditLimitReached); renderDeepEditState(); } return false; }
     const rawType = String(eventData?.type || 'system-note');
     const event = { id: createDeepEventId(), timestamp: new Date().toISOString(), type: DEEP_ALLOWED_EVENT_TYPES.has(rawType) ? rawType : 'system-note', source: String(eventData?.source || 'user'), heading: sanitizeDeepText(eventData?.heading || ''), summary: sanitizeDeepText(eventData?.summary || ''), charDelta: Number.isFinite(eventData?.charDelta) ? eventData.charDelta : 0, beforeSnippet: sanitizeDeepSnippet(eventData?.beforeSnippet || ''), afterSnippet: sanitizeDeepSnippet(eventData?.afterSnippet || ''), meta: sanitizeDeepMeta(eventData?.meta) };
-    deepEditSession.events.push(event); deepEditLastKnownLength = editor.value.length; if (deepEditPanelOpen) scheduleDeepLogRender(); return true;
+    deepEditSession.events.push(event); deepEditLastKnownValue = editor.value; deepEditLastKnownLength = editor.value.length; if (deepEditPanelOpen) scheduleDeepLogRender(); return true;
   } catch (error) { console.error('Deep Edit logging failed', error); return false; }
 }
 function renderDeepEditState(){
@@ -8850,7 +9311,7 @@ function renderDeepEditState(){
   const logEntry = document.getElementById('m-deep-log-entry'); const logCheck = document.getElementById('deep-log-check');
   if (logEntry) logEntry.classList.toggle('active', deepEditPanelOpen); if (logCheck) logCheck.style.opacity = deepEditPanelOpen ? '1' : '0';
 }
-function toggleDeepEditMode(){ closeMenus(); if (deepEditEnabled) { stopDeepEditMode(false); return; } if (deepEditSession?.events?.length && !confirm(T.deepEditReplaceSessionConfirm)) return; if (!confirm(T.deepEditStartConfirm)) return; clearDeepInputBatch(); deepEditSession = createDeepSession(); deepEditEnabled = true; deepEditLimitNotified = false; deepEditLastKnownLength = editor.value.length; recordDeepEditEvent({ type:'session-start', source:'system', summary: isJa ? 'Deep編集モード開始' : 'Deep Edit Mode started', meta:{ schemaVersion: DEEP_EDIT_SCHEMA_VERSION } }); renderDeepEditState(); toast(T.deepEditOn); }
+function toggleDeepEditMode(){ closeMenus(); if (deepEditEnabled) { stopDeepEditMode(false); return; } if (deepEditSession?.events?.length && !confirm(T.deepEditReplaceSessionConfirm)) return; if (!confirm(T.deepEditStartConfirm)) return; clearDeepInputBatch(); deepEditSession = createDeepSession(); deepEditEnabled = true; deepEditLimitNotified = false; deepEditLastKnownValue = editor.value; deepEditLastKnownLength = editor.value.length; recordDeepEditEvent({ type:'session-start', source:'system', summary: isJa ? 'Deep編集モード開始' : 'Deep Edit Mode started', meta:{ schemaVersion: DEEP_EDIT_SCHEMA_VERSION } }); renderDeepEditState(); toast(T.deepEditOn); }
 function stopDeepEditMode(silent){ if (!deepEditEnabled) return; pendingDeepFilenameChange = null; flushDeepInputBatch(); recordDeepEditEvent({ type:'session-stop', source:'system', summary: isJa ? 'Deep編集モード終了' : 'Deep Edit Mode stopped' }); if (deepEditSession) deepEditSession.stoppedAt = new Date().toISOString(); deepEditEnabled = false; deepEditBeforeInput = null; deepEditCompositionReplacement = null; clearDeepInputBatch(); renderDeepEditState(); if (!silent) toast(T.deepEditOff); if (deepEditPanelOpen) scheduleDeepLogRender(); }
 function prepareDeepEditForTrackedDocumentOpen(details = {}){
   if (!deepEditEnabled || !deepEditSession) return false;
@@ -8872,6 +9333,7 @@ function finalizeDeepEditAfterTrackedDocumentOpen(filename){
   deepEditCompositionReplacement = null;
   clearDeepInputBatch();
   deepEditExplicitOperationDepth = 0;
+  deepEditLastKnownValue = editor.value;
   deepEditLastKnownLength = editor.value.length;
   if (deepEditSession.document) deepEditSession.document.currentFilename = sanitizeDeepText(filename || filenameInput.value || 'untitled.md');
   renderDeepEditState();
@@ -8887,7 +9349,7 @@ function resetDeepEditForNewDocumentContext(){
   deepEditExplicitOperationDepth = 0;
   deepEditLimitNotified = false;
   deepEditShowJson = false;
-  deepEditLastKnownLength = 0;
+  deepEditLastKnownValue = ''; deepEditLastKnownLength = 0;
   renderDeepEditState();
   if (deepEditPanelOpen) scheduleDeepLogRender();
 }
@@ -8901,7 +9363,7 @@ function prepareDeepEditForFreshDocumentContext(){
   deepEditExplicitOperationDepth = 0;
   deepEditLimitNotified = false;
   deepEditShowJson = false;
-  deepEditLastKnownLength = 0;
+  deepEditLastKnownValue = ''; deepEditLastKnownLength = 0;
   deepEditEnabled = shouldContinue;
   renderDeepEditState();
   if (deepEditPanelOpen) scheduleDeepLogRender();
@@ -8911,7 +9373,7 @@ function resumeDeepEditForFreshDocumentContext(shouldContinue, reason = ''){
   if (!shouldContinue) {
     deepEditEnabled = false;
     deepEditSession = null;
-    deepEditLastKnownLength = 0;
+    deepEditLastKnownValue = ''; deepEditLastKnownLength = 0;
     renderDeepEditState();
     if (deepEditPanelOpen) scheduleDeepLogRender();
     return null;
@@ -8919,6 +9381,7 @@ function resumeDeepEditForFreshDocumentContext(shouldContinue, reason = ''){
   deepEditEnabled = true;
   deepEditSession = createDeepSession();
   deepEditLimitNotified = false;
+  deepEditLastKnownValue = editor.value;
   deepEditLastKnownLength = editor.value.length;
   recordDeepEditEvent({
     type:'session-start',
@@ -8953,11 +9416,36 @@ function getDeepHeadingAtOffset(offset){
   for (let i = lines.length - 1; i >= begin; i -= 1) { const line = lines[i]; if (/^ {0,3}(```|~~~)/.test(line)) return ''; const m = line.match(/^ {0,3}#{1,6}[ \t]+(.+)$/); if (m) return sanitizeDeepText(m[1].replace(/[ \t]+#+[ \t]*$/, '').trim()); }
   return '';
 }
+function computeDeepBatchDiff(beforeValue, afterValue){
+  const before = String(beforeValue ?? ''); const after = String(afterValue ?? '');
+  let start = 0; const minLength = Math.min(before.length, after.length);
+  while (start < minLength && before.charCodeAt(start) === after.charCodeAt(start)) start += 1;
+  let beforeEnd = before.length; let afterEnd = after.length;
+  while (beforeEnd > start && afterEnd > start && before.charCodeAt(beforeEnd - 1) === after.charCodeAt(afterEnd - 1)) { beforeEnd -= 1; afterEnd -= 1; }
+  return { start, beforeEnd, afterEnd, removedText:before.slice(start, beforeEnd), insertedText:after.slice(start, afterEnd), charDelta:after.length - before.length };
+}
+function getPreviousLogicalLineAtOffset(value, offset){
+  const text = String(value ?? '');
+  const safeOffset = Math.max(0, Math.min(Number(offset) || 0, text.length));
+  const currentLineStart = text.lastIndexOf('\n', Math.max(0, safeOffset - 1)) + 1;
+  if (currentLineStart <= 0) return '';
+  const previousLineEnd = currentLineStart - 1;
+  const previousLineStart = text.lastIndexOf('\n', Math.max(0, previousLineEnd - 1)) + 1;
+  return sanitizeDeepContextLine(text.slice(previousLineStart, previousLineEnd).replace(/\r$/, ''));
+}
+function getDeepPreviousLineFromFinalDiff(afterValue, diff){
+  if (!diff || !Number.isFinite(diff.start)) return null;
+  const insertedText = String(diff.insertedText ?? '');
+  const leadingBreakLength = insertedText.match(/^(?:(?:\r\n)|\r|\n)*/)?.[0].length || 0;
+  const anchorOffset = diff.start + (leadingBreakLength > 0 ? leadingBreakLength : 0);
+  return getPreviousLogicalLineAtOffset(afterValue, anchorOffset);
+}
 function mergeIntoDeepInputBatch(data){
   const now = new Date().toISOString(); const headingKey = data.offset;
   if (deepEditPendingBatch && data.contextKey !== null && data.contextKey !== undefined && deepEditPendingBatch.contextKey !== null && deepEditPendingBatch.contextKey !== data.contextKey) flushDeepInputBatch();
-  if (!deepEditPendingBatch) deepEditPendingBatch = { charDelta:0, operations:0, insertedCharacters:0, deletedCharacters:0, startedAt:now, endedAt:now, beforeSnippet:'', afterSnippet:'', firstOffset: headingKey, approximate:false, previousLine:'', nextLine:'', contextKey:null };
+  if (!deepEditPendingBatch) deepEditPendingBatch = { charDelta:0, operations:0, insertedCharacters:0, deletedCharacters:0, startedAt:now, endedAt:now, beforeSnippet:'', afterSnippet:'', firstOffset: headingKey, approximate:false, previousLine:'', nextLine:'', contextKey:null, startValue:typeof data.beforeValue === 'string' ? data.beforeValue : deepEditLastKnownValue, endValue:typeof data.afterValue === 'string' ? data.afterValue : editor.value };
   deepEditPendingBatch.operations += 1; deepEditPendingBatch.charDelta += data.charDelta; deepEditPendingBatch.endedAt = now;
+  deepEditPendingBatch.endValue = typeof data.afterValue === 'string' ? data.afterValue : editor.value;
   if (data.charDelta > 0) deepEditPendingBatch.insertedCharacters += data.charDelta; else deepEditPendingBatch.deletedCharacters += Math.abs(data.charDelta);
   if (!deepEditPendingBatch.beforeSnippet && data.beforeSnippet) deepEditPendingBatch.beforeSnippet = data.beforeSnippet;
   if (data.afterSnippet) deepEditPendingBatch.afterSnippet = data.afterSnippet;
@@ -8966,13 +9454,14 @@ function mergeIntoDeepInputBatch(data){
   if (deepEditPendingBatch.contextKey === null && data.contextKey !== null && data.contextKey !== undefined) deepEditPendingBatch.contextKey = data.contextKey;
   if (data.meta?.approximate) deepEditPendingBatch.approximate = true;
 }
-function flushDeepInputBatch(){ if (!deepEditPendingBatch) return; if (isEditorComposing) { scheduleDeepInputBatchFlush(); return; } clearTimeout(deepEditBatchTimer); deepEditBatchTimer = null; const b = deepEditPendingBatch; deepEditPendingBatch = null; recordDeepEditEvent({ type:'typing', summary:isJa?'通常編集':'Typing', heading:getDeepHeadingAtOffset(b.firstOffset || editor.selectionStart), charDelta:b.charDelta, beforeSnippet:b.beforeSnippet, afterSnippet:b.afterSnippet, meta:{ operations:b.operations, insertedCharacters:b.insertedCharacters, deletedCharacters:b.deletedCharacters, startedAt:b.startedAt, endedAt:b.endedAt, approximate:b.approximate, previousLine:b.previousLine, nextLine:b.nextLine, contextBasis:'before-edit' } }); }
+function flushDeepInputBatch(){ if (!deepEditPendingBatch) return; if (isEditorComposing) { scheduleDeepInputBatchFlush(); return; } clearTimeout(deepEditBatchTimer); deepEditBatchTimer = null; const b = deepEditPendingBatch; deepEditPendingBatch = null; const diff = computeDeepBatchDiff(b.startValue, b.endValue); const finalPreviousLine = getDeepPreviousLineFromFinalDiff(b.endValue, diff); recordDeepEditEvent({ type:'typing', summary:isJa?'通常編集':'Typing', heading:getDeepHeadingAtOffset(b.firstOffset || editor.selectionStart), charDelta:diff.charDelta, beforeSnippet:diff.removedText, afterSnippet:diff.insertedText, meta:{ operations:b.operations, insertedCharacters:b.insertedCharacters, deletedCharacters:b.deletedCharacters, startedAt:b.startedAt, endedAt:b.endedAt, approximate:b.approximate, previousLine:finalPreviousLine ?? b.previousLine ?? '', nextLine:b.nextLine, contextBasis:'before-edit' } }); }
 function collectDeepGenericInput(event){
   try {
     if (!deepEditEnabled) return; if (suppressInputHandling) return; if (deepEditExplicitOperationDepth > 0) return;
     const before = deepEditBeforeInput; deepEditBeforeInput = null; const inputType = event?.inputType || before?.inputType || '';
-    const charDelta = before ? editor.value.length - before.beforeLength : editor.value.length - deepEditLastKnownLength;
-    deepEditLastKnownLength = editor.value.length;
+    const currentValue = editor.value; const previousValue = typeof before?.beforeValue === 'string' ? before.beforeValue : deepEditLastKnownValue;
+    const charDelta = currentValue.length - previousValue.length;
+    deepEditLastKnownValue = currentValue; deepEditLastKnownLength = currentValue.length;
     if (inputType === 'historyUndo' || inputType === 'historyRedo') { deepEditCompositionReplacement = null; flushDeepInputBatch(); recordDeepEditEvent({ type: inputType === 'historyUndo' ? 'undo' : 'redo', summary: inputType === 'historyUndo' ? 'Undo' : 'Redo', heading:getDeepHeadingAtOffset(before?.offset || editor.selectionStart), charDelta, meta: before ? {} : { approximate:true } }); return; }
     if (!before && deepEditCompositionReplacement && !isDeepDeleteInput(inputType)) {
       const compositionBefore = deepEditCompositionReplacement;
@@ -8982,12 +9471,13 @@ function collectDeepGenericInput(event){
         deepEditCompositionReplacement = null;
         flushDeepInputBatch();
         recordDeepEditEvent({ type:'delete', summary:isJa?'大きな文字列を削除':'Large deletion', heading:getDeepHeadingAtOffset(compositionBefore.offset), charDelta:-compositionSelectedLength, beforeSnippet:compositionBefore.selectedText, afterSnippet:'', meta:{ deletedCharacters:compositionSelectedLength, replacement:true, inputType } });
-        mergeIntoDeepInputBatch({ inputType, offset:compositionBefore.offset, charDelta:compositionInsertedLength, beforeSnippet:'', afterSnippet:editor.value.slice(compositionBefore.start, compositionBefore.start + compositionInsertedLength), previousLine:compositionBefore.previousLine, nextLine:compositionBefore.nextLine, contextKey:compositionBefore.contextKey, meta:{ replacementOfLargeSelection:true } });
+        const valueAfterDeletion = compositionBefore.beforeValue.slice(0, compositionBefore.start) + compositionBefore.beforeValue.slice(compositionBefore.end);
+        mergeIntoDeepInputBatch({ inputType, offset:compositionBefore.offset, charDelta:compositionInsertedLength, beforeSnippet:'', afterSnippet:editor.value.slice(compositionBefore.start, compositionBefore.start + compositionInsertedLength), beforeValue:valueAfterDeletion, afterValue:currentValue, previousLine:compositionBefore.previousLine, nextLine:compositionBefore.nextLine, contextKey:compositionBefore.contextKey, meta:{ replacementOfLargeSelection:true } });
         scheduleDeepInputBatchFlush();
         return;
       }
     }
-    if (!before) { mergeIntoDeepInputBatch({ inputType, offset: editor.selectionStart, charDelta, beforeSnippet:'', afterSnippet:'', meta:{ approximate:true } }); scheduleDeepInputBatchFlush(); return; }
+    if (!before) { mergeIntoDeepInputBatch({ inputType, offset: editor.selectionStart, charDelta, beforeSnippet:'', afterSnippet:'', beforeValue:previousValue, afterValue:currentValue, meta:{ approximate:true } }); scheduleDeepInputBatchFlush(); return; }
     const selectedLength = Math.max(0, before.end - before.start);
     const insertedLength = Math.max(0, charDelta + selectedLength);
     const insertedText = insertedLength > 0 ? editor.value.slice(before.start, before.start + insertedLength) : '';
@@ -9009,6 +9499,8 @@ function collectDeepGenericInput(event){
         charDelta:insertedLength,
         beforeSnippet:'',
         afterSnippet:insertedText,
+        beforeValue:before.beforeValue.slice(0, before.start) + before.beforeValue.slice(before.end),
+        afterValue:currentValue,
         previousLine:before.previousLine,
         nextLine:before.nextLine,
         contextKey:before.contextKey,
@@ -9024,7 +9516,7 @@ function collectDeepGenericInput(event){
       recordDeepEditEvent({ type:'delete', summary:isJa?'大きな文字列を削除':'Large deletion', heading:getDeepHeadingAtOffset(before.offset), charDelta:-deletedCharacters, beforeSnippet:before.selectedText, afterSnippet:'', meta:{ deletedCharacters } });
       return;
     }
-    mergeIntoDeepInputBatch({ inputType, offset: before.offset, charDelta, beforeSnippet: before.selectedText, afterSnippet: insertedText, previousLine: insertedLength > 0 ? before.previousLine : '', nextLine: insertedLength > 0 ? before.nextLine : '', contextKey: insertedLength > 0 ? before.contextKey : null }); scheduleDeepInputBatchFlush();
+    mergeIntoDeepInputBatch({ inputType, offset: before.offset, charDelta, beforeSnippet: before.selectedText, afterSnippet: insertedText, beforeValue:previousValue, afterValue:currentValue, previousLine: insertedLength > 0 ? before.previousLine : '', nextLine: insertedLength > 0 ? before.nextLine : '', contextKey: insertedLength > 0 ? before.contextKey : null }); scheduleDeepInputBatchFlush();
   } catch (error) { console.error('Deep Edit logging failed', error); }
 }
 
@@ -9033,7 +9525,7 @@ function getDeepLogLabels(){ return isJa ? { startedAs:'開始時のファイル
 function getDeepSessionDocumentNames(){ const doc = deepEditSession?.document || {}; const started = sanitizeDeepContextLine(doc.filename || ''); return { startedFilename: started, currentFilename: sanitizeDeepContextLine(doc.currentFilename || doc.filename || '') }; }
 function getDeepEventChangeDisplay(event){
   if (!event || DEEP_FILE_EVENT_TYPES.has(event.type) || ['undo','redo','session-start','session-stop','system-note'].includes(event.type)) return null;
-  const before = sanitizeDeepSnippet(event.beforeSnippet || ''); const after = sanitizeDeepSnippet(event.afterSnippet || '');
+  const before = formatDeepSnippetForDisplay(sanitizeDeepSnippet(event.beforeSnippet || '')); const after = formatDeepSnippetForDisplay(sanitizeDeepSnippet(event.afterSnippet || ''));
   const label = (kind) => isJa ? ({inserted:'挿入',deleted:'削除',replaced:'置換'}[kind]) : ({inserted:'Inserted',deleted:'Deleted',replaced:'Replaced'}[kind]);
   if (event.type === 'paste' || event.type === 'image-drop') return after ? { kind:'inserted', label:label('inserted'), value:after } : null;
   if (event.type === 'delete' || event.type === 'large-delete') return before ? { kind:'deleted', label:label('deleted'), value:before } : null;
@@ -9191,6 +9683,7 @@ function clearDeepEditLog(){
   if (!deepEditSession) {
     if (deepEditEnabled) {
       deepEditSession = createDeepSession();
+      deepEditLastKnownValue = editor.value;
       deepEditLastKnownLength = editor.value.length;
       renderDeepEditState();
       if (deepEditPanelOpen) scheduleDeepLogRender();
@@ -9220,10 +9713,11 @@ function clearDeepEditLog(){
   if (shouldContinue) {
     deepEditEnabled = true;
     deepEditSession = createDeepSession();
+    deepEditLastKnownValue = editor.value;
     deepEditLastKnownLength = editor.value.length;
   } else {
     deepEditEnabled = false;
-    deepEditLastKnownLength = 0;
+    deepEditLastKnownValue = ''; deepEditLastKnownLength = 0;
   }
 
   renderDeepEditState();
@@ -9719,14 +10213,21 @@ const closableUiRegistry = [
 ].sort((a, b) => b.priority - a.priority);
 
 function handleGlobalEscape(e) {
-  if (e.key !== 'Escape' || e.isComposing || e.keyCode === 229) return;
+  if (e.key !== 'Escape' || e.isComposing || e.keyCode === 229 || isComposing) return;
 
   const targetUi = closableUiRegistry.find(ui => ui.isOpen());
-  if (!targetUi) return;
+  if (targetUi) {
+    targetUi.close();
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
 
-  targetUi.close();
-  e.preventDefault();
-  e.stopPropagation();
+  if (srHighlightActive) {
+    clearSearchHighlights();
+    e.preventDefault();
+    e.stopPropagation();
+  }
 }
 
 document.addEventListener('keydown', handleGlobalEscape);
@@ -9784,8 +10285,7 @@ async function closeFile() {
   await saveToHistoryList(filenameInput.value, editor.value);
   const continueDeepEdit = prepareDeepEditForFreshDocumentContext();
   setEditorDocumentValue(''); resetDocumentIdentity(); update(); markSaved();
-  secureRemoveItem(AUTOSAVE_TXT_KEY);
-  secureRemoveItem(AUTOSAVE_NAME_KEY);
+  { const keys = getWorkspaceStorageKeys(); secureRemoveItem(keys.text); secureRemoveItem(keys.name); }
   const continuedSessionId = resumeDeepEditForFreshDocumentContext(continueDeepEdit, 'file-close');
   toast(T.closedToast);
   scheduleDeepEditContinuationToast(continuedSessionId);
