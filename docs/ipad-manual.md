@@ -47,7 +47,10 @@ MD//WORKS Editor works comfortably in the following iPad environments:
   * External Keyboard (Magic Keyboard, etc.)
   * Mouse or Trackpad
  
-  > 💡 **Enhance your workflow with multiple browsers**: To create a desktop-like environment on your iPad, try installing another browser like Brave or Chrome in addition to Safari. Using Split View, you can use one browser for research while writing in the editor on the other, or effortlessly edit two different documents side-by-side.
+> 💡 **Editing multiple documents in browser tabs**
+> In v1.6.3 and later, each MD//WORKS tab is handled as an independent Workspace. The Auto Save content and filename, as well as work history, are kept separately for each tab, helping prevent one document from overwriting another while several documents are edited in parallel. The browser tab shows the current filename, with a `●` prefix when the document has unsaved changes.
+>
+> In supported environments, using the browser's **Duplicate Tab** command also separates the copy into a new Workspace automatically. The duplicated tab inherits work history up to the point of duplication; subsequent history is recorded independently in each tab. Themes such as Midnight, Paper, and Warm remain useful for visually distinguishing browsers or different kinds of work.
 
 ### 1-3. Screen Layout
 
@@ -101,6 +104,8 @@ Open the file selection screen using either of the following methods:
 
 **② Select from the "Files" app**
 The standard iPad "Files" app will open; select your target file from here.
+
+You can also open `.html` and `.htm` files and edit them as text source. When a file is a supported MD//WORKS format—such as a Restricted Viewer, Private Viewer, or Password-protected App—MD//WORKS identifies the format and performs the required restoration. HTML examples embedded in a Markdown or text file are not treated as one of these special formats.
 
 > 💡 **Using Cloud Storage:** Because it integrates with the "Files" app, you can directly open files saved not only on your local iPad storage but also in cloud storage services like **iCloud Drive** or **OneDrive**.
 
@@ -228,6 +233,9 @@ The current line count, word count, and character count are shown in the status 
 You can format text either by typing Markdown syntax directly or by using the toolbar.
 
 The toolbar makes it easy to insert headings, bold text, lists, quotes, code blocks, links, and tables without memorizing Markdown syntax.
+
+> 💡 **Cursor and selection preservation**
+> When you insert H1 / H2 / H3 headings, quotes, horizontal rules, and similar Markdown elements from the toolbar, the cursor position or text selection relative to the original text is preserved, so you can continue editing without repositioning the cursor.
 
 ### 4-1. Creating Headings
 
@@ -445,6 +453,8 @@ Select **File > History** to view saved draft states.
 
 Use this feature if you accidentally delete content or want to return to an earlier draft.
 
+When multiple tabs are in use, work history is maintained separately for the Workspace in each tab. After a file is saved, the confirmed filename is shown in the corresponding history entry.
+
 Running **Clear Local Data** also deletes History.
 
 Do not rely on History as your only backup for important documents.
@@ -556,6 +566,8 @@ To search within the document, select **Edit > Find (⌘F)** from the menu bar.
 3. Enter the text you want to find.
 4. Matching text is highlighted in the editor.
 5. Use the **↑ / ↓** buttons to move between results.
+6. **Close the Find/Replace panel:** Press `Esc` or use the × button in the upper-right corner. Only the panel closes; the search highlights remain.
+7. **Clear search highlights:** With the panel closed, press `Esc` again to clear the highlights. The search text and options are retained, so reopening the panel resumes the search with the same settings. As you edit the document, the remaining highlights update to match the current content.
 
 ![Image: Find Menu](<./images/findE.jpg>)
 
@@ -713,7 +725,7 @@ Because the Deep Edit log is kept completely separate from the main text, it doe
 
 ### 10-2. How Editing and Recording Works
 
-Edit your document as usual. Deep Edit mode does not directly alter your text; rather, it silently records your editing process in the background. Continuous typing—including spaces, punctuation, and standard backspacing—is grouped into normal edit events with a short delay to keep the log readable.
+Edit your document as usual. Deep Edit mode does not directly alter your text; rather, it silently records your editing process in the background. Continuous typing—including spaces, punctuation, and standard backspacing—is grouped into one normal editing event after approximately five seconds to keep the log readable. Uncommitted text during IME composition is not recorded. For normal typing events, MD//WORKS records the final changes based on the difference between the document state at the beginning and end of the typing batch.
 
 If a selected text range of 100 characters or more is replaced through normal text input, it will be recorded intelligently as two separate events: a large deletion followed by an input event.
 
@@ -721,7 +733,7 @@ If a selected text range of 100 characters or more is replaced through normal te
 
 Open the log panel from **View > Deep Edit Log**. After making significant changes, reviewing the log helps you retrace your thought process and decide whether to make further revisions or save the document as a new version.
 
-* **Display Contents:** The log shows the operation time, event type, edited location (e.g., previous heading, previous/next line), and character count changes (e.g., `+128`, `-340`). For save/file operation events, the saved name or opened file name is also displayed.
+* **Display Contents:** The log shows the operation time, event type, edited location (e.g., previous heading, previous/next line), and character count changes (e.g., `+128`, `-340`). For save/file operation events, the saved name or opened file name is also displayed. A line break entered by itself is shown as `[New line]` (or, for example, `[New lines × 2]`), making Enter-only edits visible instead of appearing as an empty entry.
 * **Copy Log:** Use the **Copy Log** button to copy the entire log to your clipboard.
 * **View JSON:** Use the **View JSON** button to display the raw internal Deep Edit log data in JSON format. You can then select and copy it manually if needed.
 
@@ -756,7 +768,7 @@ Use the **Clear Log** button to delete the current log. If you clear the log whi
 
 ### 10-7. Main Recorded Events
 
-* **Editing:** Normal edits (grouped after a short delay), large deletions (100+ characters), overwriting a selection of 100+ characters through normal text input (recorded separately as deletion and input), and pasting.
+* **Editing:** Normal edits (grouped into approximately five-second batches), large deletions (100+ characters), overwriting a selection of 100+ characters through normal text input (recorded separately as deletion and input), and pasting. Line breaks are displayed clearly in normal editing events, and the Previous line context is recorded from the final edit location.
 * **Operations:** Replace all, Format Markdown, Update TOC, Add image, and Rename document.
 * **File:** Save, Save as, Download, Open file (Markdown / Word / Normal Viewer HTML), Open Word file, and Restore from work history.
 * **Other:** Undo / Redo executions.
@@ -799,7 +811,8 @@ Select **Help > Keyboard Shortcuts** to view available shortcuts.
 | Select All | ⌘A |
 | Find | ⌘F |
 | Replace | ⌘H |
-| Close the front panel or modal | ⌘ + . or Esc |
+| Close the frontmost panel or modal | ⌘ + . or Esc |
+| Clear search highlights | Esc (when no panel or modal is open) |
 
 ### 11-3. GitHub / About MD//WORKS
 
@@ -981,7 +994,9 @@ MD//WORKS is based primarily on GitHub Flavored Markdown (GFM). It supports comm
 
 ### 13-15. My Standalone HTML app does not open correctly
 
-Ensure your browser is up-to-date and no corporate restrictions are blocking the file.
+A regular HTML file opened with **File > Open** is loaded as text source. When MD//WORKS recognizes a supported Restricted Viewer, Private Viewer, or Password-protected App, it performs the required restoration. Enter the correct password or passphrase when the format requires one; a corrupted file may not be recoverable.
+
+If a Standalone App or protected HTML file does not open correctly, update the browser and check whether device or organizational restrictions are blocking the file. If it still does not open with the correct credentials, export it again from the original source.
 
 ### 13-16. I forgot my Private Storage passphrase
 
