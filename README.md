@@ -61,6 +61,19 @@ The core Markdown Preview components are now bundled directly with MD//WORKS, al
 * **Mermaid diagrams**:  We plan to support for previewing Mermaid diagrams, including flowcharts and sequence diagrams, directly from Markdown. The implementation will prioritize secure SVG rendering, readable source fallback when offline, and reliable output in viewers, print, and PDF.
 * **PWA Support**: We plan to support Progressive Web Apps (PWA), allowing you to install the editor directly on your device for a faster, seamless, native-app-like experience.
 
+### 🎓 Spin-off: Academic MD//WORKS for Education
+
+A sibling project applying MD//WORKS to academic reports. 
+
+Instead of relying on AI detectors or always-on monitoring, it records the writing process locally as **a hash chain** inside a single HTML file. The file can be verified independently for tampering.
+
+* **Process-recording editor:** Offline-first, local-only logging with **optional server anchoring**
+* **Teacher Reviewer:** 5-tab viewer (Document / Summary / Timeline / Sessions / Detailed Log) — detailed text collapsed by default
+
+Coming next month as **Academic MD//WORKS β** (experimental).
+
+---
+
 ## 💡 **Handy Companion Tools**
 We've also provided two standalone command-line tools that instantly compile large batches of images into a single file. This significantly streamlines your MD//WORKS workflow when creating image-heavy reports or handouts.
 
