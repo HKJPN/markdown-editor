@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-08-19 - v1.6.3 - Persist per-tab work history
+- Persisted per-tab work history across  browser restarts, with a unified history view on launch.
+
 ## 2026-08-07 - v1.6.3 candidate - Smarter, Safer Editing
 
 - Improved multi-tab editing with isolated Auto Save/work history, safer duplicated tabs, filename-based tab titles, and correct filenames in history.   
