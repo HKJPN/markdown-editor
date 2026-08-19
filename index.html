@@ -833,6 +833,9 @@ body.preview-focus-mode #preview h6 {
 }
 .hist-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--border); padding-bottom:10px; }
 .hist-head h3 { font-size:14px; font-weight:700; color:var(--text); font-family:var(--sans); }
+.hist-actions { display:flex; align-items:center; gap:8px; }
+.hist-clear { padding:4px 9px; border:1px solid var(--border); border-radius:6px; background:transparent; color:var(--text3); cursor:pointer; font:11px var(--sans); }
+.hist-clear:hover { color:var(--text); border-color:var(--text3); }
 #hist-list { max-height:40vh; overflow-y:auto; font-size:13px; padding-right:4px;}
 #hist-list::-webkit-scrollbar{width:8px}
 #hist-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:999px}
@@ -1885,7 +1888,10 @@ body.zen-mode #zen-exit-btn { display: flex; }
   <div class="hist-content">
     <div class="hist-head">
       <h3 id="hist-title"></h3>
-      <button onclick="closeHistory()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;">✕</button>
+      <div class="hist-actions">
+        <button id="hist-clear" class="hist-clear" type="button" onclick="clearVisibleHistory()"></button>
+        <button onclick="closeHistory()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;">✕</button>
+      </div>
     </div>
     <div id="hist-list"></div>
   </div>
@@ -2217,6 +2223,10 @@ const T = {
   themeWarm:    isJa ? 'Warm（長文執筆・目にやさしい）' : 'Warm (Long Writing)',
   themeChanged: isJa ? name => `テーマを ${name} に変更しました` : name => `Theme changed to ${name}`,
   historyEmpty:isJa ? '履歴がありません' : 'No history found',
+  historyAll: isJa ? 'すべての作業履歴' : 'All History',
+  historyClear: isJa ? '履歴を削除' : 'Clear History',
+  historyClearCurrentConfirm: isJa ? '現在の文書セッションの作業履歴を削除しますか？' : 'Clear the history for the current document session?',
+  historyClearAllConfirm: isJa ? '保存されているすべての作業履歴を削除しますか？' : 'Clear all saved work history?',
   formatDone:  isJa ? '整形を完了しました' : 'Formatting complete',
   insertToc:   isJa ? '目次を挿入' : 'Insert Table of Contents',
   tocTitle:    isJa ? '目次' : 'Table of Contents',
@@ -3643,6 +3653,8 @@ const HISTORY_KEY = "mdworks_secure_history_v2";
 const META_KEY = "mdworks_secure_meta_v2";
 const AUTO_DB_NAME = "mdworks_auto_crypto_db";
 const AUTO_DB_STORE = "keys";
+const HISTORY_DB_STORE = "history";
+const HISTORY_DB_VERSION = 2;
 const AUTO_KEY_ID = "auto-aes-key";
 const FALLBACK_AUTO_JWK_KEY = "mdworks_auto_key_jwk_fallback";
 const LEGACY_TEXT_KEY = "md_editor_draft_text"; // old plaintext
@@ -3673,6 +3685,7 @@ let workspaceChannelActive = false;
 let workspaceStoragePaused = false;
 let pendingWorkspaceAutoSave = false;
 let pendingWorkspaceHistorySave = false;
+let showAllHistoryOnStartup = false;
 const tabInstanceId = createSecureId('tab');
 const tabStartedAt = Date.now();
 
@@ -3793,12 +3806,60 @@ function shouldForkForWorkspaceCollision(occupied) {
   return String(occupied.instanceId || '') < tabInstanceId;
 }
 async function readWorkspaceHistory(id = workspaceId, scope = workspaceScope) {
-  const raw = await secureGetItem(getWorkspaceStorageKeys(id, scope).history);
-  try { const parsed = JSON.parse(raw || '[]'); return Array.isArray(parsed) ? parsed : []; }
-  catch { return []; }
+  try {
+    const records = await readHistoryRecords(id);
+    const history = await Promise.all(records.map(decodeHistoryRecord));
+    return history.filter(Boolean).sort((a, b) => b.date - a.date);
+  } catch (error) {
+    console.warn('IndexedDB history read failed; using workspace fallback', error);
+    const raw = await secureGetItem(getWorkspaceStorageKeys(id, scope).history);
+    try { const parsed = JSON.parse(raw || '[]'); return Array.isArray(parsed) ? parsed : []; }
+    catch { return []; }
+  }
 }
 async function writeWorkspaceHistory(hist, id = workspaceId, scope = workspaceScope) {
-  return secureSetItem(getWorkspaceStorageKeys(id, scope).history, JSON.stringify(Array.isArray(hist) ? hist : []));
+  try {
+    await replaceHistoryRecords(id, Array.isArray(hist) ? hist : []);
+    secureRemoveItem(getWorkspaceStorageKeys(id, scope).history);
+    return true;
+  } catch (error) {
+    console.warn('IndexedDB history write failed; using workspace fallback', error);
+    return secureSetItem(getWorkspaceStorageKeys(id, scope).history, JSON.stringify(Array.isArray(hist) ? hist : []));
+  }
+}
+async function readAllHistory() {
+  try {
+    const records = await readHistoryRecords();
+    const history = await Promise.all(records.map(decodeHistoryRecord));
+    return history.filter(Boolean).sort((a, b) => b.date - a.date);
+  } catch (error) {
+    console.warn('All-history read failed', error);
+    const histories = await Promise.all(getAllWorkspaceStorageKeys()
+      .filter(key => key.endsWith(':history'))
+      .map(async key => {
+        const raw = await secureGetItem(key);
+        try { const parsed = JSON.parse(raw || '[]'); return Array.isArray(parsed) ? parsed : []; }
+        catch { return []; }
+      }));
+    return histories.flat().sort((a, b) => Number(b.date || 0) - Number(a.date || 0));
+  }
+}
+async function migrateWorkspaceHistoryToIndexedDb() {
+  const historyKeys = getAllWorkspaceStorageKeys().filter(key => key.endsWith(':history'));
+  for (const key of historyKeys) {
+    const parts = key.split(':');
+    const documentSessionId = parts.at(-2);
+    if (!documentSessionId || !localStorage.getItem(key)) continue;
+    const raw = await secureGetItem(key);
+    let legacy = [];
+    try { legacy = JSON.parse(raw || '[]'); } catch { continue; }
+    if (!Array.isArray(legacy) || !legacy.length) { secureRemoveItem(key); continue; }
+    try {
+      const existing = await readHistoryRecords(documentSessionId);
+      if (!existing.length) await replaceHistoryRecords(documentSessionId, legacy);
+      secureRemoveItem(key);
+    } catch (error) { console.warn('Legacy workspace history migration failed', key, error); }
+  }
 }
 async function migrateLegacySharedDataToWorkspace() {
   if (!workspaceId) return;
@@ -3823,6 +3884,7 @@ async function initializeWorkspace() {
   const sessionKey = getWorkspaceSessionKey();
   workspaceId = sessionStorage.getItem(sessionKey);
   const hadSessionWorkspace = Boolean(workspaceId);
+  showAllHistoryOnStartup = !hadSessionWorkspace && !hasStandaloneData;
   if (!workspaceId) {
     workspaceId = createWorkspaceId();
     sessionStorage.setItem(sessionKey, workspaceId);
@@ -3833,6 +3895,7 @@ async function initializeWorkspace() {
     if (shouldForkForWorkspaceCollision(occupied)) await forkDuplicatedWorkspace(occupied?.filename);
   }
   await migrateLegacySharedDataToWorkspace();
+  await migrateWorkspaceHistoryToIndexedDb();
 }
 async function requestWorkspaceFork(sourceWorkspaceId, targetWorkspaceId, targetFilename) {
   if (!workspaceChannel) throw new Error('BroadcastChannel unavailable');
@@ -3940,8 +4003,16 @@ function currentMode() {
 function openKeyDb() {
   return new Promise((resolve, reject) => {
     if (!window.indexedDB) return reject(new Error("IndexedDB unavailable"));
-    const req = indexedDB.open(AUTO_DB_NAME, 1);
-    req.onupgradeneeded = () => req.result.createObjectStore(AUTO_DB_STORE);
+    const req = indexedDB.open(AUTO_DB_NAME, HISTORY_DB_VERSION);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(AUTO_DB_STORE)) db.createObjectStore(AUTO_DB_STORE);
+      if (!db.objectStoreNames.contains(HISTORY_DB_STORE)) {
+        const store = db.createObjectStore(HISTORY_DB_STORE, { keyPath: 'historyId' });
+        store.createIndex('documentSessionId', 'documentSessionId', { unique: false });
+        store.createIndex('timestamp', 'timestamp', { unique: false });
+      }
+    };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error || new Error("IndexedDB open failed"));
   });
@@ -4050,6 +4121,95 @@ async function secureGetItem(key) {
 
 function secureRemoveItem(key) {
   localStorage.removeItem(key);
+}
+
+function historyRequest(run, mode = 'readonly') {
+  return openKeyDb().then(db => new Promise((resolve, reject) => {
+    const tx = db.transaction(HISTORY_DB_STORE, mode);
+    let request;
+    try { request = run(tx.objectStore(HISTORY_DB_STORE)); }
+    catch (error) { db.close(); reject(error); return; }
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error || new Error('History IndexedDB request failed'));
+    tx.oncomplete = () => db.close();
+    tx.onerror = () => { db.close(); reject(tx.error || new Error('History IndexedDB transaction failed')); };
+  }));
+}
+function readHistoryRecords(documentSessionId) {
+  return historyRequest(store => documentSessionId
+    ? store.index('documentSessionId').getAll(documentSessionId)
+    : store.getAll());
+}
+async function encodeHistoryRecord(entry, documentSessionId) {
+  const timestamp = Number(entry.date || entry.timestamp) || Date.now();
+  const historyId = entry.historyId && (!entry.documentSessionId || entry.documentSessionId === documentSessionId)
+    ? entry.historyId
+    : createSecureId('history');
+  const eventData = entry.eventData || { content: String(entry.content || '') };
+  const payload = await encryptString(JSON.stringify({
+    fileName: entry.filename || entry.fileName || 'untitled.md',
+    eventType: entry.eventType || 'snapshot',
+    eventData
+  }), await getActiveKey());
+  return { historyId, documentSessionId, timestamp, createdAt: entry.createdAt || timestamp, lastUpdatedAt: Date.now(), payload };
+}
+async function decodeHistoryRecord(record) {
+  try {
+    const raw = await decryptString(record.payload, await getActiveKey());
+    const data = JSON.parse(raw);
+    return {
+      historyId: record.historyId,
+      documentSessionId: record.documentSessionId,
+      filename: data.fileName || 'untitled.md',
+      fileName: data.fileName || 'untitled.md',
+      date: record.timestamp,
+      timestamp: record.timestamp,
+      eventType: data.eventType || 'snapshot',
+      eventData: data.eventData || {},
+      content: typeof data.eventData?.content === 'string' ? data.eventData.content : ''
+    };
+  } catch (error) {
+    console.warn('History record could not be decrypted', record?.historyId, error);
+    return null;
+  }
+}
+async function replaceHistoryRecords(documentSessionId, entries) {
+  const existing = await readHistoryRecords(documentSessionId);
+  const records = await Promise.all(entries.map(entry => encodeHistoryRecord(entry, documentSessionId)));
+  const db = await openKeyDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(HISTORY_DB_STORE, 'readwrite');
+    const store = tx.objectStore(HISTORY_DB_STORE);
+    existing.forEach(record => store.delete(record.historyId));
+    records.forEach(record => store.put(record));
+    tx.oncomplete = () => { db.close(); resolve(true); };
+    tx.onerror = () => { db.close(); reject(tx.error || new Error('History replacement failed')); };
+  });
+}
+async function storeHistoryEntry(entry, documentSessionId, removedHistoryIds = []) {
+  const record = await encodeHistoryRecord(entry, documentSessionId);
+  const db = await openKeyDb();
+  await new Promise((resolve, reject) => {
+    const tx = db.transaction(HISTORY_DB_STORE, 'readwrite');
+    const store = tx.objectStore(HISTORY_DB_STORE);
+    removedHistoryIds.forEach(id => store.delete(id));
+    store.put(record);
+    tx.oncomplete = () => { db.close(); resolve(); };
+    tx.onerror = () => { db.close(); reject(tx.error || new Error('History entry write failed')); };
+  });
+  return { ...entry, historyId: record.historyId, documentSessionId, date: record.timestamp };
+}
+async function deleteHistoryRecords(documentSessionId) {
+  const records = await readHistoryRecords(documentSessionId);
+  if (!records.length) return;
+  const db = await openKeyDb();
+  await new Promise((resolve, reject) => {
+    const tx = db.transaction(HISTORY_DB_STORE, 'readwrite');
+    const store = tx.objectStore(HISTORY_DB_STORE);
+    records.forEach(record => store.delete(record.historyId));
+    tx.oncomplete = () => { db.close(); resolve(); };
+    tx.onerror = () => { db.close(); reject(tx.error || new Error('History deletion failed')); };
+  });
 }
 
 function renderStorageBadge() {
@@ -4584,7 +4744,7 @@ async function getCurrentHistoryForMigration() {
 }
 
 async function getAllWorkspaceDataForMigration() {
-  const keys = getAllWorkspaceStorageKeys();
+  const keys = getAllWorkspaceStorageKeys().filter(key => !key.endsWith(':history'));
   const cryptoKey = await getActiveKey();
   const data = [];
   for (const key of keys) {
@@ -4607,8 +4767,8 @@ async function getAllWorkspaceDataForMigration() {
   };
   upsertMigrationItem(currentKeys.text, editor.value);
   upsertMigrationItem(currentKeys.name, filenameInput.value || 'untitled.md');
-  upsertMigrationItem(currentKeys.history, JSON.stringify(historyCache || []));
-  return { ok: true, data };
+  const history = await readAllHistory();
+  return { ok: true, data, history };
 }
 
 async function migrateToMode(mode, passphrase = null) {
@@ -4636,6 +4796,14 @@ async function migrateToMode(mode, passphrase = null) {
       const ok = await secureSetItem(item.key, item.value);
       if (!ok) throw new Error(`Failed to write ${item.key}`);
     }
+    await deleteHistoryRecords();
+    const historyBySession = new Map();
+    allDataResult.history.forEach(entry => {
+      const sessionId = entry.documentSessionId || workspaceId;
+      if (!historyBySession.has(sessionId)) historyBySession.set(sessionId, []);
+      historyBySession.get(sessionId).push(entry);
+    });
+    for (const [sessionId, entries] of historyBySession) await replaceHistoryRecords(sessionId, entries);
     historyCache = await readWorkspaceHistory();
   } catch (err) {
     setMeta(previousMeta);
@@ -4678,6 +4846,7 @@ async function clearProtectedStorage() {
   const ok = confirm(T.confirmClearLocalData);
   if (!ok) return;
   [...getAllWorkspaceStorageKeys(), AUTOSAVE_TXT_KEY, AUTOSAVE_NAME_KEY, HISTORY_KEY, LEGACY_TEXT_KEY, LEGACY_NAME_KEY].forEach((k) => localStorage.removeItem(k));
+  try { await deleteHistoryRecords(); } catch (error) { console.warn('Persistent history deletion failed', error); }
   historyCache = [];
   postWorkspaceMessage({ type: WORKSPACE_MESSAGES.DATA_CLEARED });
   toast(T.localDataCleared);
@@ -5440,6 +5609,7 @@ editor.addEventListener('beforeinput', event => {
   } catch (error) { console.error('Deep Edit logging failed', error); }
 });
 editor.addEventListener('input', event => {
+  showAllHistoryOnStartup = false;
   const isHistoryUndo =
     event && event.inputType === 'historyUndo';
 
@@ -9113,9 +9283,19 @@ async function saveToHistoryList(filename, content, targetWorkspaceId = workspac
   if (!content || content.trim() === '' || content === T.defaultMd || isLegacyDefaultMarkdown(content)) return null;
   const savingWorkspaceId = targetWorkspaceId || workspaceId;
   let hist = await readWorkspaceHistory(savingWorkspaceId);
-  const entry = { filename, content, date: Date.now() };
-  hist = [entry, ...hist.filter(h => h.filename !== filename)].slice(0, 10);
-  await writeWorkspaceHistory(hist, savingWorkspaceId);
+  const entry = { filename, content, date: Date.now(), eventType: 'snapshot', eventData: { content } };
+  const retained = hist.filter(h => h.filename !== filename).slice(0, 9);
+  const removedIds = hist.filter(h => h.filename === filename || !retained.includes(h)).map(h => h.historyId).filter(Boolean);
+  let storedEntry;
+  try {
+    storedEntry = await storeHistoryEntry(entry, savingWorkspaceId, removedIds);
+    secureRemoveItem(getWorkspaceStorageKeys(savingWorkspaceId).history);
+  } catch (error) {
+    console.warn('IndexedDB history entry write failed; using workspace fallback', error);
+    storedEntry = entry;
+    await secureSetItem(getWorkspaceStorageKeys(savingWorkspaceId).history, JSON.stringify([entry, ...retained]));
+  }
+  hist = [storedEntry, ...retained];
   if (savingWorkspaceId === workspaceId) historyCache = hist;
   return {
     workspaceId: savingWorkspaceId,
@@ -9156,8 +9336,10 @@ async function updateSavedHistoryFilename(historyWriteResult, confirmedFilename)
 async function openHistory() {
   if (!guardEditorCommand()) return;
   closeMenus();
-  const hist = await readWorkspaceHistory();
+  const hist = showAllHistoryOnStartup ? await readAllHistory() : await readWorkspaceHistory();
   historyCache = hist;
+  document.getElementById('hist-title').textContent = showAllHistoryOnStartup ? T.historyAll : T.menuHistory;
+  document.getElementById('hist-clear').textContent = T.historyClear;
   const container = document.getElementById('hist-list');
   container.innerHTML = '';
   if (!hist.length) {
@@ -9199,6 +9381,22 @@ async function openHistory() {
   document.getElementById('history-modal').classList.add('show');
 }
 function closeHistory() { document.getElementById('history-modal').classList.remove('show'); }
+async function clearVisibleHistory() {
+  const clearAll = showAllHistoryOnStartup;
+  if (!confirm(clearAll ? T.historyClearAllConfirm : T.historyClearCurrentConfirm)) return;
+  try {
+    await deleteHistoryRecords(clearAll ? undefined : workspaceId);
+    if (clearAll) {
+      getAllWorkspaceStorageKeys().filter(key => key.endsWith(':history')).forEach(secureRemoveItem);
+    } else {
+      secureRemoveItem(getWorkspaceStorageKeys().history);
+    }
+    historyCache = [];
+    await openHistory();
+  } catch (error) {
+    console.error('History deletion failed', error);
+  }
+}
 
 function formatDoc() {
   if (!guardEditorCommand()) return;
@@ -9314,6 +9512,7 @@ function renderDeepEditState(){
 function toggleDeepEditMode(){ closeMenus(); if (deepEditEnabled) { stopDeepEditMode(false); return; } if (deepEditSession?.events?.length && !confirm(T.deepEditReplaceSessionConfirm)) return; if (!confirm(T.deepEditStartConfirm)) return; clearDeepInputBatch(); deepEditSession = createDeepSession(); deepEditEnabled = true; deepEditLimitNotified = false; deepEditLastKnownValue = editor.value; deepEditLastKnownLength = editor.value.length; recordDeepEditEvent({ type:'session-start', source:'system', summary: isJa ? 'Deep編集モード開始' : 'Deep Edit Mode started', meta:{ schemaVersion: DEEP_EDIT_SCHEMA_VERSION } }); renderDeepEditState(); toast(T.deepEditOn); }
 function stopDeepEditMode(silent){ if (!deepEditEnabled) return; pendingDeepFilenameChange = null; flushDeepInputBatch(); recordDeepEditEvent({ type:'session-stop', source:'system', summary: isJa ? 'Deep編集モード終了' : 'Deep Edit Mode stopped' }); if (deepEditSession) deepEditSession.stoppedAt = new Date().toISOString(); deepEditEnabled = false; deepEditBeforeInput = null; deepEditCompositionReplacement = null; clearDeepInputBatch(); renderDeepEditState(); if (!silent) toast(T.deepEditOff); if (deepEditPanelOpen) scheduleDeepLogRender(); }
 function prepareDeepEditForTrackedDocumentOpen(details = {}){
+  showAllHistoryOnStartup = false;
   if (!deepEditEnabled || !deepEditSession) return false;
   pendingDeepFilenameChange = null;
   flushDeepInputBatch();
@@ -10265,6 +10464,7 @@ async function newFile() {
   clearPreviewSession();
   if (isDirty && !confirm(T.confirmNew)) return;
   await saveToHistoryList(filenameInput.value, editor.value);
+  showAllHistoryOnStartup = false;
   const continueDeepEdit = prepareDeepEditForFreshDocumentContext();
   setEditorDocumentValue('');
   resetDocumentIdentity();
