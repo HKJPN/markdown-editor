@@ -212,6 +212,7 @@ Accidental edits happen. MD//WORKS helps you recover.
 - Captures opened files, saved files, and pre-close text states
 - Restore previous versions from the History menu
 - Autosave and recovery prompt help prevent data loss
+- Work history is maintained separately for each tab, while all saved history can be reviewed and restored together after restarting MD//WORKS.
 
 A lightweight safety net for everyday writing.
 
