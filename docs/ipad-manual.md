@@ -453,7 +453,7 @@ Select **File > History** to view saved draft states.
 
 Use this feature if you accidentally delete content or want to return to an earlier draft.
 
-When multiple tabs are in use, work history is maintained separately for the Workspace in each tab. After a file is saved, the confirmed filename is shown in the corresponding history entry.
+When editing in multiple tabs, work history is managed independently for each tab's Workspace. After restarting MD//WORKS, saved history from all Workspaces is shown together for review and recovery. Once editing begins in a tab, only that tab's history is displayed. Saved history entries show the actual file name confirmed at the time of saving.
 
 Running **Clear Local Data** also deletes History.
 
