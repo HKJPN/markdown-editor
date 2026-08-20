@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.6.2 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.6.3 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) <br>
 
 
@@ -34,30 +34,23 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 
 ---
 
-## 🎉 What’s New in v1.6.2
+## 🎉  What’s New in v1.6.3 — Safer editing across multiple documents
 
-### Σ LaTeX Math Rendering
+### Improved multi-tab editing
 
-You can now write and preview mathematical equations used in mathematics, physics, chemistry, and other technical fields directly in Markdown documents.
+* Edit multiple documents independently, with **separate Auto Save and work history for each tab**.
+* Work history now persists after closing the browser. On restart, **previous history is brought together for easy review and recovery**.
+* Tabs show the current filename, and duplicated tabs are safely separated into independent Workspaces.
 
-* Use \`$...$\` for inline equations.
-* Use \`$$...$$\` for equations displayed as separate blocks.
-* Equations are supported in Preview, exported viewers, Standalone Apps, printing, and PDF output.
+### Smoother everyday editing
 
-### 🖥️ More Reliable Offline Preview
-
-The core Markdown Preview components are now bundled directly with MD//WORKS, allowing regular Markdown content to remain available even when the app is opened offline for the first time.
-
-* The document body remains visible if the equation-rendering library cannot be loaded.
-* Equations are shown in their original LaTeX notation as a readable fallback.
-* When the connection returns and the library loads successfully, displayed equations automatically switch to formatted output.
-
+* Search highlights remain after closing Find/Replace and can be cleared with a second **Esc**.
+* Deep Edit Mode, formatting insertion, and protected HTML file detection have also been improved.
+* 
 ---
 
 ## ✨ Upcoming Features
 
-* **Persistent Search Highlights**: We plan to keep search highlights visible after closing the find panel, with highlights staying in sync as you edit. Press Esc again to clear them.
-* **Deep Edit Mode Improvements**: We plan to make log contents easier to read and understand when using an IME (such as for Japanese).
 * **Mermaid diagrams**:  We plan to support for previewing Mermaid diagrams, including flowcharts and sequence diagrams, directly from Markdown. The implementation will prioritize secure SVG rendering, readable source fallback when offline, and reliable output in viewers, print, and PDF.
 * **PWA Support**: We plan to support Progressive Web Apps (PWA), allowing you to install the editor directly on your device for a faster, seamless, native-app-like experience.
 
