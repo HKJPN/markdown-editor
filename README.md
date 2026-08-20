@@ -46,7 +46,7 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 
 * Search highlights remain after closing Find/Replace and can be cleared with a second **Esc**.
 * Deep Edit Mode, formatting insertion, and protected HTML file detection have also been improved.
-* 
+
 ---
 
 ## ✨ Upcoming Features
