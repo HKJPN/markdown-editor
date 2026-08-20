@@ -2576,43 +2576,33 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
   releaseNotesClose: isJa ? '閉じる' : 'Close',
   releaseNotesContent: isJa ? `
 
-## 🎉 v1.6.2の新機能
+## 🎉 v1.6.3 — 複数文書を、もっと安心して編集
 
-### LaTeX数式の表示に対応しました
+### マルチタブ編集を強化
 
-数学、物理学、化学などで使用する数式を、Markdown文書内に記述してPreviewできるようになりました。
+* 複数の文書をタブごとに独立して編集でき、**Auto Saveと作業履歴もそれぞれ安全に管理**されます。
+* ブラウザを閉じても作業履歴を保持。再起動時には、**これまでの履歴をまとめて確認・復元**できます。
+* タブには現在のファイル名を表示し、複製したタブも独立したWorkspaceとして安全に扱います。
 
-* 文中の数式は \`$...$\` で記述できます。
-* 独立した数式は \`$$...$$\` で記述できます。
-* Preview、各種Viewer、Standalone App、印刷・PDF出力で数式を表示できます。
+### 日常の編集操作も改善
 
-### オフライン時のPreviewを改善しました
-
-Markdown Previewの基盤をMD//WORKS本体へ内蔵し、初回オフライン時でも通常のMarkdown本文をPreviewできるようにしました。
-
-* 数式描画ライブラリを読み込めない場合も、本文は通常どおり表示されます。
-* 数式部分はLaTeX記法のまま表示され、文書を読み続けることができます。
-* オンラインに復帰してライブラリの取得に成功すると、表示中の数式が自動的に整形表示へ切り替わります。
+* 検索パネルを閉じてもハイライトを保持し、もう一度 **Esc** を押すと解除できます。
+* Deep Edit Mode、見出し等の挿入操作、保護HTMLファイルの判定も改善しました。
 
 ` : `
 
-## 🎉 What’s New in v1.6.2
+## 🎉 v1.6.3 — Safer editing across multiple documents
 
-### LaTeX Math Rendering
+### Improved multi-tab editing
 
-You can now write and preview mathematical equations used in mathematics, physics, chemistry, and other technical fields directly in Markdown documents.
+* Edit multiple documents independently, with **separate Auto Save and work history for each tab**.
+* Work history now persists after closing the browser. On restart, **previous history is brought together for easy review and recovery**.
+* Tabs show the current filename, and duplicated tabs are safely separated into independent Workspaces.
 
-* Use \`$...$\` for inline equations.
-* Use \`$$...$$\` for equations displayed as separate blocks.
-* Equations are supported in Preview, exported viewers, Standalone Apps, printing, and PDF output.
+### Smoother everyday editing
 
-### More Reliable Offline Preview
-
-The core Markdown Preview components are now bundled directly with MD//WORKS, allowing regular Markdown content to remain available even when the app is opened offline for the first time.
-
-* The document body remains visible if the equation-rendering library cannot be loaded.
-* Equations are shown in their original LaTeX notation as a readable fallback.
-* When the connection returns and the library loads successfully, displayed equations automatically switch to formatted output.
+* Search highlights remain after closing Find/Replace and can be cleared with a second **Esc**.
+* Deep Edit Mode, formatting insertion, and protected HTML file detection have also been improved.
 
 `};
 
