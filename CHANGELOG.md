@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-08-20 - v1.6.3　Official Release
+
 ## 2026-08-19 - v1.6.3 - Persist per-tab work history
 - Persisted per-tab work history across  browser restarts, with a unified history view on launch.
 
