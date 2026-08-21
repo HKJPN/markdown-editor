@@ -1121,7 +1121,7 @@ MD//WORKSは、[GitHub Flavored Markdown（GFM）](https://github.github.com/gfm
 | 分類 | MD//WORKSでの例 |
 |---|---|
 | 基本Markdown | 見出し、太字、斜体、引用、リンク、画像、コード |
-| GFM系 | 表、取り消し線、チェックリスト、コードフェンス |
+| [GFM]((https://github.github.com/gfm/))系 | 表、取り消し線、チェックリスト、コードフェンス |
 | MD//WORKS拡張 | 脚注、数式 |
 | Pandoc風の拡張 | `^上付き^`、`~下付き~` |
 | HTMLの一部 | `<sup>`、`<sub>`、`<video>`など |
