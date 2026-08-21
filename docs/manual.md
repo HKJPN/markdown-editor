@@ -1112,12 +1112,12 @@ For detailed instructions, see “Using Markdown Documents in Microsoft Word” 
 
 ### 13-14. About MD//WORKS Markdown Compatibility
 
-MD//WORKS is based primarily on GitHub Flavored Markdown (GFM). It supports common Markdown features such as headings, bold and italic text, lists, links, images, tables, task lists, strikethrough, and fenced code blocks. It also extends the syntax with features useful for scientific and technical documents, including footnotes, superscript and subscript text, and LaTeX math. For this reason, MD//WORKS is best described as **GFM-based Markdown with MD//WORKS extensions**, rather than as a strict implementation of GFM or Pandoc Markdown. Basic Markdown syntax is generally compatible with other Markdown editors. However, advanced features such as footnotes, equations, superscript, and subscript may be displayed differently depending on the capabilities of the other application.
+MD//WORKS is based primarily on [GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/). It supports common Markdown features such as headings, bold and italic text, lists, links, images, tables, task lists, strikethrough, and fenced code blocks. It also extends the syntax with features useful for scientific and technical documents, including footnotes, superscript and subscript text, and LaTeX math. For this reason, MD//WORKS is best described as **GFM-based Markdown with MD//WORKS extensions**, rather than as a strict implementation of GFM or Pandoc Markdown. Basic Markdown syntax is generally compatible with other Markdown editors. However, advanced features such as footnotes, equations, superscript, and subscript may be displayed differently depending on the capabilities of the other application.
 
 | Syntax family | Supported examples |
 |---|---|
 | Standard Markdown | Headings, bold, italics, blockquotes, links, images, and code |
-| GitHub Flavored Markdown–style features | Tables, strikethrough, task lists, and fenced code blocks |
+| [GitHub Flavored Markdown–style features](https://github.github.com/gfm/) | Tables, strikethrough, task lists, and fenced code blocks |
 | MD//WORKS-specific extensions | Footnotes and LaTeX math |
 | Pandoc-style syntax | `^superscript^` and `~subscript~` |
 | Selected HTML | `<sup>`, `<sub>`, `<video>`, and other sanitized tags |
