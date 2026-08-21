@@ -233,7 +233,7 @@ Find and revise text quickly, even in long documents.
 
 - Find and replace
 - Replace all
-- Regular expression support
+- [Regular expression](https://github.com/HKJPN/markdown-editor/blob/main/docs/regex-recipes-ja.md) support
 - Case-sensitive search
 - Whole-word matching
 - Automatically jumps to the nearest match from the cursor
