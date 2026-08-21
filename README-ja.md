@@ -211,7 +211,7 @@ MD//WORKSの最大の特徴は、用途に合わせて「文書を1つのHTMLフ
 
 - 検索・置換
 - すべて置換
-- 正規表現対応
+- [正規表現対応](https://github.com/HKJPN/markdown-editor/blob/main/docs/regex-recipes-ja.md)
 - 大文字小文字の区別
 - 単語単位の一致
 - カーソル位置から最も近い一致へ自動ジャンプ
