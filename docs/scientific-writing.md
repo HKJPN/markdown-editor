@@ -300,7 +300,7 @@ This renders the probability density function of a normal distribution with mean
 
 ## Appendix: MD//WORKS Support Status and Version Info
 
-The writing methods described in this guide can be easily applied using **MD//WORKS**, our dedicated Markdown editor.MD//WORKS v1.5.8 or later supports standard Markdown specifications as well as most of representative extended syntax:
+The writing methods described in this guide can be easily applied using **MD//WORKS**, our dedicated Markdown editor. MD//WORKS v1.6.4 or later supports standard Markdown specifications as well as most representative extended syntax:
 
 * Headings
 * Bulleted and numbered lists
@@ -315,10 +315,13 @@ The writing methods described in this guide can be easily applied using **MD//WO
 * Automatic footnote numbering
 * Descriptive text labels in footnotes
 * [LaTeX math](<BasicExamplesMathFormulasE.md>) rendering
+* Mermaid diagram rendering in Preview
+
+Mermaid diagrams are also included when using **Print / Save as PDF** and the **Viewer**, **Restricted Viewer**, and **Password-protected Viewer** exports.
 
 ### Future Extensions Under Consideration
 
-Future updates, including a "Deep Editing Mode" for long-form writing, may explore:
+Deep Edit Mode is already available for reviewing the writing and revision process. Further enhancements under consideration include:
 
 * Advanced table creation
 * Figure/table captions and auto-numbering
