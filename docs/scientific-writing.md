@@ -287,7 +287,48 @@ $$
 
 This renders the probability density function of a normal distribution with mean $\mu$ and variance $\sigma^2$.
 
-## 8. Example Writing Workflow
+## 8. Mermaid Diagrams
+
+Mermaid is a Markdown extension that generates diagrams from text, including flowcharts, sequence diagrams, and state diagrams. To use it, specify `mermaid` on the opening line of a standard fenced code block. Diagram rendering depends on whether your Markdown environment supports Mermaid.
+
+### Scientific Workflow Flowchart
+
+**Input example:**
+
+````markdown
+```mermaid
+flowchart TD
+    A[Sample collection] --> B[Preprocessing]
+    B --> C[Measurement]
+    C --> D{Quality control passed?}
+    D -- Yes --> E[Statistical analysis]
+    D -- No --> C
+    E --> F[Result interpretation]
+```
+````
+
+This flowchart represents a scientific workflow from sample collection through result interpretation. The quality-control decision sends acceptable measurements to statistical analysis and returns failed measurements for remeasurement.
+
+### Research Data Sequence Diagram
+
+**Input example:**
+
+````markdown
+```mermaid
+sequenceDiagram
+    participant R as Researcher
+    participant P as Analysis pipeline
+    participant D as Database
+    R->>P: Submit samples and parameters
+    P->>D: Query reference data
+    D-->>P: Return reference data
+    P-->>R: Return analysis results
+```
+````
+
+This sequence diagram represents how a researcher submits work to an analysis pipeline, which retrieves reference data from a database before returning the analysis results.
+
+## 9. Example Writing Workflow
 
 1. **Create the Skeleton:** Write only the main headings (e.g., Abstract, Introduction, Methods, Results, Discussion).
 2. **Bullet the Main Points:** Under each heading, list the results, rationale, and interpretations using bullet points.
