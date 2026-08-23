@@ -1173,6 +1173,13 @@ If the renderer cannot be retrieved because the device is offline, the network t
 
 If the Mermaid syntax is invalid, Preview displays a warning together with the original source so that you can correct it. Likewise, if a diagram cannot be rendered during a Viewer-type export, the exported Viewer contains error information and the original source in place of the diagram.
 
+#### Limitations
+
+* A maximum of 20 Mermaid diagrams can be rendered in a single document.
+* The source of each Mermaid code block is limited to 50,000 characters.
+* Code blocks that exceed either limit are not rendered as diagrams; a warning and the original source are displayed instead.
+* For large diagrams, we recommend splitting the content across multiple documents or into multiple smaller diagrams.
+
 ---
 
 <div id="appendix-1-2-local-llm"></div>
