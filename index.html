@@ -2773,6 +2773,7 @@ const INVISIBLES_STORAGE_KEY = 'mdworks_show_invisibles';
 const LINE_NUMBERS_STORAGE_KEY = 'mdworks_show_line_numbers';
 const CURRENT_LINE_STORAGE_KEY = 'mdworks_highlight_current_line';
 const WRAP_LINES_STORAGE_KEY = 'mdworks_wrap_lines';
+const DEEP_EDIT_ENABLED_STORAGE_KEY = 'mdworks_deep_edit_enabled';
 
 function getStoredShowInvisibles() {
   try { return localStorage.getItem(INVISIBLES_STORAGE_KEY) === '1'; } catch (e) { return false; }
@@ -4335,6 +4336,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   await initializeWorkspace();
   await loadAutoSave();
+  restoreDeepEditModeSetting();
   renderLineViewMenuChecks();
   renderDeepEditState();
   renderLineWrapState();
@@ -9499,7 +9501,21 @@ function renderDeepEditState(){
   const logEntry = document.getElementById('m-deep-log-entry'); const logCheck = document.getElementById('deep-log-check');
   if (logEntry) logEntry.classList.toggle('active', deepEditPanelOpen); if (logCheck) logCheck.style.opacity = deepEditPanelOpen ? '1' : '0';
 }
-function toggleDeepEditMode(){ closeMenus(); if (deepEditEnabled) { stopDeepEditMode(false); return; } if (deepEditSession?.events?.length && !confirm(T.deepEditReplaceSessionConfirm)) return; if (!confirm(T.deepEditStartConfirm)) return; clearDeepInputBatch(); deepEditSession = createDeepSession(); deepEditEnabled = true; deepEditLimitNotified = false; deepEditLastKnownValue = editor.value; deepEditLastKnownLength = editor.value.length; recordDeepEditEvent({ type:'session-start', source:'system', summary: isJa ? 'Deep編集モード開始' : 'Deep Edit Mode started', meta:{ schemaVersion: DEEP_EDIT_SCHEMA_VERSION } }); renderDeepEditState(); toast(T.deepEditOn); }
+function saveDeepEditModeSetting(enabled){ try { localStorage.setItem(DEEP_EDIT_ENABLED_STORAGE_KEY, enabled ? '1' : '0'); } catch (e) { console.warn('Deep Edit Mode setting save failed', e); } }
+function restoreDeepEditModeSetting(){
+  let shouldEnable = false;
+  try { shouldEnable = localStorage.getItem(DEEP_EDIT_ENABLED_STORAGE_KEY) === '1'; } catch (e) {}
+  if (!shouldEnable) return;
+  clearDeepInputBatch();
+  deepEditEnabled = true;
+  deepEditSession = createDeepSession();
+  deepEditLimitNotified = false;
+  deepEditLastKnownValue = editor.value;
+  deepEditLastKnownLength = editor.value.length;
+  recordDeepEditEvent({ type:'session-start', source:'system', summary: isJa ? 'Deep編集モード開始' : 'Deep Edit Mode started', meta:{ schemaVersion: DEEP_EDIT_SCHEMA_VERSION } });
+  renderDeepEditState();
+}
+function toggleDeepEditMode(){ closeMenus(); if (deepEditEnabled) { stopDeepEditMode(false); saveDeepEditModeSetting(false); return; } if (deepEditSession?.events?.length && !confirm(T.deepEditReplaceSessionConfirm)) return; if (!confirm(T.deepEditStartConfirm)) return; clearDeepInputBatch(); deepEditSession = createDeepSession(); deepEditEnabled = true; deepEditLimitNotified = false; deepEditLastKnownValue = editor.value; deepEditLastKnownLength = editor.value.length; recordDeepEditEvent({ type:'session-start', source:'system', summary: isJa ? 'Deep編集モード開始' : 'Deep Edit Mode started', meta:{ schemaVersion: DEEP_EDIT_SCHEMA_VERSION } }); saveDeepEditModeSetting(true); renderDeepEditState(); toast(T.deepEditOn); }
 function stopDeepEditMode(silent){ if (!deepEditEnabled) return; pendingDeepFilenameChange = null; flushDeepInputBatch(); recordDeepEditEvent({ type:'session-stop', source:'system', summary: isJa ? 'Deep編集モード終了' : 'Deep Edit Mode stopped' }); if (deepEditSession) deepEditSession.stoppedAt = new Date().toISOString(); deepEditEnabled = false; deepEditBeforeInput = null; deepEditCompositionReplacement = null; clearDeepInputBatch(); renderDeepEditState(); if (!silent) toast(T.deepEditOff); if (deepEditPanelOpen) scheduleDeepLogRender(); }
 function prepareDeepEditForTrackedDocumentOpen(details = {}){
   showAllHistoryOnStartup = false;
