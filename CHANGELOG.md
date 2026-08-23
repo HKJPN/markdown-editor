@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2026-08-23 - v1.6.4 candidate - Persist Deep Edit Mode
+## 2026-08-23 - v1.6.4 candidate - Mermaid Diagram & Persist Deep Edit Mode
+- Mermaid Diagram Support for Preview and Exports
 - Persist Deep Edit Mode preference in localStorage
 
 ## 2026-08-20 - v1.6.3　Official Release
