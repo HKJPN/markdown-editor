@@ -2075,9 +2075,9 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
-const APP_VERSION = '1.6.3';
-const APP_VERSION_LABEL = 'v1.6.3';
-const RELEASE_NOTES_VERSION = '1.6.3-release';
+const APP_VERSION = '1.6.4';
+const APP_VERSION_LABEL = 'v1.6.4';
+const RELEASE_NOTES_VERSION = '1.6.4-release';
 const LEGACY_DEFAULT_MARKDOWN_SAMPLES = [
   `# MD//WORKS エディタ
 
@@ -2581,33 +2581,33 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
   releaseNotesClose: isJa ? '閉じる' : 'Close',
   releaseNotesContent: isJa ? `
 
-## 🎉 v1.6.3 — 複数文書を、もっと安心して編集
+## 🎉 v1.6.4 — 図解とDeep Editを、もっと自然に
 
-### マルチタブ編集を強化
+### Markdownからそのまま図を作成
 
-* 複数の文書をタブごとに独立して編集でき、**Auto Saveと作業履歴もそれぞれ安全に管理**されます。
-* ブラウザを閉じても作業履歴を保持。再起動時には、**これまでの履歴をまとめて確認・復元**できます。
-* タブには現在のファイル名を表示し、複製したタブも独立したWorkspaceとして安全に扱います。
+* \`mermaid\`コードブロックを書くだけで、**フローチャートやシーケンス図などをPreviewで表示**できるようになりました。
+* 作成した図は**Print / PDFやStandalone Viewerにもそのまま出力**できます。
+* 文章と図を1つのMarkdown文書で管理でき、外部の作図ツールへ切り替える必要がありません。
 
-### 日常の編集操作も改善
+### Deep Edit Modeが設定を記憶
 
-* 検索パネルを閉じてもハイライトを保持し、もう一度 **Esc** を押すと解除できます。
-* Deep Edit Mode、見出し等の挿入操作、保護HTMLファイルの判定も改善しました。
+* Deep Edit ModeのON/OFFを記憶し、**再起動後も前回の設定を維持**するようになりました。
+* Deep Editを日常的に使う場合、起動するたびにONへ戻す必要がありません。
 
 ` : `
 
-## 🎉 v1.6.3 — Safer editing across multiple documents
+## 🎉 v1.6.4 — Diagrams and Deep Edit, now more seamless
 
-### Improved multi-tab editing
+### Create diagrams directly from Markdown
 
-* Edit multiple documents independently, with **separate Auto Save and work history for each tab**.
-* Work history now persists after closing the browser. On restart, **previous history is brought together for easy review and recovery**.
-* Tabs show the current filename, and duplicated tabs are safely separated into independent Workspaces.
+* Write a \`mermaid\` code block to display **flowcharts, sequence diagrams, and more directly in Preview**.
+* Your diagrams are also included in **Print / PDF and Standalone Viewer exports**.
+* Keep text and diagrams together in one Markdown document — no need to switch to an external diagramming tool.
 
-### Smoother everyday editing
+### Deep Edit Mode remembers your preference
 
-* Search highlights remain after closing Find/Replace and can be cleared with a second **Esc**.
-* Deep Edit Mode, formatting insertion, and protected HTML file detection have also been improved.
+* Deep Edit Mode now **keeps its ON/OFF setting across reloads and browser restarts**.
+* If Deep Edit is part of your regular workflow, there is no need to enable it again each time you start MD//WORKS.
 
 `};
 
