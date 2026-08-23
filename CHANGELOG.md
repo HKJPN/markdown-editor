@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-08-23 - v1.6.4 candidate - Persist Deep Edit Mode
+- Persist Deep Edit Mode preference in localStorage
+
 ## 2026-08-20 - v1.6.3　Official Release
 
 ## 2026-08-19 - v1.6.3 - Persist per-tab work history
