@@ -351,6 +351,22 @@ You can insert mathematical equations used in mathematics, physics, chemistry, a
 
 > **Offline display:** If the equation-rendering library cannot be loaded, the rest of the document will still appear in Preview, while equations will be shown in their original LaTeX notation. When the device reconnects and the library is loaded successfully, the displayed equations automatically switch to formatted output.
 
+### 4-8. Inserting Mermaid diagrams
+
+To insert a Mermaid diagram, write the Mermaid source inside a fenced code block whose language name is `mermaid`. For example, the following Markdown creates a short top-to-bottom flowchart (`graph TD` can be replaced with `flowchart TD`):
+
+````markdown
+```mermaid
+graph TD
+    A[Start] --> B[Edit Markdown]
+    B --> C[Preview]
+```
+````
+
+The code is rendered as a diagram in Preview. The rendered diagram is also embedded when using **Print / Save as PDF** and when generating a **Viewer**, **Restricted Viewer**, or **Private Viewer**.
+
+> **Compatibility:** Mermaid syntax is neither standard Markdown nor GFM. It is an extension provided by MD//WORKS, so other Markdown applications may display the fenced block as source code instead of a diagram.
+
 
 ---
 
@@ -1122,7 +1138,7 @@ MD//WORKS is based primarily on [GitHub Flavored Markdown (GFM)](https://github.
 |---|---|
 | Standard Markdown | Headings, bold, italics, blockquotes, links, images, and code |
 | [GitHub Flavored Markdown–style features](https://github.github.com/gfm/) | Tables, strikethrough, task lists, and fenced code blocks |
-| MD//WORKS-specific extensions | Footnotes and LaTeX math |
+| MD//WORKS-specific extensions | Footnotes, LaTeX math, and Mermaid diagrams |
 | Pandoc-style syntax | `^superscript^` and `~subscript~` |
 | Selected HTML | `<sup>`, `<sub>`, `<video>`, and other sanitized tags |
 
