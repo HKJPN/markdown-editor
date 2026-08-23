@@ -764,6 +764,10 @@ Because the Deep Edit log is kept completely separate from the main text, it doe
 * **Start:** Press the **DEEP** button on the title bar or select **View > Deep Edit Mode**. A Deep Edit session will start, and the **DEEP** button will light up. If an existing Deep Edit log remains in memory, you will be prompted to confirm whether to clear it and start a new session.
 * **Stop:** Press the **DEEP** button again or select **View > Deep Edit Mode** once more to turn it off. Recording of new events will stop, but the existing log will be retained temporarily until the page is reloaded.
 
+**Version 1.6.4 and later:** When you turn Deep Edit mode ON, its ON/OFF setting is saved in the browser's local storage. If you close the page while the mode is ON, the next time you open the same MD//WORKS, a new Deep Edit session starts automatically without a confirmation dialog. Turning the mode OFF with the **DEEP** button or **View > Deep Edit Mode** also saves the setting, so it remains OFF the next time MD//WORKS starts.
+
+Only the mode setting is persisted; previous Deep Edit logs are not restored. After a page reload, recording begins in a new, empty session. Copy any logs you need before reloading the page.
+
 ### 10-2. How Editing and Recording Works
 
 Edit your document as usual. Deep Edit mode does not directly alter your text; rather, it silently records your editing process in the background. Continuous typing—including spaces, punctuation, and standard backspacing—is grouped into one normal editing event after approximately five seconds to keep the log readable. Uncommitted text during IME composition is not recorded. For normal typing events, MD//WORKS records the final changes based on the difference between the document state at the beginning and end of the typing batch.
