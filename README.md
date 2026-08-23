@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.6.3 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.6.4 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) <br>
 
 
@@ -32,25 +32,28 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 
 ---
 
-## 🎉  What’s New in v1.6.3 — Safer editing across multiple documents
+## 🎉  What’s New in v1.6.4 — Mermaid Diagrams & Deep Edit Mode
 
-### Improved multi-tab editing
+### Mermaid Diagrams — Create diagrams directly in Markdown
 
-* Edit multiple documents independently, with **separate Auto Save and work history for each tab**.
-* Work history now persists after closing the browser. On restart, **previous history is brought together for easy review and recovery**.
-* Tabs show the current filename, and duplicated tabs are safely separated into independent Workspaces.
+Write a `mermaid` code block to create flowcharts, sequence diagrams, state diagrams, and more directly inside MD//WORKS.
 
-### Smoother everyday editing
+Diagrams are rendered in Preview and are also included in **Print / PDF and Standalone Viewer exports**, allowing text and diagrams to stay together in a single Markdown document — no need to switch to an external diagramming tool.
 
-* Search highlights remain after closing Find/Replace and can be cleared with a second **Esc**.
-* Deep Edit Mode, formatting insertion, and protected HTML file detection have also been improved.
+Rendering uses Mermaid v11.12.2 with sanitized SVG output, safety limits, and source-code fallback when a diagram cannot be rendered.
 
+### Deep Edit Mode now remembers your preference
+
+MD//WORKS now remembers whether Deep Edit Mode is ON or OFF and **restores your preference after reloads and browser restarts**.
+
+If Deep Edit is part of your everyday workflow, you no longer need to enable it each time you start MD//WORKS. Deep Edit Logs remain session-only and start fresh after a restart.
 ---
 
 ## ✨ Upcoming Features
 
-* **Mermaid diagrams**:  We plan to support for previewing Mermaid diagrams, including flowcharts and sequence diagrams, directly from Markdown. The implementation will prioritize secure SVG rendering, readable source fallback when offline, and reliable output in viewers, print, and PDF.
-* **PWA Support**: We plan to support Progressive Web Apps (PWA), allowing you to install the editor directly on your device for a faster, seamless, native-app-like experience.
+### **PWA Support**
+
+We plan to support Progressive Web Apps (PWA), allowing you to install the editor directly on your device for a faster, seamless, native-app-like experience.
 
 ### 🎓 Spin-off: Academic MD//WORKS for Education
 
