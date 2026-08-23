@@ -651,6 +651,11 @@ body.show-line-numbers #editor-backdrop{
 #preview .mdw-math-inline{line-height:normal}
 #preview .mdw-math-display{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:.15em 0}
 #preview .mdw-math-fallback{font-family:var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;color:inherit}
+#preview .mdw-mermaid{max-width:100%;overflow-x:auto;margin:1em 0;text-align:center}
+#preview .mdw-mermaid svg{display:block;max-width:100%;height:auto;margin:0 auto}
+#preview .mdw-mermaid-error{color:var(--danger);font-family:var(--sans);font-weight:600;text-align:left;margin-bottom:.45em}
+#preview .mdw-mermaid-error-detail{display:block;font-size:12px;font-weight:400;overflow-wrap:anywhere;margin-top:.25em}
+#preview .mdw-mermaid-source{text-align:left;margin:.45em 0 0}
 
 #preview li.task-open-item, #preview li.task-done-item{ list-style:none; display:flex; align-items:flex-start; gap:.72em; margin:.28em 0; padding:.42em .58em .42em .48em; border-radius:10px; transition:background-color .16s ease, opacity .16s ease, color .16s ease; }
 #preview li.task-open-item:hover, #preview li.task-done-item:hover{ background:rgba(255,255,255,.032); }
@@ -3094,6 +3099,7 @@ let mdworksMarked = null;
 let mdworksPreviewMarked = null;
 let mdworksFootnoteState = null;
 let mdworksMathRenderState = null;
+let mdworksMermaidRenderState = null;
 
 function normalizeFootnoteLabel(label) {
   const value = String(label || '').trim();
@@ -3330,6 +3336,26 @@ function createMdwMathExtensions() {
   };
 }
 
+function createMdwMermaidExtension() {
+  return {
+    renderer: {
+      code(token) {
+        const language = String(token.lang || '').trim().split(/\s+/, 1)[0];
+        if (!mdworksMermaidRenderState || language.toLowerCase() !== 'mermaid') return false;
+        const id = `${mdworksMermaidRenderState.marker}-${mdworksMermaidRenderState.nextId++}`;
+        const source = String(token.text || '');
+        const ordinal = mdworksMermaidRenderState.nextId;
+        const limitReason = ordinal > 20 ? 'count' : (source.length > 50000 ? 'size' : '');
+        mdworksMermaidRenderState.diagrams.set(id, { source, limitReason });
+        const message = limitReason
+          ? `<div class="mdw-mermaid-error">${isJa ? 'Mermaid図は安全上の上限を超えたため描画されませんでした。' : 'Mermaid diagram was not rendered because it exceeds the safety limit.'}</div>`
+          : '';
+        return `<div id="${id}" class="mdw-mermaid">${message}<pre class="mdw-mermaid-source"><code class="language-mermaid">${escapeHtml(source)}</code></pre></div>`;
+      }
+    }
+  };
+}
+
 function renderMdwMathPlaceholder(token) {
   if (!mdworksMathRenderState) return escapeHtml(token.raw);
   const id = `${mdworksMathRenderState.marker}-${mdworksMathRenderState.nextId++}`;
@@ -3381,7 +3407,7 @@ function initializeMarkdownRenderer() {
   };
   const MarkedCtor = marked.Marked || window.marked.Marked;
   mdworksMarked = MarkedCtor ? new MarkedCtor({ gfm: true, breaks: true }, scriptExtension, footnoteExtension) : marked.use({ gfm: true, breaks: true }, scriptExtension, footnoteExtension);
-  if (MarkedCtor) mdworksPreviewMarked = new MarkedCtor({ gfm: true, breaks: true }, scriptExtension, footnoteExtension, createMdwMathExtensions());
+  if (MarkedCtor) mdworksPreviewMarked = new MarkedCtor({ gfm: true, breaks: true }, scriptExtension, footnoteExtension, createMdwMathExtensions(), createMdwMermaidExtension());
 }
 initializeMarkdownRenderer();
 const segmenter = typeof Intl.Segmenter !== 'undefined'
@@ -3420,7 +3446,7 @@ const MARKDOWN_SANITIZE_CONFIG = Object.freeze({
 
 const PREVIEW_SANITIZE_CONFIG = Object.freeze({
   ...MARKDOWN_SANITIZE_CONFIG,
-  ALLOWED_TAGS: [...MARKDOWN_SANITIZE_CONFIG.ALLOWED_TAGS, 'span'],
+  ALLOWED_TAGS: [...MARKDOWN_SANITIZE_CONFIG.ALLOWED_TAGS, 'span', 'div'],
   ALLOWED_ATTR: [...MARKDOWN_SANITIZE_CONFIG.ALLOWED_ATTR, 'id']
 });
 
@@ -3615,10 +3641,17 @@ function createMathRenderMarker() {
   return 'mdw-math-' + Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
 }
 
-function safePreviewMarkdownHtml(markdownText) {
-  if (!window.marked || !window.DOMPurify || !mdworksPreviewMarked) return { html: '', math: new Map(), marker: '' };
+function createMermaidRenderMarker() {
+  return createMathRenderMarker().replace('mdw-math-', 'mdw-mermaid-');
+}
+
+function safePreviewMarkdownHtml(markdownText, options = {}) {
+  if (!window.marked || !window.DOMPurify || !mdworksPreviewMarked) return { html: '', math: new Map(), marker: '', diagrams: new Map(), mermaidMarker: '' };
   mdworksFootnoteState = createFootnoteState();
   mdworksMathRenderState = { marker: createMathRenderMarker(), nextId: 0, math: new Map() };
+  mdworksMermaidRenderState = options.editorMermaid
+    ? { marker: createMermaidRenderMarker(), nextId: 0, diagrams: new Map() }
+    : null;
   collectFootnoteDefinitionsBeforeRender(markdownText, mdworksFootnoteState);
   try {
     let rendered = mdworksPreviewMarked.parse(String(markdownText || ''));
@@ -3627,11 +3660,14 @@ function safePreviewMarkdownHtml(markdownText) {
     return {
       html: decorateSanitizedMarkdownHtml(sanitized, mdworksFootnoteState),
       math: mdworksMathRenderState.math,
-      marker: mdworksMathRenderState.marker
+      marker: mdworksMathRenderState.marker,
+      diagrams: mdworksMermaidRenderState?.diagrams || new Map(),
+      mermaidMarker: mdworksMermaidRenderState?.marker || ''
     };
   } finally {
     mdworksFootnoteState = null;
     mdworksMathRenderState = null;
+    mdworksMermaidRenderState = null;
   }
 }
 
@@ -4726,6 +4762,7 @@ function applyTheme(theme, opts = {}) {
 
 function setTheme(theme) {
   applyTheme(theme, { persist: true });
+  if (previewOpen) renderPreview(true);
   closeMenus();
   toast(T.themeChanged(getThemeDisplayName(currentTheme)));
 }
@@ -5777,11 +5814,19 @@ const KATEX_CSS_INTEGRITY = 'sha384-vlBdW0r3AcZO/HboRPznQNowvexd3fY8qHOWkBi5q7KG
 const KATEX_JS_INTEGRITY = 'sha384-AtrdNsnxl/75rvBneBVH7DtOvCxSVahR2zWqle1coBKd8DEmLoviqNeJSx64gNAs';
 const KATEX_CSS_ELEMENT_ID = 'mdworks-katex-css';
 const KATEX_JS_ELEMENT_ID = 'mdworks-katex-js';
+const MERMAID_VERSION = '11.12.2';
+const MERMAID_JS_URL = `https://cdn.jsdelivr.net/npm/mermaid@${MERMAID_VERSION}/dist/mermaid.min.js`;
+const MERMAID_JS_ELEMENT_ID = 'mdworks-mermaid-js';
+const MERMAID_RENDER_DELAY = 400;
 let katexLoadPromise = null;
 let katexLoadState = 'idle';
 let katexRecoveryPromise = null;
 let katexFailureNotified = false;
 let previewRenderGeneration = 0;
+let mermaidLoadPromise = null;
+let mermaidLoadState = 'idle';
+let mermaidRenderTimer = null;
+let mermaidRenderSequence = 0;
 
 function loadKatexAsset(tagName, attributes, elementId) {
   return new Promise((resolve, reject) => {
@@ -5904,14 +5949,170 @@ function renderKatexIntoTarget(katexApi, item, target) {
   });
 }
 
+function resetMermaidLoaderForRetry() {
+  if (mermaidLoadState !== 'failed') return false;
+  document.getElementById(MERMAID_JS_ELEMENT_ID)?.remove();
+  mermaidLoadPromise = null;
+  mermaidLoadState = 'idle';
+  return true;
+}
+
+function ensureMermaidLoaded() {
+  if (mermaidLoadState === 'ready' && window.mermaid) return Promise.resolve(window.mermaid);
+  if (mermaidLoadPromise) return mermaidLoadPromise;
+  mermaidLoadState = 'loading';
+  mermaidLoadPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.id = MERMAID_JS_ELEMENT_ID;
+    script.src = MERMAID_JS_URL;
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    script.referrerPolicy = 'no-referrer';
+    const fail = error => {
+      clearTimeout(timeout);
+      script.remove();
+      reject(error);
+    };
+    const timeout = setTimeout(() => fail(new Error('Mermaid load timed out')), 15000);
+    script.addEventListener('load', () => {
+      clearTimeout(timeout);
+      if (!window.mermaid) return fail(new Error('Mermaid is unavailable'));
+      mermaidLoadState = 'ready';
+      resolve(window.mermaid);
+    }, { once: true });
+    script.addEventListener('error', () => fail(new Error('Mermaid load failed')), { once: true });
+    document.head.appendChild(script);
+  }).catch(error => {
+    mermaidLoadState = 'failed';
+    console.warn('Mermaid loading failed; retaining source fallback.', error);
+    throw error;
+  });
+  return mermaidLoadPromise;
+}
+
+function getMermaidThemeConfig(themeMode = 'editor') {
+  if (themeMode === 'viewer') return { theme: 'neutral' };
+  if (currentTheme === 'paper') return { theme: 'neutral' };
+  if (currentTheme === 'warm') {
+    return {
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#f4e3c1', primaryTextColor: '#4c3524', primaryBorderColor: '#b7791f',
+        lineColor: '#825d35', secondaryColor: '#fff8e8', tertiaryColor: '#ead5b2'
+      }
+    };
+  }
+  return { theme: 'dark' };
+}
+
+function initializeMermaid(mermaidApi, options = {}) {
+  mermaidApi.initialize({
+    startOnLoad: false,
+    securityLevel: 'strict',
+    secure: ['secure', 'securityLevel', 'startOnLoad', 'maxTextSize', 'htmlLabels', 'flowchart', 'theme', 'themeVariables'],
+    htmlLabels: false,
+    flowchart: { htmlLabels: false },
+    maxTextSize: 50000,
+    suppressErrorRendering: true,
+    ...getMermaidThemeConfig(options.themeMode)
+  });
+}
+
+function sanitizeMermaidSvg(svg) {
+  if (!window.DOMPurify) return document.createDocumentFragment();
+  return DOMPurify.sanitize(String(svg || ''), {
+    USE_PROFILES: { svg: true, svgFilters: true },
+    RETURN_DOM_FRAGMENT: true,
+    ALLOW_DATA_ATTR: false,
+    FORBID_TAGS: ['script', 'foreignObject', 'a'],
+    FORBID_ATTR: ['href', 'xlink:href', 'style', 'onclick', 'onload', 'onerror', 'onmouseover', 'onfocus']
+  });
+}
+
+async function renderMermaidToSvg(source, options = {}) {
+  const mermaidApi = options.mermaidApi || await ensureMermaidLoaded();
+  initializeMermaid(mermaidApi, { themeMode: options.themeMode || 'editor' });
+  const renderId = options.renderId || `mdw-mermaid-svg-${++mermaidRenderSequence}`;
+  const result = await mermaidApi.render(renderId, String(source || ''));
+  const fragment = sanitizeMermaidSvg(result?.svg || '');
+  const svg = fragment.querySelector?.('svg');
+  if (!svg || fragment.querySelector?.('script, foreignObject, a')) {
+    throw new Error(isJa ? '安全なMermaid SVGを生成できませんでした。' : 'A safe Mermaid SVG could not be generated.');
+  }
+  const holder = document.createElement('div');
+  holder.appendChild(fragment);
+  return holder.innerHTML;
+}
+
+function setMermaidError(target, source, error) {
+  const message = document.createElement('div');
+  message.className = 'mdw-mermaid-error';
+  message.textContent = isJa ? '⚠ Mermaid図を描画できませんでした' : '⚠ Mermaid diagram could not be rendered';
+  const summary = String(error?.message || '').split('\n').find(line => line.trim())?.trim();
+  if (summary) {
+    const detail = document.createElement('span');
+    detail.className = 'mdw-mermaid-error-detail';
+    detail.textContent = summary.slice(0, 300);
+    message.appendChild(detail);
+  }
+  const pre = document.createElement('pre');
+  pre.className = 'mdw-mermaid-source';
+  const code = document.createElement('code');
+  code.className = 'language-mermaid';
+  code.textContent = source;
+  pre.appendChild(code);
+  target.replaceChildren(message, pre);
+}
+
+async function renderPreviewMermaid(rendered, generation) {
+  if (!previewOpen || generation !== previewRenderGeneration || !rendered.diagrams.size) return;
+  let mermaidApi;
+  try {
+    if (mermaidLoadState === 'failed') resetMermaidLoaderForRetry();
+    mermaidApi = await ensureMermaidLoaded();
+  } catch (error) {
+    return; // Sanitized source placeholders remain visible while offline.
+  }
+  if (!previewOpen || generation !== previewRenderGeneration) return;
+  for (const [id, item] of rendered.diagrams) {
+    if (!previewOpen || generation !== previewRenderGeneration) return;
+    if (item.limitReason) continue;
+    const target = document.getElementById(id);
+    if (!target || !preview.contains(target) || !id.startsWith(`${rendered.mermaidMarker}-`)) continue;
+    try {
+      const renderId = `mdw-mermaid-svg-${generation}-${++mermaidRenderSequence}`;
+      const sanitizedSvg = await renderMermaidToSvg(item.source, { mermaidApi, renderId, themeMode: 'editor' });
+      if (!previewOpen || generation !== previewRenderGeneration || !target.isConnected) return;
+      target.replaceChildren(sanitizeMermaidSvg(sanitizedSvg));
+    } catch (error) {
+      if (generation === previewRenderGeneration && target.isConnected) setMermaidError(target, item.source, error);
+    }
+  }
+}
+
+function schedulePreviewMermaid(rendered, generation) {
+  clearTimeout(mermaidRenderTimer);
+  if (!previewOpen || !rendered.diagrams.size || (typeof printPrepState !== 'undefined' && printPrepState)) return;
+  mermaidRenderTimer = setTimeout(() => renderPreviewMermaid(rendered, generation), MERMAID_RENDER_DELAY);
+}
+
+function handleMermaidOnlineRecovery() {
+  if (mermaidLoadState !== 'failed') return;
+  resetMermaidLoaderForRetry();
+  if (previewOpen && preview.querySelector('.mdw-mermaid')) renderPreview(true);
+}
+
+window.addEventListener('online', handleMermaidOnlineRecovery);
+
 function renderPreview(force = false) {
   if ((!previewOpen && !force) || !window.marked) return;
   const generation = ++previewRenderGeneration;
   if (window.DOMPurify) {
-    const rendered = safePreviewMarkdownHtml(editor.value);
+    const rendered = safePreviewMarkdownHtml(editor.value, { editorMermaid: true });
     preview.innerHTML = rendered.html;
     decoratePreviewTasks();
     renderPreviewMath(rendered, generation);
+    schedulePreviewMermaid(rendered, generation);
   } else {
     preview.innerHTML = `<div style="color:var(--danger); border: 1px solid var(--danger); padding: 15px; border-radius: 8px; font-family: var(--sans); background: rgba(240,112,112,0.1); margin: 20px;"><b>Security Error:</b><br>Preview disabled because DOMPurify failed to load.</div>`;
   }
@@ -7999,11 +8200,59 @@ function serializeViewerMathState(rendered) {
   return items.length === rendered.math.size && items.length ? { version: 1, marker: rendered.marker, items } : null;
 }
 
-function createViewerRenderPackage(markdownText) {
-  const rendered = safePreviewMarkdownHtml(markdownText);
-  if (!rendered.math || rendered.math.size === 0) return { html: safeMarkdownHtml(markdownText), math: null };
-  const math = serializeViewerMathState(rendered);
-  return math ? { html: rendered.html, math } : { html: safeMarkdownHtml(markdownText), math: null };
+async function createViewerRenderPackage(markdownText) {
+  const rendered = safePreviewMarkdownHtml(markdownText, { editorMermaid: true });
+  const hasMath = rendered.math instanceof Map && rendered.math.size > 0;
+  const hasMermaid = rendered.diagrams instanceof Map && rendered.diagrams.size > 0;
+  if (!hasMath && !hasMermaid) return { html: safeMarkdownHtml(markdownText), math: null };
+
+  const math = hasMath ? serializeViewerMathState(rendered) : null;
+  if (!hasMermaid) return math ? { html: rendered.html, math } : { html: safeMarkdownHtml(markdownText), math: null };
+
+  const template = document.createElement('template');
+  template.innerHTML = rendered.html;
+  let mermaidApi = null;
+  let mermaidLoadError = null;
+  const needsRenderer = Array.from(rendered.diagrams.values()).some(item => !item.limitReason);
+
+  if (needsRenderer) {
+    try {
+      if (mermaidLoadState === 'failed') resetMermaidLoaderForRetry();
+      mermaidApi = await ensureMermaidLoaded();
+    } catch (error) {
+      mermaidLoadError = error;
+    }
+  }
+
+  let ordinal = 0;
+  for (const [id, item] of rendered.diagrams) {
+    ordinal += 1;
+    const matches = Array.from(template.content.querySelectorAll('[id]')).filter(node => node.id === id);
+    const target = matches.length === 1 ? matches[0] : null;
+    if (!target || !target.classList.contains('mdw-mermaid') || !id.startsWith(`${rendered.mermaidMarker}-`)) continue;
+
+    if (item.limitReason) {
+      const reason = item.limitReason === 'count'
+        ? (isJa ? '1文書あたりのMermaid図の上限を超えています。' : 'The per-document Mermaid diagram limit was exceeded.')
+        : (isJa ? 'Mermaidソースが安全上のサイズ上限を超えています。' : 'The Mermaid source exceeds the safety size limit.');
+      setMermaidError(target, item.source, new Error(reason));
+      continue;
+    }
+    if (mermaidLoadError || !mermaidApi) {
+      setMermaidError(target, item.source, mermaidLoadError || new Error('Mermaid renderer is unavailable.'));
+      continue;
+    }
+
+    try {
+      const renderId = `${rendered.mermaidMarker}-svg-${ordinal}-${++mermaidRenderSequence}`;
+      const sanitizedSvg = await renderMermaidToSvg(item.source, { mermaidApi, renderId, themeMode: 'viewer' });
+      target.replaceChildren(sanitizeMermaidSvg(sanitizedSvg));
+    } catch (error) {
+      setMermaidError(target, item.source, error);
+    }
+  }
+
+  return { html: template.innerHTML, math };
 }
 
 function viewerMathCsp(hasMath) {
@@ -8014,6 +8263,10 @@ function viewerMathCsp(hasMath) {
 
 function viewerMathCss(hasMath) {
   return hasMath ? `.mdw-math-inline{line-height:normal}.mdw-math-display{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:.15em 0}.mdw-math-fallback{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}.viewer-math-status{margin:12px 0;padding:8px 12px;border:1px solid var(--line);border-radius:10px;color:var(--muted);background:#fafbff;font-size:.9rem}@media print{.mdw-math-display{overflow:visible;max-width:100%}}` : '';
+}
+
+function viewerMermaidCss() {
+  return `.mdw-mermaid{max-width:100%;overflow-x:auto;margin:1em 0;text-align:center;break-inside:avoid;page-break-inside:avoid}.mdw-mermaid svg{display:block;max-width:100%;height:auto;margin:0 auto}.mdw-mermaid-error{color:#b42318;font-weight:700;text-align:left;margin-bottom:.45em}.mdw-mermaid-error-detail{display:block;font-size:.82rem;font-weight:400;overflow-wrap:anywhere;margin-top:.25em}.mdw-mermaid-source{text-align:left;margin:.45em 0 0}@media print{.mdw-mermaid{overflow:visible;break-inside:avoid;page-break-inside:avoid}.mdw-mermaid svg{max-width:100%!important;height:auto!important}}`;
 }
 
 function viewerMathRuntime(hasMath) {
@@ -8181,6 +8434,7 @@ header h1{margin:0 0 8px;font-size:clamp(1.5rem,4vw,2.1rem);line-height:1.25}.no
 main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:36px;box-shadow:0 10px 30px rgba(22,34,66,.06)}
 main>:first-child{margin-top:0}main>:last-child{margin-bottom:0}h1,h2,h3,h4,h5,h6{line-height:1.35;margin:1.7em 0 .65em}h1{font-size:2rem;border-bottom:1px solid var(--line);padding-bottom:.25em}h2{font-size:1.55rem;border-bottom:1px solid #edf0f6;padding-bottom:.2em}h3{font-size:1.25rem}p,ul,ol,blockquote,pre,table{margin:1em 0}a{color:var(--accent)}img{max-width:100%;height:auto}main video{display:block;width:100%;max-width:100%;height:auto;margin:1em 0;border-radius:8px;border:1px solid var(--line);background:#000}blockquote{border-left:4px solid var(--line);padding:.2em 1em;color:#475467;background:#fafbff}pre{overflow:auto;padding:14px;border-radius:12px;background:#111827;color:#f9fafb}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.92em;background:#eef2f7;border-radius:5px;padding:.1em .3em}pre code{background:transparent;padding:0}table{display:block;max-width:100%;overflow:auto;border-collapse:collapse}th,td{border:1px solid var(--line);padding:6px 10px}th{background:#f5f7fb}.mdw-footnote-ref{font-size:78%;line-height:0;white-space:nowrap}.mdw-footnote-ref-link,.mdw-footnote-backref{text-decoration:none}.mdw-footnotes-separator{margin:2.2em 0 1em;border:none;border-top:1px solid var(--line)}.mdw-footnotes{font-size:88%;line-height:1.7;overflow-wrap:anywhere}.mdw-footnote-item{margin:.35em 0;padding-left:.15em}.mdw-footnote-item p{margin:.25em 0}.mdw-footnote-backref{margin-left:.35em}
 ${viewerMathCss(hasMath)}
+${viewerMermaidCss()}
 @media (max-width:860px){.viewer-shell{display:block;padding:14px}.outline-wrap{position:static;max-height:none;margin:14px 0}main{padding:22px}header{padding:18px}}
 @media print{body{background:#fff}.viewer-shell{display:block;max-width:none;padding:0}.outline-wrap{display:none}header,main{box-shadow:none;border:0;border-radius:0}main{padding:0}.mdw-footnote-backref{display:none!important}}
 </style>
@@ -8234,13 +8488,13 @@ ${hasMath ? `<script id="mdworks-viewer-math" type="application/json">${safeScri
 }
 
 // --- NEW: exportViewer ---
-function exportViewer() {
+async function exportViewer() {
   if (!guardEditorCommand()) return;
   closeMenus();
   try {
     const rawTitle = (filenameInput.value || '').replace(/\.[^/.]+$/, '').trim() || 'document';
     const title = rawTitle || 'document';
-    const renderPackage = createViewerRenderPackage(editor.value);
+    const renderPackage = await createViewerRenderPackage(editor.value);
     const viewerHtml = buildViewerHtml(renderPackage.html, title, {
       math: renderPackage.math,
       notice: T.viewerPlainNotice,
@@ -8299,6 +8553,7 @@ function buildRestrictedViewerHtml(box, title, options = {}) {
 header{grid-column:1/-1;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px 26px;box-shadow:0 10px 30px rgba(22,34,66,.06)}header h1{margin:0;font-size:clamp(1.5rem,4vw,2.1rem);line-height:1.25}.outline-wrap{position:sticky;top:18px;align-self:start;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px;max-height:calc(100vh - 36px);overflow:auto}.outline-wrap summary{cursor:pointer;font-weight:700;color:#202a44}.outline-list{list-style:none;margin:12px 0 0;padding:0}.outline-list li{margin:3px 0}.outline-list a{display:block;border-radius:9px;padding:5px 7px;color:var(--accent);text-decoration:none;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.outline-list a:hover{background:var(--soft)}.outline-h2{padding-left:8px}.outline-h3{padding-left:16px;font-size:.92rem}
 main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:36px;box-shadow:0 10px 30px rgba(22,34,66,.06)}main>:first-child{margin-top:0}main>:last-child{margin-bottom:0}h1,h2,h3,h4,h5,h6{line-height:1.35;margin:1.7em 0 .65em}h1{font-size:2rem;border-bottom:1px solid var(--line);padding-bottom:.25em}h2{font-size:1.55rem;border-bottom:1px solid #edf0f6;padding-bottom:.2em}h3{font-size:1.25rem}p,ul,ol,blockquote,pre,table{margin:1em 0}a{color:var(--accent)}img{max-width:100%;height:auto}main video{display:block;width:100%;max-width:100%;height:auto;margin:1em 0;border-radius:8px;border:1px solid var(--line);background:#000}blockquote{border-left:4px solid var(--line);padding:.2em 1em;color:#475467;background:#fafbff}pre{overflow:auto;padding:14px;border-radius:12px;background:#111827;color:#f9fafb}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.92em;background:#eef2f7;border-radius:5px;padding:.1em .3em}pre code{background:transparent;padding:0}table{display:block;max-width:100%;overflow:auto;border-collapse:collapse}th,td{border:1px solid var(--line);padding:6px 10px}th{background:#f5f7fb}.mdw-footnote-ref{font-size:78%;line-height:0;white-space:nowrap}.mdw-footnote-ref-link,.mdw-footnote-backref{text-decoration:none}.mdw-footnotes-separator{margin:2.2em 0 1em;border:none;border-top:1px solid var(--line)}.mdw-footnotes{font-size:88%;line-height:1.7;overflow-wrap:anywhere}.mdw-footnote-item{margin:.35em 0;padding-left:.15em}.mdw-footnote-item p{margin:.25em 0}.mdw-footnote-backref{margin-left:.35em}
 ${viewerMathCss(hasMath)}
+${viewerMermaidCss()}
 @media (max-width:860px){.viewer-shell{display:block;padding:14px}.outline-wrap{position:static;max-height:none;margin:14px 0}main{padding:22px}header{padding:18px}}@media print{html,body{background:#fff!important}body *{display:none!important}}
 </style>
 </head>
@@ -8355,7 +8610,7 @@ async function exportRestrictedViewer() {
     const title = rawTitle || 'document';
     const originalFilename = ensureMarkdownFilename(filenameInput.value.trim() || `${title}.md`);
     const createdAt = new Date().toISOString();
-    const renderPackage = createViewerRenderPackage(editor.value);
+    const renderPackage = await createViewerRenderPackage(editor.value);
     const displayPayload = {
       v: 1,
       type: 'mdworks-restricted-viewer-display',
@@ -8430,6 +8685,7 @@ header,.unlock-card{background:var(--paper);border:1px solid var(--line);border-
 main{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:36px;box-shadow:0 10px 30px rgba(22,34,66,.06)}main>:first-child{margin-top:0}main>:last-child{margin-bottom:0}h1,h2,h3,h4,h5,h6{line-height:1.35;margin:1.7em 0 .65em}h1{font-size:2rem;border-bottom:1px solid var(--line);padding-bottom:.25em}h2{font-size:1.55rem;border-bottom:1px solid #edf0f6;padding-bottom:.2em}h3{font-size:1.25rem}p,ul,ol,blockquote,pre,table{margin:1em 0}a{color:var(--accent)}img{max-width:100%;height:auto}main video{display:block;width:100%;max-width:100%;height:auto;margin:1em 0;border-radius:8px;border:1px solid var(--line);background:#000}blockquote{border-left:4px solid var(--line);padding:.2em 1em;color:#475467;background:#fafbff}pre{overflow:auto;padding:14px;border-radius:12px;background:#111827;color:#f9fafb}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.92em;background:#eef2f7;border-radius:5px;padding:.1em .3em}pre code{background:transparent;padding:0}table{display:block;max-width:100%;overflow:auto;border-collapse:collapse}th,td{border:1px solid var(--line);padding:6px 10px}th{background:#f5f7fb}
 body.private-viewer-unlocked .viewer-shell{user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-webkit-touch-callout:none}body.private-viewer-unlocked img,body.private-viewer-unlocked a{-webkit-user-drag:none}
 ${viewerMathCss(hasMath)}
+${viewerMermaidCss()}
 @media (max-width:860px){.viewer-shell{display:block;padding:14px}.outline-wrap{position:static;max-height:none;margin:14px 0}main{padding:22px}header{padding:18px}.unlock-form{display:block}.unlock-form button{width:100%;margin-top:10px}}@media print{html,body{background:#fff!important}body *{display:none!important}}
 </style>
 </head>
@@ -8566,7 +8822,7 @@ async function exportPrivateViewer() {
     showLoader(T.creatingPrivateViewer);
     const rawTitle = (filenameInput.value || '').replace(/\.[^/.]+$/, '').trim() || 'document';
     const title = rawTitle || 'document';
-    const renderPackage = createViewerRenderPackage(editor.value);
+    const renderPackage = await createViewerRenderPackage(editor.value);
     const payload = {
       v: 1,
       type: 'mdworks-private-viewer',
@@ -10557,17 +10813,18 @@ function escapePrintAttr(value) {
 }
 
 async function buildPrintablePreviewHtml() {
-  const rendered = safePreviewMarkdownHtml(editor.value);
+  const renderPackage = await createViewerRenderPackage(editor.value);
   const container = document.createElement('div');
-  container.innerHTML = rendered.html;
+  container.innerHTML = renderPackage.html;
   let mathRendered = false;
+  const math = renderPackage.math;
 
-  if (rendered.math.size) {
+  if (math && Array.isArray(math.items) && math.items.length) {
     try {
       const katexApi = await ensureKatexLoaded();
-      rendered.math.forEach((item, id) => {
-        if (!id.startsWith(`${rendered.marker}-`)) return;
-        const target = container.querySelector(`#${CSS.escape(id)}`);
+      math.items.forEach(item => {
+        if (!item?.id?.startsWith(`${math.marker}-`)) return;
+        const target = container.querySelector(`#${CSS.escape(item.id)}`);
         if (!target) return;
         try {
           renderKatexIntoTarget(katexApi, item, target);
@@ -10678,6 +10935,7 @@ ${katexStylesheet}
     margin: .8em 0; overflow: visible; break-inside: avoid; page-break-inside: avoid;
   }
   .katex { max-width: 100%; }
+  ${viewerMermaidCss()}
 </style>
 </head>
 <body>
