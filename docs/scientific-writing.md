@@ -125,7 +125,17 @@ To insert experimental graphs, microscopy images, or diagrams, use an exclamatio
 
 The text inside the square brackets is the "alt text" (alternative text). Instead of just writing "Graph" or "Figure 1", briefly describe what the image shows for accessibility.
 
-### 2-2. Hyperlinks
+### 2-2. Mermaid Diagrams
+
+Mermaid is well suited to experimental designs, sample-processing flows, analysis pipelines, state transitions, system architectures, and the order of processing among participants. Use short, clear node names; do not distinguish states by color alone; and split complex diagrams into smaller ones.
+
+It is not suitable for visualizations that must accurately show quantitative relationships in measured data, such as scatter plots, graphs with error bars, or heatmaps. Create these reproducibly with R, Python, or dedicated statistical software, and insert the resulting figure as an image.
+
+Do not make an important conclusion depend on the diagram alone. Explain the diagram's purpose and main flow in the text immediately before or after it.
+
+A standard Mermaid code block cannot by itself manage formal figure numbers, captions, or cross-references from the text. As with the guidance in "Images and Figures," documents prepared for submission require support from the output tool or a final editing step.
+
+### 2-3. Hyperlinks
 
 For links to external databases, public datasets, or online tools, wrap the display text in square brackets and the URL in parentheses.
 
