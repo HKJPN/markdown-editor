@@ -360,6 +360,22 @@ Pandoc-compatible syntax である`~` や `^` を用いる表記法にも対応�
 
 > **オフライン時の表示:** 数式描画ライブラリを読み込めない場合も、本文のPreviewは表示され、数式部分はLaTeX記法のまま表示されます。オンラインに復帰してライブラリの取得に成功すると、表示中の数式は自動的に整形表示へ切り替わります。
 
+### 4-8. Mermaid図を挿入する
+
+Mermaid図を挿入するには、Mermaidソースを、言語名が `mermaid` のコードフェンス内に記述します。たとえば、次のMarkdownで上から下へ進む短いフローチャートを作成できます（`graph TD` は `flowchart TD` に置き換えることもできます）。
+
+````markdown
+```mermaid
+graph TD
+    A[開始] --> B[Markdownを編集]
+    B --> C[Previewで確認]
+```
+````
+
+このコードはPreviewで図として表示されます。また、**印刷 / PDF保存** の実行時、および **Viewer**、**Restricted Viewer**、**Private Viewer** の生成時にも、描画された図が埋め込まれます。
+
+> **互換性:** Mermaid記法自体は標準MarkdownやGFMではなく、MD//WORKSが追加する拡張機能です。そのため、他のMarkdownアプリでは図ではなくコードフェンス内のソースとして表示される場合があります。
+
 
 ---
 
@@ -1110,7 +1126,7 @@ MD//WORKSは、[GitHub Flavored Markdown（GFM）](https://github.github.com/gfm
 |---|---|
 | 基本Markdown | 見出し、太字、斜体、引用、リンク、画像、コード |
 | [GFM系](https://github.github.com/gfm/) | 表、取り消し線、チェックリスト、コードフェンス |
-| MD//WORKS拡張 | 脚注、数式 |
+| MD//WORKS拡張 | 脚注、数式、Mermaid図 |
 | Pandoc風の拡張 | `^上付き^`、`~下付き~` |
 | HTMLの一部 | `<sup>`、`<sub>`、`<video>`など |
 
