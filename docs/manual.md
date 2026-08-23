@@ -1164,6 +1164,15 @@ For important long-term records, keep the following files and information togeth
 
 Do not store the password in plain text in the same location as the encrypted file.
 
+
+### 13-19. Mermaid diagrams are not rendered
+
+The Mermaid renderer is loaded from an external CDN when a Mermaid diagram is displayed for the first time. An internet connection is therefore required for the initial rendering of a diagram.
+
+If the renderer cannot be retrieved because the device is offline, the network times out, organizational filtering is in effect, or the CDN is blocked, Preview displays the original Mermaid source instead of the diagram. After connectivity is restored, Preview is redrawn and the failed renderer load is retried.
+
+If the Mermaid syntax is invalid, Preview displays a warning together with the original source so that you can correct it. Likewise, if a diagram cannot be rendered during a Viewer-type export, the exported Viewer contains error information and the original source in place of the diagram.
+
 ---
 
 <div id="appendix-1-2-local-llm"></div>
