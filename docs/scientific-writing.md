@@ -129,8 +129,6 @@ The text inside the square brackets is the "alt text" (alternative text). Instea
 
 Mermaid diagrams describe flowcharts and other diagrams in a fenced code block whose language is `mermaid`. Mermaid code blocks are not standard Markdown and are rendered as diagrams only by editors, previewers, or conversion tools that support Mermaid. In unsupported environments, they may appear as ordinary code blocks.
 
-> **Note:** MD//WORKS can render Mermaid diagrams in Preview, but loading the renderer requires a network connection. If the renderer fails to load, the Mermaid syntax contains an error, or a safety limit is exceeded, an error and the original source are displayed. Whether a Mermaid diagram can be converted to Word, PDF, HTML, LaTeX, or another format depends on the output path and tools you use; a generic Pandoc conversion does not guarantee that the diagram will be rendered. Before final submission, check the actual output and confirm that every diagram has been rendered.
-
 ````markdown
 ```mermaid
 flowchart LR
@@ -138,6 +136,15 @@ flowchart LR
     B --> C[Report results]
 ```
 ````
+
+Mermaid is well suited to experimental designs, sample-processing flows, analysis pipelines, state transitions, system architectures, and the order of processing among participants. Use short, clear node names; do not distinguish states by color alone; and split complex diagrams into smaller ones.
+
+It is not suitable for visualizations that must accurately show quantitative relationships in measured data, such as scatter plots, graphs with error bars, or heatmaps. Create these reproducibly with R, Python, or dedicated statistical software, and insert the resulting figure as an image.
+
+Do not make an important conclusion depend on the diagram alone. Explain the diagram's purpose and main flow in the text immediately before or after it.
+
+A standard Mermaid code block cannot by itself manage formal figure numbers, captions, or cross-references from the text. As with the guidance in "Images and Figures," documents prepared for submission require support from the output tool or a final editing step.
+
 
 ### 2-3. Hyperlinks
 
