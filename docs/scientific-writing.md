@@ -350,7 +350,7 @@ A standard Mermaid code block cannot by itself manage formal figure numbers, cap
 
 ## Appendix: MD//WORKS Support Status and Version Info
 
-The writing methods described in this guide can be easily applied using **MD//WORKS**, our dedicated Markdown editor. MD//WORKS v1.6.4 or later supports standard Markdown specifications as well as most representative extended syntax:
+The writing methods described in this guide can be easily applied using **MD//WORKS**, our dedicated Markdown editor. MD//WORKS support standard Markdown specifications as well as most representative extended syntax:
 
 * Headings
 * Bulleted and numbered lists
