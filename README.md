@@ -47,6 +47,7 @@ Rendering uses Mermaid v11.12.2 with sanitized SVG output, safety limits, and so
 MD//WORKS now remembers whether Deep Edit Mode is ON or OFF and **restores your preference after reloads and browser restarts**.
 
 If Deep Edit is part of your everyday workflow, you no longer need to enable it each time you start MD//WORKS. Deep Edit Logs remain session-only and start fresh after a restart.
+
 ---
 
 ## ✨ Upcoming Features
