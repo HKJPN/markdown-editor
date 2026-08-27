@@ -420,6 +420,9 @@ You can save your document as a standard Markdown file.
 3.  Choose where you want to save your document, such as **On My iPad** or **iCloud Drive**, within the Files app.
 4.  Tap **Save** in the top-right corner. Your document is now saved as a Markdown file (`.md`).
 
+> **Note:**
+> Make sure to tap the Share button **inside the editor's title bar**, NOT the browser's share button at the top or bottom of the screen. You cannot save a Markdown file using the browser's share menu.
+
 ### 6-2. Renaming the File and Changing Folders (Save As)
 
 Tap the file name field in the title bar to change the document name directly.
