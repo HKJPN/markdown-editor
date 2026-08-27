@@ -428,13 +428,13 @@ Previewでは、主に次の要素を確認できます。
 
 ---
 
-## 6. ファイルを保存（共有）する
+## 6. ファイルを保存（共有）する<img src="images/SaveToFiles-J.jpg" width="200" align="right">
 
 
 
 作成した文書は、Markdownファイルとして保存できます。
 
-### 6-1. Markdownファイルとして保存する<img src="images/SaveToFiles-J.jpg" width="200" align="right">
+### 6-1. Markdownファイルとして保存する
 
 1. タイトルバーの **共有**ボタン<img src="./images/share-ja.jpg" alt="share" width="100">をタップします。   
    または、メニューバーの **ファイル > 共有（⌘S）** を選択します。
