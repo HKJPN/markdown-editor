@@ -421,7 +421,8 @@ You can save your document as a standard Markdown file.
 4.  Tap **Save** in the top-right corner. Your document is now saved as a Markdown file (`.md`).
 
 > **Note:**
-> Make sure to tap the Share button **inside the editor's title bar**, NOT the browser's share button at the top or bottom of the screen. You cannot save a Markdown file using the browser's share menu.
+> Make sure to tap the Share button **inside the editor's title bar**🚫<img src="images/DoNotTapBrowserShareBottons.jpeg" width="30">, NOT the browser's share button at the top or bottom of the screen. You cannot save a Markdown file using the browser's share menu.
+> 
 
 ### 6-2. Renaming the File and Changing Folders (Save As)
 
