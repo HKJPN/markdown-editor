@@ -428,7 +428,7 @@ Previewでは、主に次の要素を確認できます。
 
 ---
 
-## 6. ファイルを保存（共有）する<img src="images/SaveToFiles-J.jpg" width="200" align="right">
+## 6. ファイルを保存（共有）する<img src="images/SaveToFiles-J.jpg" width="200" style="float: right; margin-right: 200px;">
 
 
 
