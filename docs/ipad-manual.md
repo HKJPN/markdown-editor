@@ -422,7 +422,6 @@ You can save your document as a standard Markdown file.
 
 > **Note:**
 > Make sure to tap the Share button <img src="./images/share-e.jpg" alt="share" width="60">**inside the editor's title bar**, NOT the browser's share button <img src="images/DoNotTapBrowserShareBottons.jpeg" width="20">at the top or bottom of the screen. You cannot save a Markdown file using the browser's share menu.
-> 25
 
 ### 6-2. Renaming the File and Changing Folders (Save As)
 
