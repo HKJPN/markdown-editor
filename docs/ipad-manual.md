@@ -415,7 +415,7 @@ You can save your document as a standard Markdown file.
 
 ### 6-1. Saving as a Markdown File
 
-1.  **Tap the Share button** <img src="./images/share-e.jpg" alt="share" width="60"> located in the title bar. Alternatively, you can go to **File > Share** in the menu bar, or press `⌘ + S` on your keyboard.* <img src="images/SaveToFiles-e.jpg" width="180" align="right">
+1.  **Tap the Share button** <img src="./images/share-e.jpg" alt="share" width="60"> located in the title bar. Alternatively, you can go to **File > Share** in the menu bar, or press `⌘ + S` on your keyboard. <img src="images/SaveToFiles-e.jpg" width="180" align="right">
 2.  In the menu that appears, tap **Save to Files**.
 3.  Choose where you want to save your document, such as **On My iPad** or **iCloud Drive**, within the Files app.
 4.  Tap **Save** in the top-right corner. Your document is now saved as a Markdown file (`.md`).
