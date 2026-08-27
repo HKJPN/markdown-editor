@@ -442,8 +442,7 @@ Previewでは、主に次の要素を確認できます。
 5. Markdownファイルとして保存されます。
 
 > **※注意：**
-> ブラウザ（Safariなど）のメニューにある共有ボタンではなく、必ず**エディタのタイトルバー（画面内）にある共有ボタン**を押してください。ブラウザの共有ボタンからはMarkdownファイルを保存できません。
-<br>🚫<img src="images/DoNotTapBrowserShareBotton.jpeg" width="220">
+> ブラウザ（Safariなど）のメニューにある共有ボタン<img src="images/DoNotTapBrowserShareBottons.jpeg" width="30">ではなく、必ず**エディタのタイトルバー（画面内）にある共有ボタン<img src="./images/share-ja.jpg" alt="share" width="100">**を押してください。ブラウザの共有ボタンからはMarkdownファイルを保存できません。
 
 
 ### 6-2. ファイル名や保存先フォルダを変更する（「名前を付けて保存」に相当）
