@@ -436,10 +436,10 @@ Previewでは、主に次の要素を確認できます。
 
 ### 6-1. Markdownファイルとして保存する
 
-1. タイトルバーの **共有**ボタンをタップします。  
+1. タイトルバーの **共有**ボタンをタップします。    <br><img src="./images/share-ja.jpg" alt="share" width="200">
    または、メニューバーの **ファイル > 共有（⌘S）** を選択します。
-   <br><img src="./images/share-ja.jpg" alt="share" width="90">
-3. 「ファイル」アプリから必要に応じて保存先を選択します。
+3. 「ファイル」アプリから必要に応じて保存先を選択します。<br><img src="./images/SaveToFiles-J.jpg" alt="SaveToFiles" width="300">
+
 4. Markdownファイルとして保存されます。
 
 
