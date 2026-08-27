@@ -436,13 +436,13 @@ Previewでは、主に次の要素を確認できます。
 
 ### 6-1. Markdownファイルとして保存する
 
-1. タイトルバーの **共有**ボタン<img src="./images/share-ja.jpg" alt="share" width="100">をタップします。   
+1. タイトルバーの **共有**ボタン<img src="./images/share-ja.jpg" alt="share" width="100">をタップします。<img src="images/SaveToFiles-J.jpg" width="130" align="right"> 
    または、メニューバーの **ファイル > 共有（⌘S）** を選択します。
 3. 「ファイル」アプリから必要に応じて保存先を選択します。
 4. Markdownファイルとして保存されます。
 
 
-### 6-2. ファイル名や保存先フォルダを変更する（「名前を付けて保存」に相当）<img src="images/SaveToFiles-J.jpg" width="150" style="float: right; margin-right: 100px;">
+### 6-2. ファイル名や保存先フォルダを変更する（「名前を付けて保存」に相当）
 
 タイトルバーのファイル名欄をタップすると、ファイル名を直接変更できます。
 たとえば、`untitled.md` を `meeting-note.md` や `manual-draft.md` のように変更できます。その後、保存（共有）を行う際に、iPadの「ファイル」アプリ側で保存先フォルダを指定することで、PCやMacの「名前を付けて保存」と同じように、新しいファイルとして任意の場所に保存することもできます。
