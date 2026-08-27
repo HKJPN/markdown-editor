@@ -438,7 +438,7 @@ Previewでは、主に次の要素を確認できます。
 
 1. タイトルバーの **共有**ボタン<img src="./images/share-ja.jpg" alt="share" width="60">をタップします。   
    または、メニューバーの **ファイル > 共有（⌘S）** を選択します。
-3. 「ファイル」アプリから必要に応じて保存先を選択します。<img src="./images/SaveToFiles-J.jpg" alt="SaveToFiles" width="300" style="float: right; margin-left: 15px;">
+3. 「ファイル」アプリから必要に応じて保存先を選択します。<img src="./images/SaveToFiles-J.jpg" alt="SaveToFiles" width="300" style="float: right; margin-left: 100px;">
 
 4. Markdownファイルとして保存されます。
 
