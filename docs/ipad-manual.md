@@ -433,7 +433,7 @@ The title bar shows the current save status.
 | --- | --- |
 | Unsaved | The document contains unsaved changes |
 | Saved | All changes have been saved |
-
+![Image: Saved / Unsaved indicator highlighted](<./images/SaveUndUnsavedStatus.jpg>)
 
 If you edit the document after saving, the status changes to **Unsaved**.
 
