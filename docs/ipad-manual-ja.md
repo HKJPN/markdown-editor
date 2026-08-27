@@ -428,7 +428,7 @@ Previewでは、主に次の要素を確認できます。
 
 ---
 
-## 6. ファイルを保存（共有）する<img src="images/SaveToFiles-J.jpg" width="200" style="float: right; margin-right: 200px;">
+## 6. ファイルを保存（共有）する
 
 
 
@@ -442,7 +442,7 @@ Previewでは、主に次の要素を確認できます。
 4. Markdownファイルとして保存されます。
 
 
-### 6-2. ファイル名や保存先フォルダを変更する（「名前を付けて保存」に相当）
+### 6-2. ファイル名や保存先フォルダを変更する（「名前を付けて保存」に相当）<img src="images/SaveToFiles-J.jpg" width="150" style="float: right; margin-right: 100px;">
 
 タイトルバーのファイル名欄をタップすると、ファイル名を直接変更できます。
 たとえば、`untitled.md` を `meeting-note.md` や `manual-draft.md` のように変更できます。その後、保存（共有）を行う際に、iPadの「ファイル」アプリ側で保存先フォルダを指定することで、PCやMacの「名前を付けて保存」と同じように、新しいファイルとして任意の場所に保存することもできます。
