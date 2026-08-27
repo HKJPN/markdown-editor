@@ -415,7 +415,7 @@ You can save your document as a standard Markdown file.
 
 ### 6-1. Saving as a Markdown File
 
-1. Tap the **Share** <img src="./images/share-e.jpg" alt="share" width="90">button on the title bar.<img src="images/SaveToFiles-e.jpg" width="180" align="right">
+1. Tap the **Share** <img src="./images/share-e.jpg" alt="share" width="60">button on the title bar.<img src="images/SaveToFiles-e.jpg" width="180" align="right">
 Alternatively, select **File > Share (⌘S)** from the menu bar.
 2. Choose a destination folder in the "Files" app if prompted.
 3. The document is saved as a Markdown file.
