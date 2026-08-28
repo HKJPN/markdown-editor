@@ -36,17 +36,17 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 
 ### Mermaid Diagrams — Create diagrams directly in Markdown
 
-Write a `mermaid` code block to create flowcharts, sequence diagrams, state diagrams, and more directly inside MD//WORKS.
-
-Diagrams are rendered in Preview and are also included in **Print / PDF and Standalone Viewer exports**, allowing text and diagrams to stay together in a single Markdown document — no need to switch to an external diagramming tool.
+Write a `mermaid` code block to create flowcharts, sequence diagrams, state diagrams, and more directly inside MD//WORKS. Diagrams are rendered in Preview and are also included in **Print / PDF and Standalone Viewer exports**, allowing text and diagrams to stay together in a single Markdown document — no need to switch to an external diagramming tool.
 
 Rendering uses Mermaid v11.12.2 with sanitized SVG output, safety limits, and source-code fallback when a diagram cannot be rendered.
 
 ### Deep Edit Mode now remembers your preference
 
-MD//WORKS now remembers whether Deep Edit Mode is ON or OFF and **restores your preference after reloads and browser restarts**.
+MD//WORKS now remembers whether Deep Edit Mode is ON or OFF and **restores your preference after reloads and browser restarts**. If Deep Edit is part of your everyday workflow, you no longer need to enable it each time you start MD//WORKS. Deep Edit Logs remain session-only and start fresh after a restart.
 
-If Deep Edit is part of your everyday workflow, you no longer need to enable it each time you start MD//WORKS. Deep Edit Logs remain session-only and start fresh after a restart.
+### Fixed minor issues
+- Fixed the three-state Task toolbar cycling issue.
+- Fixed Undo/Redo functionality.
 
 ---
 
