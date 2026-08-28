@@ -6293,10 +6293,10 @@ function getSelectedBlockInfo() {
 }
 
 function replaceSelectedLines(transformer) {
-  const { value, lineStart, lineEnd, lines } = getSelectedBlockInfo();
+  const { lineStart, lineEnd, lines } = getSelectedBlockInfo();
   const nextLines = transformer(lines.slice());
   const nextBlock = nextLines.join('\n');
-  editor.value = value.slice(0, lineStart) + nextBlock + value.slice(lineEnd);
+  replaceEditorText(lineStart, lineEnd, nextBlock);
   editor.setSelectionRange(lineStart, lineStart + nextBlock.length);
   update();
   markDirty();
@@ -6306,14 +6306,22 @@ function replaceSelectedLines(transformer) {
 }
 
 function stripListPrefix(line) {
-  return line.replace(/^\s*-\s\[[ xX]\]\s+/, '').replace(/^\s*-\s+/, '').replace(/^\s*\d+\.\s+/, '');
+  return line.replace(/^\s*[-*]\s\[[ xX]\]\s+/, '').replace(/^\s*-\s+/, '').replace(/^\s*\d+\.\s+/, '');
 }
 function isPlainBullet(line) { return /^\s*-\s(?!\[[ xX]\]\s)/.test(line); }
 function isOrderedLine(line) { return /^\s*\d+\.\s+/.test(line); }
+function parseTaskLine(line) {
+  const match = line.match(/^([ \t]*)([-*])[ \t]+\[([ xX])\][ \t]+(.*)$/);
+  if (!match) return null;
+  return {
+    indent: match[1],
+    bullet: match[2],
+    state: match[3] === ' ' ? 'open' : 'done',
+    content: match[4]
+  };
+}
 function taskStateOf(line) {
-  if (/^\s*-\s\[\s\]\s/.test(line)) return 'open';
-  if (/^\s*-\s\[x\]\s/i.test(line)) return 'done';
-  return 'none';
+  return parseTaskLine(line)?.state || 'none';
 }
 
 function toggleBulletList() {
@@ -6342,30 +6350,33 @@ function toggleOrderedList() {
 }
 
 function cycleSingleTaskLine(line) {
-  const state = taskStateOf(line);
-  const content = stripListPrefix(line).trim();
-  if (state === 'none') return `- [ ] ${content}`.trimEnd();
-  if (state === 'open') return `- [x] ${content}`.trimEnd();
-  return content;
+  const task = parseTaskLine(line);
+  if (!task) return `- [ ] ${stripListPrefix(line).trim()}`.trimEnd();
+  if (task.state === 'open') return `${task.indent}${task.bullet} [x] ${task.content}`.trimEnd();
+  return `${task.indent}${task.content}`.trimEnd();
 }
 
 function toggleTaskList() {
   replaceSelectedLines(lines => {
-    const nonEmpty = lines.filter(l => l.trim() !== '');
-    if (nonEmpty.length <= 1) return lines.map(line => line.trim() === '' ? line : cycleSingleTaskLine(line));
-    const states = nonEmpty.map(taskStateOf);
-    const allOpen = states.every(s => s === 'open');
-    const allDone = states.every(s => s === 'done');
+    const nonEmpty = lines.filter(line => line.trim() !== '');
+    if (nonEmpty.length <= 1) {
+      return lines.map(line => line.trim() === '' ? line : cycleSingleTaskLine(line));
+    }
+    const tasks = nonEmpty.map(parseTaskLine);
+    const allOpen = tasks.every(task => task?.state === 'open');
+    const allDone = tasks.every(task => task?.state === 'done');
     if (allOpen) {
       return lines.map(line => {
         if (line.trim() === '') return line;
-        return `- [x] ${stripListPrefix(line).trim()}`.trimEnd();
+        const task = parseTaskLine(line);
+        return `${task.indent}${task.bullet} [x] ${task.content}`.trimEnd();
       });
     }
     if (allDone) {
       return lines.map(line => {
         if (line.trim() === '') return line;
-        return stripListPrefix(line).trim();
+        const task = parseTaskLine(line);
+        return `${task.indent}${task.content}`.trimEnd();
       });
     }
     return lines.map(line => {
