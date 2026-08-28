@@ -3,7 +3,8 @@
 All notable changes to this project will be documented in this file.
 
 ## 2026-08-23 - v1.6.4 candidate - Minor update
-- Fixed three-state Task toolbar cycling and Undo/Redo
+- Fixed the three-state Task toolbar cycling issue.
+- Fixed Undo/Redo functionality.
 
 ## 2026-08-23 - v1.6.4 candidate - Mermaid Diagram & Persist Deep Edit Mode
 - Mermaid Diagram Support for Preview and Exports
