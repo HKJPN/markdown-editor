@@ -47,8 +47,8 @@ Deep Editを普段の編集スタイルとして使う場合、起動するた�
 
 ## ✨ 今後のアップデート予定
 
-### MD//WORKS PROVENANCEとのシームレスな連携
-MD//WORKS PROVENANCE（限定公開中、後述派生プロジェクト）で作成した **Working Report / Finalized Report** も、通常版MD//WORKSでそのままMarkdownとして開けるようになります。
+### [MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)とのシームレスな連携
+[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)（限定公開中、後述派生プロジェクト）で作成した **Working Report / Finalized Report** も、通常版MD//WORKSでそのままMarkdownとして開けるようになります。
 
 ```text
 MD//WORKS PROVENANCE
@@ -64,9 +64,9 @@ Markdown本文として自由に再編集
 
 お使いの端末にインストールして、ネイティブアプリのようにより高速・快適に利用できるPWA（Progressive Web App）に対応予定です。
 
-### 🎓 派生プロジェクト：教育機関向け「MD//WORKS PROVENANCE」
+### 🎓 派生プロジェクト：教育機関向け「[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)」
 
-MD//WORKSの「執筆プロセスを記録する」技術を応用し、レポート課題向けの別プロジェクト「MD//WORKS PROVENANCE」を限定公開し準備しています。
+MD//WORKSの「執筆プロセスを記録する」技術を応用し、レポート課題向けの別プロジェクト「[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)」を限定公開し準備しています。
 
 AI検知ツールや常時監視に頼るのではなく、タイピングや推敲の履歴を**ハッシュチェーン**として記録し、単一HTMLファイルに内包して提出。提出物が改ざんされていないことを、教員側で自律的に検証できます。
 
