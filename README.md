@@ -70,7 +70,7 @@ Continue as ordinary Markdown
 
 We plan to support Progressive Web Apps (PWA), allowing you to install the editor directly on your device for a faster, seamless, native-app-like experience.
 
-### 🎓 Spin-off: MD//WORKS PROVENANCE
+### 🎓 Spin-off: [MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)
 
 A sibling project applying MD//WORKS to academic reports. 
 
@@ -79,7 +79,7 @@ Instead of relying on AI detectors or always-on monitoring, it records the writi
 * **Process-recording editor:** Offline-first, local-only logging with **optional server anchoring**
 * **Teacher Reviewer:** 5-tab viewer (Document / Summary / Timeline / Sessions / Detailed Log) — detailed text collapsed by default
 
-Coming this month as **MD//WORKS PROVENANCE β** (experimental).
+Coming this month as **[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE) β** (experimental).
 
 ---
 
