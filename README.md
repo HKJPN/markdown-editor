@@ -52,11 +52,25 @@ MD//WORKS now remembers whether Deep Edit Mode is ON or OFF and **restores your 
 
 ## ✨ Upcoming Features
 
+## From Academic Evidence to Everyday Writing
+
+MD//WORKS PROVENANCE Reports (our upcoming spin-off project, detailed below) will soon open directly in standard MD//WORKS as Markdown. That means a paper does not have to end where the Academic workflow ends.
+
+```text
+MD//WORKS PROVENANCE
+   ↓
+Working / Finalized Report (.html)
+   ↓
+Open in MD//WORKS
+   ↓
+Continue as ordinary Markdown
+```
+
 ### **PWA Support**
 
 We plan to support Progressive Web Apps (PWA), allowing you to install the editor directly on your device for a faster, seamless, native-app-like experience.
 
-### 🎓 Spin-off: Academic MD//WORKS for Education
+### 🎓 Spin-off: MD//WORKS PROVENANCE
 
 A sibling project applying MD//WORKS to academic reports. 
 
@@ -65,7 +79,7 @@ Instead of relying on AI detectors or always-on monitoring, it records the writi
 * **Process-recording editor:** Offline-first, local-only logging with **optional server anchoring**
 * **Teacher Reviewer:** 5-tab viewer (Document / Summary / Timeline / Sessions / Detailed Log) — detailed text collapsed by default
 
-Coming next month as **Academic MD//WORKS β** (experimental).
+Coming this month as **MD//WORKS PROVENANCE β** (experimental).
 
 ---
 
