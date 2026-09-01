@@ -54,7 +54,7 @@ MD//WORKS now remembers whether Deep Edit Mode is ON or OFF and **restores your 
 
 ## From Academic Evidence to Everyday Writing
 
-MD//WORKS PROVENANCE Reports (our upcoming spin-off project, detailed below) will soon open directly in standard MD//WORKS as Markdown. That means a paper does not have to end where the Academic workflow ends.
+[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE) Reports (our upcoming spin-off project, detailed below) will soon open directly in standard MD//WORKS as Markdown. That means a paper does not have to end where the Academic workflow ends.
 
 ```text
 MD//WORKS PROVENANCE
