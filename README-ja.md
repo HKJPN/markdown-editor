@@ -48,7 +48,7 @@ Deep Editを普段の編集スタイルとして使う場合、起動するた�
 ## ✨ 今後のアップデート予定
 
 ### Formatメニューと操作体系の統一
-Markdown書式を独立した**［書式］**メニューにまとめ、トップメニューを ファイル / 編集 / 表示 / 書式 / ヘルプ に整理する予定です。これにより、MD//WORKS PROVENANCEと基本的なメニュー構成・操作体系を統一し、両アプリを行き来しても迷いにくいUIになる予定です。
+Markdown書式を独立した **［書式］** メニューにまとめ、トップメニューを ファイル / 編集 / 表示 / 書式 / ヘルプ に整理する予定です。これにより、MD//WORKS PROVENANCEと基本的なメニュー構成・操作体系を統一し、両アプリを行き来しても迷いにくいUIになる予定です。
 
 ### [MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)とのシームレスな連携
 [MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)（限定公開中、後述派生プロジェクト）で作成した **Working Report / Finalized Report** も、通常版MD//WORKSでそのままMarkdownとして開けるようになります。
