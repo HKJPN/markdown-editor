@@ -1478,6 +1478,7 @@ body.ipad-safari-fullscreen #menubar {
 @media (max-width:760px){
   #app-name{display:none}
   .save-state{display:none}
+  #dd-format{left:auto;right:0}
   #toolbar{height:42px}
   #preview-wrap.open{width:100%!important;min-width:0}
   #main-container.preview-on #splitter{display:none}
@@ -1671,20 +1672,6 @@ body.zen-mode #zen-exit-btn { display: flex; }
       <div class="menu-entry" onclick="openSearchPanel('replace')">
         <span id="m-replace"></span><span class="menu-shortcut">Ctrl+H</span>
       </div>
-      <div class="menu-sep-line"></div>
-      <div class="menu-entry" onclick="formatDoc()">
-        <span id="m-format"></span>
-      </div>
-      <div class="menu-entry" onclick="insertOrUpdateToc()">
-        <span id="m-insert-toc"></span>
-      </div>
-      <div class="menu-sep-line"></div>
-      <div class="menu-entry" onclick="closeMenus();ins('# ',true)">H1</div>
-      <div class="menu-entry" onclick="closeMenus();ins('## ',true)">H2</div>
-      <div class="menu-entry" onclick="closeMenus();ins('### ',true)">H3</div>
-      <div class="menu-sep-line"></div>
-      <div class="menu-entry" onclick="closeMenus();wrap('**')"><span id="m-bold"></span></div>
-      <div class="menu-entry" onclick="closeMenus();wrap('*')"><span id="m-italic"></span></div>
     </div>
   </div>
 
@@ -1742,6 +1729,34 @@ body.zen-mode #zen-exit-btn { display: flex; }
       <div class="menu-entry" id="m-zen-entry" onclick="toggleZenMode()">
         <span id="m-zen-label"></span><span class="menu-check" id="zen-check">✓</span>
       </div>
+    </div>
+  </div>
+
+  <div class="menu-item">
+    <button class="menu-trigger" data-menu="format" id="t-format"></button>
+    <div class="menu-dropdown" id="dd-format">
+      <div class="menu-entry" onclick="closeMenus();ins('# ',true)"><span id="m-format-h1"></span></div>
+      <div class="menu-entry" onclick="closeMenus();ins('## ',true)"><span id="m-format-h2"></span></div>
+      <div class="menu-entry" onclick="closeMenus();ins('### ',true)"><span id="m-format-h3"></span></div>
+      <div class="menu-sep-line"></div>
+      <div class="menu-entry" onclick="closeMenus();wrap('**')"><span id="m-bold"></span></div>
+      <div class="menu-entry" onclick="closeMenus();wrap('*')"><span id="m-italic"></span></div>
+      <div class="menu-entry" onclick="wrap('~~')"><span id="m-format-strike"></span></div>
+      <div class="menu-entry" onclick="toggleScriptFormat('^')"><span id="m-format-sup"></span></div>
+      <div class="menu-entry" onclick="toggleScriptFormat('~')"><span id="m-format-sub"></span></div>
+      <div class="menu-entry" onclick="wrap('`')"><span id="m-format-inline-code"></span></div>
+      <div class="menu-sep-line"></div>
+      <div class="menu-entry" onclick="ins('> ',true)"><span id="m-format-quote"></span></div>
+      <div class="menu-entry" onclick="insBlock('```\n','\n```')"><span id="m-format-code-block"></span></div>
+      <div class="menu-entry" onclick="toggleBulletList()"><span id="m-format-bullet-list"></span></div>
+      <div class="menu-entry" onclick="toggleOrderedList()"><span id="m-format-ordered-list"></span></div>
+      <div class="menu-entry" onclick="toggleTaskList()"><span id="m-format-task"></span></div>
+      <div class="menu-entry" onclick="insertLink()"><span id="m-format-link"></span></div>
+      <div class="menu-entry" onclick="insertTable()"><span id="m-format-table"></span></div>
+      <div class="menu-entry" onclick="ins('---\n',true)"><span id="m-format-hr"></span></div>
+      <div class="menu-sep-line"></div>
+      <div class="menu-entry" onclick="formatDoc()"><span id="m-format"></span></div>
+      <div class="menu-entry" onclick="insertOrUpdateToc()"><span id="m-insert-toc"></span></div>
     </div>
   </div>
 
@@ -2125,6 +2140,7 @@ const T = {
   menuFile:    isJa ? 'ファイル' : 'File',
   menuView:    isJa ? '表示'     : 'View',
   menuEdit:    isJa ? '編集'     : 'Edit',
+  menuFormatTop: isJa ? '書式'   : 'Format',
   menuHelp:    isJa ? 'ヘルプ'   : 'Help',
   newFile:     isJa ? '新規作成' : 'New',
   closeMenu:   isJa ? '閉じる'   : 'Close',
@@ -2222,6 +2238,16 @@ const T = {
   previewFocusExit: isJa ? '編集画面へ戻る' : 'Return to Editor',
   menuHistory: isJa ? '作業履歴' : 'History',
   menuFormat:  isJa ? 'Markdownを整形' : 'Format Markdown',
+  formatHeading1: isJa ? '見出し 1' : 'Heading 1',
+  formatHeading2: isJa ? '見出し 2' : 'Heading 2',
+  formatHeading3: isJa ? '見出し 3' : 'Heading 3',
+  formatStrike: isJa ? '取り消し線' : 'Strike',
+  formatInlineCode: isJa ? 'インラインコード' : 'Inline Code',
+  formatCodeBlock: isJa ? 'コードブロック' : 'Code Block',
+  formatBulletList: isJa ? '箇条書き' : 'Bullet List',
+  formatOrderedList: isJa ? '番号付きリスト' : 'Ordered List',
+  formatHorizontalRule: isJa ? '区切り線' : 'Horizontal Rule',
+  formatInsertToc: isJa ? '目次を挿入・更新' : 'Insert / Update TOC',
   themeLabel:  isJa ? 'テーマ' : 'Theme',
   themeMidnight:isJa ? 'Midnight（集中・開発者向け）' : 'Midnight (Focus / Developer)',
   themePaper:   isJa ? 'Paper（白背景・文書作成）' : 'Paper (Light / Document)',
@@ -2285,6 +2311,8 @@ const T = {
   privateAppImportedFromBackup: isJa ? 'backupデータから文書を復元しました。新しいPassword-protected Appとして書き出し直すことを推奨します' : 'The document was restored from the backup data. Re-exporting it as a new Password-protected App is recommended',
   privateAppImportError: isJa ? 'Password-protected Appの復元に失敗しました。パスワードが正しくないか、ファイルが破損しています' : 'Failed to restore the Password-protected App. The password may be incorrect or the file may be corrupted',
   privateAppImportMissingDocument: isJa ? 'このPassword-protected Appには復元可能な文書が含まれていません' : 'This Password-protected App does not contain a restorable document',
+  academicReportImported: isJa ? 'Academic Reportの本文をMarkdownとして読み込みました。Writing Processや検証情報は読み込まれていません。' : 'Academic Report opened as Markdown. Writing Process and verification data were not imported.',
+  academicReportImportError: isJa ? 'Academic Reportを開けません。埋め込まれたReportデータが無効か、対応していません。' : 'Unable to open Academic Report: the embedded Report data is invalid or unsupported.',
   restrictedViewerRecoveryPassword: isJa ? '復元用パスワードを設定してください。\nこのパスワードは、MD//WORKSで元Markdownを復元するときに使用します。\n閲覧時には使用しません。' : 'Set a recovery password.\nThis password is used only when restoring the original Markdown in MD//WORKS.\nIt is not required for viewing.',
   restrictedViewerRecoveryPasswordConfirm: isJa ? '確認のため、復元用パスワードをもう一度入力してください。' : 'Enter the recovery password again for confirmation.',
   restrictedViewerPasswordMismatch: isJa ? '復元用パスワードが一致しません' : 'Recovery passwords do not match',
@@ -2438,7 +2466,7 @@ MD//WORKS は、1つのHTMLで動くMarkdownエディタです。下書き、プ
 
 ### 4. 探す・整える
 * **Edit > Find** / **Replace** で検索と置換を行います。
-* **Edit > Format Markdown** で余分な空行や行末スペースを整えます。
+* **書式 > Markdownを整形** で余分な空行や行末スペースを整えます。
 
 ### 5. オフラインで使う
 * スタンドアロンHTMLはネットワークがなくても開けます。
@@ -2465,7 +2493,7 @@ MD//WORKS is a single-file Markdown editor for drafting, previewing, saving, and
 
 ### 4. Find and tidy
 * Use **Edit > Find** / **Replace** for search and replacement.
-* Use **Edit > Format Markdown** to clean excess blank lines and trailing spaces.
+* Use **Format > Format Markdown** to clean excess blank lines and trailing spaces.
 
 ### 5. Work offline
 * Standalone HTML exports can open without a network connection.
@@ -2612,7 +2640,7 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
 `};
 
 const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-set('t-file', T.menuFile); set('t-view', T.menuView); set('t-edit', T.menuEdit); set('t-help', T.menuHelp);
+set('t-file', T.menuFile); set('t-view', T.menuView); set('t-edit', T.menuEdit); set('t-format', T.menuFormatTop); set('t-help', T.menuHelp);
 set('m-new', T.newFile);
 set('m-close', T.closeMenu);
 set('m-open', T.open);
@@ -2628,7 +2656,12 @@ set('m-select-all', T.selectAll);
 
 set('m-history', T.menuHistory);
 set('m-format', T.menuFormat);
-set('m-insert-toc', T.insertToc);
+set('m-insert-toc', T.formatInsertToc);
+set('m-format-h1', T.formatHeading1); set('m-format-h2', T.formatHeading2); set('m-format-h3', T.formatHeading3);
+set('m-format-strike', T.formatStrike); set('m-format-sup', T.tbSup); set('m-format-sub', T.tbSub); set('m-format-inline-code', T.formatInlineCode);
+set('m-format-quote', T.tbQuote); set('m-format-code-block', T.formatCodeBlock);
+set('m-format-bullet-list', T.formatBulletList); set('m-format-ordered-list', T.formatOrderedList); set('m-format-task', T.tbTask);
+set('m-format-link', T.tbLink); set('m-format-table', T.tbTable); set('m-format-hr', T.formatHorizontalRule);
 set('m-outline-label', T.menuOutline);
 set('m-deep-edit-label', T.menuDeepEdit); set('m-deep-log-label', T.menuDeepLog); set('deep-log-title', T.menuDeepLog);
 set('m-invis-label', T.menuInvisibles);
@@ -7626,6 +7659,67 @@ function isHtmlOpenCandidate(filename) {
   return /\.html?$/i.test(String(filename || '').trim());
 }
 
+const ACADEMIC_REPORT_PAYLOAD_ID = 'mdworks-academic-payload';
+const ACADEMIC_REPORT_FORMAT = 'mdworks-academic-report';
+const ACADEMIC_REPORT_VERSION = 1;
+
+function tryParseAcademicReport(htmlText) {
+  const doc = new DOMParser().parseFromString(String(htmlText ?? ''), 'text/html');
+  const element = doc.getElementById(ACADEMIC_REPORT_PAYLOAD_ID);
+  if (!element) return { matched: false };
+
+  try {
+    if (element.tagName !== 'SCRIPT' ||
+        String(element.getAttribute('type') || '').toLowerCase() !== 'application/json') {
+      throw new Error('Invalid Academic Report payload element');
+    }
+
+    const payload = JSON.parse(element.textContent || '');
+    if (payload?.format !== ACADEMIC_REPORT_FORMAT ||
+        payload?.formatVersion !== ACADEMIC_REPORT_VERSION ||
+        !payload.document || typeof payload.document !== 'object' || Array.isArray(payload.document) ||
+        typeof payload.document.markdown !== 'string') {
+      throw new Error('Invalid or unsupported Academic Report payload');
+    }
+
+    return { matched: true, markdown: payload.document.markdown };
+  } catch (error) {
+    return { matched: true, error };
+  }
+}
+
+function academicReportSourceToMarkdownName(sourceName) {
+  const markdownName = String(sourceName || 'document.html').replace(/\.html?$/i, '.md');
+  return ensureMarkdownFilename(markdownName);
+}
+
+async function importAcademicReportHtml(htmlText, sourceName) {
+  if (!isHtmlOpenCandidate(sourceName)) return false;
+
+  const inspection = tryParseAcademicReport(htmlText);
+  if (!inspection.matched) return false;
+  if (inspection.error) {
+    toast(T.academicReportImportError);
+    return true;
+  }
+
+  const logicalFilename = academicReportSourceToMarkdownName(sourceName);
+  const continueDeepEdit = prepareDeepEditForFreshDocumentContext();
+  setEditorDocumentValue(inspection.markdown);
+  setFilenameProgrammatically(logicalFilename);
+  fileHandle = null;
+  lastPickerStartHandle = null;
+  syncFilenameInputState();
+  update();
+  markSaved();
+  await triggerAutoSave();
+  if (spellEnabled) runSpellCheck();
+  const continuedSessionId = resumeDeepEditForFreshDocumentContext(continueDeepEdit, 'academic-report-import');
+  toast(T.academicReportImported);
+  scheduleDeepEditContinuationToast(continuedSessionId);
+  return true;
+}
+
 
 const RESTRICTED_VIEWER_FORMAT = 'mdworks-restricted-viewer';
 const RESTRICTED_VIEWER_VERSION = 1;
@@ -7987,6 +8081,7 @@ async function handleOpen() {
       const file = await handle.getFile();
       await saveToHistoryList(filenameInput.value, editor.value);
       const text = await file.text();
+      if (await importAcademicReportHtml(text, file.name)) return;
       if (await importRestrictedViewerHtml(text, file.name, 'file-system-access')) return;
       if (await importPrivateViewerHtml(text, file.name, 'file-system-access')) return;
       if (await importPrivateAppHtml(text, file.name, 'file-system-access')) return;
@@ -8022,6 +8117,7 @@ document.getElementById('file-input').addEventListener('change', async (e) => {
     await saveToHistoryList(filenameInput.value, editor.value);
 
     const text = await file.text();
+    if (await importAcademicReportHtml(text, file.name)) return;
     if (await importRestrictedViewerHtml(text, file.name, 'file-input')) return;
     if (await importPrivateViewerHtml(text, file.name, 'file-input')) return;
     if (await importPrivateAppHtml(text, file.name, 'file-input')) return;
