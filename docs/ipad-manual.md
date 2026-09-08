@@ -57,7 +57,7 @@ MD//WORKS Editor works comfortably in the following iPad environments:
 ![Image: Overall screen layout with numbers ① to ⑥ indicating each area](<./images/overall-screen-layout.jpg>)
 
 * **① Menu Bar**  
-  Provides access to the File, Edit, View, Help, and Latest Version Notification menus. Use it to create new files, save, export, switch views, and access help.
+  Provides access to the File, Edit, View, Format, Help, and Latest Version Notification menus. Use it to create new files, save, export, switch views, and access help. The Format menu provides access to Markdown formatting commands such as headings, emphasis, lists, tasks, links, tables, and document formatting.
 
 * **② Title Bar**  
 This section displays the app name, file name, save status, and primary operation buttons. **On iPad, specifying a file name here allows you to save (share) the file under any desired name via the "Files" app**. You can quickly perform operations such as opening and saving files, toggling the Preview, entering full-screen mode, and using Spell (EN).
@@ -230,16 +230,16 @@ The current line count, word count, and character count are shown in the status 
 
 ## 4. Formatting Text
 
-You can format text either by typing Markdown syntax directly or by using the toolbar.
+You can format text by typing Markdown syntax directly, using the toolbar, or using the Format menu.
 
-The toolbar makes it easy to insert headings, bold text, lists, quotes, code blocks, links, and tables without memorizing Markdown syntax.
+The toolbar and Format menu provide different ways to access the same core Markdown formatting features, so you can use whichever method you prefer. The Format menu provides Heading 1 / 2 / 3, Bold, Italic, Strike, Superscript, Subscript, Inline Code, Quote, Code Block, Bullet List, Ordered List, Task, Link, Table, Horizontal Rule, Format Markdown, and Insert / Update TOC.
 
 > 💡 **Cursor and selection preservation**
 > When you insert H1 / H2 / H3 headings, quotes, horizontal rules, and similar Markdown elements from the toolbar, the cursor position or text selection relative to the original text is preserved, so you can continue editing without repositioning the cursor.
 
 ### 4-1. Creating Headings
 
-Use the **H1 / H2 / H3** buttons on the toolbar to create headings.
+Use the **H1 / H2 / H3** buttons on the toolbar or the corresponding commands in the **Format** menu to create headings.
 
 | Button | Description | Markdown example |
 | --- | --- | --- |
@@ -249,7 +249,7 @@ Use the **H1 / H2 / H3** buttons on the toolbar to create headings.
 
 ### 4-2. Applying Bold, Italics, and Strikethrough
 
-Select the text you want to format, then click the corresponding toolbar button.
+Select the text you want to format, then click the corresponding toolbar button or choose the command from the **Format** menu.
 
 | Button | Description | Markdown example |
 | --- | --- | --- |
@@ -267,7 +267,7 @@ Example2: `code`
 
 ### 4-3. Creating Lists, Tasks, and Quotes
 
-You can create bulleted lists and checklists for task management. You can apply these settings by selecting one or multiple lines simultaneously and clicking the list, number, or task buttons on the toolbar. Clicking the button multiple times will reapply or clear the formatting. You can also create blockquotes.
+You can create bulleted lists and checklists for task management. You can apply these settings by selecting one or multiple lines simultaneously and clicking the list, number, or task buttons on the toolbar, or by using the corresponding **Format** menu commands. Clicking the button multiple times will reapply or clear the formatting. You can also create blockquotes.
 
 ```markdown
 
@@ -574,7 +574,7 @@ To export as a PDF, choose **Save as PDF** as the destination in your browser’
 ---
 
 ## 8. Search, Replace, and Final Touches
-MD//WORKS Editor provides tools to search and replace text strings across your document, as well as an automatic table of contents generator. These features are highly useful when editing long drafts, meeting minutes, specifications, or research notes.
+MD//WORKS Editor provides tools to search and replace text strings across your document, as well as tools for formatting Markdown and generating a table of contents. Find and Replace are available from the **Edit** menu, while Format Markdown and Insert / Update TOC are available from the **Format** menu. These features are highly useful when editing long drafts, meeting minutes, specifications, or research notes.
 
 ### 8-1. Finding Text
 
@@ -614,10 +614,10 @@ The Find and Replace panel provides the following options:
 
 ### 8-4. Formatting Markdown
 
-Select **Edit > Format Markdown** to clean up excessive blank lines and trailing spaces. Running this before sharing or exporting helps keep the document clean.
+Select **Format > Format Markdown** to clean up excessive blank lines and trailing spaces. Running this before sharing or exporting helps keep the document clean.
 
 ### 8-5. Inserting a Table of Contents
-Selecting **Edit > Insert Table of Contents** automatically generates a clickable, linked table of contents based on the headings (`#` to `###` / H1 to H3) in your document.
+Selecting **Format > Insert / Update TOC** automatically generates a clickable, linked table of contents based on the headings (`#` to `###` / H1 to H3) in your document.
 
 ![Image: TOC and Outlin](<./images/TOCandOutlineE.jpg>)
 
@@ -633,7 +633,7 @@ Selecting **Edit > Insert Table of Contents** automatically generates a clickabl
   If a table of contents previously inserted by MD//WORKS already exists in the document, running the command will **automatically locate and update the existing table of contents with the latest heading structure**, regardless of where your cursor is placed (it will not create a duplicate).
 
 * **Manually Editing the Table of Contents**
-  The generated table of contents is inserted as regular text, so you can freely modify it. However, please note that if you run **Edit > Insert Table of Contents** again to refresh it, **any manual edits you made within the table of contents will be overwritten and reset** based on the latest headings. If you need to make manual fine-tunings, it is highly recommended to do so at the very end, just before exporting.
+  The generated table of contents is inserted as regular text, so you can freely modify it. However, please note that if you run **Format > Insert / Update TOC** again to refresh it, **any manual edits you made within the table of contents will be overwritten and reset** based on the latest headings. If you need to make manual fine-tunings, it is highly recommended to do so at the very end, just before exporting.
 
 > 📄 **Note on Links in Exported PDFs**
 > When saving your document as a PDF, the table of contents can still function as in-page clickable links depending on your viewing environment (this has been verified using the standard "Microsoft Print to PDF" feature on Windows). Since behavior may vary depending on the browser or PDF viewer used, we recommend testing the links once before distributing your file.
@@ -815,6 +815,14 @@ The Help menu provides access to Quick Start, Keyboard Shortcuts, the GitHub pag
 ### 11-1. Quick Start
 
 Select **Help > Quick Start** for a brief overview of MD//WORKS Editor.
+
+Quick Start covers:
+
+* Entering Markdown
+* Formatting with the toolbar and Format menu
+* Previewing documents
+* Saving files
+* Exporting as a standalone app
 
 ### 11-2. Keyboard Shortcuts
 
