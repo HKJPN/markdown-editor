@@ -21,6 +21,9 @@ You can save your document as a Markdown file using **Save** or **Download**. Th
 ### Preview
 Click the **Preview button** to check how your Markdown will be rendered. LaTeX equations and Mermaid diagrams are also supported. Their renderers are loaded from an external CDN, so an internet connection is required the first time each renderer is used; if loading fails, the original source remains visible.
 
+### Formatting
+Apply Markdown formatting from the toolbar or the **Format** menu. Use **Format > Format Markdown** to format the document, and **Format > Insert / Update TOC** to insert or update its table of contents.
+
 ### Wrap Lines
 Use **View > Wrap Lines** to switch between wrapped text and horizontal scrolling. Keep it on for regular writing, and turn it off when editing code, CSV, logs, or long Base64 lines.
 
@@ -32,17 +35,21 @@ Use the **DEEP** button or **View > Deep Edit Mode** to record a temporary log o
 - Headings
 - Automatic Table of Contents
 - Bold and italic text
+- Strikethrough
 - Bullet lists
 - Numbered lists
 - Task lists
 - Blockquotes
+- Inline code
 - Code blocks
+- Horizontal rules
 - Tables
 - Links and images
 - Footnotes
 - Superscript and subscript
 - LaTeX equations
 - Mermaid diagrams
+- Format Markdown
 - Wrap Lines
 
 ## 5. AI Writing Assistant
@@ -68,7 +75,7 @@ Use **File > Export...** to choose Viewer, Restricted Viewer, Password-protected
 No. MD//WORKS runs in your browser.
 
 ### Is my data uploaded to the cloud?
-No. All editing and saving operations are completed within your browser. Your documents are not uploaded to the cloud. By using browsers that prevent AI integrations, MD//WORKS acts as a 100% secure offline-capable editor. See ["12. AI-Assisted Writing" in the manual](https://github.com/HKJPN/markdown-editor/blob/main/docs/manual.md#for-strict-security-and-corporate-policies) for more detail.
+No. All editing and saving operations are completed within your browser. Your documents are not uploaded to the cloud. When browser AI integrations are disabled, MD//WORKS is an offline-capable, local-first editor. See ["12. AI-Assisted Writing" in the manual](https://github.com/HKJPN/markdown-editor/blob/main/docs/manual.md#for-strict-security-and-corporate-policies) for more detail.
 
 ### Which browsers are recommended?
 MD//WORKS has been tested on Chrome, Brave, Firefox, Safari, and Edge. The editor automatically detects the browser environment and adjusts available features accordingly. For AI-assisted writing on desktop, Chrome and Brave are recommended. On iPad, the standard Safari browser does not support AI-assisted writing in this workflow, but this can be enabled by using Brave.
