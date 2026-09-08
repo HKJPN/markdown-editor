@@ -52,6 +52,10 @@ MD//WORKS now remembers whether Deep Edit Mode is ON or OFF and **restores your 
 
 ## ✨ Upcoming Features
 
+## Format menu and unified interaction model
+
+Markdown formatting commands will be grouped under a dedicated Format menu, with the top-level menu organized as File / Edit / View / Format / Help. This also aligns the basic menu structure and interaction model with MD//WORKS PROVENANCE, making it easier to move between the two applications.
+
 ## From Academic Evidence to Everyday Writing
 
 [MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE) Reports (our upcoming spin-off project, detailed below) will soon open directly in standard MD//WORKS as Markdown. That means a paper does not have to end where the Academic workflow ends.
