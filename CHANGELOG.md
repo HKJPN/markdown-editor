@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-09-10 - v1.6.5 Candidate - Improved search performance and responsiveness
+- Improved search performance and responsiveness in long documents, especially with many matches.
+
 ## 2026-09-08 - v1.6.5 - Added a Format menu
 - Added a dedicated Format menu and unified the top-level menu structure.
 
