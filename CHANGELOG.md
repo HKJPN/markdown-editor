@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 ## 2026-09-08 - v1.6.5 - Added a Format menu
 - Added a dedicated Format menu and unified the top-level menu structure.
 
+## 2026-08-27 v-1.6.4 　Official Release
+
 ## 2026-08-23 - v1.6.4 candidate - Minor update
 - Fixed the three-state Task toolbar cycling issue.
 - Fixed Undo/Redo functionality.
