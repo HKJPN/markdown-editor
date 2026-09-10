@@ -5186,17 +5186,47 @@ function markSaved() {
   updateBrowserTabTitle();
 }
 
-function update() {
+function update({ wordCountImmediate = true } = {}) {
   renderPreview();
   refreshBackdrop();
   if (outlineOpen) renderOutline(); 
-  
+
+  updateStatsOnly({ wordCountImmediate });
+}
+
+const WORD_COUNT_DEBOUNCE_MS = 300;
+let wordCountDebounceTimer = null;
+
+function countWords(text) {
+  let words = 0;
+  if (segmenter) {
+    for (const s of segmenter.segment(text)) {
+      if (s.isWordLike) words++;
+    }
+  } else {
+    words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  }
+  return words;
+}
+
+function updateWordCountNow() {
+  clearTimeout(wordCountDebounceTimer);
+  wordCountDebounceTimer = null;
+  set('s-words', countWords(editor.value));
+}
+
+function scheduleWordCountUpdate() {
+  clearTimeout(wordCountDebounceTimer);
+  wordCountDebounceTimer = setTimeout(updateWordCountNow, WORD_COUNT_DEBOUNCE_MS);
+}
+
+function updateStatsOnly({ wordCountImmediate = false } = {}) {
   const text = editor.value;
   const lines = text.length === 0 ? 1 : text.split('\n').length;
-  let words = 0;
-  if (segmenter) { for (const s of segmenter.segment(text)) { if (s.isWordLike) words++; } }
-  else words = text.trim() ? text.trim().split(/\s+/).length : 0;
-  set('s-lines', lines); set('s-words', words); set('s-chars', text.replace(/[\n\r]/g, '').length);
+  set('s-lines', lines);
+  set('s-chars', text.replace(/[\n\r]/g, '').length);
+  if (wordCountImmediate) updateWordCountNow();
+  else scheduleWordCountUpdate();
 }
 
 let isEditorComposing = false;
@@ -5222,13 +5252,13 @@ editor.addEventListener('compositionstart', () => {
     };
   } catch (error) { console.error('Deep Edit logging failed', error); }
 });
-editor.addEventListener('compositionend', () => { isEditorComposing = false; updateCurrentLineHighlight(); if (deepEditEnabled && deepEditPendingBatch) scheduleDeepInputBatchFlush(); });
+editor.addEventListener('compositionend', () => { isEditorComposing = false; scheduleWordCountUpdate(); updateCurrentLineHighlight(); if (deepEditEnabled && deepEditPendingBatch) scheduleDeepInputBatchFlush(); });
 
 function refreshAfterEditorTabChange() {
-  update();
+  update({ wordCountImmediate: false });
   markDirty();
   if (spellEnabled) runSpellCheck();
-  if (shouldTrackSearchHighlights()) performSearch(false);
+  if (shouldRefreshSearchAfterEdit()) performSearch(false);
   clearTimeout(autoSaveTimeout);
   autoSaveTimeout = setTimeout(triggerAutoSave, 1500);
 }
@@ -5441,7 +5471,7 @@ function shouldDeferPasteUpdate(pasteLength, nextLength) {
     nextLength >= 30000 ||
     (previewOpen && nextLength >= 20000) ||
     (showInvisibles && nextLength >= 20000) ||
-    ((spellEnabled || shouldTrackSearchHighlights()) && nextLength >= 15000)
+    ((spellEnabled || shouldRefreshSearchAfterEdit()) && nextLength >= 15000)
   );
 }
 
@@ -5533,22 +5563,6 @@ function deferPasteTask(fn, preferIdle) {
   });
 }
 
-function updateStatsOnly() {
-  const text = editor.value;
-  const lines = text.length === 0 ? 1 : text.split('\n').length;
-  let words = 0;
-  if (segmenter) {
-    for (const s of segmenter.segment(text)) {
-      if (s.isWordLike) words++;
-    }
-  } else {
-    words = text.trim() ? text.trim().split(/\s+/).length : 0;
-  }
-  set('s-lines', lines);
-  set('s-words', words);
-  set('s-chars', text.replace(/[\n\r]/g, '').length);
-}
-
 async function handlePlainTextPaste(text) {
   if (!text) return;
 
@@ -5604,7 +5618,7 @@ async function handlePlainTextPaste(text) {
       tasks.push(deferPasteTask(() => renderOutline(), preferIdle));
     }
 
-    if (shouldTrackSearchHighlights()) {
+    if (shouldRefreshSearchAfterEdit()) {
       tasks.push(deferPasteTask(() => performSearch(false), preferIdle));
     }
 
@@ -5690,10 +5704,10 @@ editor.addEventListener('input', event => {
     clearPendingReplaceAllUndoRestore();
   }
 
-  update();
+  update({ wordCountImmediate: false });
   markDirty();
   if (spellEnabled) runSpellCheck();
-  if (shouldTrackSearchHighlights()) performSearch(false);
+  if (shouldRefreshSearchAfterEdit()) performSearch(false);
   clearTimeout(autoSaveTimeout);
   autoSaveTimeout = setTimeout(triggerAutoSave, 1500);
 
@@ -5825,7 +5839,7 @@ editor.addEventListener("drop", async (e) => {
         recordDeepEditEvent({ type:'image-drop', summary:isJa?'埋め込み画像を追加':'Embedded image added', heading:getDeepHeadingAtOffset(dropSelection.s), charDelta:markdown.length - replacedLength, afterSnippet:'[embedded image data omitted]', meta:{ imageCount:snippets.length, totalBytes:files.filter(file => file.type.startsWith('image/') && file.type !== 'image/svg+xml' && file.size <= IMAGE_DROP_MAX_BYTES).reduce((sum, file) => sum + file.size, 0), embeddedDataOmitted:true } });
       }
       if (spellEnabled) runSpellCheck();
-      if (shouldTrackSearchHighlights()) performSearch(false);
+      if (shouldRefreshSearchAfterEdit()) performSearch(false);
       await yieldToBrowserPaint();
     }
   } finally {
@@ -6232,6 +6246,7 @@ function refreshBackdrop() {
   const showSpell = spellEnabled && spellMatches.length > 0; 
 
   let globalPos = 0;
+  let searchMatchCursor = 0;
   const lineHtml = [];
 
   for (let i = 0; i < lines.length; i++) {
@@ -6248,9 +6263,16 @@ function refreshBackdrop() {
     let lineIntersects = [];
 
     if (showSearch) {
-      lineIntersects.push(...srMatches
-        .map((m, idx) => ({ start: m.start, end: m.end, type: 'search', idx: idx }))
-      );
+      while (searchMatchCursor < srMatches.length && srMatches[searchMatchCursor].end <= lineStart) {
+        searchMatchCursor++;
+      }
+      for (let matchIndex = searchMatchCursor; matchIndex < srMatches.length; matchIndex++) {
+        const match = srMatches[matchIndex];
+        if (match.start >= lineEnd) break;
+        if (match.end > lineStart) {
+          lineIntersects.push({ start: match.start, end: match.end, type: 'search', idx: matchIndex });
+        }
+      }
     }
     if (showSpell) {
       lineIntersects.push(...spellMatches
@@ -6333,7 +6355,7 @@ function replaceSelectedLines(transformer) {
   editor.setSelectionRange(lineStart, lineStart + nextBlock.length);
   update();
   markDirty();
-  if (shouldTrackSearchHighlights()) performSearch(false);
+  if (shouldRefreshSearchAfterEdit()) performSearch(false);
   triggerAutoSave();
   editor.focus();
 }
@@ -6475,6 +6497,10 @@ function shouldTrackSearchHighlights() {
   return srPanelOpen || srHighlightActive;
 }
 
+function shouldRefreshSearchAfterEdit() {
+  return shouldTrackSearchHighlights() && srInput.value !== '';
+}
+
 function clearSearchHighlights() {
   const currentMatch = srMatches[srCurrentIdx];
   srHighlightActive = false;
@@ -6594,7 +6620,6 @@ function highlightCurrentMatch() {
 
   requestAnimationFrame(() => {
     scrollToSearchMatch(m);
-    refreshBackdrop();
 
     if (shouldRestoreSearchFocus && document.contains(activeEl)) {
       activeEl.focus();
@@ -6787,7 +6812,7 @@ document.getElementById('sr-btn-replace-all').onclick = async () => {
     const tasks = [];
     const preferIdle = true;
 
-    if (shouldTrackSearchHighlights()) {
+    if (shouldRefreshSearchAfterEdit()) {
       tasks.push(deferPasteTask(() => performSearch(true), preferIdle));
     } else {
       tasks.push(deferPasteTask(() => refreshBackdrop(), preferIdle));
@@ -7318,7 +7343,7 @@ async function insertOrUpdateToc() {
     tasks.push(deferPasteTask(() => refreshBackdrop(), isLargeToc));
     if (previewOpen) tasks.push(deferPasteTask(() => renderPreview(), isLargeToc));
     if (outlineOpen) tasks.push(deferPasteTask(() => renderOutline(), isLargeToc));
-    if (shouldTrackSearchHighlights()) tasks.push(deferPasteTask(() => performSearch(false), isLargeToc));
+    if (shouldRefreshSearchAfterEdit()) tasks.push(deferPasteTask(() => performSearch(false), isLargeToc));
     if (spellEnabled) tasks.push(deferPasteTask(() => runSpellCheck(), isLargeToc));
 
     clearTimeout(autoSaveTimeout);
@@ -9761,7 +9786,7 @@ function formatDoc() {
     const formattedText = originalText.replace(/\n{3,}/g, '\n\n').split('\n').map(l => l.trimEnd()).join('\n');
     editor.value = formattedText;
     update();
-    if (shouldTrackSearchHighlights()) performSearch(false);
+    if (shouldRefreshSearchAfterEdit()) performSearch(false);
     if (deepEditEnabled && formattedText !== originalText) {
       recordDeepEditEvent({ type:'format-markdown', summary:isJa?'Markdownを整形':'Format Markdown', charDelta:formattedText.length - originalText.length, meta:{ beforeLength:originalText.length, afterLength:formattedText.length } });
     }
