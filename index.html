@@ -1735,9 +1735,9 @@ body.zen-mode #zen-exit-btn { display: flex; }
   <div class="menu-item">
     <button class="menu-trigger" data-menu="format" id="t-format"></button>
     <div class="menu-dropdown" id="dd-format">
-      <div class="menu-entry" onclick="closeMenus();ins('# ',true)"><span id="m-format-h1"></span></div>
-      <div class="menu-entry" onclick="closeMenus();ins('## ',true)"><span id="m-format-h2"></span></div>
-      <div class="menu-entry" onclick="closeMenus();ins('### ',true)"><span id="m-format-h3"></span></div>
+      <div class="menu-entry" onclick="closeMenus();applyHeadingLevel(1)"><span id="m-format-h1"></span></div>
+      <div class="menu-entry" onclick="closeMenus();applyHeadingLevel(2)"><span id="m-format-h2"></span></div>
+      <div class="menu-entry" onclick="closeMenus();applyHeadingLevel(3)"><span id="m-format-h3"></span></div>
       <div class="menu-sep-line"></div>
       <div class="menu-entry" onclick="closeMenus();wrap('**')"><span id="m-bold"></span></div>
       <div class="menu-entry" onclick="closeMenus();wrap('*')"><span id="m-italic"></span></div>
@@ -1753,7 +1753,7 @@ body.zen-mode #zen-exit-btn { display: flex; }
       <div class="menu-entry" onclick="toggleTaskList()"><span id="m-format-task"></span></div>
       <div class="menu-entry" onclick="insertLink()"><span id="m-format-link"></span></div>
       <div class="menu-entry" onclick="insertTable()"><span id="m-format-table"></span></div>
-      <div class="menu-entry" onclick="ins('---\n',true)"><span id="m-format-hr"></span></div>
+      <div class="menu-entry" onclick="insertHorizontalRule()"><span id="m-format-hr"></span></div>
       <div class="menu-sep-line"></div>
       <div class="menu-entry" onclick="formatDoc()"><span id="m-format"></span></div>
       <div class="menu-entry" onclick="insertOrUpdateToc()"><span id="m-insert-toc"></span></div>
@@ -1810,9 +1810,9 @@ body.zen-mode #zen-exit-btn { display: flex; }
 
 <div id="toolbar">
   <div class="tool-group">
-    <button class="tool-btn heading" onclick="ins('# ',true)">H1</button>
-    <button class="tool-btn heading" onclick="ins('## ',true)">H2</button>
-    <button class="tool-btn heading" onclick="ins('### ',true)">H3</button>
+    <button class="tool-btn heading" onclick="applyHeadingLevel(1)">H1</button>
+    <button class="tool-btn heading" onclick="applyHeadingLevel(2)">H2</button>
+    <button class="tool-btn heading" onclick="applyHeadingLevel(3)">H3</button>
   </div>
   <div class="tool-group">
     <button class="tool-btn" onclick="wrap('**')"><b>B</b></button>
@@ -1832,7 +1832,7 @@ body.zen-mode #zen-exit-btn { display: flex; }
     <button class="tool-btn" onclick="insBlock('```\n','\n```')">{ } <span id="tb-code"></span></button>
     <button class="tool-btn" onclick="insertLink()">⌘ <span id="tb-link"></span></button>
     <button class="tool-btn" onclick="insertTable()">⊞ <span id="tb-table"></span></button>
-    <button class="tool-btn" onclick="ins('---\n',true)">─ <span id="tb-hr"></span></button>
+    <button class="tool-btn" onclick="insertHorizontalRule()">─ <span id="tb-hr"></span></button>
   </div>
 </div>
 
@@ -7405,6 +7405,67 @@ function ins(text, lineStart) {
   markDirty();
   triggerAutoSave();
 }
+function applyHeadingLevel(level) {
+  if (!guardEditorCommand()) return;
+  const s = editor.selectionStart;
+  const e = editor.selectionEnd;
+  const direction = editor.selectionDirection || 'none';
+  const scrollTop = editor.scrollTop;
+  const scrollLeft = editor.scrollLeft;
+  const val = editor.value;
+  const lineStart = val.lastIndexOf('\n', Math.max(0, s - 1)) + 1;
+  const lineEnd = val.indexOf('\n', lineStart);
+  const line = val.slice(lineStart, lineEnd < 0 ? val.length : lineEnd);
+  const heading = line.match(/^( {0,3})(#{1,6})(?=[ \t]|$)/);
+  const markerStart = lineStart + (heading ? heading[1].length : ((line.match(/^ {0,3}/) || [''])[0].length));
+  const markerEnd = markerStart + (heading ? heading[2].length : 0);
+  const replacement = '#'.repeat(level) + (heading ? '' : ' ');
+
+  if (heading && heading[2].length === level) return;
+
+  const adjustPosition = position => {
+    if (markerStart === markerEnd) return position < markerStart ? position : position + replacement.length;
+    if (position <= markerStart) return position;
+    if (position >= markerEnd) return position + replacement.length - (markerEnd - markerStart);
+    return markerStart + Math.min(position - markerStart, replacement.length);
+  };
+
+  editor.focus();
+  editor.setSelectionRange(markerStart, markerEnd);
+  document.execCommand('insertText', false, replacement);
+  editor.setSelectionRange(adjustPosition(s), adjustPosition(e), direction);
+  editor.scrollTop = scrollTop;
+  editor.scrollLeft = scrollLeft;
+  markDirty();
+  triggerAutoSave();
+}
+function insertHorizontalRule() {
+  if (!guardEditorCommand()) return;
+  const s = editor.selectionStart;
+  const e = editor.selectionEnd;
+  const direction = editor.selectionDirection || 'none';
+  const scrollTop = editor.scrollTop;
+  const scrollLeft = editor.scrollLeft;
+  const val = editor.value;
+  const lineStart = val.lastIndexOf('\n', Math.max(0, s - 1)) + 1;
+  const lineEnd = val.indexOf('\n', lineStart);
+  const currentLine = val.slice(lineStart, lineEnd < 0 ? val.length : lineEnd);
+  const previousLineEnd = Math.max(0, lineStart - 1);
+  const previousLineStart = val.lastIndexOf('\n', Math.max(0, previousLineEnd - 1)) + 1;
+  const previousLine = val.slice(previousLineStart, previousLineEnd);
+  const before = lineStart > 0 && previousLine.trim() !== '' ? '\n' : '';
+  const after = currentLine.length > 0 ? '\n\n' : (lineEnd >= 0 ? '\n' : '');
+  const insertion = before + '---' + after;
+
+  editor.focus();
+  editor.setSelectionRange(lineStart, lineStart);
+  document.execCommand('insertText', false, insertion);
+  editor.setSelectionRange(s + insertion.length, e + insertion.length, direction);
+  editor.scrollTop = scrollTop;
+  editor.scrollLeft = scrollLeft;
+  markDirty();
+  triggerAutoSave();
+}
 function wrap(mark) {
   if (!guardEditorCommand()) return;
   const { s, e } = getPos();
@@ -10843,6 +10904,10 @@ window.addEventListener('keydown', e => {
     }
     return;
   }
+  if (e.target === editor && m && !e.shiftKey && !e.altKey && !e.isComposing && e.keyCode !== 229 && !isEditorComposing) {
+    if (key === 'b') { e.preventDefault(); wrap('**'); return; }
+    if (key === 'i') { e.preventDefault(); wrap('*'); return; }
+  }
   if (key === 'f' && m) { e.preventDefault(); openSearchPanel('find'); }
 });
 
@@ -10887,7 +10952,21 @@ async function closeFile() {
 
 async function execEdit(action) {
   if (!guardEditorCommand()) return;
-  editor.focus(); if (action === 'selectAll') editor.select(); else document.execCommand(action);
+  editor.focus();
+  if (action === 'selectAll') {
+    editor.select();
+    return;
+  }
+  try {
+    const ok = document.execCommand(action);
+    if (action === 'paste' && ok === false) toast(T.errPaste);
+  } catch (error) {
+    if (action === 'paste') {
+      toast(T.errPaste);
+      return;
+    }
+    throw error;
+  }
 }
 
 function exportHtml() {
