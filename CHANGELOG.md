@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-09-16 - v1.6.5 Candidate - Improved editing usability
+- Improved editing usability with clearer paste-failure guidance, Ctrl/Cmd+B and Ctrl/Cmd+I shortcuts, and safer heading and horizontal-rule insertion.
+
 ## 2026-09-10 - v1.6.5 Candidate - Improved search performance and responsiveness
 - Improved search performance and responsiveness in long documents, especially with many matches.
 
