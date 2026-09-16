@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.6.4 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.6.5 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) <br>
 
 
@@ -32,43 +32,35 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 
 ---
 
-## 🎉  What’s New in v1.6.4 — Mermaid Diagrams & Deep Edit Mode
+## 🎉  What’s New in v1.6.5 — New Format Menu & Improved Editing 
 
-### Mermaid Diagrams — Create diagrams directly in Markdown
+v1.6.5 is primarily a refinement release, focused on making MD//WORKS **faster in long documents and more natural to use during everyday editing**.
 
-Write a `mermaid` code block to create flowcharts, sequence diagrams, state diagrams, and more directly inside MD//WORKS. Diagrams are rendered in Preview and are also included in **Print / PDF and Standalone Viewer exports**, allowing text and diagrams to stay together in a single Markdown document — no need to switch to an external diagramming tool.
+### New Format menu
 
-Rendering uses Mermaid v11.12.2 with sanitized SVG output, safety limits, and source-code fallback when a diagram cannot be rendered.
+Added a dedicated **Format menu** and reorganized the top-level menu structure for clearer access to common formatting tools.
 
-### Deep Edit Mode now remembers your preference
+### Faster search in long documents
 
-MD//WORKS now remembers whether Deep Edit Mode is ON or OFF and **restores your preference after reloads and browser restarts**. If Deep Edit is part of your everyday workflow, you no longer need to enable it each time you start MD//WORKS. Deep Edit Logs remain session-only and start fresh after a restart.
+Improved search performance and responsiveness, especially in long documents with many matches.
 
-### Fixed minor issues
-- Fixed the three-state Task toolbar cycling issue.
-- Fixed Undo/Redo functionality.
+Search navigation with Next / Previous is now smoother under heavier match counts.
+
+### Improved editing controls
+
+Several everyday editing behaviors have also been refined:
+
+* **Ctrl/Cmd+B** for Bold
+* **Ctrl/Cmd+I** for Italic
+* Clearer guidance when menu-based Paste is blocked by the browser
+* Safer H1 / H2 / H3 heading-level changes
+* Safer Horizontal Rule insertion as a standalone Markdown block
+
+These changes help avoid duplicated heading markers and unintended Setext headings caused by horizontal-rule insertion.
 
 ---
 
 ## ✨ Upcoming Features
-
-## Format menu and unified interaction model
-
-Markdown formatting commands will be grouped under a dedicated Format menu, with the top-level menu organized as File / Edit / View / Format / Help. This also aligns the basic menu structure and interaction model with [MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)(our upcoming spin-off project, detailed below), making it easier to move between the two applications.
-
-## From Academic Evidence to Everyday Writing
-
-[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE) Reports  will soon open directly in standard MD//WORKS as Markdown. That means a paper does not have to end where the Academic workflow ends.
-
-```text
-MD//WORKS PROVENANCE
-   ↓
-Working / Finalized Report (.html)
-   ↓
-Open in MD//WORKS
-   ↓
-Continue as ordinary Markdown
-```
 
 ### **PWA Support**
 
