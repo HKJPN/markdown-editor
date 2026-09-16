@@ -54,7 +54,7 @@ MD//WORKS now remembers whether Deep Edit Mode is ON or OFF and **restores your 
 
 ## Format menu and unified interaction model
 
-Markdown formatting commands will be grouped under a dedicated Format menu, with the top-level menu organized as File / Edit / View / Format / Help. This also aligns the basic menu structure and interaction model with MD//WORKS PROVENANCE, making it easier to move between the two applications.
+Markdown formatting commands will be grouped under a dedicated Format menu, with the top-level menu organized as File / Edit / View / Format / Help. This also aligns the basic menu structure and interaction model with [MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE), making it easier to move between the two applications.
 
 ## From Academic Evidence to Everyday Writing
 
