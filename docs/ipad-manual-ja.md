@@ -111,6 +111,10 @@ iPad標準の『ファイル』アプリが開くので、対象のファイル�
 
 `.html` / `.htm` ファイルもテキストソースとして開いて編集できます。MD//WORKSが書き出したRestricted Viewer、Private Viewer、Password-protected Appなどの対応HTML形式を開いた場合は、その形式を判定して必要な復元処理を行います。Markdownやテキストファイル内にこれらのHTMLコード例が含まれていても、特殊形式として扱われることはありません。
 
+> **💡 クラウドストレージの利用**
+> 『ファイル』アプリと連携しているため、iPad本体（このiPad内）だけでなく、**iCloud Drive** や **OneDrive** などのクラウドストレージに保存されているファイルも直接開くことができます。
+
+
 > 💡 **MD//WORKS PROVENANCE Reportを開く**
 >
 > [MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE) で作成した **Working Report / Finalized Report（.html）** は、通常のMD//WORKSから直接開くことができます。Report内の文書本文がMarkdownとして読み込まれるため、Academic workflowで作成した原稿を、その後も通常のMarkdown文書として編集できます。
@@ -127,8 +131,6 @@ iPad標準の『ファイル』アプリが開くので、対象のファイル�
 > 
 > **注意:** Standard MD//WORKSへ読み込まれるのはMarkdown本文です。Writing Process、検証情報、署名などのPROVENANCE情報はStandard MD//WORKSには引き継がれません。
 
-> **💡 クラウドストレージの利用**
-> 『ファイル』アプリと連携しているため、iPad本体（このiPad内）だけでなく、**iCloud Drive** や **OneDrive** などのクラウドストレージに保存されているファイルも直接開くことができます。
 
 ### 2-3. Wordファイルを読み込む
 
