@@ -52,6 +52,19 @@ v1.6.5は、新しい大規模機能を追加するというより、**長い文
 
 見出し記号の重複や、`---` が意図せずSetext見出しとして解釈されるケースを避けるようになりました。
 
+### MD//WORKS PROVENANCEとのシームレスな連携
+[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)で作成した **Working Report / Finalized Report** (詳細後述) も、通常版MD//WORKSでそのままMarkdownとして開けるようになりました。
+
+```text
+MD//WORKS PROVENANCE
+   ↓
+Working / Finalized Report (.html)
+   ↓
+MD//WORKSで開く
+   ↓
+Markdown本文として自由に再編集
+```
+
 
 ---
 
