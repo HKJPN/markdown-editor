@@ -107,23 +107,24 @@ The standard iPad "Files" app will open; select your target file from here.
 
 You can also open `.html` and `.htm` files and edit them as text source. When a file is a supported MD//WORKS format—such as a Restricted Viewer, Private Viewer, or Password-protected App—MD//WORKS identifies the format and performs the required restoration. HTML examples embedded in a Markdown or text file are not treated as one of these special formats.
 
-💡 **Opening an MD//WORKS PROVENANCE Report**
-
-**Working Reports** and **Finalized Reports (`.html`)** created with [MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE) can be opened directly in standard MD//WORKS. The document body is imported as Markdown, so a paper created in the academic workflow can continue as an ordinary Markdown document.
-
-```text
-MD//WORKS PROVENANCE
-   ↓
-Working / Finalized Report (.html)
-   ↓
-Open in MD//WORKS
-   ↓
-Continue as ordinary Markdown
-```
-
-**Note:** Standard MD//WORKS imports the Markdown document only. Writing Process records, verification data, signatures, and other PROVENANCE information are not imported.
-
 > 💡 **Using Cloud Storage:** Because it integrates with the "Files" app, you can directly open files saved not only on your local iPad storage but also in cloud storage services like **iCloud Drive** or **OneDrive**.
+
+
+> 💡 **Opening an MD//WORKS PROVENANCE Report**
+> 
+> **Working Reports** and **Finalized Reports (`.html`)** created with [MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE) can be opened directly in standard MD//WORKS. The document body is imported as Markdown, so a paper created in the academic workflow can continue as an ordinary Markdown document.
+> 
+> ```text
+> MD//WORKS PROVENANCE
+>    ↓
+> Working / Finalized Report (.html)
+>    ↓
+> Open in MD//WORKS
+>    ↓
+> Continue as ordinary Markdown
+> ```
+> 
+> **Note:** Standard MD//WORKS imports the Markdown document only. Writing Process records, verification data, signatures, and other PROVENANCE information are not imported.
 
 ### 2-3. Importing Word Files
 
