@@ -104,6 +104,22 @@ PCに保存されているMarkdownファイル（`.md`、`.txt`、`.markdown` �
 
 `.html` / `.htm` ファイルもテキストソースとして開いて編集できます。MD//WORKSが書き出したRestricted Viewer、Private Viewer、Password-protected Appなどの対応HTML形式を開いた場合は、その形式を判定して必要な復元処理を行います。Markdownやテキストファイル内にこれらのHTMLコード例が含まれていても、特殊形式として扱われることはありません。
 
+💡 **MD//WORKS PROVENANCE Reportを開く**
+
+[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE) で作成した **Working Report / Finalized Report（.html）** は、通常のMD//WORKSから直接開くことができます。Report内の文書本文がMarkdownとして読み込まれるため、Academic workflowで作成した原稿を、その後も通常のMarkdown文書として編集できます。
+
+```text
+MD//WORKS PROVENANCE
+   ↓
+Working / Finalized Report (.html)
+   ↓
+MD//WORKSで開く
+   ↓
+通常のMarkdownとして編集を続ける
+```
+
+**注意:** Standard MD//WORKSへ読み込まれるのはMarkdown本文です。Writing Process、検証情報、署名などのPROVENANCE情報はStandard MD//WORKSには引き継がれません。
+
 ### 2-3. Wordファイルを読み込む
 
 お手持ちのWordファイル（`.docx`）を読み込んで、Markdownに変換して編集を開始できます。  
