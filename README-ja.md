@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.6.4 — AIアシスタント融合スタンドアロン Markdown エディタ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.6.5 — AIアシスタント融合スタンドアロン Markdown エディタ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **言語選択:** [🇺🇸 English](README.md) 又は [🇯🇵 日本語](README-ja.md)
 
 **完全ローカルでインストール不要、なのにAI対応**  
@@ -27,41 +27,35 @@ MD//WORKSはMITライセンスの下、ご自身のウェブサイトで自由�
 
 ---
 
-# 🎉 v1.6.4の新機能とアップデート —  Mermaid図対応とDeep Edit Mode
+# 🎉 v1.6.5の新機能とアップデート —  New Format Menu & Improved Editing
+v1.6.5は、新しい大規模機能を追加するというより、**長い文書でも軽快に、日々の編集をより自然に行えること**を重視したアップデートです。
 
-### Mermaid図に対応 — Markdownのまま図まで作成
+### 書式メニューの追加
 
-`mermaid`コードブロックを書くだけで、フローチャート、シーケンス図、状態図などをMD//WORKS内でそのまま図として表示できます。
+書式操作をまとめた専用の **Formatメニュー**を追加し、トップレベルメニューの構成を整理しました。
 
-Previewでリアルタイムに確認でき、**Print / PDFやStandalone Viewerにも図を含めて出力**できます。文章と図を1つのMarkdown文書で管理できるため、図を作るために外部ツールへ切り替える必要がありません。
-	
-Mermaid v11.12.2を使用し、SVGのサニタイズ、安全上限、構文エラー時のソース表示など、安全性と安定性にも配慮しています。
+見出し、太字・斜体、コード、引用、リスト、リンク、表などの書式操作へ、より分かりやすくアクセスできます。
 
-### Deep Edit Modeの設定を記憶
+### 長文の検索処理改善
 
-Deep Edit ModeのON/OFF設定を記憶し、**再読み込みやブラウザ再起動後も前回の設定を維持**するようになりました。
+長い文書での検索処理を改善しました。特に検索結果が多い場合の検索表示や、Next / Previousによる一致箇所の移動がより軽快になっています。
 
-Deep Editを普段の編集スタイルとして使う場合、起動するたびにONへ戻す必要がありません。Deep Edit Log自体は従来どおりセッション内だけに保持され、再起動時には新しいログとして開始します。
+### キーボードショートカット等の改善
+
+日常的なMarkdown編集操作も改善しました。
+
+* **Ctrl/Cmd+B** で太字
+* **Ctrl/Cmd+I** で斜体
+* メニューからの貼り付けがブラウザに拒否された場合の分かりやすい案内
+* H1 / H2 / H3操作時の見出しレベルを安全に変更
+* Horizontal Ruleを独立したMarkdownブロックとして安全に挿入
+
+見出し記号の重複や、`---` が意図せずSetext見出しとして解釈されるケースを避けるようになりました。
+
 
 ---
 
 ## ✨ 今後のアップデート予定
-
-### Formatメニューと操作体系の統一
-Markdown書式を独立した **［書式］** メニューにまとめ、トップメニューを ファイル / 編集 / 表示 / 書式 / ヘルプ に整理する予定です。これにより、[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)（限定公開中、後述派生プロジェクト）と基本的なメニュー構成・操作体系を統一し、両アプリを行き来しても迷いにくいUIになる予定です。
-
-### MD//WORKS PROVENANCEとのシームレスな連携
-[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)で作成した **Working Report / Finalized Report** も、通常版MD//WORKSでそのままMarkdownとして開けるようになります。
-
-```text
-MD//WORKS PROVENANCE
-   ↓
-Working / Finalized Report (.html)
-   ↓
-MD//WORKSで開く
-   ↓
-Markdown本文として自由に再編集
-```
 
 ### **PWA対応**
 
