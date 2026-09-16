@@ -42,9 +42,7 @@ Added a dedicated **Format menu** and reorganized the top-level menu structure f
 
 ### Faster search in long documents
 
-Improved search performance and responsiveness, especially in long documents with many matches.
-
-Search navigation with Next / Previous is now smoother under heavier match counts.
+Improved search performance and responsiveness, especially in long documents with many matches. Search navigation with Next / Previous is now smoother under heavier match counts.
 
 ### Improved editing controls
 
