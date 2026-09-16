@@ -2090,9 +2090,9 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
-const APP_VERSION = '1.6.4';
-const APP_VERSION_LABEL = 'v1.6.4';
-const RELEASE_NOTES_VERSION = '1.6.4-release';
+const APP_VERSION = '1.6.5';
+const APP_VERSION_LABEL = 'v1.6.5';
+const RELEASE_NOTES_VERSION = '1.6.5-release';
 const LEGACY_DEFAULT_MARKDOWN_SAMPLES = [
   `# MD//WORKS エディタ
 
@@ -2604,38 +2604,30 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
 
 `,
 
-  releaseNotesTitle: isJa ? `${APP_VERSION_LABEL} の新機能` : `What's New in ${APP_VERSION_LABEL}`,
-  releaseNotesIntro: isJa ? '今回の主な改善内容です。' : 'Here are the main improvements in this release.',
+  releaseNotesTitle: `MD//WORKS ${APP_VERSION_LABEL}`,
+  releaseNotesIntro: isJa ? '今回のアップデートでは、メニュー構成と長文編集の使いやすさを改善しました。' : 'This update improves menu organization and everyday editing, especially in long documents.',
   releaseNotesClose: isJa ? '閉じる' : 'Close',
   releaseNotesContent: isJa ? `
 
-## 🎉 v1.6.4 — 図解とDeep Editを、もっと自然に
+* **Formatメニューを新設**
+  書式操作をまとめ、トップメニューの構成を整理しました。
 
-### Markdownからそのまま図を作成
+* **長文検索を高速化**
+  検索結果が多い文書でも、検索や移動がより軽快になりました。
 
-* \`mermaid\`コードブロックを書くだけで、**フローチャートやシーケンス図などをPreviewで表示**できるようになりました。
-* 作成した図は**Print / PDFやStandalone Viewerにもそのまま出力**できます。
-* 文章と図を1つのMarkdown文書で管理でき、外部の作図ツールへ切り替える必要がありません。
-
-### Deep Edit Modeが設定を記憶
-
-* Deep Edit ModeのON/OFFを記憶し、**再起動後も前回の設定を維持**するようになりました。
-* Deep Editを日常的に使う場合、起動するたびにONへ戻す必要がありません。
+* **編集操作を改善**
+  Ctrl/Cmd+B・Ctrl/Cmd+Iへの対応、貼り付け失敗時の案内、見出し・水平線の安全な挿入を追加しました。
 
 ` : `
 
-## 🎉 v1.6.4 — Diagrams and Deep Edit, now more seamless
+* **New Format menu**
+  Formatting tools are now grouped in a clearer top-level menu structure.
 
-### Create diagrams directly from Markdown
+* **Faster search in long documents**
+  Search and match navigation are now more responsive, especially with many results.
 
-* Write a \`mermaid\` code block to display **flowcharts, sequence diagrams, and more directly in Preview**.
-* Your diagrams are also included in **Print / PDF and Standalone Viewer exports**.
-* Keep text and diagrams together in one Markdown document — no need to switch to an external diagramming tool.
-
-### Deep Edit Mode remembers your preference
-
-* Deep Edit Mode now **keeps its ON/OFF setting across reloads and browser restarts**.
-* If Deep Edit is part of your regular workflow, there is no need to enable it again each time you start MD//WORKS.
+* **Improved editing controls**
+  Added Ctrl/Cmd+B and Ctrl/Cmd+I shortcuts, clearer paste-failure guidance, and safer heading and horizontal-rule insertion.
 
 `};
 
