@@ -56,6 +56,21 @@ Several everyday editing behaviors have also been refined:
 
 These changes help avoid duplicated heading markers and unintended Setext headings caused by horizontal-rule insertion.
 
+### From Academic Evidence to Everyday Writing
+
+[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE) Reports  (our upcoming spin-off project, detailed below) open directly in standard MD//WORKS as Markdown. That means a paper does not have to end where the Academic workflow ends.
+
+```text
+MD//WORKS PROVENANCE
+   ↓
+Working / Finalized Report (.html)
+   ↓
+Open in MD//WORKS
+   ↓
+Continue as ordinary Markdown
+```
+
+
 ---
 
 ## ✨ Upcoming Features
