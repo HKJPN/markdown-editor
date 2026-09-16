@@ -2,8 +2,6 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2026-09-16 v-1.6.5 Official Release
-
 ## 2026-09-16 - v1.6.5 Candidate - Improved editing usability
 - Improved editing usability with clearer paste-failure guidance, Ctrl/Cmd+B and Ctrl/Cmd+I shortcuts, and safer heading and horizontal-rule insertion.
 
