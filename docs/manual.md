@@ -158,7 +158,17 @@ This is the main text.
 You can also use **bold** and *italics*.
 ```
 
-### 3-2. Inserting Images
+### 3-2. Line Breaks and Paragraphs
+
+In MD//WORKS Editor, line breaks entered in the Editor are preserved in Preview.
+
+- Pressing Enter creates a visible line break in Preview.
+- Leaving a blank line starts a new paragraph.
+- Headings, lists, tables, and code blocks follow their Markdown structure.
+
+This provides a writing and preview experience similar to a conventional word processor for ordinary text.
+
+### 3-3. Inserting Images
 
 
 
@@ -185,13 +195,13 @@ For security reasons, SVG images are not supported. Convert SVG files to PNG, JP
 
 > 💡 **Pro Tip:** You can bypass the 300 KB image limit by using tools like `images2md.py` or `images2rHTML.py`. However, to maintain stable performance, please ensure the total file size does not exceed 20MB when re-importing into MD//WORKS.
 
-### 3-3. Local Files and Relative Links
+### 3-4. Local Files and Relative Links
 	
 MD//WORKS Editor allows you to display and play local files such as images, videos, audio, and PDFs in the preview screen by specifying them with "relative paths." Images can also be embedded using Base64. This section explains how to display files using relative links and how to embed them.
 
 >  **⚠️Note**:On mobile operating systems like iPadOS, local relative links do not function due to strict OS security restrictions. Please use the direct embedding method instead.
 
-#### 3-3-1. Opening the App from a Local Folder
+#### 3-4-1. Opening the App from a Local Folder
 
 Relative links will function correctly by placing the MD//WORKS HTML file, your Markdown file, and all related media files within the same folder structure.
 
@@ -231,15 +241,15 @@ With this configuration, you can smoothly view images, navigate through file lin
 
 
 
-#### 3-3-2. Opening Local Files from MD//WORKS on the Web
+#### 3-4-2. Opening Local Files from MD//WORKS on the Web
 
 When using the web version of MD//WORKS hosted on a website and selecting a Markdown file from your local computer to edit, images and other media files in the same folder will not be loaded automatically. This is a standard behavior driven by web browser security specifications (same-origin policy) and is not a malfunction of the application.
 
 > 💡 **For a small number of images or small image sizes (up to a few tens of MBs in total):**
-> Even if files cannot be automatically loaded from the folder, you can directly embed (drag and drop) images into your Markdown by referring to "3-2. Inserting Images". Images embedded in the created Markdown file have the advantage of being stably displayed inline in any environment.
+> Even if files cannot be automatically loaded from the folder, you can directly embed (drag and drop) images into your Markdown by referring to "3-3. Inserting Images". Images embedded in the created Markdown file have the advantage of being stably displayed inline in any environment.
 
 
-### 3-4. Checking Input Status
+### 3-5. Checking Input Status
 
   
 The current line count, word count, and character count are shown in the status bar at the bottom of the screen.
@@ -1085,7 +1095,7 @@ If drag-and-drop image insertion does not work, check the following:
 | The image is an SVG file | Convert it to PNG, JPEG, or WebP |
 | The file is not an image | Use a valid image file |
 
-To protect local storage capacity and improve security, MD//WORKS Editor does not accept images over 300 KB or SVG files (see "3-2. Inserting Images" for details).
+To protect local storage capacity and improve security, MD//WORKS Editor does not accept images over 300 KB or SVG files (see "3-3. Inserting Images" for details).
 
 ### 13-7. Preview is not displayed
 
