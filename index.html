@@ -4295,7 +4295,7 @@ let autoSaveFailing = false;
 let beforeUnloadGuardActive = false;
 function beforeUnloadHandler(event) {
   event.preventDefault();
-  event.returnValue = '';
+  event.returnValue = true;
 }
 
 function syncBeforeUnloadGuard() {
