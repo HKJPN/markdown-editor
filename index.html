@@ -3458,6 +3458,14 @@ let fileHandle = null;
 let lastPickerStartHandle = null;
 let resolveAppReady;
 const appReady = new Promise(resolve => { resolveAppReady = resolve; });
+const isInstalledPwa = location.protocol === 'https:' && location.pathname.startsWith('/markdown-editor/') &&
+  window.matchMedia('(display-mode: standalone)').matches && 'launchQueue' in window;
+const waitForInitialPwaLaunch = isInstalledPwa && performance.getEntriesByType('navigation')[0]?.type !== 'reload';
+let resolveInitialPwaLaunch;
+const initialPwaLaunch = new Promise(resolve => { resolveInitialPwaLaunch = resolve; });
+let initialPwaLaunchReceived = false;
+let initialFileLaunch = false;
+let initialFileLaunchBlocked = false;
 
 function syncFilenameInputState() {
   const locked = !!fileHandle && !isMobile && !!window.showSaveFilePicker;
@@ -4362,6 +4370,24 @@ async function loadAutoSave() {
   }
 }
 
+async function preserveAutoSaveForFileLaunch() {
+  const keys = getWorkspaceStorageKeys();
+  if (localStorage.getItem(keys.text) == null) return;
+  const savedTxt = await secureGetItem(keys.text);
+  if (savedTxt === null) throw new Error('AutoSave draft could not be read');
+  if (!savedTxt || savedTxt === T.defaultMd || isLegacyDefaultMarkdown(savedTxt)) return;
+  if (!savedTxt.trim()) throw new Error('AutoSave draft cannot be saved to History');
+  const savedName = await secureGetItem(keys.name);
+  if (localStorage.getItem(keys.name) != null && savedName === null) throw new Error('AutoSave filename could not be read');
+  const backupName = `${savedName || 'untitled.md'} (AutoSave ${Date.now()})`;
+  const result = await saveToHistoryList(backupName, savedTxt);
+  if (!result) throw new Error('AutoSave draft could not be saved to History');
+  const history = await readWorkspaceHistory();
+  if (!history.some(entry => entry.filename === backupName && entry.content === savedTxt)) {
+    throw new Error('AutoSave draft History verification failed');
+  }
+}
+
 let hasStandaloneData = false;
 
 function getStandaloneAutosaveSuffix(filename, content) {
@@ -4410,7 +4436,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   await initializeWorkspace();
-  await loadAutoSave();
+  if (waitForInitialPwaLaunch) await initialPwaLaunch;
+  if (initialFileLaunch) {
+    try {
+      await preserveAutoSaveForFileLaunch();
+    } catch (error) {
+      initialFileLaunchBlocked = true;
+      console.error('AutoSave draft backup failed', error);
+      alert(isJa
+        ? 'AutoSave下書きをHistoryへ退避できなかったため、指定ファイルを開きませんでした。下書きは削除していません。'
+        : 'The AutoSave draft could not be backed up to History. The requested file was not opened, and the draft was not deleted.');
+    }
+  } else {
+    await loadAutoSave();
+  }
   restoreDeepEditModeSetting();
   renderLineViewMenuChecks();
   renderDeepEditState();
@@ -8165,8 +8204,18 @@ async function openFileFromHandle(handle, { method = 'file-system-access', prote
   if (protectCurrentDocument) await closePreviewBeforeOpen();
   lastPickerStartHandle = handle;
   const file = await handle.getFile();
+  const bytes = await file.arrayBuffer();
+  let text;
+  try {
+    text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+  } catch (error) {
+    if (!(error instanceof TypeError)) throw error;
+    alert(isJa
+      ? 'このファイルはUTF-8ではない可能性があります。安全のため開きませんでした。元ファイルは変更されていません。'
+      : 'This file may not be UTF-8. It was not opened, and the original file was not modified.');
+    return false;
+  }
   await saveToHistoryList(filenameInput.value, editor.value);
-  const text = await file.text();
   if (await importAcademicReportHtml(text, file.name)) return true;
   if (await importRestrictedViewerHtml(text, file.name, method)) return true;
   if (await importPrivateViewerHtml(text, file.name, method)) return true;
@@ -8213,13 +8262,18 @@ async function handleOpen() {
 
 // File launches are used only by the installed HTTPS app. Each launch is serialized,
 // so a later launch cannot replace a document while an earlier one is still opening.
-if (location.protocol === 'https:' && location.pathname.startsWith('/markdown-editor/') &&
-    window.matchMedia('(display-mode: standalone)').matches && 'launchQueue' in window) {
+if (isInstalledPwa) {
   let launchChain = Promise.resolve();
   window.launchQueue.setConsumer(({ files }) => {
+    if (!initialPwaLaunchReceived) {
+      initialPwaLaunchReceived = true;
+      initialFileLaunch = Boolean(files?.length);
+      resolveInitialPwaLaunch();
+    }
     if (!files?.length) return;
     launchChain = launchChain.then(async () => {
       await appReady;
+      if (initialFileLaunchBlocked) return;
       if (files.length !== 1) {
         alert(isJa
           ? '複数ファイルをこのウィンドウで開けませんでした。ファイルを1つずつ開いてください。'
