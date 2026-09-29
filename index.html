@@ -631,7 +631,7 @@ body.show-line-numbers #editor-backdrop{
 #preview em{ font-style:italic;color:var(--text2) }
 #preview code{ font-family:var(--mono);font-size:13px;background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:1px 6px;color:var(--accent2) }
 #preview pre{ background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.018)); border:1px solid rgba(255,255,255,.085);border-radius:14px; padding:16px 20px;overflow-x:auto;margin:1em 0;box-shadow:var(--glow) }
-#preview pre code{ background:none;border:none;padding:0;color:var(--text);font-size:13.5px }
+#preview pre code{ background:none;border:none;padding:0;color:var(--text);font-size:13.5px;font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0 }
 #preview blockquote{ border-left:3px solid rgba(143,130,255,.9);margin:1.1em 0;padding:8px 16px; color:var(--text2); background:linear-gradient(90deg, rgba(143,130,255,.13), rgba(143,130,255,.035)); border-radius:0 12px 12px 0 }
 #preview hr{ border:none;border-top:1px solid var(--border2);margin:1.5em 0 }
 #preview table{ border-collapse:separate;border-spacing:0;width:100%;margin:1em 0; font-family:var(--sans);font-size:14px;overflow:hidden;border-radius:14px; border:1px solid rgba(255,255,255,.08) }
@@ -11165,7 +11165,7 @@ async function execEdit(action) {
 
 function exportHtml() {
   if (!guardEditorCommand()) return;
-  const html = `<html><body style="max-width:800px;margin:auto;padding:40px">${safeMarkdownHtml(editor.value)}</body></html>`;
+  const html = `<html><head><style>pre code{font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0}</style></head><body style="max-width:800px;margin:auto;padding:40px">${safeMarkdownHtml(editor.value)}</body></html>`;
   triggerDownload(html, filenameInput.value.replace('.md', '.html'), 'text/html');
 }
 
@@ -11311,7 +11311,7 @@ ${katexStylesheet}
     padding: 8px 10px; background: transparent !important; color: #000 !important;
     page-break-inside: avoid; break-inside: avoid;
   }
-  pre code { border: none; padding: 0; font-size: inherit; }
+  pre code { border: none; padding: 0; font-size: inherit; font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
   blockquote {
     border-left: 4px solid #999; margin: 1em 0; padding: .2em 1em;
     color: #333 !important; background: transparent !important;
