@@ -8,6 +8,14 @@
 <title>MD//WORKS Editor</title>
 <link rel="icon" type="image/png" href="images/icon2.png">
 <link rel="apple-touch-icon" href="images/icon2.png">
+<script>
+  if (location.protocol === 'https:' && location.pathname.startsWith('/markdown-editor/')) {
+    const manifestLink = document.createElement('link');
+    manifestLink.rel = 'manifest';
+    manifestLink.href = 'manifest.json';
+    document.head.appendChild(manifestLink);
+  }
+</script>
 
 <script>
   (function() {
@@ -3448,6 +3456,8 @@ const MDWORKS_PICKER_ID = 'mdworks-open-markdown';
 let currentTheme = 'midnight';
 let fileHandle = null;
 let lastPickerStartHandle = null;
+let resolveAppReady;
+const appReady = new Promise(resolve => { resolveAppReady = resolve; });
 
 function syncFilenameInputState() {
   const locked = !!fileHandle && !isMobile && !!window.showSaveFilePicker;
@@ -4417,6 +4427,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateBrowserTabTitle();
   maybeShowReleaseNotes(); // 起動時の復元・初期描画後に、このバージョン未表示なら表示
   scheduleUpdateCheck();
+  resolveAppReady();
 });
 //#endregion
 
@@ -8144,6 +8155,38 @@ function notifyFileSystemError(action, err) {
   alert(isJa ? `${action}に失敗しました。` : `${action} failed.`);
 }
 
+async function openFileFromHandle(handle, { method = 'file-system-access', protectCurrentDocument = false } = {}) {
+  if (protectCurrentDocument && (fileHandle || isDirty || editor.value !== T.defaultMd || filenameInput.value !== 'untitled.md')) {
+    alert(isJa
+      ? 'このウィンドウには既に文書があります。既存の文書を保護するため、受け取ったファイルは開きませんでした。'
+      : 'This window already contains a document. The incoming file was not opened to protect it.');
+    return false;
+  }
+  if (protectCurrentDocument) await closePreviewBeforeOpen();
+  lastPickerStartHandle = handle;
+  const file = await handle.getFile();
+  await saveToHistoryList(filenameInput.value, editor.value);
+  const text = await file.text();
+  if (await importAcademicReportHtml(text, file.name)) return true;
+  if (await importRestrictedViewerHtml(text, file.name, method)) return true;
+  if (await importPrivateViewerHtml(text, file.name, method)) return true;
+  if (await importPrivateAppHtml(text, file.name, method)) return true;
+  const previousFilename = deepEditSession?.document?.currentFilename || deepEditSession?.document?.filename || filenameInput.value || 'untitled.md';
+  prepareDeepEditForTrackedDocumentOpen({
+    type: 'file-open',
+    summary: isJa ? 'ファイルを開きました' : 'File opened',
+    meta: { previousFilename, openedFilename: file.name, method }
+  });
+  setEditorDocumentValue(text.normalize('NFC'));
+  fileHandle = handle;
+  syncFilenameInputState();
+  setFilenameProgrammatically(file.name);
+  update(); markSaved(); triggerAutoSave();
+  finalizeDeepEditAfterTrackedDocumentOpen(file.name);
+  toast(T.opened(file.name));
+  return true;
+}
+
 async function handleOpen() {
   closeMenus();
   await closePreviewBeforeOpen();
@@ -8159,34 +8202,33 @@ async function handleOpen() {
       }
 
       const [handle] = await window.showOpenFilePicker(openOptions);
-      lastPickerStartHandle = handle;
-      const file = await handle.getFile();
-      await saveToHistoryList(filenameInput.value, editor.value);
-      const text = await file.text();
-      if (await importAcademicReportHtml(text, file.name)) return;
-      if (await importRestrictedViewerHtml(text, file.name, 'file-system-access')) return;
-      if (await importPrivateViewerHtml(text, file.name, 'file-system-access')) return;
-      if (await importPrivateAppHtml(text, file.name, 'file-system-access')) return;
-      // 文書切り替え：File System Access APIで通常ファイルを開く
-      const previousFilename = deepEditSession?.document?.currentFilename || deepEditSession?.document?.filename || filenameInput.value || 'untitled.md';
-      prepareDeepEditForTrackedDocumentOpen({
-        type: 'file-open',
-        summary: isJa ? 'ファイルを開きました' : 'File opened',
-        meta: { previousFilename, openedFilename: file.name, method: 'file-system-access' }
-      });
-      setEditorDocumentValue(text.normalize('NFC'));
-      fileHandle = handle;
-      syncFilenameInputState();
-      setFilenameProgrammatically(file.name);
-      update(); markSaved(); triggerAutoSave();
-      finalizeDeepEditAfterTrackedDocumentOpen(file.name);
-      toast(T.opened(file.name));
+      await openFileFromHandle(handle);
     } catch (e) {
       notifyFileSystemError(isJa ? 'ファイルを開く処理' : 'Open file', e);
     }
   } else {
     document.getElementById('file-input').click();
   }
+}
+
+// File launches are used only by the installed HTTPS app. Each launch is serialized,
+// so a later launch cannot replace a document while an earlier one is still opening.
+if (location.protocol === 'https:' && location.pathname.startsWith('/markdown-editor/') &&
+    window.matchMedia('(display-mode: standalone)').matches && 'launchQueue' in window) {
+  let launchChain = Promise.resolve();
+  window.launchQueue.setConsumer(({ files }) => {
+    if (!files?.length) return;
+    launchChain = launchChain.then(async () => {
+      await appReady;
+      if (files.length !== 1) {
+        alert(isJa
+          ? '複数ファイルをこのウィンドウで開けませんでした。ファイルを1つずつ開いてください。'
+          : 'Multiple files could not be opened in this window. Open them one at a time.');
+        return;
+      }
+      await openFileFromHandle(files[0], { method: 'pwa-file-handler', protectCurrentDocument: true });
+    }).catch(error => notifyFileSystemError(isJa ? 'ファイルを開く処理' : 'Open file', error));
+  });
 }
 
 document.getElementById('file-input').addEventListener('change', async (e) => {
