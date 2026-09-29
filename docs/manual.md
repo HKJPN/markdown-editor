@@ -1,6 +1,6 @@
 # MD//WORKS Editor User Manual
 
-MD//WORKS Editor is a Markdown editor that runs entirely from a single HTML file.  It supports document creation, Markdown preview, file saving, exporting to HTML or PDF, saving as a standalone HTML file, and integration with browser-based AI tools. MD//WORKS works seamlessly across different OSs and browsers, but we've put together a [special manual](https://github.com/HKJPN/markdown-editor/blob/main/docs/ipad-manual.md) for iPad users to help with things like handwriting and AI.
+MD//WORKS Editor is a browser-based Markdown editor available in three forms: a regular web page, an installable PWA from the HTTPS site, and a local single-file HTML edition. The local edition continues to run from one HTML file. It supports document creation, Markdown preview, file saving, exporting to HTML or PDF, saving as a standalone HTML file, and integration with browser-based AI tools. MD//WORKS works seamlessly across different OSs and browsers, but we've put together a [special manual](https://github.com/HKJPN/markdown-editor/blob/main/docs/ipad-manual.md) for iPad users to help with things like handwriting and AI.
 
 ## Image Annotations Used in This Manual
 
@@ -23,32 +23,29 @@ Depending on your browser or operating system, some shortcuts may conflict with 
 
 ### 1-1. Starting the App
 
-MD//WORKS does not require installation; you can use it simply by opening the Editor's HTML file in a browser. It can also be launched directly from the [MD//WORKS Editor website](<https://hkjpn.github.io/markdown-editor/>). If unsaved data from a previous session remains, a restoration prompt may appear. If you wish to restore the data, select "Restore" on the confirmation screen.
+MD//WORKS can be used in three distinct ways. In each case it runs in a browser, and may offer to restore a previous draft.
 
-Although installation is not required, you can convert it into an app using the following steps. Even after turning it into an app, you can switch back and forth with your browser as needed. 
+1. **Regular web page:** Open the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/) in a normal browser tab. No installation is required.
+2. **Installable PWA:** Open the HTTPS site in a supported browser such as Chrome and use its install command. The PWA runs in an independent app window; use **Open in Chrome** when you want to move to a normal tab. Supported Windows environments can also use file associations.
+3. **Local single-file HTML edition:** Open a downloaded `index.html` or equivalent file in a browser. This is the edition that runs from one HTML file.
 
-#### 1-1-1. Steps to Create an App and Switch with Browser Tabs for Chrome<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">. <br>For other browsers, please refer to Appendix 5
+#### 1-1-1. Installing the PWA and Moving Between It and Chrome<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">
 
-1. Open the [MD//WORKS Editor website](<https://hkjpn.github.io/markdown-editor/>) in the Chrome browser on your PC/Mac.
-2. Select the menu (︙) in the top right corner of the screen > "Cast, save, and share" > "Install page as app".
-3. Click "Install" on the confirmation screen, and a dedicated MD//WORKS icon will be created on your desktop or taskbar.
-4. By simply clicking this icon, it will launch immediately as an independent window so you can begin editing.
-5. When you want to use browser AI or similar features, select **"Open in Chrome"** from the menu (︙) in the top right corner. This will move you to a standard browser tab while retaining the text you are currently editing.
-6. To return to the app mode and focus on writing again, click the "Open in app" button displayed at the far right of the browser's address bar.
+1. Open the HTTPS [MD//WORKS site](https://hkjpn.github.io/markdown-editor/) in Chrome.
+2. Choose Chrome's command to install the page as an app. Its name may vary with the browser version or management policy.
+3. Launch MD//WORKS in its independent app window.
+4. Use **Open in Chrome** from the app menu to move to a regular tab; where available, use **Open in app** in the address bar to return.
 <br><img src="./images/icon2s.png" alt="Image:icon" width="90">
 
-> 💡 **If using a downloaded HTML file locally:** The install button will not appear in the address bar. Instead, open the Chrome menu (︙), go to **Save and share** > **Create shortcut**, check the **Open as window** box, and click **Create**.
+> 💡 Creating an **Open as window** shortcut for a local HTML file is not the same as installing the PWA from the HTTPS site. That shortcut does not provide the PWA's OS File Handler associations.
 
-#### 1-1-2. Uninstall for Chrome<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">
+#### 1-1-2. Uninstalling Chrome PWA
 
-If you are running the app from the HTML file or directly from the [MD//WORKS Editor website](https://hkjpn.github.io/markdown-editor/), uninstallation is not required. You can completely remove it simply by deleting the HTML file and clearing your browser cache.
-
-If you installed it as a Chrome App, open the standalone app window, click the menu icon (︙) in the top-right corner, and select **"Uninstall MD//WORKS"**.
-> *Note: If you are unable to uninstall it this way, please refer to Appendix 4.*
+A regular web page needs no uninstall. Uninstall a PWA from its app window or the browser's app management interface. For the local HTML edition, delete the HTML file and any shortcut you created. See [Appendix 4](#appendix-4-chrome-uninstall).
 
 ### 1-2. Supported Environments
 
-MD//WORKS is compatible with almost all environments that can run a modern web browser. Please refer to [save behavior by OS and browser](#save-behavior) for detailed differences in saving behavior across various OS and browser combinations. For best results, use the latest version of a modern desktop browser such as Chrome, Brave, Edge, Firefox or Safari.
+The regular web edition is compatible with a wide range of modern browsers. Please refer to [save behavior by OS and browser](#save-behavior) for detailed differences in saving behavior across various OS and browser combinations. For best results, use the latest browser. PWA installation and OS file association support depend on the browser and OS; Firefox and Safari are not guaranteed to provide the Windows Chrome PWA File Handler behavior.
 
 * **Device Requirements:** PC (Windows/Linux), Mac, iPad, Android tablets, Chromebook, etc., capable of running a modern web browser.
 * **Screen Size:** A tablet-sized screen or larger is required. Almost all features can also be used on iPhones and Android smartphones by switching to landscape mode or using an external display.
@@ -101,27 +98,15 @@ Depending on the current state of the document, you may also be prompted to save
 
 ### 2-2. Opening an Existing File
 
-To continue editing a Markdown file saved on your computer, select **File > Open (Ctrl+O / ⌘O)** from the menu bar or click the **Open** button on the title bar.
+Use **File > Open (Ctrl+O / ⌘O)** or the title-bar **Open** button. The normal Open command accepts `.md`, `.txt`, `.markdown`, `.html`, and `.htm` as text-based input.
 
-Supported text-based file types include `.md`, `.txt`, and `.markdown`.
+In a **supported Chrome PWA installed on Windows**, after the OS association is configured, `.md`, `.markdown`, and `.txt` files can be sent to MD//WORKS by double-clicking them in Explorer or using **Open with**. `.html` and `.htm` are not registered as OS File Handler types.
 
-You can also open `.html` and `.htm` files and edit them as text source. When a file is a supported MD//WORKS format—such as a Restricted Viewer, Private Viewer, or Password-protected App—MD//WORKS identifies the format and performs the required restoration. HTML examples embedded in a Markdown or text file are not treated as one of these special formats.
+The design is one document per window. Opening another file from the OS is intended to create a new PWA window rather than silently replacing a document being edited. If one launch sends multiple files to the same window, none are opened and a notification is shown.
 
-> 💡 **Opening an MD//WORKS PROVENANCE Report**
->
-> **Working Reports** and **Finalized Reports (`.html`)** created with [MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE) can be opened directly in standard MD//WORKS. The document body is imported as Markdown, so a paper created in the academic workflow can continue as an ordinary Markdown document.
->
-> ```text
-> MD//WORKS PROVENANCE
->    ↓
-> Working / Finalized Report (.html)
->    ↓
-> Open in MD//WORKS
->    ↓
-> Continue as ordinary Markdown
-> ```
-> 
-> **Note:** Standard MD//WORKS imports the Markdown document only. Writing Process records, verification data, signatures, and other PROVENANCE information are not imported.
+The Windows PWA and supported File System Access paths validate files as strict UTF-8. A file that cannot be read safely as UTF-8—potentially including Shift-JIS—is rejected with a warning and the original file is not changed. Reading a file with a UTF-8 BOM or CRLF does not guarantee byte-for-byte preservation of its BOM or newline format after saving. Fallback Open in browsers such as Firefox follows a different implementation path.
+
+Normal Open can also recognize supported MD//WORKS HTML exports, including Restricted Viewer, Private Viewer, and Password-protected App files. [MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE) Working / Finalized Reports can be imported as Markdown; process records, verification data, and signatures are not imported.
 
 ### 2-3. Importing Word Files
 
@@ -458,6 +443,8 @@ You can save your document as a standard Markdown file.
 You can also use the shortcut shown above.  
 To save the file under a different name, use **File > Save As (Ctrl+Shift+S / ⌘⇧S)**.
 
+When a file was opened through the OS from a **supported installed PWA on Windows**, **Ctrl+S / Save** writes back to that opened file. **Save As** selects another name or destination. This conditional behavior must not be assumed for ordinary browser selection, Firefox, iPad, or Android.
+
 ### 6-2. Renaming the File
 
 
@@ -480,6 +467,8 @@ The title bar shows the current save status.
 If you edit the document after saving, the status changes to **Unsaved**.  
 Always check this status before closing the app or ending your work session.
 
+AutoSave health is separate from **Saved / Unsaved**. If AutoSave fails, the status bar continuously shows **⚠ AutoSave unavailable**, and a toast also reports the failure. Save explicitly with **Ctrl+S / Save**. The badge returns to its normal display after AutoSave succeeds again.
+
 ### 6-4. Understanding Local Draft Protection
 
 MD//WORKS Editor protects browser-stored drafts and history with **Auto encrypted** so they are not saved locally in plain text.
@@ -490,6 +479,8 @@ For stronger protection or to remove stored data, use the following features:
 * **Clear Local Data**: Available under **Storage Security** in the File menu. This removes all protected drafts and history stored in the browser.
 
 > **Important:** Auto encrypted and Private Storage protect browser-based drafts and history. They do not replace saving your document as a file. To keep your work permanently, save it as a `.md` file with **File > Save (Ctrl+S / ⌘S)**.
+>
+> The AutoSave warning badge and file save status are independent. A document can be saved by Ctrl+S while **AutoSave unavailable** remains visible until a later AutoSave succeeds. The browser confirmation on exit is enabled only while AutoSave is failing **and** changes remain unsaved to a file. Successful Ctrl+S or Save As clears the unsaved state and removes that guard even if the badge remains. The browser controls the confirmation text, and some browsers, operating systems, or exit methods may not show it. This guard does not replace AutoSave or manual saving.
 
 ### 6-5. Private Storage vs. Private App Export
 
@@ -510,6 +501,8 @@ For important documents, keep a separate Markdown backup (`.md`) in a secure loc
 Select **File > History** to view saved draft states.  
 Use this feature if you accidentally delete content or want to return to an earlier draft.
 
+When an installed Windows PWA is first launched with an OS-selected file and an existing AutoSave draft is present, MD//WORKS first backs the draft up to History and verifies it before opening the requested file. If that backup cannot be completed safely, the requested file is not opened and the AutoSave draft is not deleted.
+
 When editing in multiple tabs, work history is managed independently for each tab's Workspace. After restarting MD//WORKS, saved history from all Workspaces is shown together for review and recovery. Once editing begins in a tab, only that tab's history is displayed. Saved history entries show the actual file name confirmed at the time of saving.
 
 Running **Clear Local Data** also deletes History.  
@@ -527,6 +520,8 @@ MD//WORKS Editor is designed to work across a wide range of environments, includ
 | **iPadOS**          | Saves as a new file with a numbered suffix to **a folder of your choice** via the **Files app.**| Same as **Chrome / Edge**.                                                        | Same as **Chrome / Edge**.                                                                | Same as **Chrome / Edge**. |
 | **Chromebook**      | Direct overwrite is **supported** after the initial save.                                                   | Overwrite manually using **“Download As”** to **a folder of your choice**. | Downloads as a new file with a **numbered suffix**. | —                          |
 | **Android Tablet**  |🚫 `.md` downloads are not supported. Use the `.txt` extension instead.                                     | Downloads as a new file with **a numbered suffix.** | Same as **Brave**.                                                                        | —                          |
+> **Windows PWA OS File Handler:** When `.md`, `.markdown`, or `.txt` was opened through the OS by a supported installed Windows PWA, Ctrl+S can save to that file. This launch condition is distinct from ordinary File System Access opening in the table and does not apply to other browsers or operating systems.
+>
 > **To Firefox, Safari, and Mobile Users:**
 > Due to browser security restrictions, direct overwrite saving to local files is unavailable. Each time you click the save button, the file will be downloaded with a version history number appended (e.g., `filename(1).md`). This allows you to keep track of previous save versions for the same file.
 
@@ -894,7 +889,7 @@ Quick Start covers:
 * Exporting as a standalone app
 * Finding and replacing text
 * Formatting Markdown
-* Working offline
+* Using the local single-file HTML edition and understanding offline limitations
 
 ### 11-2. Keyboard Shortcuts
 
@@ -1039,6 +1034,13 @@ When using the AI sidebar, switching to full-screen mode is highly recommended t
 ## 13. Troubleshooting
 
 This section covers common issues and how to resolve them.
+
+### 13-0. PWA, File Launch, and AutoSave Issues
+
+* **The PWA install command is missing:** Open the HTTPS public site in Chrome or another supported browser. A local `file://` HTML file has a different installation path, and its **Open as window** shortcut is not an OS File Handler PWA. Names and availability vary by version and management policy.
+* **Double-clicking `.md` does not open MD//WORKS, or uses another Chrome profile:** Check Windows file associations and confirm that the associated profile is the one where the PWA was installed. Use **Open with** to select the intended MD//WORKS. PWA installations and Storage may be separated by profile.
+* **A non-UTF-8 file will not open:** Supported Windows PWA / File System Access paths reject potentially non-UTF-8 files, including some Shift-JIS files, for safety. The original is unchanged. Convert it to UTF-8 first. Complete BOM and newline preservation is not guaranteed.
+* **“⚠ AutoSave unavailable” appears:** Browser AutoSave has failed. Save explicitly with Ctrl+S / Save. The badge returns to normal after a later AutoSave succeeds. A browser exit confirmation is eligible only while AutoSave is failing and unsaved changes remain; successful Ctrl+S removes that condition. The confirmation may not appear for every browser, OS, or exit method.
 
 ### 13-1. The title bar shows “Unsaved”
 
@@ -1443,47 +1445,19 @@ We are monitoring browser updates. If the behavior on Brave, Edge, or Firefox ch
 
 ---
 
-## Appendix 4: Uninstalling the Chrome App
+<a id="appendix-4-chrome-uninstall"></a>
+## Appendix 4: Uninstalling the Chrome PWA
 
-If you installed the editor as a Chrome App, uninstalling it directly from the app window might occasionally fail. **If the app does not uninstall properly or if the shortcut icon remains**, please try one of the manual removal methods below:
+A regular web page needs no uninstall. Remove the HTTPS-installed PWA from its app-window menu or Chrome's app management interface; labels and locations can vary by Chrome/OS version and policy. Where it appears in Windows installed-app management, it may also be removed there.
 
-## **A. Remove from the Chrome App List**
-  1. Open your Chrome browser, type `chrome://apps` in the address bar, and press **Enter**.
-  2. Right-click the **MD//WORKS** icon (Mac users: `Control`-click or two-finger tap).
-  3. Select **"Remove from Chrome"** and confirm the deletion on the prompt screen.
+The local single-file HTML edition is not the PWA. Delete the HTML file and any **Open as window** shortcut. Before clearing browser drafts and History, save any needed documents as files.
 
-## **B. Remove Using Standard OS Features**
-  You can also uninstall it just like any standard desktop software.
-  * **Windows:** Go to **Settings** > **Apps** > **Installed apps**, locate **MD//WORKS**, click the three-dot menu (**...**), and select **Uninstall**.
-  * **Mac:** 1. Open **Finder** and navigate to the **Applications** folder.
-    2. Open the **Chrome Apps** folder.
-    3. Drag the **MD//WORKS** icon to the **Trash** (or right-click and select **Move to Trash**).
+<a id="appendix-5-other-browsers"></a>
+## Appendix 5: App-like Use and Uninstalling in Other Browsers
 
----
+Keep the three forms distinct: a web page, a PWA installed from the HTTPS site, and a local HTML file opened in a window. Brave and Edge may provide their own install or shortcut commands and app-management removal. Safari on Mac/iPadOS provides OS-specific options such as **Add to Home Screen**.
 
-## Appendix 5: How to Install as an App and Uninstall on Various Browsers
-
-If you are using a browser other than Chrome, you can also install it as an app (launching in an independent window) as long as your environment, such as a PC/Mac, supports it.
-
-### Appendix 5-1. **<img src="./images/BraveIcon.jpg" alt="Image:icon" width="30">  For Brave**
-
-* **Installation:** Click the "Install" icon displayed at the right end of the address bar, or select the menu (≡) at the top right of the screen > "Save and share" > "Install page as app".
-* **Uninstallation:** Select "Uninstall MD//WORKS" from the top right menu (︙) of the app window, or enter `brave://apps` in the browser's address bar and delete it from the list.
-
-### Appendix 5-2. **<img src="./images/SafariIcon.png" alt="Image:icon" width="25"> For Safari (Mac / iPadOS)**
-
-* **Installation (Mac):** With MD//WORKS open in Safari, select "File" > "Add to Dock" from the menu bar. You will then be able to launch it as an independent web app from the Dock (*macOS Sonoma or later).
-* **Installation (iPad / iPhone):** Select the Share button (the square icon with an upward arrow) at the top or bottom of the screen > "Add to Home Screen".
-* **Uninstallation:** For Mac, long-press the icon in Launchpad to delete it, or delete it from the "Applications" folder. For iPads and iPhones, long-press the icon on the home screen and select "Remove App" or "Delete Bookmark".
-
-### Appendix 5-3. **<img src="./images/EdgeIcon.png" alt="Image:icon" width="16"> For Microsoft Edge**
-
-* **Installation:** Select the menu (…) at the top right of the screen > "Apps" > "Install this site as an app".
-* **Uninstallation:** Uninstall from "App settings" in the top right menu (…) of the independent app window, or enter `edge://apps` in the browser's address bar and select "Remove" from the list.
-
-> <img src="./images/FirefoxIcon.jpg" alt="Image:icon" width="30"> Firefox does not natively support web apps (PWA), so please use it as a standard browser tab.
-
----
+Availability and UI depend on browser, OS, version, and policy. Other browsers are not guaranteed to reproduce Chrome PWA's Windows OS File Handler behavior. This PWA has no Service Worker, so installation does not guarantee fully offline startup. Use the local single-file HTML edition when local startup without network access is required.
 
 ## Appendix 6: AI Prompt Examples for Comprehensive Document Revision
 
