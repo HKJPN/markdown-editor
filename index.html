@@ -2102,6 +2102,7 @@ const isIPadOS = (navigator.platform === 'MacIntel' || /Macintosh/i.test(navigat
 const isSafari = /^((?!chrome|android|crios|fxios|edgios|opr|opera).)*safari/i.test(navigator.userAgent);
 const isIPadSafari = isIPadOS && isSafari;
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || isIPadOS || (navigator.maxTouchPoints > 0 && window.innerWidth <= 1024);
+const isAndroid = /Android/i.test(navigator.userAgent);
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
@@ -8384,11 +8385,64 @@ function ensureMarkdownFilename(name) {
   return ensureTextFilename(name);
 }
 
+async function handleAndroidSave(isSaveAs, deepSaveSnapshot, savingWorkspaceId) {
+  const inputFilename = filenameInput.value;
+  const filename = ensureMarkdownFilename(inputFilename);
+  const content = editor.value;
+  const savingDeepSession = deepEditSession;
+  const mimeType = /\.txt$/i.test(filename) ? 'text/plain' : 'text/markdown';
+  let method = 'download';
+
+  // Start sharing in the button's activation, before any asynchronous History work.
+  try {
+    const file = new File([content], filename, { type: mimeType });
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: filename });
+      method = 'share';
+    }
+  } catch (error) {
+    console.warn('Android share failed:', error?.name, error?.message);
+    if (error?.name === 'AbortError') return false;
+  }
+
+  if (method === 'download') {
+    try {
+      const downloadedFilename = fallbackDownload({
+        filename, content, mimeType: `${mimeType};charset=utf-8`, updateSaveState: false
+      });
+      if (!downloadedFilename) throw new Error('Download did not start');
+    } catch (error) {
+      console.warn('Android download failed:', error?.name, error?.message);
+      toast(isJa ? '共有またはダウンロードを開始できませんでした。' : 'Could not start sharing or downloading.');
+      return false;
+    }
+  }
+
+  // Only the snapshot handed to the OS was saved; later edits remain unsaved.
+  if (workspaceId === savingWorkspaceId && filenameInput.value === inputFilename) {
+    if (editor.value === content) {
+      setFilenameProgrammatically(filename);
+      markSaved();
+      syncFilenameInputState();
+    }
+    if (deepEditSession === savingDeepSession) {
+      commitDeepFileSave(deepSaveSnapshot, filename, method, isSaveAs);
+    }
+  }
+  try {
+    await saveToHistoryList(filename, content, savingWorkspaceId);
+  } catch (error) {
+    console.warn('Failed to save Android shared/downloaded content to History:', error?.name, error?.message);
+  }
+  return true;
+}
+
 async function handleSave(isSaveAs = false) {
   if (previewFocusOpen && isSaveAs) { closeMenus(); return; }
   closeMenus();
   const deepSaveSnapshot = prepareDeepFileSave();
   const savingWorkspaceId = workspaceId;
+  if (isAndroid) return handleAndroidSave(isSaveAs, deepSaveSnapshot, savingWorkspaceId);
   const historyWriteResult = await saveToHistoryList(filenameInput.value, editor.value, savingWorkspaceId);
   const saveFilename = ensureMarkdownFilename(filenameInput.value);
   if (isMobile) {
@@ -8467,10 +8521,12 @@ async function handleSave(isSaveAs = false) {
   }
 }
 
-function fallbackDownload() {
-  const filename = ensureMarkdownFilename(filenameInput.value);
-  setFilenameProgrammatically(filename);
-  const blob = new Blob([editor.value], { type: 'text/markdown;charset=utf-8' });
+function fallbackDownload({
+  filename = ensureMarkdownFilename(filenameInput.value), content = editor.value,
+  mimeType = 'text/markdown;charset=utf-8', updateSaveState = true
+} = {}) {
+  if (updateSaveState) setFilenameProgrammatically(filename);
+  const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
 
   const a = document.createElement('a');
@@ -8480,7 +8536,7 @@ function fallbackDownload() {
 
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 
-  markSaved();
+  if (updateSaveState) markSaved();
   toast(T.downloaded);
   syncFilenameInputState();
   return filename;
