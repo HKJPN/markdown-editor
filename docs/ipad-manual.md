@@ -1,6 +1,6 @@
 # MD//WORKS Editor User Manual (iPad)
 
-MD//WORKS Editor is a Markdown editor that runs entirely from a single HTML file. It supports document creation, Markdown preview, file saving, exporting to HTML or PDF, saving as a standalone HTML file, and integration with browser-based AI tools. On iPad, setting the theme to "Midnight" makes handwriting input with Apple Pencil even more comfortable. Also, by utilizing the 'Files' app, file saving and sharing is as convenient as on a Mac or PC, and even safer due to the automatic backup history.
+MD//WORKS Editor is a browser-based Markdown editor. Alongside the public web page, a local single-file HTML edition remains available and runs from one HTML file. It supports document creation, Markdown preview, file saving, exporting to HTML or PDF, saving as a standalone HTML file, and integration with browser-based AI tools. On iPad, setting the theme to "Midnight" makes handwriting input with Apple Pencil even more comfortable. Also, by utilizing the 'Files' app, file saving and sharing is as convenient as on a Mac or PC, and even safer due to the automatic backup history.
 	
 ## Image Annotations Used in This Manual
 
@@ -26,7 +26,7 @@ You can also start it by opening a locally saved HTML file in your browser. (How
 After the file opens, you can begin typing Markdown in the editor area.  
 If draft data from a previous session is available, you may be asked whether you want to restore it. Choose the restore option if you want to recover the previous draft.
 
-> 💡 **iPad Tip:** Select "Add to Home Screen" from Safari's Share button (the square with an upward arrow) to add an icon to your home screen. From then on, you can launch it just like a regular app.<br><img src="./images/icon2.png" alt="Image:icon" width="90">
+> 💡 **iPad Tip:** Select **Add to Home Screen** from Safari's Share button (the square with an upward arrow). MD//WORKS specifies a dedicated iPad/iPhone Home Screen icon. You can then launch it from that icon. Because there is no Service Worker, adding it to the Home Screen does not guarantee fully offline startup.<br><img src="./images/icon2.png" alt="Image:icon" width="90">
 
 ### 1-2. Supported Environments
 
@@ -469,6 +469,8 @@ If you edit the document after saving, the status changes to **Unsaved**.
 
 Always check this status before closing the app or ending your work session.
 
+AutoSave health is separate from **Saved / Unsaved**. While it is failing, the status bar continuously shows **⚠ AutoSave unavailable**, and a toast reports the failure. Save explicitly through the normal iPad save/share flow. The badge returns to normal after AutoSave succeeds again.
+
 ### 6-4. Understanding Local Draft Protection
 
 MD//WORKS Editor protects browser-stored drafts and history with **Auto encrypted** so they are not saved locally in plain text.
@@ -479,6 +481,8 @@ For stronger protection or to remove stored data, use the following features:
 * **Clear Local Data**: Available under **Storage Security** in the File menu. This removes all protected drafts and history stored in the browser.
 
 > **Important:** Auto encrypted and Private Storage protect browser-based drafts and history. They do not replace saving your document as a file. To keep your work permanently, save it as a `.md` file with **File > Save (⌘S)**. **On iPad, if you move to another app or the Home screen while editing, the browser may release memory, which can cause the Auto encrypted restoration to fail.**
+>
+> The AutoSave warning badge and the file's Saved / Unsaved state are separate. The file can be saved through the normal share flow even while the warning remains. An exit confirmation may be eligible only when AutoSave is failing and file-unsaved changes remain, but iPadOS, the browser, and the way you exit determine whether it appears. It does not replace manual saving.
 
 ### 6-5. Private Storage vs. Private App Export
 
@@ -955,6 +959,15 @@ In our testing, **Leo in Brave Browser** provides the most seamless and effectiv
 ## 13. Troubleshooting
 
 This section covers common issues and how to resolve them.
+
+### 13-0. The Home Screen icon does not update or shows a placeholder such as “M”
+
+1. Delete the existing MD//WORKS Home Screen icon.
+2. Reload the public MD//WORKS page in Safari.
+3. Choose **Share > Add to Home Screen**.
+4. Confirm that the new icon appears.
+
+If the AutoSave warning appears, save explicitly to the Files app through the normal save/share flow. An exit confirmation is not guaranteed for every iPadOS/browser exit method.
 
 ### 13-1. The title bar shows “Unsaved”
 
