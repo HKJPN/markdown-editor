@@ -730,6 +730,11 @@ body.show-line-numbers #editor-backdrop{
 #spell-status{font-family:var(--mono);font-size:10.5px;color:var(--text3);margin-left:auto;margin-right:10px}
 #spell-status.on{color:var(--warn)}
 #storage-badge {font-family:var(--mono);font-size:10px;font-weight:600;color:var(--accent2);padding:2px 6px;border-radius:4px;background:var(--surface3);}
+#storage-badge.storage-warning {
+  color:var(--warn) !important;
+  border:1px solid rgba(235,176,91,.32);
+  background:rgba(235,176,91,.10) !important;
+}
 
 #toast{
   position:fixed;bottom:38px;left:50%; transform:translateX(-50%) translateY(20px);
@@ -4286,9 +4291,44 @@ async function deleteHistoryRecords(documentSessionId) {
   });
 }
 
+let autoSaveFailing = false;
+let beforeUnloadGuardActive = false;
+function beforeUnloadHandler(event) {
+  event.preventDefault();
+  event.returnValue = '';
+}
+
+function syncBeforeUnloadGuard() {
+  const shouldWarn = autoSaveFailing && isDirty;
+  if (shouldWarn === beforeUnloadGuardActive) return;
+  beforeUnloadGuardActive = shouldWarn;
+  if (shouldWarn) {
+    window.addEventListener('beforeunload', beforeUnloadHandler);
+  } else {
+    window.removeEventListener('beforeunload', beforeUnloadHandler);
+  }
+}
+
 function renderStorageBadge() {
   const badge = document.getElementById('storage-badge');
-  if (badge) badge.textContent = currentMode() === "private" ? "Private Storage" : "Auto encrypted";
+  if (!badge) return;
+  badge.textContent = autoSaveFailing
+    ? (isJa ? '⚠ 自動保存できません' : '⚠ AutoSave unavailable')
+    : (currentMode() === "private" ? "Private Storage" : "Auto encrypted");
+  badge.classList.toggle('storage-warning', autoSaveFailing);
+}
+
+function setAutoSaveHealth(ok) {
+  const nextFailing = !ok;
+  if (nextFailing === autoSaveFailing) return;
+  autoSaveFailing = nextFailing;
+  renderStorageBadge();
+  syncBeforeUnloadGuard();
+  if (autoSaveFailing) {
+    toast(isJa
+      ? '自動保存に失敗しました。Ctrl+Sで保存してください。'
+      : 'AutoSave failed. Save with Ctrl+S.');
+  }
 }
 
 function setStatusBadge(text) {
@@ -4343,11 +4383,13 @@ async function triggerAutoSave() {
   if (isSaving) return;
   isSaving = true;
   try {
-    await secureSetItem(keys.text, editor.value);
+    const textSaved = await secureSetItem(keys.text, editor.value);
     const nameSaved = await secureSetItem(keys.name, filenameInput.value);
+    if (savingWorkspaceId === workspaceId) setAutoSaveHealth(textSaved && nameSaved);
     if (nameSaved && savingWorkspaceId === workspaceId) commitPendingDeepFilenameChange();
   } catch (e) {
     console.warn('Auto save failed', e);
+    if (savingWorkspaceId === workspaceId) setAutoSaveHealth(false);
   } finally {
     isSaving = false;
   }
@@ -5215,6 +5257,7 @@ function markDirty() {
   }
 
   updateBrowserTabTitle();
+  syncBeforeUnloadGuard();
 }
 
 function markSaved() {
@@ -5230,6 +5273,7 @@ function markSaved() {
   }
 
   updateBrowserTabTitle();
+  syncBeforeUnloadGuard();
 }
 
 function update({ wordCountImmediate = true } = {}) {
