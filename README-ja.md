@@ -73,14 +73,12 @@ HTMLファイル自体は、MD//WORKSの **File > Open** から引き続き開�
 
 ## 🎓 派生プロジェクト：教育機関向け「[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)」
 
-MD//WORKSの「執筆プロセスを記録する」技術を応用し、レポート課題向けの別プロジェクト「[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)」を限定公開し準備しています。
+MD//WORKSの「執筆プロセスを記録する」技術を応用し、レポート課題向けの別プロジェクト「[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)」を公開しました。
 
 AI検知ツールや常時監視に頼るのではなく、タイピングや推敲の履歴を**ハッシュチェーン**として記録し、単一HTMLファイルに内包して提出。提出物が改ざんされていないことを、教員側で自律的に検証できます。
 
 * **プロセス記録エディター:** 執筆ログをローカルで記録、オフラインでも動作。**サーバー署名による存在証明**にも対応
 * **教員用レビュアー:** タイムラインやセッション履歴を可視化。詳細ログはデフォルト非表示（プライバシー配慮）
-
-一般向けβ版公開は今月予定しています。
  
 ---
 
