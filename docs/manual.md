@@ -35,14 +35,11 @@ For installation instructions for other browsers, see [Appendix 5: Installing an
 
 1. Open the [MD//WORKS Editor website](https://hkjpn.github.io/markdown-editor/) in Chrome.
 
-2. On a desktop computer, click the **Install** icon on the right side of the address bar.  
-   You can also install MD//WORKS from the Chrome menu **(⋮)** → **Cast, save, and share** → **Install**.  
-   Menu names and available options may vary depending on your Chrome version or your organization's browser policies.
+2. On a desktop computer, click the **Install** icon on the right side of the address bar. You can also install MD//WORKS from the Chrome menu **(⋮)** → **Cast, save, and share** → **Install**. Menu names and available options may vary depending on your Chrome version or your organization's browser policies.
 
 3. Once installed, MD//WORKS can be launched in its own app window, without the usual browser tabs and controls.
 
-4. To continue working in a regular Chrome tab without losing your current document, open the app window menu **(⋮)** and select **Open in Chrome**.  
-   This is especially useful when you want to use browser-integrated AI features such as Gemini in Chrome. To return to the installed app, use **Open in app** from the Chrome address bar when available.
+4. To continue working in a regular Chrome tab without losing your current document, open the app window menu **(⋮)** and select **Open in Chrome**. This is especially useful when you want to use browser-integrated AI features such as Gemini in Chrome. To return to the installed app, use **Open in app** from the Chrome address bar when available.
 
 5. On Windows, the installed PWA can also be associated with supported file types. This allows you to open documents in MD//WORKS directly from File Explorer—for example, by double-clicking a file or using **Open with**—much like a desktop application.
 <br><img src="./images/icon2s.png" alt="Image:icon" width="90">
