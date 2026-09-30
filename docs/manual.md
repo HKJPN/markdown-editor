@@ -35,7 +35,8 @@ For installation instructions for other browsers, see [Appendix 5: Installing an
 
 1. Open the [MD//WORKS Editor website](https://hkjpn.github.io/markdown-editor/) in Chrome.
 
-2. On a desktop computer, click the **Install** icon on the right side of the address bar. You can also install MD//WORKS from the Chrome menu **(⋮)** → **Cast, save, and share** → **Install**. Menu names and available options may vary depending on your Chrome version or your organization's browser policies.
+2. On a desktop computer, click the **Install** icon on the right side of the address bar. <br>
+![Image: InstallAsPWA](<./images//InstallAsPWA.jpg>)<br>You can also install MD//WORKS from the Chrome menu **(⋮)** → **Cast, save, and share** → **Install**. Menu names and available options may vary depending on your Chrome version or your organization's browser policies.
 
 3. Once installed, MD//WORKS can be launched in its own app window, without the usual browser tabs and controls.
 
