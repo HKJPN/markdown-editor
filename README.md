@@ -305,6 +305,7 @@ MD//WORKS automatically detects your browser language and switches the interface
 
 - **Browsers:** Works on all modern browsers (Chrome, Edge, Brave, Firefox, Safari, etc.).
 - **Zero Installation:** Just open the HTML file in your browser and start typing.
+- **Optional Installation**: Alternatively, you can install it as a PWA for a seamless desktop or tablet experience.
 - **Cross-Device:** Fully supported on desktops and tested for compatibility on tablets including the iPad.
 ---
 
