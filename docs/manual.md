@@ -23,7 +23,7 @@ Depending on your browser or operating system, some shortcuts may conflict with 
 
 ### 1-1. Starting the App
 
-MD//WORKS can be used in three distinct ways. In each case it runs in a browser, and may offer to restore a previous draft.
+MD//WORKS can be used in three distinct ways.
 
 1. **Regular web page:** Open the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/) in a normal browser tab. No installation is required.
 2. **Installable PWA:** Open the HTTPS site in a supported browser such as Chrome and use its install command. The PWA runs in an independent app window; use **Open in Chrome** when you want to move to a normal tab. Supported Windows environments can also use file associations.
