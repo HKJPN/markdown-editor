@@ -1,6 +1,6 @@
 # MD//WORKS Editor User Manual
 
-MD//WORKS Editor is a browser-based Markdown editor available in three forms: a regular web page, an installable PWA from the HTTPS site, and a local single-file HTML edition. The local edition continues to run from one HTML file. It supports document creation, Markdown preview, file saving, exporting to HTML or PDF, saving as a standalone HTML file, and integration with browser-based AI tools. MD//WORKS works seamlessly across different OSs and browsers, but we've put together a [special manual](https://github.com/HKJPN/markdown-editor/blob/main/docs/ipad-manual.md) for iPad users to help with things like handwriting and AI.
+MD//WORKS Editor is a browser-based Markdown editor available in three forms: a regular web page, an installable PWA from the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/), and a local single-file HTML edition. The local edition continues to run from one HTML file. It supports document creation, Markdown preview, file saving, exporting to HTML or PDF, saving as a standalone HTML file, and integration with browser-based AI tools. MD//WORKS works seamlessly across different OSs and browsers, but we've put together a [special manual](https://github.com/HKJPN/markdown-editor/blob/main/docs/ipad-manual.md) for iPad users to help with things like handwriting and AI.
 
 ## Image Annotations Used in This Manual
 
@@ -26,7 +26,7 @@ Depending on your browser or operating system, some shortcuts may conflict with 
 MD//WORKS can be used in three distinct ways.
 
 1. **Regular web page:** Open the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/) in a normal browser tab. No installation is required.
-2. **Installable PWA:** Open the HTTPS site in a supported browser such as Chrome and use its install command. The PWA runs in an independent app window; use **Open in Chrome** when you want to move to a normal tab. Supported Windows environments can also use file associations.
+2. **Installable PWA:** Open the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/) in a supported browser such as Chrome and use its install command. The PWA runs in an independent app window; use **Open in Chrome** when you want to move to a normal tab. Supported Windows environments can also use file associations.
 3. **Local single-file HTML edition:** Open a downloaded `index.html` or equivalent file in a browser. This is the edition that runs from one HTML file.
 
 #### 1-1-1. Install MD//WORKS as a PWA in Chrome <img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">
@@ -44,7 +44,7 @@ For installation instructions for other browsers, see [Appendix 5: Installing an
 5. On Windows, the installed PWA can also be associated with supported file types. This allows you to open documents in MD//WORKS directly from File Explorer—for example, by double-clicking a file or using **Open with**—much like a desktop application.
 <br><img src="./images/icon2s.png" alt="Image:icon" width="90">
 
-> 💡 Creating an **Open as window** shortcut for a local HTML file is not the same as installing the PWA from the HTTPS site. That shortcut does not provide the PWA's OS File Handler associations.
+> 💡 Creating an **Open as window** shortcut for a local HTML file is not the same as installing the PWA from the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/). That shortcut does not provide the PWA's OS File Handler associations.
 
 #### 1-1-2. Uninstalling Chrome PWA
 
@@ -1462,7 +1462,7 @@ The local single-file HTML edition is not the PWA. Delete the HTML file and any 
 <a id="appendix-5-other-browsers"></a>
 ## Appendix 5: App-like Use and Uninstalling in Other Browsers
 
-Keep the three forms distinct: a web page, a PWA installed from the HTTPS site, and a local HTML file opened in a window. Brave and Edge may provide their own install or shortcut commands and app-management removal. Safari on Mac/iPadOS provides OS-specific options such as **Add to Home Screen**.
+Keep the three forms distinct: a web page, a PWA installed from the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/), and a local HTML file opened in a window. Brave and Edge may provide their own install or shortcut commands and app-management removal. Safari on Mac/iPadOS provides OS-specific options such as **Add to Home Screen**.
 
 Availability and UI depend on browser, OS, version, and policy. Other browsers are not guaranteed to reproduce Chrome PWA's Windows OS File Handler behavior. This PWA has no Service Worker, so installation does not guarantee fully offline startup. Use the local single-file HTML edition when local startup without network access is required.
 
