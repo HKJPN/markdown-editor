@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-09-30 - v1.6.6 Candidate - PWA support
+- **You can now install MD//WORKS as an app.**
+- On supported devices, you can open, edit, and save `.md`, `.markdown`, and `.txt` files directly from your OS.
+
 ## 2026-09-24 - v1.6.5 　Official Release
 
 ## 2026-09-16 - v1.6.5 Candidate - Improved editing usability
