@@ -42,7 +42,7 @@ For installation instructions for other browsers, see [Appendix 5: Installing an
 
 4. To continue working in a regular Chrome tab without losing your current document, open the app window menu **(⋮)** and select **Open in Chrome**. This is especially useful when you want to use browser-integrated AI features such as Gemini in Chrome. To return to the installed app, use **Open in app** from the Chrome address bar.
 
-5. On Windows, the installed PWA can also be associated with supported file types. This allows you to open documents in MD//WORKS directly from File Explorer—for example, by double-clicking a file or using **Open with**—much like a desktop application.
+5. On Windows and macOS, installing MD//WORKS as a PWA via a Chromium-based browser enables file association. Once set up, you can open files directly in MD//WORKS by **double-clicking** them or choosing **'Open with'**.
 <br><img src="./images/icon2s.png" alt="Image:icon" width="90">
 
 > 💡 Creating an **Open as window** shortcut for a local HTML file is not the same as installing the PWA from the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/). That shortcut does not provide the PWA's OS File Handler associations.
