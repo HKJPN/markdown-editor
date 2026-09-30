@@ -29,7 +29,7 @@ MD//WORKSはMITライセンスの下、ご自身のウェブサイトで自由�
 
 # 🎉 v1.6.6の新機能とアップデート —  PWA Support
 
-MD//WORKSがPWA（Progressive Web App）に対応しました。対応ブラウザでは、MD//WORKSをPCやタブレットにインストールし、通常のデスクトップアプリに近い感覚で利用できます。
+PWA（Progressive Web App）に対応しました。対応ブラウザでは、MD//WORKSをPCやタブレットにインストールし、通常のデスクトップアプリに近い感覚で利用できます。
 
 ### 主な改善
 
