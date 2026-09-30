@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.6.5 — AIアシスタント融合スタンドアロン Markdown エディタ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.6.6 — AIアシスタント融合スタンドアロン Markdown エディタ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **言語選択:** [🇺🇸 English](README.md) 又は [🇯🇵 日本語](README-ja.md)
 
 **完全ローカルでインストール不要、なのにAI対応**  
@@ -27,54 +27,51 @@ MD//WORKSはMITライセンスの下、ご自身のウェブサイトで自由�
 
 ---
 
-# 🎉 v1.6.5の新機能とアップデート —  New Format Menu & Improved Editing
-v1.6.5は、新しい大規模機能を追加するというより、**長い文書でも軽快に、日々の編集をより自然に行えること**を重視したアップデートです。
+# 🎉 v1.6.6の新機能とアップデート —  PWA Support
 
-### 書式メニューの追加
+MD//WORKSがPWA（Progressive Web App）に対応しました。対応ブラウザでは、MD//WORKSをPCやタブレットにインストールし、通常のデスクトップアプリに近い感覚で利用できます。
 
-書式操作をまとめた専用の **Formatメニュー**を追加し、トップレベルメニューの構成を整理しました。
+### 主な改善
 
-見出し、太字・斜体、コード、引用、リスト、リンク、表などの書式操作へ、より分かりやすくアクセスできます。
+- **MD//WORKSをアプリとしてインストール可能**
+  - ブラウザのタブやアドレスバーのない専用ウィンドウで利用できます。
+  - Windows、macOS、iPadなど、対応環境ではホーム画面やアプリ一覧から直接起動できます。
 
-### 長文の検索処理改善
+- **Markdown / TextファイルをOSから直接開ける**
+  - Windows / macOSの対応するChrome PWAでは、`.md`、`.markdown`、`.txt` をOSのファイル関連付けからMD//WORKSへ渡せます。
+  - ファイルのダブルクリックや「プログラムから開く / Open With」から起動できます。
 
-長い文書での検索処理を改善しました。特に検索結果が多い場合の検索表示や、Next / Previousによる一致箇所の移動がより軽快になっています。
+- **開いたファイルへそのまま保存**
+  - OS File Handler経由、または対応ブラウザのFile System Access APIで開いたファイルは、編集後に **Ctrl+S（macOSでは⌘S）** で元のファイルへ保存できます。
+  - **名前を付けて保存**では、別名または別の保存先を選択できます。
 
-### キーボードショートカット等の改善
+- **既存のWeb版もそのまま利用可能**
+  - インストールは必須ではありません。
+  - 従来どおりブラウザからMD//WORKSを開いて使用できます。
+  - Firefox、iPad、Androidなどでは、ブラウザやOSに応じてファイル選択・共有・ダウンロード方式が使用されます。
 
-日常的なMarkdown編集操作も改善しました。
+### File Handlerについて
 
-* **Ctrl/Cmd+B** で太字
-* **Ctrl/Cmd+I** で斜体
-* メニューからの貼り付けがブラウザに拒否された場合の分かりやすい案内
-* H1 / H2 / H3操作時の見出しレベルを安全に変更
-* Horizontal Ruleを独立したMarkdownブロックとして安全に挿入
+OS File Handlerの対象は次のファイルです。
 
-見出し記号の重複や、`---` が意図せずSetext見出しとして解釈されるケースを避けるようになりました。
+- `.md`
+- `.markdown`
+- `.txt`
 
-### MD//WORKS PROVENANCEとのシームレスな連携
-[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)で作成した **Working Report / Finalized Report** (詳細後述) も、通常版MD//WORKSでそのままMarkdownとして開けるようになりました。
+`.html` / `.htm` は一般のWebページとの関連付け競合を避けるため、OS File Handlerの対象にはしていません。
 
-```text
-MD//WORKS PROVENANCE
-   ↓
-Working / Finalized Report (.html)
-   ↓
-MD//WORKSで開く
-   ↓
-Markdown本文として自由に再編集
-```
+HTMLファイル自体は、MD//WORKSの **File > Open** から引き続き開くことができます。
 
+### 補足
+
+- MD//WORKSはUTF-8形式のテキストファイルを標準としています。
+- Shift-JISなど他の文字コードには現在対応していません。
+- PWA版でも、ユーザーが選択していない同一フォルダ内の画像などへ自動的にアクセスすることはできません。
+- v1.6.6ではService Workerによる完全オフライン動作は実装していません。
 
 ---
 
-## ✨ 今後のアップデート予定
-
-### **PWA対応**
-
-お使いの端末にインストールして、ネイティブアプリのようにより高速・快適に利用できるPWA（Progressive Web App）に対応予定です。
-
-### 🎓 派生プロジェクト：教育機関向け「[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)」
+## 🎓 派生プロジェクト：教育機関向け「[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)」
 
 MD//WORKSの「執筆プロセスを記録する」技術を応用し、レポート課題向けの別プロジェクト「[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)」を限定公開し準備しています。
 
