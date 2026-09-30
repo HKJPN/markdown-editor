@@ -451,8 +451,6 @@ You can save your document as a standard Markdown file.
 You can also use the shortcut shown above.  
 To save the file under a different name, use **File > Save As (Ctrl+Shift+S / ⌘⇧S)**.
 
-When a file was opened through the OS from a **supported installed PWA on Windows**, **Ctrl+S / Save** writes back to that opened file. **Save As** selects another name or destination. This conditional behavior must not be assumed for ordinary browser selection, Firefox, iPad, or Android.
-
 ### 6-2. Renaming the File
 
 
