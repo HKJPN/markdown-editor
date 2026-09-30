@@ -30,7 +30,7 @@ MD//WORKSには、次の3つの利用形態があります。いずれもブラ�
 2. **インストール可能なPWA:** [MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)を対応ブラウザで開き、ブラウザのインストール項目から追加します。
 5. **ローカル単体HTML版:** ダウンロードした `index.html` などをブラウザで開きます。1つのHTMLファイルで利用できる形態です。
 
-#### 1-1-1. PWAとしてインストールし、ブラウザタブと行き来する（Chromeの場合<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">）
+#### 1-1-1. PWAとしてインストール（Chromeの場合<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">）
 他のブラウザについては[付録5：各種ブラウザでのアプリ化とアンインストール法](#appendix-5-other-browsers)をご覧ください。
 
 1. Chromeで[MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)を開きます。
