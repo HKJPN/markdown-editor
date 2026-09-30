@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.6.5 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.6.6 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) <br>
 
 
@@ -32,63 +32,54 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 
 ---
 
-## 🎉  What’s New in v1.6.5 — New Format Menu & Improved Editing 
+## 🎉  What’s New in v1.6.6 — PWA support  
 
-v1.6.5 is primarily a refinement release, focused on making MD//WORKS **faster in long documents and more natural to use during everyday editing**.
+MD//WORKS now supports installation as a PWA (Progressive Web App). On supported browsers, you can install MD//WORKS on your computer or tablet and use it in a dedicated app window, much like a desktop application.
 
-### New Format menu
+- **Install MD//WORKS as an app**
+  - Run MD//WORKS in its own window without the usual browser tabs and address bar.
+  - On supported environments, including Windows, macOS, and iPad, you can launch it directly from your app list, Dock, Start menu, or Home Screen.
 
-Added a dedicated **Format menu** and reorganized the top-level menu structure for clearer access to common formatting tools.
+- **Open Markdown and text files directly from the OS**
+  - On supported Chrome-based PWA environments on Windows and macOS, `.md`, `.markdown`, and `.txt` files can be passed directly to MD//WORKS through the operating system.
+  - You can open them by double-clicking the file or using **Open with**.
 
-### Faster search in long documents
+- **Save changes back to the opened file**
+  - Files opened through the OS File Handler or the File System Access API can be saved back to the original file with **Ctrl+S** on Windows or **⌘S** on macOS.
+  - Use **Save As** when you want to save under a different name or location.
 
-Improved search performance and responsiveness, especially in long documents with many matches. Search navigation with Next / Previous is now smoother under heavier match counts.
+- **The regular web version remains available**
+  - Installing the PWA is optional.
+  - MD//WORKS can still be used directly in a normal browser tab.
+  - On Firefox, iPad, Android, and other environments, file handling may use browser-specific file selection, sharing, or download behavior instead.
 
-### Improved editing controls
+### File Handler Support
 
-Several everyday editing behaviors have also been refined:
+The OS File Handler is registered for:
 
-* **Ctrl/Cmd+B** for Bold
-* **Ctrl/Cmd+I** for Italic
-* Clearer guidance when menu-based Paste is blocked by the browser
-* Safer H1 / H2 / H3 heading-level changes
-* Safer Horizontal Rule insertion as a standalone Markdown block
+- `.md`
+- `.markdown`
+- `.txt`
 
-These changes help avoid duplicated heading markers and unintended Setext headings caused by horizontal-rule insertion.
+`.html` and `.htm` are intentionally excluded to avoid interfering with normal web-page file associations.
 
-### From Academic Evidence to Everyday Writing
+HTML files can still be opened from **File > Open** inside MD//WORKS.
 
-[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE) Reports  (our upcoming spin-off project, detailed below) open directly in standard MD//WORKS as Markdown. That means a paper does not have to end where the Academic workflow ends.
+### Notes
 
-```text
-MD//WORKS PROVENANCE
-   ↓
-Working / Finalized Report (.html)
-   ↓
-Open in MD//WORKS
-   ↓
-Continue as ordinary Markdown
-```
-
+- MD//WORKS uses UTF-8 as its standard text encoding.
+- Shift-JIS and other legacy encodings are not currently supported.
+- Even when installed as a PWA, MD//WORKS cannot automatically access images or other files located next to a selected Markdown file unless those files have been explicitly made available to the app.
+- v1.6.6 does not include a Service Worker or full offline support.
 
 ---
 
-## ✨ Upcoming Features
+## 🎓 Spin-off: [MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)
 
-### **PWA Support**
-
-We plan to support Progressive Web Apps (PWA), allowing you to install the editor directly on your device for a faster, seamless, native-app-like experience.
-
-### 🎓 Spin-off: [MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE)
-
-A sibling project applying MD//WORKS to academic reports. 
-
-Instead of relying on AI detectors or always-on monitoring, it records the writing process locally as **a hash chain** inside a single HTML file. The file can be verified independently for tampering.
+A sibling project applying MD//WORKS to academic reports. Instead of relying on AI detectors or always-on monitoring, it records the writing process locally as **a hash chain** inside a single HTML file. The file can be verified independently for tampering.
 
 * **Process-recording editor:** Offline-first, local-only logging with **optional server anchoring**
 * **Teacher Reviewer:** 5-tab viewer (Document / Summary / Timeline / Sessions / Detailed Log) — detailed text collapsed by default
-
-Coming this month as **[MD//WORKS PROVENANCE](https://github.com/HKJPN/MD-WORKS-PROVENANCE) β** (experimental).
 
 ---
 
