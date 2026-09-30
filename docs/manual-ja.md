@@ -24,7 +24,7 @@ Shiftキーを含むショートカットは、Mac側では **⇧** を使って
 
 ### 1-1. 起動する
 
-MD//WORKSには、次の3つの利用形態があります。いずれもブラウザで動作し、前回の下書きがある場合は復元確認が表示されることがあります。
+MD//WORKSには、次の3つの利用形態があります。
 
 1. **通常のWebページ:** [MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)をブラウザタブで開きます。インストールは不要です。
 2. **インストール可能なPWA:** [MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)を対応ブラウザで開き、ブラウザのインストール項目から追加します。
