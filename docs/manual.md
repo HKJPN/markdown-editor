@@ -108,7 +108,7 @@ Depending on the current state of the document, you may also be prompted to save
 
 Use **File > Open (Ctrl+O / ⌘O)** or the title-bar **Open** button. The normal Open command accepts `.md`, `.txt`, `.markdown`, `.html`, and `.htm` as text-based input.
 
-In a **supported Chrome PWA installed on Windows**, after the OS association is configured, `.md`, `.markdown`, and `.txt` files can be sent to MD//WORKS by double-clicking them in Explorer or using **Open with**. `.html` and `.htm` are not registered as OS File Handler types.
+In a **supported Chrome PWA installed on Windows/Mac**, after the OS association is configured, `.md`, `.markdown`, and `.txt` files can be sent to MD//WORKS by double-clicking them in Explorer or using **Open with**. `.html` and `.htm` are not registered as OS File Handler types.
 
 The design is one document per window. Opening another file from the OS is intended to create a new PWA window rather than silently replacing a document being edited. If one launch sends multiple files to the same window, none are opened and a notification is shown.
 
