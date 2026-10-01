@@ -2106,9 +2106,9 @@ const isAndroid = /Android/i.test(navigator.userAgent);
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
-const APP_VERSION = '1.6.5';
-const APP_VERSION_LABEL = 'v1.6.5';
-const RELEASE_NOTES_VERSION = '1.6.5-release';
+const APP_VERSION = '1.6.6';
+const APP_VERSION_LABEL = 'v1.6.6';
+const RELEASE_NOTES_VERSION = '1.6.6-release';
 const LEGACY_DEFAULT_MARKDOWN_SAMPLES = [
   `# MD//WORKS エディタ
 
@@ -2625,29 +2625,23 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
 `,
 
   releaseNotesTitle: `MD//WORKS ${APP_VERSION_LABEL}`,
-  releaseNotesIntro: isJa ? '今回のアップデートでは、メニュー構成と長文編集の使いやすさを改善しました。' : 'This update improves menu organization and everyday editing, especially in long documents.',
+  releaseNotesIntro: isJa ? 'MD//WORKSがPWAに対応し、アプリとしてより使いやすくなりました。' : 'MD//WORKS now supports PWA installation for a more app-like workflow.',
   releaseNotesClose: isJa ? '閉じる' : 'Close',
   releaseNotesContent: isJa ? `
 
-* **Formatメニューを新設**
-  書式操作をまとめ、トップメニューの構成を整理しました。
+* **アプリとしてインストール**
+  対応環境では、MD//WORKSを専用ウィンドウから起動できます。
 
-* **長文検索を高速化**
-  検索結果が多い文書でも、検索や移動がより軽快になりました。
-
-* **編集操作を改善**
-  Ctrl/Cmd+B・Ctrl/Cmd+Iへの対応、貼り付け失敗時の案内、見出し・水平線の安全な挿入を追加しました。
+* **OSからファイルを直接開く**
+  対応環境では、MarkdownやテキストファイルをOSから直接開き、そのまま編集・保存できます。
 
 ` : `
 
-* **New Format menu**
-  Formatting tools are now grouped in a clearer top-level menu structure.
+* **Install MD//WORKS as an app**
+  Run MD//WORKS in its own app window on supported environments.
 
-* **Faster search in long documents**
-  Search and match navigation are now more responsive, especially with many results.
-
-* **Improved editing controls**
-  Added Ctrl/Cmd+B and Ctrl/Cmd+I shortcuts, clearer paste-failure guidance, and safer heading and horizontal-rule insertion.
+* **Open files directly from the OS**
+  On supported environments, Markdown and text files can be opened directly from the OS, edited, and saved back.
 
 `};
 
