@@ -395,26 +395,25 @@ The Preview feature allows you to see exactly how the Markdown text entered in t
 
 ### 5-1. Displaying the Preview
 
-Each time you click/tap one of the following, the display cycles through three steps: "Split View (Editor & Preview)" → "Focus Preview" → "Editor Only".
+Each time you click/tap one of the following, the display cycles through three steps: "Split View (Editor & Preview)" → "Focused Preview" → "Editor Only".
 
 - The **Preview** button on the title bar
 - **View > Preview** in the menu bar
 
-![Image: Split view and Focus preview ](<./images/splitviewE.jpg>)
+![Image: Split view and Focused Preview ](<./images/splitviewE.jpg>)
 
 #### 5-1-1. Split View (Editor & Preview)
 
 The Markdown editor is displayed on the left side of the screen, and the Preview is displayed on the right side.
 As you edit the text on the left, the changes are reflected in the Preview in real time, allowing you to write while instantly checking the final output. This is especially useful when adjusting tables, footnotes, and images. You can adjust the width of the panes by dragging the splitter between the editor and the preview.
 
-#### 5-1-2. Focus Preview
+#### 5-1-2. Focused Preview
 
-This mode expands the Preview to full width, allowing you to focus on reading the document. By opening the Outline panel and selecting a heading, you can quickly jump to that specific section. This view is ideal for reviewing the entire document, proofreading, collaborative reading, or giving simple presentations.
+Focused Preview hides the menu bar, title bar, toolbar, status bar, Editor, Splitter, and other editing controls. This uses more of the available browser or PWA window for a distraction-free document view.
 
-To return to the editor from Focus Preview, use one of the following methods:
+Use **Return to Editor** in the upper-right corner to return to the Editor. If you are using a keyboard, you can also press `Esc`.
 
-- Click/tap **Preview** again on the title bar or menu bar.
-- Click/tap the **Return to Editor** button on the screen.
+If the Outline is already open when you enter Focused Preview, it remains available: you can review the heading list, select a heading to move to that location in the Preview, or close the Outline itself. If it is closed, Focused Preview does not open it automatically. When the Outline is open, the first press of `Esc` closes it; press `Esc` again to leave Focused Preview and return to the Editor.
 
 ### 5-2. Content Verifiable in Preview
 
