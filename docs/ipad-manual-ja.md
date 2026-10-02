@@ -414,12 +414,12 @@ Preview機能を使用すると、エディタに入力したMarkdownが、実�
 
 ### 5-1. Previewを表示する
 
-Previewは次のいずれかをタップするたびに、「編集画面とPreviewの分割表示」→「Focus Preview」→「編集画面のみ」と遷移します。
+Previewは次のいずれかをタップするたびに、「編集画面とPreviewの分割表示」→「Focused Preview」→「編集画面のみ」と遷移します。
 
 * タイトルバーの **Preview** ボタン
 * メニューバーの **表示 > Preview**
 
-![Image: Split view and Focus preview ](<./images/splitviewJ.jpg>)
+![Image: Split view and Focused Preview ](<./images/splitviewJ.jpg>)
 
 #### 5-1-1. 編集画面とPreviewの分割表示
 
@@ -427,14 +427,13 @@ Previewは次のいずれかをタップするたびに、「編集画面とPrev
 
 左側の文章を編集すると、その内容が右側のPreviewへ反映されるため、表示結果を確認しながら執筆できます。表、脚注、画像などを調整するときに便利です。編集画面とPreviewの境界は、中央の仕切りをドラッグして位置を調整できます。
 
-#### 5-1-2. Focus Preview
+#### 5-1-2. Focused Preview
 
-Previewを大きく表示し、文書の閲覧に集中できる表示モードです。アウトラインを表示して見出しを選択すると、目的のセクションへすばやく移動できます。文書全体の確認、校正、読み合わせ、簡単なプレゼンテーションなどに利用できます。
+Focused Previewでは、メニューバー、タイトルバー、ツールバー、ステータスバー、Editor、Splitterなどの操作UIを非表示にし、ブラウザまたはホーム画面から起動したアプリの表示領域を広く使って文書の閲覧に集中できます。
 
-Focus Previewから編集画面へ戻るには、次のいずれかを使用します。
+Editorへ戻るには、右上の **編集画面へ戻る** ボタンをタップします。外付けキーボードを使用している場合は `Esc` キーでも戻れます。
 
-* タイトルバーまたはメニューバーの **Preview** をもう一度選択する
-* 画面上の **編集画面へ戻る** ボタンを選択する
+Focused Previewに入る前からOutlineを表示していた場合は、そのまま見出し一覧を確認し、見出しをタップしてPreview内の該当位置へ移動できます。Outline自体を閉じることもできます。Outlineが閉じている場合は自動的には表示されません。Outlineが開いている状態で外付けキーボードの `Esc` キーを押すと、1回目でOutlineが閉じ、2回目でFocused Previewを終了してEditorへ戻ります。
 
 ### 5-2. Preview画面で確認できる内容
 
