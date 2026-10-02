@@ -1583,11 +1583,23 @@ body.preview-focus-mode #preview{
 body.preview-focus-mode #preview-focus-exit-btn{position:fixed;display:flex}
 #preview-focus-exit-btn:hover{border-color:var(--accent2)}
 #preview-focus-exit-btn:focus-visible{outline:3px solid var(--accent2);outline-offset:3px}
+body.preview-focus-mode #outline-panel{
+  top:calc(90px + env(safe-area-inset-top,0px));
+  right:calc(20px + env(safe-area-inset-right,0px));
+  max-height:calc(100vh - 140px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
+}
 @media (max-width:980px){
   body.preview-focus-mode #preview{
     padding-right:calc(28px + env(safe-area-inset-right,0px));
     padding-bottom:calc(28px + env(safe-area-inset-bottom,0px));
     padding-left:calc(28px + env(safe-area-inset-left,0px));
+  }
+}
+@media (max-width:760px){
+  body.preview-focus-mode #outline-panel{
+    right:calc(10px + env(safe-area-inset-right,0px));
+    left:calc(10px + env(safe-area-inset-left,0px));
+    max-height:min(40vh,calc(100vh - 140px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px)));
   }
 }
 @media (max-width:760px){#preview-focus-exit-btn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
@@ -3064,7 +3076,6 @@ function enterPreviewFocusMode() {
   suppressPreviewScrollSync = true;
   // Close editing UI after capturing selection/scroll; preserve its data.
   if (srPanelOpen) closeSearchPanel();
-  closeOutlinePanel();
   closeSpellPanel();
   if (deepEditPanelOpen) toggleDeepLogPanel();
   if (!previewOpen) {
