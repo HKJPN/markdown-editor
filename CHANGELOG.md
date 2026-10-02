@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-02 - v1.6.7 Candidate - Improved Focused Preview
+- Improved Focused Preview to provide a fully distraction-free reading experience.
+
 ## 2026-10-01 - v1.6.6 Official Release
 
 ## 2026-09-30 - v1.6.6 Candidate - PWA support
