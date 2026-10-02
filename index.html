@@ -10866,6 +10866,10 @@ function scheduleUpdateCheck() {
   }
 }
 
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') void checkForUpdates();
+});
+
 function setUpdateModalState(isOpen) {
   const modal = document.getElementById('update-modal');
   if (!modal) return;
