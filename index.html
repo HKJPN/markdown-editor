@@ -1555,16 +1555,42 @@ body.ipad-safari-fullscreen #menubar {
 
 #preview-wrap{position:relative}
 #fullscreen-toggle-title-btn{font-size:16px;line-height:1}
-body.preview-focus-mode #editor-wrap,body.preview-focus-mode #splitter{display:none!important}
-body.preview-focus-mode #preview-wrap{width:auto!important;min-width:0!important;max-width:none!important;flex:1 1 auto;overflow-y:auto}
-body.preview-focus-mode #preview{max-width:960px}
+body.preview-focus-mode #menubar,
+body.preview-focus-mode #titlebar,
+body.preview-focus-mode #toolbar,
+body.preview-focus-mode #statusbar,
+body.preview-focus-mode #editor-wrap,
+body.preview-focus-mode #splitter,
+body.preview-focus-mode #toast{display:none!important}
+body.preview-focus-mode #main-container{min-width:0;min-height:0;flex:1 1 0}
+body.preview-focus-mode #preview-wrap{
+  width:auto!important;min-width:0!important;max-width:none!important;min-height:0;flex:1 1 auto;overflow-x:hidden;overflow-y:auto;
+  /* Keep scrolling text below the fixed return button, including on narrow screens. */
+  border-top:calc(68px + env(safe-area-inset-top,0px)) solid transparent;
+}
+body.preview-focus-mode #preview{
+  max-width:960px;
+  padding-top:4px;
+  padding-right:max(50px,calc(28px + env(safe-area-inset-right,0px)));
+  padding-bottom:calc(42px + env(safe-area-inset-bottom,0px));
+  padding-left:max(50px,calc(28px + env(safe-area-inset-left,0px)));
+}
 #preview-focus-exit-btn{
   position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:calc(12px + env(safe-area-inset-right,0px));margin:0;
   z-index:160;min-width:44px;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);
   background:rgba(20,24,34,.86);color:var(--text);cursor:pointer;backdrop-filter:blur(12px);box-shadow:var(--shadow-lg);display:none;align-items:center;gap:8px;
 }
-body.preview-focus-mode #preview-focus-exit-btn{display:flex}
-@media (max-width:760px){body.preview-focus-mode #preview{padding:28px}#preview-focus-exit-btn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
+body.preview-focus-mode #preview-focus-exit-btn{position:fixed;display:flex}
+#preview-focus-exit-btn:hover{border-color:var(--accent2)}
+#preview-focus-exit-btn:focus-visible{outline:3px solid var(--accent2);outline-offset:3px}
+@media (max-width:980px){
+  body.preview-focus-mode #preview{
+    padding-right:calc(28px + env(safe-area-inset-right,0px));
+    padding-bottom:calc(28px + env(safe-area-inset-bottom,0px));
+    padding-left:calc(28px + env(safe-area-inset-left,0px));
+  }
+}
+@media (max-width:760px){#preview-focus-exit-btn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
 @media print{#preview-focus-exit-btn{display:none!important}}
 
 #deep-edit-title-btn{color:var(--warn);border-color:rgba(235,176,91,.22);background:rgba(235,176,91,.025);opacity:.48}
@@ -3036,6 +3062,11 @@ function enterPreviewFocusMode() {
 
   isPreviewFocusTransitioning = true;
   suppressPreviewScrollSync = true;
+  // Close editing UI after capturing selection/scroll; preserve its data.
+  if (srPanelOpen) closeSearchPanel();
+  closeOutlinePanel();
+  closeSpellPanel();
+  if (deepEditPanelOpen) toggleDeepLogPanel();
   if (!previewOpen) {
     previewOpen = true;
     renderPreviewState();
@@ -7032,7 +7063,7 @@ function doSpellCheck() {
   const list = document.getElementById('spell-list');
   const empty = document.getElementById('spell-empty');
   const loading = document.getElementById('spell-loading');
-  panel.classList.add('show');
+  if (!previewFocusOpen) panel.classList.add('show');
   if (!dictReady || !typo) {
     loading.classList.add('show');
     set('sp-loading-text', T.dictLoading);
