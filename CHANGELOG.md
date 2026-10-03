@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-04 - v1.6.7 Candidate - Improved inline formatting
+- Improved inline formatting (Bold, Italic, Strikethrough) for multi-line selections to apply markers per line instead of wrapping the entire selection.
+
 ## 2026-10-02 - v1.6.7 Candidate - Improved Focused Preview
 - Improved Focused Preview to provide a fully distraction-free reading experience.
 
