@@ -7595,6 +7595,213 @@ function insertHorizontalRule() {
   markDirty();
   triggerAutoSave();
 }
+// Multiline formatting is a pure transformation; only wrap() commits an edit.
+// Use the bundled lexer without the preview's stateful footnote extensions.
+function transformMultilineInline(value, start, end, mark) {
+  const selected = value.slice(start, end);
+  if (!['**', '*', '~~'].includes(mark) || !/[\r\n]/.test(selected) || !window.marked?.Lexer) return selected;
+  const normalized = value.replace(/\r\n|\r/g, '\n');
+  const normalizeOffset = offset => value.slice(0, offset).replace(/\r\n|\r/g, '\n').length;
+  const selectionStart = normalizeOffset(start), selectionEnd = normalizeOffset(end);
+  let options = { gfm: true, breaks: true };
+  const extensions = [];
+  if (typeof createMdwMathExtensions === 'function') {
+    extensions.push(...createMdwMathExtensions().extensions.filter(extension => extension.level === 'block'));
+  }
+  if (typeof parseFootnoteDefinitionBlock === 'function') {
+    extensions.push({ name: 'mdwFootnoteDefinition', level: 'block',
+      start(src) { const match = src.match(/^\[\^[^\]\r\n]+\]:/um); return match ? match.index : undefined; },
+      tokenizer(src) {
+        const parsed = parseFootnoteDefinitionBlock(src);
+        return parsed ? { type: 'mdwFootnoteDefinition', raw: parsed.raw } : false;
+      } });
+  }
+  // Keep the preview's block grammar, without collecting footnotes or rendering anything.
+  if (extensions.length) options = new marked.Marked(options, { extensions }).defaults;
+  const inline = text => marked.Lexer.lexInline(text, options);
+  const decorationTypes = new Set(['strong', 'em', 'del']);
+  const targetType = { '**': 'strong', '*': 'em', '~~': 'del' }[mark];
+  const supportedBlocks = new Set(['paragraph', 'text', 'space', 'blockquote', 'list', 'list_item', 'checkbox']);
+  const children = token => token.items || token.tokens || [];
+  const unsafeBlock = token => !supportedBlocks.has(token.type) ||
+    children(token).some(child => supportedBlocks.has(child.type) ? unsafeBlock(child) :
+      ['code', 'heading', 'hr', 'html', 'table', 'def', 'mdwMathBlock', 'mdwFootnoteDefinition'].includes(child.type));
+  const crossesLines = token => (['strong', 'em', 'del', 'codespan', 'link', 'image'].includes(token.type) && /\n/.test(token.raw || '')) ||
+    children(token).some(crossesLines);
+  // Block shape must survive the transformation (e.g. emphasis must not become a list).
+  const blockShape = tokens => tokens.filter(token => token.type !== 'space').map(token => {
+    if (token.type === 'list') return ['list', token.ordered, token.start, token.items.map(item => [item.task, blockShape(item.tokens)])];
+    if (token.type === 'blockquote') return ['blockquote', blockShape(token.tokens)];
+    return token.type;
+  });
+  // Compare parsed inline meaning, allowing equivalent ordering of sole nested decorations.
+  const meaning = tokens => tokens.map(token => {
+    if (decorationTypes.has(token.type)) {
+      const types = [token.type];
+      let nested = token.tokens;
+      while (nested?.length === 1 && decorationTypes.has(nested[0].type)) {
+        types.push(nested[0].type);
+        nested = nested[0].tokens;
+      }
+      return [types.sort(), meaning(nested || [])];
+    }
+    return [token.type, token.text ?? token.raw, token.href, token.tokens ? meaning(token.tokens) : null];
+  }).reduce((result, item) => {
+    // Removing a wrapper can merge neighboring text tokens without changing meaning.
+    const previous = result.at(-1);
+    if (previous?.[0] === 'text' && item[0] === 'text') previous[1] += item[1];
+    else result.push(item);
+    return result;
+  }, []);
+  const sameMeaning = (left, right) => JSON.stringify(meaning(left)) === JSON.stringify(meaning(right));
+  const removeOuter = tokens => {
+    if (tokens.length !== 1 || !decorationTypes.has(tokens[0].type)) return null;
+    const token = tokens[0];
+    // Underscore spellings are preserved, rather than normalized to stars.
+    if (!token.raw.startsWith(token.type === 'del' ? '~~' : '*')) return null;
+    if (token.type === targetType) return token.tokens;
+    const nested = removeOuter(token.tokens || []);
+    return nested ? [{ ...token, tokens: nested }] : null;
+  };
+  const hasLiteralMarkers = tokens => tokens.some(token => {
+    if (token.type === 'text' && /[*_~]/.test(token.raw)) return true;
+    return token.tokens ? hasLiteralMarkers(token.tokens) : false;
+  });
+  const hasConflictingDecoration = tokens => tokens.some(token =>
+    (decorationTypes.has(token.type) && (token.type === targetType || token.raw.startsWith('_'))) ||
+    (token.tokens && hasConflictingDecoration(token.tokens)));
+  const prefixLength = line => {
+    let offset = (line.match(/^[ \t]*/) || [''])[0].length;
+    while (line[offset] === '>') {
+      offset += 1;
+      offset += (line.slice(offset).match(/^[ \t]*/) || [''])[0].length;
+    }
+    const list = line.slice(offset).match(/^(?:[*+-]|\d{1,9}[.)])(?:[ \t]+|$)/);
+    if (list) {
+      offset += list[0].length;
+      const task = line.slice(offset).match(/^\[[ xX]\](?:[ \t]+|$)/);
+      if (task) offset += task[0].length;
+    }
+    return offset;
+  };
+  try {
+    const blocks = marked.Lexer.lex(normalized, options);
+    const protectedRanges = [];
+    let cursor = 0;
+    for (const token of blocks) {
+      // Marked appends a synthetic final newline to some lazy blockquotes.
+      const raw = token.type === 'blockquote' && token.raw === normalized.slice(cursor) + '\n' ? token.raw.slice(0, -1) : token.raw;
+      // Fail closed if lexer source offsets cannot be recovered exactly.
+      if (normalized.slice(cursor, cursor + raw.length) !== raw) return selected;
+      const next = cursor + raw.length;
+      if (selectionStart < next && selectionEnd > cursor) {
+        if (crossesLines(token)) return selected;
+        // Nested unsupported blocks protect their enclosing list/quote as well.
+        if (unsafeBlock(token)) protectedRanges.push([cursor, next]);
+      }
+      cursor = next;
+    }
+    if (cursor !== normalized.length) return selected;
+    const parts = [];
+    const eligible = [];
+    const linePattern = /([^\r\n]*)(\r\n|\r|\n|$)/g;
+    let match, normalizedStart = 0;
+    while ((match = linePattern.exec(value)) && match[0].length) {
+      const line = match[1], separator = match[2], lineStart = match.index;
+      const lineEnd = lineStart + line.length;
+      const from = Math.max(start, lineStart), to = Math.min(end, lineEnd);
+      if (from < to) {
+        const part = { text: value.slice(from, to) };
+        parts.push(part);
+        const protectedLine = protectedRanges.some(([a, b]) => normalizedStart < b && normalizedStart + line.length > a);
+        const prefix = prefixLength(line);
+        let bodyEnd = line.length - (line.match(/[ \t]*$/) || [''])[0].length;
+        const fullBody = line.slice(prefix, bodyEnd);
+        // A following character keeps Marked from treating a terminal newline as text.
+        const lineTokens = inline(fullBody + (separator ? '\n.' : ''));
+        // A real backslash hard break has its own lexer token; escaped/code slashes do not.
+        if (separator && lineTokens.at(-2)?.type === 'br' && lineTokens.at(-2).raw === '\\\n') bodyEnd -= 1;
+        const localStart = from - lineStart, localEnd = to - lineStart;
+        let bodyStart = Math.max(localStart, prefix), bodyStop = Math.min(localEnd, bodyEnd);
+        bodyStart += (line.slice(bodyStart, bodyStop).match(/^[ \t]*/) || [''])[0].length;
+        bodyStop -= (line.slice(bodyStart, bodyStop).match(/[ \t]*$/) || [''])[0].length;
+        const cutsPrefix = (localStart > 0 && localStart < prefix) || localEnd < prefix;
+        const body = line.slice(bodyStart, bodyStop);
+        // Preserve fragments inside existing tokens, including unselected outer markers.
+        const fullTokens = inline(line.slice(prefix, bodyEnd));
+        let tokenOffset = prefix, cutsToken = false;
+        for (const token of fullTokens) {
+          const tokenEnd = tokenOffset + token.raw.length;
+          if (token.type !== 'text' && bodyStart < tokenEnd && bodyStop > tokenOffset &&
+              (bodyStart > tokenOffset || bodyStop < tokenEnd)) cutsToken = true;
+          if (token.type === 'html') cutsToken = true;
+          tokenOffset = tokenEnd;
+        }
+        if (!protectedLine && !cutsPrefix && !cutsToken && body.length && !/^[ \t]*$/.test(body)) {
+          const tokens = inline(body);
+          const unwrapped = removeOuter(tokens);
+          const removed = body.slice(mark.length, -mark.length);
+          const decorated = mark + body + mark;
+          let isWrapped = unwrapped && body.startsWith(mark) && body.endsWith(mark) &&
+            removed.length && sameMeaning(inline(removed), unwrapped);
+          let canAdd = !hasLiteralMarkers(tokens) && !hasConflictingDecoration(tokens) &&
+            sameMeaning(inline(decorated), [{ type: targetType, tokens }]);
+          const beforeBody = line.slice(prefix, bodyStart), afterBody = line.slice(bodyStop, bodyEnd);
+          if (isWrapped) {
+            let offset = prefix, found = false;
+            const expected = fullTokens.flatMap(token => {
+              const at = offset;
+              offset += token.raw.length;
+              if (at === bodyStart && offset === bodyStop) { found = true; return unwrapped; }
+              return [token];
+            });
+            isWrapped = found && sameMeaning(inline(beforeBody + removed + afterBody), expected);
+          }
+          if (canAdd) {
+            // Validate in the full line too: unselected escapes/markers can change flanking.
+            let offset = prefix;
+            canAdd = inline(beforeBody + decorated + afterBody).some(token => {
+              const at = offset;
+              offset += token.raw.length;
+              return at === bodyStart && offset === bodyStart + decorated.length &&
+                sameMeaning([token], [{ type: targetType, tokens }]);
+            });
+          }
+          if (isWrapped || canAdd) {
+            Object.assign(part, { before: line.slice(localStart, bodyStart), after: line.slice(bodyStop, localEnd),
+              body, wrapped: !!isWrapped, removed, decorated });
+            eligible.push(part);
+          }
+        }
+      }
+      const separatorStart = Math.max(start, lineEnd), separatorEnd = Math.min(end, lineEnd + separator.length);
+      if (separatorStart < separatorEnd) parts.push({ text: value.slice(separatorStart, separatorEnd) });
+      normalizedStart += line.length + (separator ? 1 : 0);
+      if (lineEnd + separator.length >= end) break;
+    }
+    if (!eligible.length) return selected;
+    const remove = eligible.every(part => part.wrapped);
+    const result = parts.map(part => part.body === undefined ? part.text :
+      part.before + (remove ? part.removed : part.wrapped ? part.body : part.decorated) + part.after).join('');
+    if (result === selected) return selected;
+    const next = value.slice(0, start) + result + value.slice(end);
+    const nextBlocks = marked.Lexer.lex(next.replace(/\r\n|\r/g, '\n'), options);
+    if (JSON.stringify(blockShape(nextBlocks)) !== JSON.stringify(blockShape(blocks))) return selected;
+    const nextSelectionEnd = selectionStart + result.replace(/\r\n|\r/g, '\n').length;
+    cursor = 0;
+    for (const token of nextBlocks) {
+      const nextOffset = cursor + token.raw.length;
+      // Newly inserted markers must not pair with incomplete markers on another line.
+      if (selectionStart < nextOffset && nextSelectionEnd > cursor && crossesLines(token)) return selected;
+      cursor = nextOffset;
+    }
+    return result;
+  } catch (error) {
+    // Uncertain syntax is a no-op, never a partial edit.
+    return selected;
+  }
+}
+
 function wrap(mark) {
   if (!guardEditorCommand()) return;
   const { s, e } = getPos();
@@ -7603,16 +7810,26 @@ function wrap(mark) {
   const scrollLeft = editor.scrollLeft;
   const hasSelection = s !== e;
   const sel = value.slice(s, e) || (isJa ? '文字' : 'text');
+  const multiline = ['**', '*', '~~'].includes(mark) && /[\r\n]/.test(sel);
+  if (multiline && isEditorComposing) return;
+  const direction = editor.selectionDirection || 'none';
   const replaceAndSelect = (rangeStart, rangeEnd, replacement, selectStart, selectEnd) => {
     editor.focus();
     editor.setSelectionRange(rangeStart, rangeEnd);
     document.execCommand('insertText', false, replacement);
-    setRange(selectStart, selectEnd);
+    if (multiline) editor.setSelectionRange(selectStart, selectEnd, direction);
+    else setRange(selectStart, selectEnd);
     editor.scrollTop = scrollTop;
     editor.scrollLeft = scrollLeft;
     markDirty();
     triggerAutoSave();
   };
+
+  if (multiline) {
+    const replacement = transformMultilineInline(value, s, e, mark);
+    if (replacement !== sel) replaceAndSelect(s, e, replacement, s, s + replacement.length);
+    return;
+  }
 
   const countEdgeChars = (text, char, fromStart) => {
     let count = 0;
