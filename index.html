@@ -7628,6 +7628,27 @@ function transformMultilineInline(value, start, end, mark) {
       ['code', 'heading', 'hr', 'html', 'table', 'def', 'mdwMathBlock', 'mdwFootnoteDefinition'].includes(child.type));
   const crossesLines = token => (['strong', 'em', 'del', 'codespan', 'link', 'image'].includes(token.type) && /\n/.test(token.raw || '')) ||
     children(token).some(crossesLines);
+  const overlapsMultiline = (token, offset, from, to, outside = []) => {
+    if (!crossesLines(token)) return false;
+    // Paragraph inline raws partition the original source; do not search for text
+    // (duplicate labels, escapes and UTF-16 offsets must stay unambiguous).
+    // Lists/quotes have stripped prefixes: keep their existing conservative guard.
+    if (!['paragraph', 'text'].includes(token.type) || !token.tokens ||
+        typeof token.text !== 'string' || !token.raw.startsWith(token.text) ||
+        !/^\n*$/.test(token.raw.slice(token.text.length))) return true;
+    let consumed = 0;
+    for (const child of token.tokens) {
+      const raw = child.raw;
+      if (typeof raw !== 'string' || token.text.slice(consumed, consumed + raw.length) !== raw) return true;
+      const at = offset + consumed;
+      consumed += raw.length;
+      if (crossesLines(child)) {
+        if (from < offset + consumed && to > at) return true;
+        outside.push([at, offset + consumed]);
+      }
+    }
+    return consumed !== token.text.length;
+  };
   // Block shape must survive the transformation (e.g. emphasis must not become a list).
   const blockShape = tokens => tokens.filter(token => token.type !== 'space').map(token => {
     if (token.type === 'list') return ['list', token.ordered, token.start, token.items.map(item => [item.task, blockShape(item.tokens)])];
@@ -7664,7 +7685,9 @@ function transformMultilineInline(value, start, end, mark) {
     return nested ? [{ ...token, tokens: nested }] : null;
   };
   const hasLiteralMarkers = tokens => tokens.some(token => {
-    if (token.type === 'text' && /[*_~]/.test(token.raw)) return true;
+    // Intraword underscores in lexer text are ordinary filename/word characters.
+    // Keep unmatched delimiter-like underscores and star/tilde fragments guarded.
+    if (token.type === 'text' && /[*_~]/.test(token.raw.replace(/(?<=[\p{L}\p{N}])_+(?=[\p{L}\p{N}])/gu, ''))) return true;
     return token.tokens ? hasLiteralMarkers(token.tokens) : false;
   });
   const hasConflictingDecoration = tokens => tokens.some(token =>
@@ -7687,6 +7710,7 @@ function transformMultilineInline(value, start, end, mark) {
   try {
     const blocks = marked.Lexer.lex(normalized, options);
     const protectedRanges = [];
+    const outsideMultiline = [];
     let cursor = 0;
     for (const token of blocks) {
       // Marked appends a synthetic final newline to some lazy blockquotes.
@@ -7695,7 +7719,7 @@ function transformMultilineInline(value, start, end, mark) {
       if (normalized.slice(cursor, cursor + raw.length) !== raw) return selected;
       const next = cursor + raw.length;
       if (selectionStart < next && selectionEnd > cursor) {
-        if (crossesLines(token)) return selected;
+        if (overlapsMultiline(token, cursor, selectionStart, selectionEnd, outsideMultiline)) return selected;
         // Nested unsupported blocks protect their enclosing list/quote as well.
         if (unsafeBlock(token)) protectedRanges.push([cursor, next]);
       }
@@ -7714,8 +7738,18 @@ function transformMultilineInline(value, start, end, mark) {
         const part = { text: value.slice(from, to) };
         parts.push(part);
         const protectedLine = protectedRanges.some(([a, b]) => normalizedStart < b && normalizedStart + line.length > a);
-        const prefix = prefixLength(line);
-        let bodyEnd = line.length - (line.match(/[ \t]*$/) || [''])[0].length;
+        let prefix = prefixLength(line);
+        let bodyEnd = line.length - (line.match(/[^\S\r\n]*$/u) || [''])[0].length;
+        // Do not re-lex a cut-off URL/label as if it were standalone line text.
+        // Only external multiline spans can narrow this line's parsing context.
+        for (const [a, b] of outsideMultiline) {
+          if (b <= selectionStart && b > normalizedStart && a < normalizedStart + line.length) {
+            prefix = Math.max(prefix, b - normalizedStart);
+          }
+          if (a >= selectionEnd && a < normalizedStart + line.length && b > normalizedStart) {
+            bodyEnd = Math.min(bodyEnd, a - normalizedStart);
+          }
+        }
         const fullBody = line.slice(prefix, bodyEnd);
         // A following character keeps Marked from treating a terminal newline as text.
         const lineTokens = inline(fullBody + (separator ? '\n.' : ''));
@@ -7723,8 +7757,9 @@ function transformMultilineInline(value, start, end, mark) {
         if (separator && lineTokens.at(-2)?.type === 'br' && lineTokens.at(-2).raw === '\\\n') bodyEnd -= 1;
         const localStart = from - lineStart, localEnd = to - lineStart;
         let bodyStart = Math.max(localStart, prefix), bodyStop = Math.min(localEnd, bodyEnd);
-        bodyStart += (line.slice(bodyStart, bodyStop).match(/^[ \t]*/) || [''])[0].length;
-        bodyStop -= (line.slice(bodyStart, bodyStop).match(/[ \t]*$/) || [''])[0].length;
+        // Body padding is Unicode whitespace, independent of Markdown prefixes.
+        bodyStart += (line.slice(bodyStart, bodyStop).match(/^[^\S\r\n]*/u) || [''])[0].length;
+        bodyStop -= (line.slice(bodyStart, bodyStop).match(/[^\S\r\n]*$/u) || [''])[0].length;
         const cutsPrefix = (localStart > 0 && localStart < prefix) || localEnd < prefix;
         const body = line.slice(bodyStart, bodyStop);
         // Preserve fragments inside existing tokens, including unselected outer markers.
@@ -7737,7 +7772,7 @@ function transformMultilineInline(value, start, end, mark) {
           if (token.type === 'html') cutsToken = true;
           tokenOffset = tokenEnd;
         }
-        if (!protectedLine && !cutsPrefix && !cutsToken && body.length && !/^[ \t]*$/.test(body)) {
+        if (!protectedLine && !cutsPrefix && !cutsToken && body.length && !/^[^\S\r\n]*$/u.test(body)) {
           const tokens = inline(body);
           const unwrapped = removeOuter(tokens);
           const removed = body.slice(mark.length, -mark.length);
@@ -7792,7 +7827,8 @@ function transformMultilineInline(value, start, end, mark) {
     for (const token of nextBlocks) {
       const nextOffset = cursor + token.raw.length;
       // Newly inserted markers must not pair with incomplete markers on another line.
-      if (selectionStart < nextOffset && nextSelectionEnd > cursor && crossesLines(token)) return selected;
+      if (selectionStart < nextOffset && nextSelectionEnd > cursor &&
+          overlapsMultiline(token, cursor, selectionStart, nextSelectionEnd)) return selected;
       cursor = nextOffset;
     }
     return result;
