@@ -1,7 +1,7 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
-## 2026-10-04 - v1.6.7 Candidate - Fixed a text rendering issue
+## 2026-10-06 - v1.6.7 Candidate - Fixed a text rendering issue
 - Fixed a Chromium text rendering issue that could temporarily hide Markdown heading markers while typing.
 
 ## 2026-10-04 - v1.6.7 Candidate - Improved inline formatting
