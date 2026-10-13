@@ -1,6 +1,18 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+
+## 2026-10-14 -v1.6.7 Candidate - Updated the external libraries
+### Updated the external libraries.
+- Marked	18.0.7→ 18.0.14
+- Mammoth	1.12.0→ 1.13.0
+- Mermaid	11.12.2→ 11.16.1
+- DOMPurify	3.4.12→ 3.4.17
+- KaTeX	0.17.0→ 0.19.0
+- Typo.js	1.2.3→ 1.3.2
+### Updated the Turndown CDN reference without changing its version (7.2.4).
+
+
 ## 2026-10-06 - v1.6.7 Candidate - Fixed a text rendering issue
 - Fixed a Chromium text rendering issue that could temporarily hide Markdown heading markers while typing.
 
