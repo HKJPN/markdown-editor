@@ -1,0 +1,156 @@
+{
+  "marked": {
+    "version": "18.0.14",
+    "tarball": "https://registry.npmjs.org/marked/-/marked-18.0.14.tgz",
+    "integrity": "sha512-mBHK6FBHuBAlhgRe88w9F0O1AbwwXJUcQibUbC/QcdTbVGAD7aWza+xt3N6oT/jCZx3/OMeS+8rnuiHZcQ9s7A==",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/markedjs/marked.git"
+    },
+    "files": {
+      "lib/marked.umd.js": {
+        "url": "https://cdn.jsdelivr.net/npm/marked@18.0.14/lib/marked.umd.js",
+        "sri": "sha384-2vpGtuKqJvFlwJqYnf/wUMuzUfhUnYBt9oay0e2yaFcq0Dh6/aEbQ8YAOeKGzlYo",
+        "sha256": "21568877a938d2c4e7d74e27f18e60da96bb73a68809610ca39216e1efebae62",
+        "bytes": 46891,
+        "cdnMatchesNpm": true
+      }
+    }
+  },
+  "typo-js": {
+    "version": "1.3.2",
+    "tarball": "https://registry.npmjs.org/typo-js/-/typo-js-1.3.2.tgz",
+    "integrity": "sha512-Z1YkJ7IIYNrFeOxAlHUercY4Q2I+PhYD/3VkWpJGy/Oqudy3bFpNcQxnv6Oa9fTSXCHPGz1eDoX1bZYm2Z891A==",
+    "license": "BSD-3-Clause",
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/cfinke/Typo.js.git"
+    },
+    "files": {
+      "typo.js": {
+        "url": "https://cdn.jsdelivr.net/npm/typo-js@1.3.2/typo.js",
+        "sri": "sha384-iKTwAGlX9kbsTpsre+dQC0+i60Pajk7wt8RXoMxVPC9LmcZ4qpBF+eP6qcHxNGpK",
+        "sha256": "38aca145fe2f2ff727d4b8f25c8698c8199f2884a0811458d6fc0d41d1f81ba3",
+        "bytes": 40168,
+        "cdnMatchesNpm": true
+      },
+      "dictionaries/en_US/en_US.aff": {
+        "url": "https://cdn.jsdelivr.net/npm/typo-js@1.3.2/dictionaries/en_US/en_US.aff",
+        "sri": "sha384-/P5B0jVP7QXgvynOMNiP5a+OFRqvn+JJmiYZmq4o1Y4vc93N3/goz8yyFz8iISRi",
+        "sha256": "c7a8c4d08c29d237880844b1623099f59092602f189be38ce3912e457ff38bc1",
+        "bytes": 3090,
+        "cdnMatchesNpm": true
+      },
+      "dictionaries/en_US/en_US.dic": {
+        "url": "https://cdn.jsdelivr.net/npm/typo-js@1.3.2/dictionaries/en_US/en_US.dic",
+        "sri": "sha384-iCAD1eau2Nvskji81XhOyqgkNzbmO85f6XiGRz1mOJCWedk2VPpjUevyBesBQpcO",
+        "sha256": "f0b1a234bd178bdd01875b2a392a9647f888b8fe879f79c52aae62c2759b3647",
+        "bytes": 551762,
+        "cdnMatchesNpm": true
+      }
+    }
+  },
+  "mammoth": {
+    "version": "1.13.0",
+    "tarball": "https://registry.npmjs.org/mammoth/-/mammoth-1.13.0.tgz",
+    "integrity": "sha512-2cawcYFcP7ISfXbBcL9lmVgTNWo88v/52ND1gnywHtVT/pX0//puPnf0iMPV9ZgmuvNOE+zkIhDgZ9M2c2dDDg==",
+    "license": "BSD-2-Clause",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/mwilliamson/mammoth.js.git"
+    },
+    "files": {
+      "mammoth.browser.min.js": {
+        "url": "https://cdn.jsdelivr.net/npm/mammoth@1.13.0/mammoth.browser.min.js",
+        "sri": "sha384-8NWE3bZDrmRI4IePMoQaEoLhAQ1MmRMJkdNgnGiHRFanTqsFKr0TmK6aSZvFJ/PO",
+        "sha256": "92914a3708cfdf1e62cb553d1856a7fedab21da83d8ee82845de2f897b368cab",
+        "bytes": 405060,
+        "cdnMatchesNpm": true
+      }
+    }
+  },
+  "mermaid": {
+    "version": "11.16.1",
+    "tarball": "https://registry.npmjs.org/mermaid/-/mermaid-11.16.1.tgz",
+    "integrity": "sha512-TQsq6u22fAn3rek5VOubrhKPo1g5hwC3FXUN9hiyupTckcYiGuuKGkNQrKYwGJkXUxZdojwRG46gsSCFZMDp4g==",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/mermaid-js/mermaid"
+    },
+    "files": {
+      "dist/mermaid.min.js": {
+        "url": "https://cdn.jsdelivr.net/npm/mermaid@11.16.1/dist/mermaid.min.js",
+        "sri": "sha384-aBQXj4hK6Jm05i7aQAsUV3bLdSUrHX1BGYfMB0166TtWt/RRaw+h0Eelme9OCOvy",
+        "sha256": "18327bef70d96fb505fe7287d9f6a7362ebf07ff6576ddfaffb1a06f3e1a2954",
+        "bytes": 3566058,
+        "cdnMatchesNpm": true
+      }
+    }
+  },
+  "dompurify": {
+    "version": "3.4.17",
+    "tarball": "https://registry.npmjs.org/dompurify/-/dompurify-3.4.17.tgz",
+    "integrity": "sha512-B/pSlYVHQ58kqISD/yDjuJ1yfzI34m1gF4lAod2bwSRhiN4K5Cl3H8Af7hqB2PmTL911tdEudnnXn5FnhRoz0w==",
+    "license": "(MPL-2.0 OR Apache-2.0)",
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/cure53/DOMPurify.git"
+    },
+    "files": {
+      "dist/purify.min.js": {
+        "url": "https://cdn.jsdelivr.net/npm/dompurify@3.4.17/dist/purify.min.js",
+        "sri": "sha384-P0JNneQf81HOl9VwNXK76cQ9VMD6Nfsnepxb0cCOg8+UzEdzgPHAPV4wVQrvYQSx",
+        "sha256": "cd37898f9782adf54820c413191b5691803f0f137c799d6edcfd38523b4c2c31",
+        "bytes": 29828,
+        "cdnMatchesNpm": true
+      }
+    }
+  },
+  "katex": {
+    "version": "0.19.0",
+    "tarball": "https://registry.npmjs.org/katex/-/katex-0.19.0.tgz",
+    "integrity": "sha512-v6Tznz3zJ7u3niRCoDTsumM2+HA2XXcCu+WAacCeHD2z3p9A9Ks987o5FzfTGBN0e8A0vjEgIDvLbICrXpdw/Q==",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/KaTeX/KaTeX.git"
+    },
+    "files": {
+      "dist/katex.min.js": {
+        "url": "https://cdn.jsdelivr.net/npm/katex@0.19.0/dist/katex.min.js",
+        "sri": "sha384-QFFtAGzvvj+bfgCGxXJlNZZR1nXEZgvG8tDLCCY1F19xl20WlfTYgguB4VcNdxYk",
+        "sha256": "103a53763cc033bba8d175bf3f0ba597c3505c9b6747dd3f2c7bc2a6bfcc8ae7",
+        "bytes": 272868,
+        "cdnMatchesNpm": true
+      },
+      "dist/katex.min.css": {
+        "url": "https://cdn.jsdelivr.net/npm/katex@0.19.0/dist/katex.min.css",
+        "sri": "sha384-3rdsX6e5mueWyoweR9NIVmtEsUkokpBT/0ALqKKIBMr9j4qhHkaIkAcGgsE6uVlp",
+        "sha256": "d4ab5b8ee16989b070cdb0ea24bd6ad48fc8df1b787f280f29d3ae4f959f2c00",
+        "bytes": 24793,
+        "cdnMatchesNpm": true
+      }
+    }
+  },
+  "turndown": {
+    "version": "7.2.4",
+    "tarball": "https://registry.npmjs.org/turndown/-/turndown-7.2.4.tgz",
+    "integrity": "sha512-I8yFsfRzmzK0WV1pNNOA4A7y4RDfFxPRxb3t+e3ui14qSGOxGtiSP6GjeX+Y6CHb7HYaFj7ECUD7VE5kQMZWGQ==",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/mixmark-io/turndown.git"
+    },
+    "files": {
+      "lib/turndown.browser.umd.js": {
+        "url": "https://cdn.jsdelivr.net/npm/turndown@7.2.4/lib/turndown.browser.umd.js",
+        "sri": "sha384-yfnQWJ22yiVEUfFDQH3SNYUI9Rl/zaLGe81+2ky2ohcZtz/854n4bJS9ZufXp2NR",
+        "sha256": "cdf933e0a2085df3c64d6c763331f04345f6c3b25746216e8f1426c9c5253045",
+        "bytes": 26946,
+        "cdnMatchesNpm": true
+      }
+    }
+  }
+}
