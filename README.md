@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.6.6 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.6.7 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) <br>
 
 
@@ -32,45 +32,26 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 
 ---
 
-## 🎉  What’s New in v1.6.6 — PWA support  
+## What's New in v1.6.7
 
-MD//WORKS now supports installation as a PWA (Progressive Web App). On supported browsers, you can install MD//WORKS on your computer or tablet and use it in a dedicated app window, much like a desktop application.
+### Security & Stability
+- **Updated Core Libraries:** Updated Marked, Mammoth, Mermaid, DOMPurify, KaTeX, and Typo.js to newer versions for improved security, compatibility, and stability.
+- **Dependency Integrity Verification:** Added SHA-384 integrity checks for externally loaded libraries and English spell-check dictionaries, helping prevent modified or unexpected resources from being loaded.
+- **Dependency Cleanup:** Removed the unused `encoding-japanese` library and documented the application's direct dependencies for easier future maintenance.
 
-- **Install MD//WORKS as an app**
-  - Run MD//WORKS in its own window without the usual browser tabs and address bar.
-  - On supported environments, including Windows, macOS, and iPad, you can launch it directly from your app list, Dock, Start menu, or Home Screen.
+### Focused Preview
+- **Distraction-Free Reading:** Improved Focused Preview to provide a cleaner, more immersive reading experience with fewer interface distractions.
 
-- **Open Markdown and text files directly from the OS**
-  - On supported Chrome-based PWA environments on Windows and macOS, `.md`, `.markdown`, and `.txt` files can be passed directly to MD//WORKS through the operating system.
-  - You can open them by double-clicking the file or using **Open with**.
+### Editing Improvements
+- **Multi-Line Formatting:** Improved Bold, Italic, and Strikethrough operations on multi-line selections. Formatting markers are now applied to each line individually instead of wrapping the entire selection.
+- **Ctrl+H for Replace:** Added support for opening the Replace panel directly with Ctrl+H, while preserving the existing Ctrl+F search workflow.
 
-- **Save changes back to the opened file**
-  - Files opened through the OS File Handler or the File System Access API can be saved back to the original file with **Ctrl+S** on Windows or **⌘S** on macOS.
-  - Use **Save As** when you want to save under a different name or location.
+### Bug Fixes
+- **Chromium Text Rendering:** Fixed an intermittent display issue in Chromium-based browsers where Markdown heading markers (`#`) could temporarily appear to disappear while typing. The underlying text was not affected.
 
-- **The regular web version remains available**
-  - Installing the PWA is optional.
-  - MD//WORKS can still be used directly in a normal browser tab.
-  - On Firefox, iPad, Android, and other environments, file handling may use browser-specific file selection, sharing, or download behavior instead.
-
-### File Handler Support
-
-The OS File Handler is registered for:
-
-- `.md`
-- `.markdown`
-- `.txt`
-
-`.html` and `.htm` are intentionally excluded to avoid interfering with normal web-page file associations.
-
-HTML files can still be opened from **File > Open** inside MD//WORKS.
-
-### Notes
-
-- MD//WORKS uses UTF-8 as its standard text encoding.
-- Shift-JIS and other legacy encodings are not currently supported.
-- Even when installed as a PWA, MD//WORKS cannot automatically access images or other files located next to a selected Markdown file unless those files have been explicitly made available to the app.
-- v1.6.6 does not include a Service Worker or full offline support.
+### Maintenance Notes
+- Retained existing Markdown features, document import/export behavior, and application settings.
+- Updated dependency verification and regression tests to help maintain compatibility and security across future releases.
 
 ---
 
