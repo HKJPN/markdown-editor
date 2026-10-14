@@ -2150,9 +2150,9 @@ const isAndroid = /Android/i.test(navigator.userAgent);
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
-const APP_VERSION = '1.6.6';
-const APP_VERSION_LABEL = 'v1.6.6';
-const RELEASE_NOTES_VERSION = '1.6.6-release';
+const APP_VERSION = '1.6.7';
+const APP_VERSION_LABEL = 'v1.6.7';
+const RELEASE_NOTES_VERSION = '1.6.7-release';
 const LEGACY_DEFAULT_MARKDOWN_SAMPLES = [
   `# MD//WORKS エディタ
 
@@ -2669,24 +2669,34 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
 `,
 
   releaseNotesTitle: `MD//WORKS ${APP_VERSION_LABEL}`,
-  releaseNotesIntro: isJa ? 'MD//WORKSがPWAに対応し、アプリとしてより使いやすくなりました。' : 'MD//WORKS now supports PWA installation for a more app-like workflow.',
+  releaseNotesIntro: isJa ? 'セキュリティと安定性を強化し、閲覧・編集機能を改善しました。' : 'Security and stability updates, plus improvements to reading and editing.',
   releaseNotesClose: isJa ? '閉じる' : 'Close',
   releaseNotesContent: isJa ? `
+### 🔒 セキュリティと安定性
+主要ライブラリを更新し、外部リソースの整合性検証を強化しました。
 
-* **アプリとしてインストール**
-  対応環境では、MD//WORKSを専用ウィンドウから起動できます。
+### 📖 Focused Preview
+画面上の余分な要素を抑え、文書に集中できる閲覧環境を改善しました。
 
-* **OSからファイルを直接開く**
-  対応環境では、MarkdownやテキストファイルをOSから直接開き、そのまま編集・保存できます。
+### ✏️ 編集機能の改善
+- 複数行選択時の太字・斜体・取り消し線を、各行に個別に適用するよう改善しました。
+- **Ctrl+H**で置換パネルを直接開けるようになりました。
 
+### 🛠 不具合修正
+Chromium系ブラウザで、入力中にMarkdownの見出し記号（\`#\`）が一時的に見えなくなる表示上の問題を修正しました。
 ` : `
+### 🔒 Security & Stability
+Updated core libraries and strengthened dependency integrity verification for safer, more reliable operation.
 
-* **Install MD//WORKS as an app**
-  Run MD//WORKS in its own app window on supported environments.
+### 📖 Focused Preview
+Enjoy a cleaner, distraction-free reading experience with the improved Focused Preview.
 
-* **Open files directly from the OS**
-  On supported environments, Markdown and text files can be opened directly from the OS, edited, and saved back.
+### ✏️ Editing Improvements
+- Bold, Italic, and Strikethrough now format multi-line selections line by line.
+- Press **Ctrl+H** to open the Replace panel directly.
 
+### 🛠 Bug Fixes
+Fixed a Chromium rendering issue that could temporarily hide Markdown heading markers while typing.
 `};
 
 const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
