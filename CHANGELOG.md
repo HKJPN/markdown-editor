@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-10-15 v1.6.7 - Official Release
+
 ## 2026-10-14 -v1.6.7 Candidate - Updated the external libraries
 ### External Library Updates
 
