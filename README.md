@@ -21,7 +21,7 @@ Choose a theme based on your working environment: **Midnight** for focused editi
 
 # Live Demo
 
-Try it instantly in your browser. 👉 **https://hkjpn.github.io/markdown-editor/**
+Try it instantly in your browser (👉 **https://hkjpn.github.io/markdown-editor/**) or [![Microsoft Store](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)
 
 - [🚀 Quick Start ](docs/quick-start.md)
 - [📖 User Manual (General) ](docs/manual.md)
