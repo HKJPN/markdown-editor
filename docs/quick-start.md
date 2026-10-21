@@ -4,9 +4,11 @@
 MD//WORKS is a browser-based Markdown editor. Create, preview, save, and export Markdown documents as HTML or PDF files. You can also package the document and the editor together as a single self-contained HTML file, and use browser-based AI tools for writing support.
 
 ## 2. Getting Started
-No installation needed—just click the link to get started!<br> 👉 https://hkjpn.github.io/markdown-editor/<br>
-You can also install it on Chromium browsers to run it like a standalone app. Click the Install icon on the right side of the address bar. <br>
+MD//WORKS is ready to use right out of the box—no installation required! Choose the method that works best for you:
+* **Use in Browser (Web Version):** Click here to start editing immediately! 👉 [https://hkjpn.github.io/markdown-editor/](https://hkjpn.github.io/markdown-editor/)
+* **Install as a Web App (PWA):** On Chromium-based browsers, click the install icon in your address bar to run the editor like a standalone desktop app. <br>
 ![Image: InstallAsPWA](<./images//InstallAsPWA.jpg>)<br>
+* **Microsoft Store App:** Highly recommended for first-time users. *(Note: AI writing assistance is somewhat restricted in this version.)*
 
 
 ## 3. Basic Operations
