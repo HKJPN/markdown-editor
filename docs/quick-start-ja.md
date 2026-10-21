@@ -5,7 +5,7 @@
 MD//WORKSは、ブラウザで動く多機能軽量Markdownエディタです。Markdown文書の作成、プレビュー、保存、HTML/PDF出力などができます。現在の文書とエディタを1つのHTMLファイルとして保存できるほか、ブラウザAIを使った執筆支援にも対応しています。
 
 ## 2. インストール
-基本的には、インストールは必要ありません。次のリンクをクリックするだけで、今すぐエディターを使用できます！👉 https://hkjpn.github.io/markdown-editor/ 。
+基本的には、インストールは必要ありません。次のリンクをクリックするだけで、今すぐエディターを使用できます<br>！👉 https://hkjpn.github.io/markdown-editor/ <br>
 Chrome系ブラウザなら、アドレスバー右側のインストールアイコンをタップすることでインストールも可能で、ネイティブアプリのようにも使うことが可能です。<br>
 ![Image: InstallAsPWA](<./images//InstallAsPWA.jpg>)<br>
 初めての方はインストール可能なMicrosoft Store版[![公式ストア](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)もお勧めです。ただし、AI執筆支援に若干の制限があります。
