@@ -35,7 +35,6 @@ MD//WORKSには、次の4つの利用形態があります。
 > Microsoft StoreアプリはEdgeベースのPWAとして動作するため、高度なAI支援執筆が利用できない場合があります。AI執筆支援を重視する場合は、ChromeやBrave等のブラウザを用いてで1-3の方法がおすすめです。
 
 #### 1-1-1. PWAとしてインストール（Chromeの場合<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">）
-他のブラウザについては[付録5：各種ブラウザでのアプリ化とアンインストール法](#appendix-5-other-browsers)をご覧ください。
 
 1. Chromeで[MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)を開きます。
 2. デスクトップ環境では、アドレスバー右側のインストールアイコンをタップすることで簡単にインストールできます。<br>
@@ -45,6 +44,8 @@ MD//WORKSには、次の4つの利用形態があります。
 5. 編集内容を保ったまま通常タブへ移る場合はアプリウィンドウのメニュー **(⋮)** から **「Chromeで開く」** を選択します。これは、Gemini in Chrome等のブラウザ統合AIを使う場合に便利です。戻る場合はアドレスバーの **「アプリで開く」** を利用できます。
 6. WindowsやmacOS等の対応するChromium系ブラウザでは、MD//WORKSをPWAとしてインストールすると、対応するファイル形式をMD//WORKSに関連付けることができます。設定後は、**ファイルのダブルクリック**や「**Open with／このアプリケーションで開く**」からMD//WORKSを起動できます。
 <br><img src="./images/icon2s.png" alt="Image:icon" width="90">
+
+他のブラウザについては[付録5：各種ブラウザでのアプリ化とアンインストール法](#appendix-5-other-browsers)をご覧ください。
 
 > 💡 **ローカル単体HTML版について:** ローカルHTMLをChromeの **「ショートカットを作成」>「ウィンドウとして開く」** で開く方法は、インストールするPWAとは別です。このショートカットは、OS File HandlerによるWindowsのファイル関連付けを意味しません。
 
