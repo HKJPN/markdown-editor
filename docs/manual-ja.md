@@ -45,13 +45,14 @@ MD//WORKSには、次の4つの利用形態があります。
 6. WindowsやmacOS等の対応するChromium系ブラウザでは、MD//WORKSをPWAとしてインストールすると、対応するファイル形式をMD//WORKSに関連付けることができます。設定後は、**ファイルのダブルクリック**や「**Open with／このアプリケーションで開く**」からMD//WORKSを起動できます。
 <br><img src="./images/icon2s.png" alt="Image:icon" width="90">
 
-他のブラウザについては[付録5：各種ブラウザでのアプリ化とアンインストール法](#appendix-5-other-browsers)をご覧ください。
-
 > 💡 **ローカル単体HTML版について:** ローカルHTMLをChromeの **「ショートカットを作成」>「ウィンドウとして開く」** で開く方法は、インストールするPWAとは別です。このショートカットは、OS File HandlerによるWindowsのファイル関連付けを意味しません。
 
 #### 1-1-2. アンインストール（Chromeの場合<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">）
 
 通常のWebページはアンインストール不要です。PWAはアプリウィンドウまたはブラウザのアプリ管理画面からアンインストールします。ローカル単体HTML版は、HTMLファイルと必要に応じて作成したショートカットを削除します。詳しくは[付録4](#appendix-4-chrome-uninstall)をご覧ください。
+
+他のブラウザについては[付録5：各種ブラウザでのアプリ化とアンインストール法](#appendix-5-other-browsers)をご覧ください。
+
 
 ### 1-2. 対応環境の目安
 
