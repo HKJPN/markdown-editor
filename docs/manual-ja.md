@@ -31,6 +31,9 @@ MD//WORKSには、次の4つの利用形態があります。
 3. **ローカル単体HTML版:** ダウンロードした `index.html` などをブラウザで開きます。1つのHTMLファイルで利用できる形態です。
 4. **Windows版:** マイクロソフトストアからインストールする[![Microsoft Store](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)
 
+> ⚠️ **Microsoft Store版をご利用の方へ（制限事項）：**
+> Microsoft StoreアプリはEdgeベースのPWAとして動作するため、高度なAI支援執筆が利用できない場合があります。AI執筆支援を重視する場合は、ChromeやBrave等のブラウザを用いてで1-3の方法がおすすめです。
+
 #### 1-1-1. PWAとしてインストール（Chromeの場合<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">）
 他のブラウザについては[付録5：各種ブラウザでのアプリ化とアンインストール法](#appendix-5-other-browsers)をご覧ください。
 
