@@ -8,7 +8,8 @@ MD//WORKS is ready to use right out of the box—no installation required! Choos
 * **Use in Browser (Web Version):** Click below to start editing immediately!<br>👉 [https://hkjpn.github.io/markdown-editor/](https://hkjpn.github.io/markdown-editor/)<br>
 * **Install as a Web App (PWA):** On Chromium-based browsers, click the install icon in your address bar to run the editor like a standalone desktop app. <br>
 ![Image: InstallAsPWA](<./images//InstallAsPWA.jpg>)<br>
-* **Microsoft Store App:** Highly recommended for first-time users. *Note: AI writing assistance is somewhat restricted in this version.* Click below to go to the Microsoft Store<br>👉[![Microsoft Store](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)
+* **Microsoft Store App:** Highly recommended for first-time users.  Click below to go to the Microsoft Store<br>👉[![Microsoft Store](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)<br>
+*Note: AI writing assistance is somewhat restricted in this version.*
 
 
 ## 3. Basic Operations
