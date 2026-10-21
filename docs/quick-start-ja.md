@@ -8,7 +8,7 @@ MD//WORKSは、ブラウザで動く多機能軽量Markdownエディタです。
 基本的には、インストールは必要ありません。次のリンクをクリックするだけで、今すぐエディターを使用できます！👉 https://hkjpn.github.io/markdown-editor/ 。
 Chrome系ブラウザなら、アドレスバー右側のインストールアイコンをタップすることでインストールも可能で、ネイティブアプリのようにも使うことが可能です。<br>
 ![Image: InstallAsPWA](<./images//InstallAsPWA.jpg>)<br>
-初めての方はインストール可能なMicrosoft Store版も[![公式ストア](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)お勧めです。
+初めての方はインストール可能なMicrosoft Store版[![公式ストア](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)もお勧めです。
 
 ## 3. 基本操作
 
