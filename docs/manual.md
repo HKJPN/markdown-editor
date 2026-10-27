@@ -1,6 +1,6 @@
 # MD//WORKS Editor User Manual
 
-MD//WORKS Editor is a browser-based Markdown editor available in three forms: a regular web page, an installable PWA from the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/), and a local single-file HTML edition. The local edition continues to run from one HTML file. It supports document creation, Markdown preview, file saving, exporting to HTML or PDF, saving as a standalone HTML file, and integration with browser-based AI tools. MD//WORKS works seamlessly across different OSs and browsers, but we've put together a [special manual](https://github.com/HKJPN/markdown-editor/blob/main/docs/ipad-manual.md) for iPad users to help with things like handwriting and AI.
+MD//WORKS Editor is a browser-based Markdown editor available in foure forms: a regular web page, an installable PWA from the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/), [Window Store Apps](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)and a local single-file HTML edition. The local edition continues to run from one HTML file. It supports document creation, Markdown preview, file saving, exporting to HTML or PDF, saving as a standalone HTML file, and integration with browser-based AI tools. MD//WORKS works seamlessly across different OSs and browsers, but we've put together a [special manual](https://github.com/HKJPN/markdown-editor/blob/main/docs/ipad-manual.md) for iPad users to help with things like handwriting and AI.
 
 ## Image Annotations Used in This Manual
 
