@@ -34,17 +34,17 @@ MD//WORKS Editor は、以下のiPad環境で快適にご利用いただけま�
 
 * **対応機種（目安）**
   * iPad（第6世代以降）
+  * iPad Air(第3世代以降)
   * iPad Pro（第1世代以降）
   * iPad mini（第5世代以降）
-  * ※上記と同等以降の性能を持つiPad Airなどでもご利用いただけます。
-
+ 
 * **推奨ブラウザ**
   * Safari、Chrome、Brave、Firefox
   * ※安全のため、最新のセキュリティアップデートが適用されたiPadOSでお使いください。
 
 * **対応アクセサリー（任意）**
-  * Apple Pencil（または互換品）
   * 外付けキーボード（Magic Keyboardなど）
+  * Apple Pencil（または互換品）
   * マウス、トラックパッド
  
 > 💡 **複数タブでの同時編集について**
