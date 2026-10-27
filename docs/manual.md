@@ -28,7 +28,7 @@ MD//WORKS can be used in four distinct ways.
 1. **Installable PWA:** Open the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/) in a supported browser such as Chrome and use its install command (see below). This is a particularly recommended method if you want to integrate it with the OS and have it function like a native app, such as launching MD//WORKS by double-clicking a file.
 2. **Regular web page:** Open the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/) in a normal browser tab. No installation is required.
 3. **Local single-file HTML edition:** Open a downloaded `index.html` file in a browser. This is the edition that runs from one HTML file and is recommended if you want to continue using it even when offline.
-4. **Microsoft Store App:** This method involves installing from the Microsoft Store and is recommended for beginners.　👉[![Microsoft Store](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)<br>
+4. **Microsoft Store App:** This method involves installing from the Microsoft Store and is recommended for beginners.<br>👉[![Microsoft Store](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)<br>
 
 > ⚠️ Limitation for Microsoft Store users:
 > Since the Microsoft Store app runs as an Edge-based PWA, advanced AI tools like Gemini in Chrome are unavailable. For the complete AI-assisted writing experience, please access the Web Version via Google Chrome or Brave.
