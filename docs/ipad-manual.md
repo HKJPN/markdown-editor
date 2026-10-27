@@ -34,17 +34,17 @@ MD//WORKS Editor works comfortably in the following iPad environments:
 
 * **Supported Devices (Guideline)**
   * iPad (6th generation or later)
+  * iPad Air (3rd generation or later)
   * iPad Pro (1st generation or later)
   * iPad mini (5th generation or later)
-  * *Compatible with iPad Air and other models with equivalent or better performance.*
 
 * **Recommended Browsers**
   * Safari, Chrome, Brave, Firefox
   * *For security, please use an iPadOS with the latest security updates applied.*
 
 * **Supported Accessories (Optional)**
-  * Apple Pencil (or compatible stylus)
   * External Keyboard (Magic Keyboard, etc.)
+  * Apple Pencil (or compatible stylus)
   * Mouse or Trackpad
  
 > 💡 **Editing multiple documents in browser tabs**
