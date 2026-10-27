@@ -26,10 +26,10 @@ Shiftキーを含むショートカットは、Mac側では **⇧** を使って
 
 MD//WORKSには、次の4つの利用形態があります。
 
-1. **通常のWebページ:** [MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)をブラウザタブで開きます。インストールは不要です。
-2. **インストール可能なPWA:** [MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)を対応ブラウザで開き、ブラウザのインストール項目から追加します。
-3. **ローカル単体HTML版:** ダウンロードした `index.html` などをブラウザで開きます。1つのHTMLファイルで利用できる形態です。
-4. **Windows版:** マイクロソフトストアからインストールする[![Microsoft Store](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)
+1. **インストール可能なPWA:** [MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)を対応ブラウザで開き、ブラウザのインストール項目から追加します（詳細インストール方法は下へ)
+3. **通常のWebページ:** [MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)をブラウザタブで開きます。インストールは不要です。
+4. **ローカル単体HTML版:** ダウンロードした `index.html` などをブラウザで開きます。1つのHTMLファイルで利用できる形態です。
+5. **Windows版:** マイクロソフトストアからインストールする[![Microsoft Store](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)
 
 > ⚠️ **Microsoft Store版をご利用の方へ（制限事項）：**
 > Microsoft StoreアプリはEdgeベースのPWAとして動作するため、高度なAI支援執筆が利用できない場合があります。AI執筆支援を重視する場合は、ChromeやBrave等のブラウザを用いて1-3の方法がおすすめです。
