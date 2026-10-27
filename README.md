@@ -1,5 +1,4 @@
-# 🚀 MD//WORKS v1.6.7 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)![No Tracking](https://img.shields.io/badge/tracking-none-green)
-![Offline First](https://img.shields.io/badge/offline--first-lightgrey)
+# 🚀 MD//WORKS v1.6.7 —Standalone Markdown Editor for AI-assisted writing![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 **Languages:**  [🇯🇵 日本語](README-ja.md) or [🇺🇸 English](README.md) <br>
 
 
