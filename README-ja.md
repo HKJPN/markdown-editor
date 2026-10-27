@@ -1,4 +1,9 @@
-# 🚀 MD//WORKS v1.6.7 — AIアシスタント融合スタンドアロン Markdown エディタ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# 🚀 MD//WORKS v1.6.7 — AIアシスタント融合スタンドアロン Markdown エディタ
+
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+![No Tracking](https://img.shields.io/badge/tracking-none-green)
+![Offline First](https://img.shields.io/badge/offline--first-lightgrey)
+
 **言語選択:** [🇺🇸 English](README.md) 又は [🇯🇵 日本語](README-ja.md)
 
 **完全ローカルでインストール不要、なのにAI対応**  
