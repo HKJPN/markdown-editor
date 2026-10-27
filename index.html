@@ -4679,6 +4679,15 @@ function updateVisualViewportLayout() {
   if (sizeChanged) scheduleViewportRefresh('visual-viewport');
 }
 
+// Re-read during the keyboard animation even if WebKit publishes the final
+// geometry without another event. All times are relative to the first event;
+// incoming events never move an active cycle's deadline.
+const VISUAL_VIEWPORT_RESAMPLE_TIMES_MS = [100, 200, 350, 500, 700, 900];
+const VISUAL_VIEWPORT_RESAMPLE_LIMIT_MS = 1000;
+const VISUAL_VIEWPORT_EVENT_GAP_MS = 250;
+let visualViewportResample = null;
+let lastVisualViewportEventAt = -Infinity;
+
 function scheduleVisualViewportLayout() {
   if (visualViewportRaf !== null) return;
   visualViewportRaf = requestAnimationFrame(() => {
@@ -4687,11 +4696,59 @@ function scheduleVisualViewportLayout() {
   });
 }
 
+function cancelVisualViewportResampling() {
+  if (visualViewportResample) clearTimeout(visualViewportResample.timer);
+  visualViewportResample = null;
+  lastVisualViewportEventAt = -Infinity;
+}
+
+function handleVisualViewportChange() {
+  if (!window.visualViewport || document.hidden) return;
+  // Preserve next-frame tracking for every event, independently of retries.
+  scheduleVisualViewportLayout();
+  const now = performance.now();
+  const newBurst = now - lastVisualViewportEventAt >= VISUAL_VIEWPORT_EVENT_GAP_MS;
+  lastVisualViewportEventAt = now;
+  // A continuing event stream must not start another cycle after the limit.
+  // A later event after a quiet interval can start a fresh cycle.
+  if (visualViewportResample || !newBurst) return;
+
+  const cycle = { startedAt: now, index: 0, timer: null };
+  visualViewportResample = cycle;
+  const sample = () => {
+    if (visualViewportResample !== cycle) return;
+    cycle.timer = null;
+    const elapsed = performance.now() - cycle.startedAt;
+    if (elapsed > VISUAL_VIEWPORT_RESAMPLE_LIMIT_MS || !window.visualViewport || document.hidden) {
+      visualViewportResample = null;
+      return;
+    }
+    // This applies the same scale guard, change detection and scroll sync as
+    // the immediate path. It does not start or extend a resampling cycle.
+    updateVisualViewportLayout();
+    cycle.index++;
+    // Skip missed slots instead of issuing a burst of catch-up reads if the
+    // main thread was busy. A suspended page never replays an old cycle.
+    while (VISUAL_VIEWPORT_RESAMPLE_TIMES_MS[cycle.index] <= elapsed) cycle.index++;
+    if (cycle.index >= VISUAL_VIEWPORT_RESAMPLE_TIMES_MS.length) {
+      visualViewportResample = null;
+      return;
+    }
+    cycle.timer = setTimeout(sample, Math.max(0,
+      cycle.startedAt + VISUAL_VIEWPORT_RESAMPLE_TIMES_MS[cycle.index] - performance.now()));
+  };
+  cycle.timer = setTimeout(sample, VISUAL_VIEWPORT_RESAMPLE_TIMES_MS[0]);
+}
+
 function setupVisualViewport() {
   if (visualViewportInitialized || !window.visualViewport) return;
   visualViewportInitialized = true;
-  window.visualViewport.addEventListener('resize', scheduleVisualViewportLayout, { passive: true });
-  window.visualViewport.addEventListener('scroll', scheduleVisualViewportLayout, { passive: true });
+  window.visualViewport.addEventListener('resize', handleVisualViewportChange, { passive: true });
+  window.visualViewport.addEventListener('scroll', handleVisualViewportChange, { passive: true });
+  window.addEventListener('pagehide', cancelVisualViewportResampling);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) cancelVisualViewportResampling();
+  });
   // IME may still own the selection when a keyboard resize arrives. Defer only
   // the scroll correction until composition ends; never refocus or reselect.
   editor.addEventListener('compositionend', () => {
