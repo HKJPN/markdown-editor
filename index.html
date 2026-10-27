@@ -193,6 +193,13 @@ body{
     radial-gradient(circle at 100% 0%, rgba(90,215,160,.06), transparent 18%),
     linear-gradient(180deg, #0b0e15 0%, #090b11 100%);
 }
+/* A fixed box uses layout-viewport coordinates; offsetTop is already relative
+   to that viewport, so window.scrollY must not be added here. No transform:
+   existing fixed dialogs retain their original containing block. */
+body.visual-viewport-layout{
+  position:fixed;left:0;right:0;top:var(--app-viewport-top,0px);
+  height:var(--app-viewport-height,100%);min-height:0;
+}
 body::before{
   content:"";
   position:fixed;
@@ -438,10 +445,10 @@ body #filename-display.locked:focus{
 /* #endregion */
 
 /* #region [CSS-05] EDITOR & BACKDROP ENGINE */
-#main-container{position:relative;display:flex;flex:1;overflow:hidden}
+#main-container{position:relative;display:flex;flex:1;min-height:0;overflow:hidden}
 
 #editor-wrap{
-  flex:1;min-width:260px;position:relative;display:flex;
+  flex:1;min-width:260px;min-height:0;position:relative;display:flex;
   background:
     linear-gradient(180deg, rgba(255,255,255,.012), transparent 18%),
     linear-gradient(180deg, rgba(12,15,22,.82), rgba(10,13,19,.76));
@@ -596,7 +603,7 @@ body.show-line-numbers #editor-backdrop{
 }
 
 #editor{
-  position:absolute;inset:0;z-index:2;resize:none;background:transparent;
+  position:absolute;inset:0;z-index:2;resize:none;background:transparent;overflow-y:auto;
   color:#f2f5ff;caret-color:var(--accent2);
 }
 #editor::placeholder{color:#7482a1}
@@ -1515,6 +1522,7 @@ body.ipad-safari-fullscreen #menubar {
   }
   #menubar,#titlebar,#toolbar,#statusbar,#editor-wrap,#splitter,#spell-panel,#toast,#sr-panel,#outline-panel,#history-modal,#rn-modal,#doc-modal,#update-modal,#export-modal,#print-modal{display:none!important}
   body{display:block!important;color:#000!important}
+  body.visual-viewport-layout{position:static!important;top:auto!important;left:auto!important;right:auto!important}
   #main-container{
     display:block!important;
     height:auto!important;
@@ -1630,7 +1638,7 @@ body.theme-paper #deep-log-actions,body.theme-warm #deep-log-actions{background:
 
 /* Zen Mode (Focus Mode) */
 body.zen-mode #menubar, body.zen-mode #titlebar, body.zen-mode #toolbar, body.zen-mode #statusbar, body.zen-mode #splitter, body.zen-mode #preview-wrap, body.zen-mode #deep-log-panel { display: none !important; }
-body.zen-mode #main-container { height: 100vh; }
+body.zen-mode #main-container { height: 100%; }
 body.zen-mode #editor-wrap { max-width: 840px; margin: 0 auto; border-left: 1px solid rgba(255,255,255,.05); border-right: 1px solid rgba(255,255,255,.05); }
 
 #zen-exit-btn {
@@ -2259,6 +2267,7 @@ const T = {
   paste:       isJa ? '貼り付け' : 'Paste',
   selectAll:   isJa ? 'すべて選択' : 'Select All',
   errPaste:    isJa ? 'メニューからの貼り付けはブロックされました。Ctrl+V を使用してください。' : 'Pasting from menu is blocked. Please use Ctrl+V.',
+  editFailed:  isJa ? '編集操作を実行できませんでした。' : 'The edit could not be completed.',
 
   menuOutline: isJa ? 'アウトライン表示' : 'Outline',
   menuDeepEdit: isJa ? 'Deep編集モード' : 'Deep Edit Mode',
@@ -2394,6 +2403,9 @@ const T = {
   printModalClose: isJa ? '閉じる' : 'Close',
   confirmNew:  isJa ? '現在の内容を履歴に保存して、空白の新規ファイルを作成しますか？' : 'Save the current draft to history and create a blank new file?',
   newCreated: isJa ? '空白の新規ファイルを作成しました' : 'Blank new file created',
+  confirmLargePaste: isJa
+    ? '10,000文字以上の貼り付けは、元に戻す（Undo）ができません。また、貼り付け前の編集も元に戻せなくなる場合があります。貼り付けを続けますか？'
+    : 'Pasting 10,000 or more characters cannot be undone. You may also be unable to undo edits made before the paste. Continue pasting?',
   processingPasteToast: isJa ? '大きなテキストを処理中...' : 'Processing large paste...',
   processingPasteStatus: isJa ? 'Processing paste...' : 'Processing paste...',
   loadingDroppedImages: isJa
@@ -4559,6 +4571,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   syncIPadSafariFullscreenClass();
   renderFullscreenMenuCheck();
   setupLayoutResizeObserver();
+  setupVisualViewport();
   syncFilenameInputState();
   updateBrowserTabTitle();
   maybeShowReleaseNotes(); // 起動時の復元・初期描画後に、このバージョン未表示なら表示
@@ -4584,6 +4597,108 @@ let viewportRefreshTimer = null;
 let viewportRefreshRaf = null;
 let layoutObserver = null;
 let lastObservedMainSize = { width: 0, height: 0 };
+let visualViewportRaf = null;
+let visualViewportInitialized = false;
+let lastVisualViewportBounds = null;
+let viewportCaretAdjustmentPending = false;
+
+function syncEditorBackdropScroll() {
+  backdrop.scrollTop = editor.scrollTop;
+  backdrop.scrollLeft = editor.scrollLeft;
+}
+
+function keepEditorCaretVisibleAfterResize() {
+  if (!viewportCaretAdjustmentPending || isEditorComposing) return;
+  viewportCaretAdjustmentPending = false;
+  if (document.activeElement !== editor || editor.clientHeight <= 0) return;
+
+  // Measure a plain-text mirror, not the decorated backdrop. Search marks,
+  // invisible characters and line numbers must not affect the caret position.
+  const style = getComputedStyle(editor);
+  const mirror = document.createElement('div');
+  mirror.setAttribute('aria-hidden', 'true');
+  for (const property of [
+    'boxSizing', 'fontFamily', 'fontSize', 'fontWeight', 'fontStyle',
+    'fontVariant', 'fontFeatureSettings', 'fontKerning', 'lineHeight',
+    'letterSpacing', 'wordSpacing', 'textIndent', 'textTransform', 'tabSize',
+    'whiteSpace', 'wordBreak', 'overflowWrap', 'direction',
+    'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'
+  ]) mirror.style[property] = style[property];
+  // clientWidth excludes a desktop scrollbar and includes the editor padding.
+  mirror.style.cssText += `;position:fixed;left:-100000px;top:0;visibility:hidden;pointer-events:none;box-sizing:border-box;width:${editor.clientWidth}px;`;
+  const caretOffset = editor.selectionDirection === 'backward' ? editor.selectionStart : editor.selectionEnd;
+  mirror.textContent = editor.value.slice(0, caretOffset);
+  const marker = document.createElement('span');
+  marker.textContent = editor.value.slice(caretOffset) || '\u200b';
+  mirror.appendChild(marker);
+  document.body.appendChild(mirror);
+  try {
+    const caretRect = marker.getClientRects()[0];
+    if (!caretRect) return;
+    const caretTop = caretRect.top - mirror.getBoundingClientRect().top;
+    const lineHeight = getEditorLineHeightPx();
+    const margin = Math.min(8, editor.clientHeight / 4);
+    const caretBottom = caretTop + lineHeight;
+    if (caretBottom > editor.scrollTop + editor.clientHeight - margin) {
+      editor.scrollTop = Math.max(0, caretBottom - editor.clientHeight + margin);
+    } else if (caretTop < editor.scrollTop + margin) {
+      editor.scrollTop = Math.max(0, caretTop - margin);
+    }
+  } finally {
+    mirror.remove();
+    syncEditorBackdropScroll();
+  }
+}
+
+function updateVisualViewportLayout() {
+  const viewport = window.visualViewport;
+  if (!viewport) return;
+  // Freeze the last unzoomed app box during pinch zoom. Resizing/repositioning
+  // it to the magnified viewport would reflow text and fight normal panning.
+  if (!Number.isFinite(viewport.scale) || Math.abs(viewport.scale - 1) > 0.01) return;
+  const height = viewport.height;
+  const top = Math.max(0, viewport.offsetTop);
+  const width = viewport.width;
+  if (![height, top, width].every(Number.isFinite) || height <= 0 || width <= 0) return;
+  const previous = lastVisualViewportBounds;
+  const sizeChanged = !previous || Math.abs(height - previous.height) >= 0.5 || Math.abs(width - previous.width) >= 0.5;
+  const topChanged = !previous || Math.abs(top - previous.top) >= 0.5;
+  if (!sizeChanged && !topChanged) return;
+
+  const previousEditorHeight = editor.clientHeight;
+  document.body.style.setProperty('--app-viewport-height', `${height}px`);
+  document.body.style.setProperty('--app-viewport-top', `${top}px`);
+  document.body.classList.add('visual-viewport-layout');
+  lastVisualViewportBounds = { height, top, width };
+  if (editor.clientHeight < previousEditorHeight || (previous && Math.abs(width - previous.width) >= 0.5)) {
+    viewportCaretAdjustmentPending = true;
+  }
+  keepEditorCaretVisibleAfterResize();
+  syncEditorBackdropScroll();
+  // Position-only panning does not require rebuilding preview/backdrop HTML.
+  if (sizeChanged) scheduleViewportRefresh('visual-viewport');
+}
+
+function scheduleVisualViewportLayout() {
+  if (visualViewportRaf !== null) return;
+  visualViewportRaf = requestAnimationFrame(() => {
+    visualViewportRaf = null;
+    updateVisualViewportLayout();
+  });
+}
+
+function setupVisualViewport() {
+  if (visualViewportInitialized || !window.visualViewport) return;
+  visualViewportInitialized = true;
+  window.visualViewport.addEventListener('resize', scheduleVisualViewportLayout, { passive: true });
+  window.visualViewport.addEventListener('scroll', scheduleVisualViewportLayout, { passive: true });
+  // IME may still own the selection when a keyboard resize arrives. Defer only
+  // the scroll correction until composition ends; never refocus or reselect.
+  editor.addEventListener('compositionend', () => {
+    if (viewportCaretAdjustmentPending) scheduleViewportRefresh('viewport-composition-end');
+  });
+  updateVisualViewportLayout();
+}
 
 function closeMenus() {
   document.querySelectorAll('.menu-dropdown').forEach(d => d.classList.remove('open'));
@@ -4770,8 +4885,8 @@ function refreshLayoutAfterViewportChange(reason = '') {
   }
   refreshBackdrop();
   if (outlineOpen) renderOutline();
-  backdrop.scrollTop = editor.scrollTop;
-  backdrop.scrollLeft = editor.scrollLeft;
+  keepEditorCaretVisibleAfterResize();
+  syncEditorBackdropScroll();
 }
 
 function scheduleViewportRefresh(reason = '') {
@@ -4823,6 +4938,7 @@ function handleFullscreenLayoutChange() {
 }
 
 window.addEventListener('resize', () => {
+  scheduleVisualViewportLayout();
   scheduleViewportRefresh('resize');
 });
 
@@ -5427,10 +5543,12 @@ function getSelectedLineRange() {
 
 function indentSelectedLines() {
   const { value, lineStart, lineEnd } = getSelectedLineRange();
+  const direction = editor.selectionDirection;
   const block = value.slice(lineStart, lineEnd);
   const nextBlock = block.split('\n').map(line => `\t${line}`).join('\n');
-  editor.value = value.slice(0, lineStart) + nextBlock + value.slice(lineEnd);
-  editor.setSelectionRange(lineStart, lineStart + nextBlock.length);
+  if (!replaceEditorText(lineStart, lineEnd, nextBlock)) return false;
+  editor.setSelectionRange(lineStart, lineStart + nextBlock.length, direction);
+  return true;
 }
 
 function countOutdentChars(line) {
@@ -5445,41 +5563,37 @@ function outdentLine(line) {
 
 function outdentSelectedLines() {
   const { value, selectionStart, selectionEnd, lineStart, lineEnd } = getSelectedLineRange();
+  const direction = editor.selectionDirection;
   const block = value.slice(lineStart, lineEnd);
   const nextBlock = block.split('\n').map(outdentLine).join('\n');
-  editor.value = value.slice(0, lineStart) + nextBlock + value.slice(lineEnd);
+  if (!replaceEditorText(lineStart, lineEnd, nextBlock)) return false;
 
   if (selectionStart === selectionEnd) {
     const removedBeforeCursor = Math.min(countOutdentChars(block), Math.max(0, selectionStart - lineStart));
     const nextCursor = selectionStart - removedBeforeCursor;
     editor.setSelectionRange(nextCursor, nextCursor);
   } else {
-    editor.setSelectionRange(lineStart, lineStart + nextBlock.length);
+    editor.setSelectionRange(lineStart, lineStart + nextBlock.length, direction);
   }
+  return true;
 }
 
 function indentOrInsertTab() {
   const { selectionStart, selectionEnd } = editor;
   if (selectionStart === selectionEnd) {
-    editor.setRangeText('\t', selectionStart, selectionEnd, 'end');
-    return;
+    return replaceEditorText(selectionStart, selectionEnd, '\t');
   }
 
-  indentSelectedLines();
+  return indentSelectedLines();
 }
 
 function handleEditorTabKey(e) {
   if (e.key !== 'Tab' || e.isComposing || e.keyCode === 229 || isEditorComposing) return;
 
   e.preventDefault();
-
-  if (e.shiftKey) {
-    outdentSelectedLines();
-  } else {
-    indentOrInsertTab();
-  }
-
-  refreshAfterEditorTabChange();
+  if (!guardEditorCommand()) return;
+  const changed = e.shiftKey ? outdentSelectedLines() : indentOrInsertTab();
+  if (changed) refreshAfterEditorTabChange();
 }
 
 editor.addEventListener('keydown', handleEditorTabKey);
@@ -5593,6 +5707,7 @@ function scrollToSearchMatch(match) {
 
 const PASTE_SET_RANGE_TEXT_THRESHOLD = 10000;
 let suppressInputHandling = false;
+let editorTextEditDepth = 0;
 let pasteSuppressSeq = 0;
 let tocSuppressSeq = 0;
 let replaceAllSuppressSeq = 0;
@@ -5709,7 +5824,7 @@ function deferPasteTask(fn, preferIdle) {
 }
 
 async function handlePlainTextPaste(text) {
-  if (!text) return;
+  if (!text || isEditorComposing || !guardEditorCommand()) return;
 
   const normalizedText = String(text).normalize('NFC');
   const pasteLength = normalizedText.length;
@@ -5721,6 +5836,8 @@ async function handlePlainTextPaste(text) {
   const nextLength = currentLength - (end - start) + pasteLength;
 
   const useSetRangeText = pasteLength >= PASTE_SET_RANGE_TEXT_THRESHOLD;
+  if (!useSetRangeText && editor.value.slice(start, end) === normalizedText) return;
+  if (useSetRangeText && !confirm(T.confirmLargePaste)) return;
   const deferUpdate = shouldDeferPasteUpdate(pasteLength, nextLength);
   const showPasteLoader = shouldShowPasteLoader(pasteLength, nextLength);
 
@@ -5739,14 +5856,7 @@ async function handlePlainTextPaste(text) {
     if (useSetRangeText) {
       editor.setRangeText(normalizedText, start, end, 'end');
     } else {
-      const insertTextSupported = document.queryCommandSupported &&
-        document.queryCommandSupported('insertText');
-
-      if (insertTextSupported) {
-        document.execCommand('insertText', false, normalizedText);
-      } else {
-        editor.setRangeText(normalizedText, start, end, 'end');
-      }
+      if (!replaceEditorText(start, end, normalizedText)) return;
     }
 
     markDirty();
@@ -5775,10 +5885,16 @@ async function handlePlainTextPaste(text) {
     autoSaveTimeout = setTimeout(triggerAutoSave, 1500);
 
     if (deepEditEnabled && editor.value !== beforeValueReference) {
+      if (!useSetRangeText) flushDeepInputBatch();
       recordDeepEditEvent({ type:'paste', summary:isJa?'文字列を貼り付け':'Text pasted', heading:getDeepHeadingAtOffset(start), charDelta:normalizedText.length - (end - start), afterSnippet:normalizedText, meta:{ insertedCharacters:normalizedText.length, replacedCharacters:end - start, containsEmbeddedData:/data:[^;,]+;base64,/i.test(normalizedText), previousLine:deepPasteContext.previousLine, nextLine:deepPasteContext.nextLine, contextBasis:'before-edit' } });
     }
   } finally {
     endDeepExplicitOperation();
+    if (editor.value === beforeValueReference && suppressSeq === pasteSuppressSeq) suppressInputHandling = false;
+    if (showPasteLoader && !tasks.length) {
+      hideLoader();
+      renderStorageBadge();
+    }
     // Some browsers dispatch execCommand's input event after the next task.
     setTimeout(() => {
       const release = () => {
@@ -5843,7 +5959,7 @@ editor.addEventListener('input', event => {
 
   collectDeepGenericInput(event);
 
-  if (suppressInputHandling && !isHistoryUndo) return;
+  if ((suppressInputHandling || editorTextEditDepth > 0) && !isHistoryUndo) return;
 
   if (pendingReplaceAllUndoRestore && !isHistoryUndo && !suppressInputHandling) {
     clearPendingReplaceAllUndoRestore();
@@ -6496,12 +6612,14 @@ function getSelectedBlockInfo() {
 
 function replaceSelectedLines(transformer) {
   const { lineStart, lineEnd, lines } = getSelectedBlockInfo();
+  const direction = editor.selectionDirection;
   const nextLines = transformer(lines.slice());
   const nextBlock = nextLines.join('\n');
-  replaceEditorText(lineStart, lineEnd, nextBlock);
-  editor.setSelectionRange(lineStart, lineStart + nextBlock.length);
+  if (!replaceEditorText(lineStart, lineEnd, nextBlock)) return;
+  editor.setSelectionRange(lineStart, lineStart + nextBlock.length, direction);
   update();
   markDirty();
+  if (spellEnabled) runSpellCheck();
   if (shouldRefreshSearchAfterEdit()) performSearch(false);
   triggerAutoSave();
   editor.focus();
@@ -6842,13 +6960,12 @@ document.getElementById('sr-btn-replace-all').onclick = async () => {
   if (srMatches.length === 0) return;
   const count = srMatches.length;
   if (!confirm(T.confirmRepAll(count))) return;
-  if (deepEditEnabled) {
-    flushDeepInputBatch();
-  }
   const regex = buildRegex(true);
   if (!regex) return;
   const repStr = getReplacementString();
   const oldFullText = editor.value;
+  const newFullText = oldFullText.replace(regex, repStr);
+  if (newFullText === oldFullText) return;
   const scrollTop = editor.scrollTop;
   const scrollLeft = editor.scrollLeft;
   const replaceAllUndoSnapshot = {
@@ -6878,7 +6995,6 @@ document.getElementById('sr-btn-replace-all').onclick = async () => {
   try {
     await yieldToBrowserPaint();
 
-    const newFullText = oldFullText.replace(regex, repStr);
     replaceAllDeepSnapshot = {
       searchText: srInput.value,
       replacementText: repStr,
@@ -6894,18 +7010,12 @@ document.getElementById('sr-btn-replace-all').onclick = async () => {
     suppressInputHandling = true;
 
     try {
-      editor.focus();
-      editor.setSelectionRange(0, oldFullText.length);
-      const before = editor.value;
       replaceAttempted = true;
-      document.execCommand('insertText', false, newFullText);
-
-      if (editor.value === before && newFullText !== oldFullText) {
-        editor.setRangeText(newFullText, 0, oldFullText.length, 'end');
-      }
+      if (!replaceEditorText(0, oldFullText.length, newFullText, { notifyFailure: false })) throw new Error(T.replaceAllFailed);
 
       replaceAllCommitted = oldFullText !== newFullText && editor.value === newFullText;
       if (replaceAllCommitted && deepEditEnabled && deepEditSession && !replaceAllDeepRecorded && replaceAllDeepSnapshot) {
+        flushDeepInputBatch();
         recordDeepEditEvent({
           type:'replace-all',
           source:'user',
@@ -6998,6 +7108,7 @@ document.getElementById('sr-btn-replace-all').onclick = async () => {
     restoreSearchReplaceControls();
     isReplaceAllRunning = false;
     endDeepExplicitOperation();
+    if (!replaceAllCommitted && suppressSeq === replaceAllSuppressSeq) suppressInputHandling = false;
   }
 
   if (completed) {
@@ -7395,15 +7506,39 @@ function buildTocMarkdown(headings, lineEnding = '\n') {
   ].join(lineEnding);
 }
 
-function replaceEditorText(start, end, replacement) {
-  if (!guardEditorCommand()) return;
-  editor.focus();
-  editor.setSelectionRange(start, end);
+function replaceEditorText(start, end, replacement, { notifyFailure = true } = {}) {
+  if (!guardEditorCommand()) return false;
   const before = editor.value;
-  document.execCommand('insertText', false, replacement);
-  if (editor.value === before && (start !== end || replacement)) {
-    editor.setRangeText(replacement, start, end, 'end');
+  const expected = before.slice(0, start) + replacement + before.slice(end);
+  if (expected === before) return false;
+  const selection = { start: editor.selectionStart, end: editor.selectionEnd, direction: editor.selectionDirection };
+  const scrollTop = editor.scrollTop;
+  const scrollLeft = editor.scrollLeft;
+  editorTextEditDepth += 1;
+  try {
+    if (document.queryCommandSupported && !document.queryCommandSupported('insertText')) throw new Error('insertText unavailable');
+    editor.focus({ preventScroll: true });
+    editor.setSelectionRange(start, end);
+    // Native editing preserves undo. Never retry with value/setRangeText: those detach earlier edits from the current text.
+    document.execCommand('insertText', false, replacement);
+  } catch (error) {
+    // A command can return false or throw after changing text; judge the actual result below.
+  } finally {
+    editorTextEditDepth -= 1;
+    if (editor.value === before) editor.setSelectionRange(selection.start, selection.end, selection.direction);
+    editor.scrollTop = scrollTop;
+    editor.scrollLeft = scrollLeft;
+    backdrop.scrollTop = scrollTop;
+    backdrop.scrollLeft = scrollLeft;
   }
+  if (editor.value === expected) {
+    clearPendingReplaceAllUndoRestore();
+    return true;
+  }
+  // If a browser partially applied a command, keep that change undoable and visibly unsaved; do not retry it.
+  if (editor.value !== before) refreshAfterEditorTabChange();
+  if (notifyFailure) toast(T.editFailed);
+  return false;
 }
 
 async function insertOrUpdateToc() {
@@ -7463,17 +7598,20 @@ async function insertOrUpdateToc() {
     }
 
     let suppressSeq = 0;
+    let tocCommitted = false;
     if (isLargeToc) {
       suppressSeq = ++tocSuppressSeq;
       suppressInputHandling = true;
     }
 
     try {
-      replaceEditorText(start, end, replacement);
+      tocCommitted = replaceEditorText(start, end, replacement);
+      if (!tocCommitted) return;
       const cursor = start + replacement.length;
       editor.setSelectionRange(cursor, cursor);
     } finally {
       if (isLargeToc) {
+        if (!tocCommitted && suppressSeq === tocSuppressSeq) suppressInputHandling = false;
         // Some browsers dispatch execCommand's input event after the next task.
         setTimeout(() => {
           const release = () => {
@@ -7511,6 +7649,7 @@ async function insertOrUpdateToc() {
     }
 
     if (deepEditEnabled && editor.value !== beforeValueReference) {
+      flushDeepInputBatch();
       recordDeepEditEvent({ type:'toc-update', summary:isJa?'目次を挿入または更新':'Table of contents inserted or updated', charDelta:editor.value.length - beforeLength, meta:{ headingCount:headings.length } });
     }
     toast(existing ? T.tocUpdated : T.tocInserted);
@@ -10351,13 +10490,16 @@ async function clearVisibleHistory() {
 function formatDoc() {
   if (!guardEditorCommand()) return;
   const originalText = editor.value;
+  const formattedText = originalText.replace(/\n{3,}/g, '\n\n').split('\n').map(l => l.trimEnd()).join('\n');
+  if (formattedText === originalText) return;
+  const selection = { start: editor.selectionStart, end: editor.selectionEnd, direction: editor.selectionDirection };
   beginDeepExplicitOperation();
   try {
-    const formattedText = originalText.replace(/\n{3,}/g, '\n\n').split('\n').map(l => l.trimEnd()).join('\n');
-    editor.value = formattedText;
-    update();
-    if (shouldRefreshSearchAfterEdit()) performSearch(false);
+    if (!replaceEditorText(0, originalText.length, formattedText)) return;
+    editor.setSelectionRange(Math.min(selection.start, formattedText.length), Math.min(selection.end, formattedText.length), selection.direction);
+    refreshAfterEditorTabChange();
     if (deepEditEnabled && formattedText !== originalText) {
+      flushDeepInputBatch();
       recordDeepEditEvent({ type:'format-markdown', summary:isJa?'Markdownを整形':'Format Markdown', charDelta:formattedText.length - originalText.length, meta:{ beforeLength:originalText.length, afterLength:formattedText.length } });
     }
     toast(T.formatDone);
