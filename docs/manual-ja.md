@@ -35,6 +35,7 @@ MD//WORKSには、次の4つの利用形態があります。
 > Microsoft StoreアプリはEdgeベースのPWAとして動作するため、高度なAI支援執筆が利用できない場合があります。AI執筆支援を重視する場合は、ChromeやBrave等のブラウザを用いて1-3の方法がおすすめです。
 
 #### 1-1-1. PWAとしてインストールする方法（Chromeの場合<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">）
+ファイルのダウブルクリックで、MD//WORKSを起動するなど、OSに融合してネイティブアプリのように機能します。最もおすすめの使い方です。
 
 1. Chromeで[MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)を開きます。
 2. デスクトップ環境では、アドレスバー右側のインストールアイコンをタップすることで簡単にインストールできます。<br>
