@@ -26,7 +26,7 @@ Shiftキーを含むショートカットは、Mac側では **⇧** を使って
 
 MD//WORKSには、次の4つの利用形態があります。
 
-1. **インストール可能なPWA:** [MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)を対応ブラウザで開き、ブラウザのインストール項目から追加します（詳細インストール方法は下へ)
+1. **インストール可能なPWA:** [MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)を対応ブラウザで開き、ブラウザのインストール項目から追加します（詳細インストール方法は下へ)。ファイルのダウブルクリックで、MD//WORKSを起動するなど、OSに融合してネイティブアプリのように機能させたい場合は、特におすすめの使い方です。
 3. **通常のWebページ:** [MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)をブラウザタブで開きます。インストールは不要で、もっとも簡単に使い始めることができます。
 4. **ローカル単体HTML版:** ダウンロードした `index.html` などをブラウザで開きます。1つのHTMLファイルで利用できる形態です。
 5. **Windows版:** マイクロソフトストアからインストールする[![Microsoft Store](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)
@@ -35,7 +35,7 @@ MD//WORKSには、次の4つの利用形態があります。
 > Microsoft StoreアプリはEdgeベースのPWAとして動作するため、高度なAI支援執筆が利用できない場合があります。AI執筆支援を重視する場合は、ChromeやBrave等のブラウザを用いて1-3の方法がおすすめです。
 
 #### 1-1-1. PWAとしてインストールする方法（Chromeの場合<img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">）
-ファイルのダウブルクリックで、MD//WORKSを起動するなど、OSに融合してネイティブアプリのように機能します。最もおすすめの使い方です。
+
 
 1. Chromeで[MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)を開きます。
 2. デスクトップ環境では、アドレスバー右側のインストールアイコンをタップすることで簡単にインストールできます。<br>
