@@ -25,7 +25,7 @@ Depending on your browser or operating system, some shortcuts may conflict with 
 
 MD//WORKS can be used in four distinct ways.
 
-1. **Installable PWA:** Open the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/) in a supported browser such as Chrome and use its install command (see below). 
+1. **Installable PWA:** Open the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/) in a supported browser such as Chrome and use its install command (see below). This is a particularly recommended method if you want to integrate it with the OS and have it function like a native app, such as launching MD//WORKS by double-clicking a file.
 2. **Regular web page:** Open the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/) in a normal browser tab. No installation is required.
 3. **Local single-file HTML edition:** Open a downloaded `index.html` file in a browser. This is the edition that runs from one HTML file.
 4. **Microsoft Store App:** Install from the Microsoft Store👉[![Microsoft Store](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)<br>
