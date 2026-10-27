@@ -1,6 +1,6 @@
 # MD//WORKS Editor 取扱説明書
 
-MD//WORKS Editor はブラウザで動作するMarkdownエディタです。通常のWebページ、インストールできるPWA、ローカルで開く単体HTML版の3つの形態で利用できます。単体HTML版は、従来どおり1つのHTMLファイルで動作します。
+MD//WORKS Editor はブラウザで動作するMarkdownエディタです。通常のWebページ、インストールできるPWA、Windows Storeからインストールできるアプリ、ローカルで開く単体HTML版の4つの形態で利用できます。単体HTML版は、従来どおり1つのHTMLファイルで動作します。
 文書の作成、Markdownのプレビュー表示、ファイル保存、HTML/PDF書き出し、スタンドアロンHTMLとしての保存、ブラウザAIに対応しています。MD//WORKSは各OSやブラウザにそれぞれ対応するよう設計されていますが、iPadは手書きやAI対応を含め[専用の説明書](https://github.com/HKJPN/markdown-editor/blob/main/docs/ipad-manual-ja.md)をご用意しました。
 
 ## 本書の画像注釈について
