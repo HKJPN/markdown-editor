@@ -35,8 +35,6 @@ MD//WORKS can be used in four distinct ways.
 
 #### 1-1-1. Install MD//WORKS as a PWA in Chrome <img src="./images/GoogleIcon.jpg" alt="Image:icon" width="20">
 
-For installation instructions for other browsers, see [Appendix 5: Installing and Uninstalling MD//WORKS in Other Browsers](#appendix-5-other-browsers).
-
 1. Open the [MD//WORKS Editor website](https://hkjpn.github.io/markdown-editor/) in Chrome.
 
 2. On a desktop computer, click the **Install** icon on the right side of the address bar. <br>
@@ -50,6 +48,7 @@ For installation instructions for other browsers, see [Appendix 5: Installing an
 <br><img src="./images/icon2s.png" alt="Image:icon" width="90">
 
 > 💡 Creating an **Open as window** shortcut for a local HTML file is not the same as installing the PWA from the [MD//WORKS site](https://hkjpn.github.io/markdown-editor/). That shortcut does not provide the PWA's OS File Handler associations.
+> For installation instructions for other browsers, see [Appendix 5: Installing and Uninstalling MD//WORKS in Other Browsers](#appendix-5-other-browsers).
 
 #### 1-1-2. Uninstalling Chrome PWA
 
