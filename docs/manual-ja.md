@@ -29,7 +29,7 @@ MD//WORKSには、次の4つの利用形態があります。
 1. **インストール可能なPWA:** [MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)を対応ブラウザで開き、ブラウザのインストール項目から追加します（詳細インストール方法は下へ)。ファイルのダウブルクリックで、MD//WORKSを起動するなど、OSに融合してネイティブアプリのように機能させたい場合は、特におすすめの使い方です。
 3. **通常のWebページ:** [MD//WORKS Editorのサイト](https://hkjpn.github.io/markdown-editor/)をブラウザタブで開きます。インストールは不要で、もっとも簡単に使い始めることができます。
 4. **ローカル単体HTML版:** ダウンロードした `index.html` などをブラウザで開きます。1つのHTMLファイルで利用できる形態で、インターネットへの接続がオフラインでも継続して使いたい場合にお勧めです。
-6. **Windows版:** マイクロソフトストアからインストールする[![Microsoft Store](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)
+6. **Windows版:** マイクロソフトストアからインストールする方法で、初心者の方にお勧めの方法です。[![Microsoft Store](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare)　ただし、AI支援執筆に制限があります。
 
 > ⚠️ **Microsoft Store版をご利用の方へ（制限事項）：**
 > Microsoft StoreアプリはEdgeベースのPWAとして動作するため、高度なAI支援執筆が利用できない場合があります。AI執筆支援を重視する場合は、ChromeやBrave等のブラウザを用いて1-3の方法がおすすめです。
