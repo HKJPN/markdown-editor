@@ -28,7 +28,7 @@
 - [📱 iPad向け 取扱説明書](docs/ipad-manual-ja.md)
 - [🎓 Scientific Writing Guide](docs/scientific-writing-ja.md).
 - [∑ 数式記載の基本例](https://github.com/HKJPN/markdown-editor/blob/main/docs/BasicExamplesMathFormulasJ.md)
-- [🪄 正規表現　実例集](https://github.com/HKJPN/markdown-editor/blob/main/docs/regex-recipes-ja.md)
+- [🪄 正規表現　実例集](https://github.com/HKJPN/markdown-editor/blob/main/docs/regex-recipes-ja.md)<br>
 　
 MD//WORKSはMITライセンスの下、ご自身のウェブサイトで自由にホストしてのご利用も可能です。ただし、セキュリティとパフォーマンスの観点から、公開環境は常に最新バージョンに保つことを強く推奨します。
 
