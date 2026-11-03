@@ -21,7 +21,7 @@
 
 # インストール不要で即実行可能
 
-全ての端末で[ブラウザから直接実行](https://hkjpn.github.io/markdown-editor)することが可能です。もちろん、初心者の方にもなじみやすいようインストーラーも提供しています([![Microsoft Store](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare))
+全ての端末で[ブラウザから直接実行](https://hkjpn.github.io/markdown-editor)することが可能です。もちろん、初心者の方にもなじみやすいようインストーラーも([![Microsoft Store](https://img.shields.io/badge/Microsoft%20Store-Download-blue?logo=microsoft)](https://apps.microsoft.com/detail/9PG3HQ7XC50T?hl=ja&gl=JP&ocid=pdpshare))提供しています
 
 - [🚀 クイックスタート（はじめに）](docs/quick-start-ja.md)
 - [📖 取扱説明書(汎用)](docs/manual-ja.md)
