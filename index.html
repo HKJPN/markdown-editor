@@ -11,7 +11,13 @@
       sizes="180x180"
       href="images/apple-touch-icon-180.png">
 <script>
-  if (location.protocol === 'https:' && location.pathname.startsWith('/markdown-editor/')) {
+  if (
+    location.protocol === 'https:' &&
+    (
+      location.pathname.startsWith('/markdown-editor/') ||
+      location.pathname.startsWith('/publictest/')
+    )
+  ) {
     const manifestLink = document.createElement('link');
     manifestLink.rel = 'manifest';
     manifestLink.href = 'manifest.json';
@@ -4572,6 +4578,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderFullscreenMenuCheck();
   setupLayoutResizeObserver();
   setupVisualViewport();
+  ipadKeyboardTrial.setup();
   syncFilenameInputState();
   updateBrowserTabTitle();
   maybeShowReleaseNotes(); // 起動時の復元・初期描画後に、このバージョン未表示なら表示
@@ -4593,6 +4600,305 @@ document.querySelectorAll('.menu-trigger').forEach(btn => {
 document.addEventListener('click', closeMenus);
 document.addEventListener('fullscreenchange', handleFullscreenLayoutChange);
 document.addEventListener('webkitfullscreenchange', handleFullscreenLayoutChange);
+// Automatic iPad standalone trial.
+const ipadKeyboardTrial = (() => {
+  const build = 'ipad-keyboard-trial-20261113-2';
+  // Provisional device-trial values, not a measured keyboard dimension.
+  const extraDistance = 57, extraDelayMs = 300, pageMovementTolerance = 2;
+  let session = null;
+  let nextSessionId = 0;
+  let baseline = null;
+  let timer = null;
+  let frame = null;
+  let beforeInputTop = null;
+  let candidate = null;
+  let last = '対象外（キーボード表示待ち）';
+  let pageBaseline = null, extraTimer = null, extraPending = null;
+  const now = () => Math.round(performance.now()*10)/10;
+  const initialExtra = reason => ({ build, mode:'automatic', clock:'navigation-performance-ms',
+    distance:extraDistance, delayMs:extraDelayMs, pageMovementTolerance, restoreExpected:false,
+    sessionId:null, eligible:false, status:'not-applicable', reason,
+    originDetected:false, originAtMs:null, originBefore:null, originAfter:null,
+    scheduled:false, scheduledAtMs:null, executed:false, executedAtMs:null,
+    moved:null, fullDistance:null, cancelledAtMs:null, completedAtMs:null });
+  let extraResult = initialExtra('keyboard-not-detected');
+  function pagePosition() {
+    return { offsetTop:window.visualViewport?.offsetTop, scrollY:window.scrollY };
+  }
+  function observePageMovement() {
+    if (!session || session.done) return;
+    const raw = pagePosition(), start = session.pageBaseline;
+    const deltaTop = raw.offsetTop-start?.offsetTop, deltaY = raw.scrollY-start?.scrollY;
+    const moved = (Number.isFinite(deltaTop) && deltaTop>pageMovementTolerance) ||
+      (Number.isFinite(deltaY) && deltaY>pageMovementTolerance);
+    // Latch the opening transition only, through the normal correction. Later
+    // scroll events cannot re-arm a cancelled or completed additional move.
+    session.pageMoved ||= moved;
+    Object.assign(extraResult, { eligible:session.pageMoved, pageBaseline:{...start},
+      pageObserved:raw, pageDelta:{offsetTop:deltaTop,scrollY:deltaY} });
+    if (session.pageMoved) {
+      extraResult.status = 'waiting-origin'; extraResult.reason = null;
+    }
+    
+  }
+  function extraGeometry() {
+    return { ...bounds(), scale:window.visualViewport?.scale };
+  }
+  function sameExtraGeometry(initial) {
+    const box = extraGeometry();
+    return initial && Number.isFinite(box.scale) && Math.abs(box.scale-1)<=0.01 &&
+      ['height','width','rootHeight','rootWidth'].every(key=>
+        Number.isFinite(box[key]) && box[key]>0 && Number.isFinite(initial[key]) && Math.abs(box[key]-initial[key])<2);
+  }
+  function cancelExtra(reason) {
+    if (!extraPending && extraResult.status !== 'waiting-origin') return;
+    clearTimeout(extraTimer); extraTimer = null; extraPending = null;
+    Object.assign(extraResult, { status:'cancelled', reason, cancelledAtMs:now() });
+    
+  }
+  function checkExtraGeometry() {
+    if (extraPending && !sameExtraGeometry(extraPending.geometry)) cancelExtra('keyboard-or-layout-changed');
+  }
+  function onCorrection(original, actual) {
+    Object.assign(extraResult, { originDetected:actual<original && actual>=0,
+      originAtMs:now(), originBefore:original, originAfter:actual });
+    if (!extraResult.originDetected || !session.pageMoved) {
+      Object.assign(extraResult,{status:'not-applicable',reason:extraResult.originDetected ? 'page-not-moved' : 'normal-correction-not-moved'});
+       return;
+    }
+    const pending = { sessionId:session.id, top:actual, value:editor.value, start:editor.selectionStart,
+      end:editor.selectionEnd, direction:editor.selectionDirection, geometry:extraGeometry() };
+    extraPending = pending;
+    Object.assign(extraResult, { status:'pending', reason:null, scheduled:true, scheduledAtMs:now() });
+    
+    extraTimer = setTimeout(() => {
+      extraTimer = null;
+      if (extraPending !== pending) return;
+      
+      if (session?.id !== pending.sessionId) { cancelExtra('keyboard-session-changed'); return; }
+      if (document.hidden || !document.hasFocus() || document.activeElement !== editor) { cancelExtra('focus-or-visibility'); return; }
+      if (isEditorComposing) { cancelExtra('composition'); return; }
+      if (editor.value !== pending.value) { cancelExtra('document-content-changed'); return; }
+      if (editor.selectionStart !== pending.start || editor.selectionEnd !== pending.end ||
+          editor.selectionDirection !== pending.direction || editor.selectionStart !== editor.selectionEnd) { cancelExtra('selection-changed'); return; }
+      if (!sameExtraGeometry(pending.geometry)) { cancelExtra('keyboard-or-layout-changed'); return; }
+      const before = editor.scrollTop, maximum = editor.scrollHeight-editor.clientHeight;
+      if (!Number.isFinite(before) || !Number.isFinite(maximum) || before<0 || before>maximum || maximum<=0) {
+        cancelExtra('outside-scroll-range'); return;
+      }
+      if (before !== pending.top) { cancelExtra('scroll-position-changed'); return; }
+      if (before === 0) { cancelExtra('at-start'); return; }
+      const target = Math.max(0,before-extraDistance);
+      Object.assign(extraResult,{executed:true,executedAtMs:now(),before,target});
+      
+      // Drop the private candidate before the queued scroll notification. No
+      // restoration, synthetic event, focus change or position enforcement.
+      extraPending = null;
+      editor.scrollTop = target;
+      const after = editor.scrollTop, delta = after-before;
+      Object.assign(extraResult,{after,actualDelta:delta,actualDistance:-delta,moved:after<before && after>=0,
+        fullDistance:Math.abs(delta+extraDistance)<0.01,completedAtMs:now(),status:'completed',
+        reason:after<before && after>=0 ? null : 'no-actual-movement'});
+      
+    },extraDelayMs);
+  }
+  function results() {
+    // Only explicit public fields; the private candidate holds document text.
+    return { build, normal:last, additional:{...extraResult,
+      pageBaseline:extraResult.pageBaseline ? {...extraResult.pageBaseline} : null,
+      pageObserved:extraResult.pageObserved ? {...extraResult.pageObserved} : null,
+      pageDelta:extraResult.pageDelta ? {...extraResult.pageDelta} : null} };
+  }
+  function description() {
+    const x = extraResult;
+    const status = x.executed ? (x.moved ? `実行済み（${x.before}→${x.after}px）` : `設定したが実移動なし（${x.before}→${x.after}px）`) :
+      x.status==='pending' ? '予約済み' : x.status==='cancelled' ? '取消' : x.status==='waiting-origin' ? '通常1px補正待ち' : '対象外';
+    return `${build} / 通常1px：${last}\n追加${extraDistance}px（暫定 ${extraDelayMs}ms）：${status}${x.reason ? ` / ${x.reason}` : ''}`;
+  }
+  function bounds() {
+    const viewport = window.visualViewport;
+    return { height:viewport.height, width:viewport.width,
+      rootHeight:document.documentElement.clientHeight, rootWidth:document.documentElement.clientWidth };
+  }
+  function unzoomed() {
+    return window.visualViewport && Math.abs(window.visualViewport.scale - 1) <= 0.01;
+  }
+  function clearPending() {
+    clearTimeout(timer);
+    timer = null;
+    candidate = null;
+    beforeInputTop = null;
+  }
+  function cancel(reason) {
+    cancelExtra(reason);
+    if (!session || session.done) {  return; }
+    
+    clearPending();
+    session.done = true;
+    last = `操作介入で取消（${reason}）`;
+  }
+  function end(reason) {
+    
+    if (session && timer === null && last.startsWith('先頭のため')) session.done = true;
+    cancel(reason);
+    session = null;
+    if (frame !== null) cancelAnimationFrame(frame);
+    frame = null;
+    clearPending();
+  }
+  function sameLayout(box) {
+    return baseline && Math.abs(box.width - baseline.width) < 2 &&
+      Math.abs(box.rootWidth - baseline.rootWidth) < 2 && Math.abs(box.rootHeight - baseline.rootHeight) < 2;
+  }
+  function run() {
+    timer = null;
+    
+    if (!session || session.done) {  return; }
+    if (document.hidden || !document.hasFocus() || document.activeElement !== editor || !unzoomed() || isEditorComposing ||
+        !sameLayout(bounds())) { cancel('編集状態または画面変更'); return; }
+    if (editor.value !== (candidate ? candidate.value : session.value)) { cancel('文書内容変更'); return; }
+    if (editor.selectionStart !== editor.selectionEnd) { cancel('選択範囲'); return; }
+    if (candidate && (editor.selectionStart !== candidate.start || editor.selectionEnd !== candidate.end ||
+        editor.selectionDirection !== candidate.direction)) { cancel('選択位置変更'); return; }
+    const original = editor.scrollTop;
+    const maximum = editor.scrollHeight - editor.clientHeight;
+    // Input-triggered work requires an actual scroll since beforeinput.
+    if (original === 0) { candidate = null;  last = '先頭のため実移動なし（入力待ち）'; return; }
+    if (candidate && original === candidate.top) { candidate = null;  last = '対象外（入力後の自動スクロールなし）'; return; }
+    candidate = null;
+    if (!Number.isFinite(original) || original < 0 || original > maximum || maximum <= 0) {
+      
+      Object.assign(extraResult,{status:'not-applicable',reason:'normal-correction-outside-range'});
+      
+      session.done = true; last = '対象外（通常スクロール範囲外）'; return;
+    }
+    
+    
+    editor.scrollTop = Math.max(0, original - 1);
+    const actual = editor.scrollTop;
+    
+    
+    // Even a rounded/no-op assignment is not retried in a loop.
+    observePageMovement();
+    session.done = true;
+    last = actual < original && actual >= 0 ? `実行済み（${original}→${actual}px）` : '対象外（設定したが実移動なし）';
+    onCorrection(original, actual);
+  }
+  function schedule() {
+    
+    clearTimeout(timer);
+    timer = setTimeout(run, 500);
+  }
+  function observeViewport() {
+    frame = null;
+    const box = bounds();
+    
+    if (!Number.isFinite(box.height) || box.height <= 0 || !Number.isFinite(box.width) || box.width <= 0) {  return; }
+    if (!unzoomed()) { end('拡大操作'); baseline = null; return; }
+    if (!baseline) {
+      if (Math.abs(box.height - box.rootHeight) < 2) baseline = box;
+      
+      return;
+    }
+    if (baseline && !sameLayout(box)) { end('画面サイズ変更'); baseline = null; return; }
+    if (session && box.height >= baseline.height - 2) { end('キーボード終了'); baseline = box; return; }
+    if (session) {
+      observePageMovement();
+      
+      if (!session.done && !candidate) schedule();
+      return;
+    }
+    if (document.activeElement !== editor || document.hidden || !document.hasFocus()) {  return; }
+    if (!baseline) return;
+    const reduction = baseline.height - box.height;
+    if (reduction < Math.max(120, baseline.height * 0.18)) {  return; }
+    session = { id:++nextSessionId, done:false, start:editor.selectionStart, end:editor.selectionEnd, value:editor.value,
+      pageBaseline:{...pageBaseline}, pageMoved:false };
+    extraResult = initialExtra('page-not-moved'); extraResult.sessionId = session.id;
+    observePageMovement();
+    
+    last = '予約済み（表示後の調整待ち）';
+    schedule();
+  }
+  function setup() {
+    const ipad = isIPadOS || /iPad/i.test(navigator.userAgent);
+    const standalone = navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+    if (!ipad || !standalone || !window.visualViewport) {
+      extraResult = initialExtra(!ipad ? 'not-ipad' : !standalone ? 'not-standalone' : 'no-visual-viewport');
+       return;
+    }
+    last = '対象外（キーボード表示待ち）';
+    baseline = bounds();
+    pageBaseline = pagePosition();
+    editor.addEventListener('focus', () => {
+      // Root geometry is unchanged by the overlaid iPad keyboard. Preserve a
+      // known full-height baseline if a failed close left visualViewport small.
+      const box = bounds();
+      if (!baseline || box.height > baseline.height || !sameLayout(box)) baseline = box;
+      if (!session && Math.abs(box.height-baseline.height)<2) pageBaseline = pagePosition();
+    });
+    editor.addEventListener('blur', () => end('本文フォーカス喪失'));
+    window.addEventListener('blur', () => end('ウィンドウフォーカス喪失'));
+    window.addEventListener('pagehide', () => end('ページ終了'));
+    document.addEventListener('visibilitychange', () => { if (document.hidden) end('非表示'); });
+    window.addEventListener('orientationchange', () => { end('画面回転'); baseline = null; });
+    window.addEventListener('resize', () => {
+      if (baseline && !sameLayout(bounds())) { end('画面サイズ変更'); baseline = null; }
+    });
+    const notify = () => {
+      checkExtraGeometry();
+      if (frame === null) frame = requestAnimationFrame(observeViewport);
+    };
+    window.visualViewport.addEventListener('resize', notify, { passive:true });
+    window.visualViewport.addEventListener('scroll', notify, { passive:true });
+    window.addEventListener('resize',checkExtraGeometry);
+    // These guards protect the automatic correction.
+    for (const name of ['pointerdown','touchstart','wheel'])
+      window.addEventListener(name,()=>cancelExtra('manual-operation'),{passive:true,capture:true});
+    for (const name of ['beforeinput','input']) editor.addEventListener(name,()=>{ if (extraPending) cancelExtra(name); });
+    editor.addEventListener('scroll',()=>{
+      // The normal correction's queued event at the saved position is expected.
+      if (extraPending && editor.scrollTop!==extraPending.top) {
+        const top = editor.scrollTop, maximum = editor.scrollHeight-editor.clientHeight;
+        cancelExtra(!Number.isFinite(top) || !Number.isFinite(maximum) || top<0 || top>maximum || maximum<=0 ?
+          'outside-scroll-range' : 'scroll-position-changed');
+      }
+    });
+    editor.addEventListener('beforeinput', () => {
+      beforeInputTop = session && !session.done && !isEditorComposing ? editor.scrollTop : null;
+    });
+    editor.addEventListener('input', () => {
+      if (!session || session.done || isEditorComposing || beforeInputTop === null) return;
+      const top = candidate ? candidate.top : beforeInputTop;
+      candidate = { top, start:editor.selectionStart, end:editor.selectionEnd, direction:editor.selectionDirection, value:editor.value };
+      beforeInputTop = null;
+      session.value = editor.value;
+      session.start = editor.selectionStart;
+      session.end = editor.selectionEnd;
+      schedule();
+    });
+    // A candidate is bounded by its 500ms timer. No general scroll listener
+    // arms work, so a finger scroll alone cannot initiate the correction.
+    for (const event of ['pointerdown','touchstart','wheel']) {
+      document.addEventListener(event, () => cancel('手動操作'), { passive:true, capture:true });
+    }
+    editor.addEventListener('compositionstart', () => cancel('日本語変換'));
+    editor.addEventListener('keydown', event => {
+      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Home','End','PageUp','PageDown','Escape'].includes(event.key)) cancel('選択操作');
+    });
+    document.addEventListener('selectionchange', () => {
+      if (extraPending && (editor.selectionStart!==extraPending.start || editor.selectionEnd!==extraPending.end ||
+          editor.selectionDirection!==extraPending.direction)) cancelExtra('selection-changed');
+      if (!session || session.done) return;
+      if (editor.selectionStart !== editor.selectionEnd || (!candidate &&
+          (editor.selectionStart !== session.start || editor.selectionEnd !== session.end)) || (candidate &&
+          (editor.selectionStart !== candidate.start || editor.selectionEnd !== candidate.end))) cancel('選択変更');
+    });
+  }
+  return { build, extraDistance, extraDelayMs, setup, results, description,
+    isCurrentSession:id=>session?.id===id, documentChanged:() => { cancelExtra('document-changed'); cancel('文書切替'); } };
+})();
+
 let viewportRefreshTimer = null;
 let viewportRefreshRaf = null;
 let layoutObserver = null;
@@ -4640,11 +4946,14 @@ function keepEditorCaretVisibleAfterResize() {
     const margin = Math.min(8, editor.clientHeight / 4);
     const caretBottom = caretTop + lineHeight;
     if (caretBottom > editor.scrollTop + editor.clientHeight - margin) {
+      
       editor.scrollTop = Math.max(0, caretBottom - editor.clientHeight + margin);
     } else if (caretTop < editor.scrollTop + margin) {
+      
       editor.scrollTop = Math.max(0, caretTop - margin);
     }
   } finally {
+    
     mirror.remove();
     syncEditorBackdropScroll();
   }
@@ -4665,6 +4974,7 @@ function updateVisualViewportLayout() {
   const topChanged = !previous || Math.abs(top - previous.top) >= 0.5;
   if (!sizeChanged && !topChanged) return;
 
+  
   const previousEditorHeight = editor.clientHeight;
   document.body.style.setProperty('--app-viewport-height', `${height}px`);
   document.body.style.setProperty('--app-viewport-top', `${top}px`);
@@ -5777,6 +6087,7 @@ function clearPendingReplaceAllUndoRestore() {
 }
 
 function setEditorDocumentValue(value) {
+  ipadKeyboardTrial.documentChanged();
   clearPendingReplaceAllUndoRestore();
   editor.value = value;
   resetSearchForDocumentSwitch();
@@ -11200,7 +11511,7 @@ function closeDocModal() {
 
 function showQuickStart() { openDocModal(T.quickStart, T.quickStartDoc); }
 function showKeyboardShortcuts() { openDocModal(T.keyboardShortcuts, T.keyboardShortcutsDoc); }
-function showAboutMdworks() { openDocModal(T.aboutMdworks, T.aboutDoc); }
+function showAboutMdworks() { openDocModal(T.aboutMdworks, T.aboutDoc + '\n\n' + ipadKeyboardTrial.description()); }
 
 function openGitHubRepo() {
   closeMenus();
