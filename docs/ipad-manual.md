@@ -1109,6 +1109,10 @@ If the Mermaid syntax is invalid, Preview displays a warning together with the o
 * Code blocks that exceed either limit are not rendered as diagrams; a warning and the original source are displayed instead.
 * For large diagrams, we recommend splitting the content across multiple documents or into multiple smaller diagrams.
 
+### 13-19. The screen sometimes shifts out of place when I close the on-screen keyboard
+
+On iPad, this can occasionally happen when using MD//WORKS from the Home Screen. If the screen does not return to normal after a moment, close and reopen the app. You can also try opening MD//WORKS directly in Safari.
+
 ---
 
 *Google, Google Chrome, and Gemini are trademarks of Google LLC. All other company, product, and service names mentioned are trademarks or registered trademarks of their respective owners.*
