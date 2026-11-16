@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 - Added **Ctrl+Shift+V** shortcut<br> 
 Added **Ctrl+Shift+V** (**Cmd+Shift+V** on macOS) to cycle between Editor Only, Split Preview, and Focused Preview.
 
+- **iPad screen positioning issues**<br>
+Improved screen positioning when using the on-screen keyboard on iPad.
+
 ## 2026-10-15 v1.6.7 - Official Release
 
 ## 2026-10-14 -v1.6.7 Candidate - Updated the external libraries
