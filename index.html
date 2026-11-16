@@ -2161,6 +2161,9 @@ const isSafari = /^((?!chrome|android|crios|fxios|edgios|opr|opera).)*safari/i.t
 const isIPadSafari = isIPadOS && isSafari;
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || isIPadOS || (navigator.maxTouchPoints > 0 && window.innerWidth <= 1024);
 const isAndroid = /Android/i.test(navigator.userAgent);
+const isApplePlatform = /Mac|iPhone|iPad|iPod/i.test(navigator.platform || navigator.userAgent);
+const PREVIEW_SHORTCUT_LABEL = isApplePlatform ? 'Cmd+Shift+V' : 'Ctrl+Shift+V';
+const PREVIEW_SHORTCUT_ARIA = isApplePlatform ? 'Meta+Shift+V' : 'Control+Shift+V';
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
@@ -2615,6 +2618,7 @@ MD//WORKS is a single-file Markdown editor for drafting, previewing, saving, and
 * **Ctrl+Shift+Home / Ctrl+Shift+End**: カーソル位置から文書の先頭 / 末尾まで選択
 
 ### UI
+* **Ctrl+Shift+V / Cmd+Shift+V（macOS）**: 編集のみ → 分割プレビュー → Focused Preview → 編集のみ
 * **Esc**: 最前面のパネルまたはモーダルだけを閉じる
 ` : `
 ## Keyboard Shortcuts
@@ -2654,6 +2658,7 @@ MD//WORKS is a single-file Markdown editor for drafting, previewing, saving, and
 * **Ctrl+Shift+Home / Ctrl+Shift+End**: Select from the cursor to the beginning / end of the document
 
 ### UI
+* **Ctrl+Shift+V / Cmd+Shift+V (macOS)**: Editor only → Split Preview → Focused Preview → Editor only
 * **Esc**: Close only the frontmost panel or modal
 `,
   aboutDoc: isJa ? `
@@ -3058,12 +3063,14 @@ function updatePreviewButtonAction() {
   const previewBtn = document.getElementById('preview-toggle-btn');
   const previewEntry = document.getElementById('m-preview-entry');
   if (previewBtn) {
-    previewBtn.title = label;
+    previewBtn.title = `${label} (${PREVIEW_SHORTCUT_LABEL})`;
     previewBtn.setAttribute('aria-label', label);
+    previewBtn.setAttribute('aria-keyshortcuts', PREVIEW_SHORTCUT_ARIA);
   }
   if (previewEntry) {
-    previewEntry.title = label;
+    previewEntry.title = `${label} (${PREVIEW_SHORTCUT_LABEL})`;
     previewEntry.setAttribute('aria-label', label);
+    previewEntry.setAttribute('aria-keyshortcuts', PREVIEW_SHORTCUT_ARIA);
     previewEntry.setAttribute('aria-pressed', previewOpen ? 'true' : 'false');
   }
 }
@@ -3207,6 +3214,8 @@ function finishPreviewSession({ restoreZen = true } = {}) {
 function togglePreviewFocusMode() {
   cyclePreviewMode();
 }
+
+updatePreviewButtonAction();
 
 editor.value = T.defaultMd;
 
@@ -5570,6 +5579,8 @@ async function closePreviewBeforeOpen() {
 }
 
 function cyclePreviewMode() {
+  // Entry/exit restores selection and scroll over two animation frames.
+  if (isPreviewFocusTransitioning) return;
   if (previewFocusOpen) {
     closePreviewSessionFromFocus();
     closeMenus();
@@ -11909,9 +11920,31 @@ function handleGlobalEscape(e) {
 
 document.addEventListener('keydown', handleGlobalEscape);
 
+function handlePreviewShortcut(e) {
+  const modifier = isApplePlatform ? e.metaKey && !e.ctrlKey : e.ctrlKey && !e.metaKey;
+  if (!modifier || e.defaultPrevented || e.isComposing || e.keyCode === 229 || isEditorComposing || isComposing) return;
+  if (document.querySelector('#doc-modal.show, #export-modal.show, #print-modal.show, #update-modal.show, #rn-modal.show, #history-modal.show, dialog[open]')) return;
+
+  const target = e.target;
+  if (!(target instanceof Element)) return;
+  if (target !== editor && (isEditableSelectionTarget(target) || target.closest('select'))) return;
+  if (target !== editor && target !== document.body && target !== document.documentElement &&
+      !previewWrap.contains(target) && !target.closest('#preview-toggle-btn, #m-preview-entry, #preview-focus-exit-btn')) return;
+
+  // Cancel plain-text paste even on repeats and while a transition is settling.
+  e.preventDefault();
+  if (e.repeat || isPreviewFocusTransitioning) return;
+  togglePreview();
+}
+
 window.addEventListener('keydown', e => {
   const m = e.ctrlKey || e.metaKey;
   const key = e.key.toLowerCase();
+  // Handle this before Focused Preview's editing-shortcut restrictions.
+  if (key === 'v' && m && e.shiftKey && !e.altKey) {
+    handlePreviewShortcut(e);
+    return;
+  }
   if (key === 'a' && m && previewOpen && isPreviewActive && !isEditableSelectionTarget(e.target)) {
     e.preventDefault();
     selectPreviewContents();
