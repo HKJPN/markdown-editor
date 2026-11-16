@@ -717,7 +717,9 @@ Examples include:
 | Full-width spaces (`□`)| Checking accidental spaces or inconsistencies |
 | Tabs  (`→`) | Checking indentation |
 | Trailing spaces (`·`)| Identifying causes of Markdown formatting issues |
-| Line breaks (`↵`) | Confirming paragraph and list spacing |
+| LF line breaks (`↓`) / CRLF line breaks (`↵`) | Checking line endings and paragraph/list spacing |
+
+The line-ending format is retained per document, including when saving newly inserted or pasted lines. Files with mixed endings or lone CR normalize to LF. New documents, files without line breaks, and older stored data without format metadata use LF. AutoSave, history, and standalone apps retain the format. Soft wraps have no marker, and markers are excluded from copied text, saved content, and Preview.
 
 In Markdown, the positions of spaces and line breaks can affect the display results. Full-width spaces, tabs, trailing spaces, and line break positions are displayed very faintly in any screen mode as shown below.
 <img src="./images/invisivlecharac.jpg" alt="invisible character" width="50%">
