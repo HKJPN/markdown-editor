@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## 2026-11-16 v1.6.8 Candidate
-- Added **Ctrl+Shift+V** shortcut 
+- Added **Ctrl+Shift+V** shortcut<br> 
 Added **Ctrl+Shift+V** (**Cmd+Shift+V** on macOS) to cycle between Editor Only, Split Preview, and Focused Preview.
 
 ## 2026-10-15 v1.6.7 - Official Release
