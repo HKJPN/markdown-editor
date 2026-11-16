@@ -403,6 +403,10 @@ Each time you click/tap one of the following, the display cycles through three s
 - The **Preview** button on the title bar
 - **View > Preview** in the menu bar
 
+Press **Ctrl+Shift+V / ⌘⇧V** to cycle through the same three display modes.
+
+> **Note:** Preview switching is inactive while you are using another input field, such as the search field, interacting with a dialog, or composing text with an input method. In the Editor, **Ctrl+Shift+V / ⌘⇧V** switches preview modes instead of performing the usual “paste as plain text” action.
+
 ![Image: Split view and Focused Preview ](<./images/splitviewE.jpg>)
 
 #### 5-1-1. Split View (Editor & Preview)
@@ -920,6 +924,7 @@ Common shortcuts include:
 | Select All | Ctrl+A / ⌘A |
 | Find | Ctrl+F / ⌘F |
 | Replace | Ctrl+H / ⌘H |
+| Cycle preview modes | Ctrl+Shift+V / ⌘⇧V |
 | Close the frontmost panel or modal | ⌘ + . or Esc |
 | Clear search highlights | Esc (when no panel or modal is open) |
 
@@ -1113,6 +1118,8 @@ If Preview does not appear, make sure it is enabled by clicking the **Preview** 
 
 On narrow screens, Preview may appear as a full-width pane or may be out of view.  
 When Preview is active, you can drag the central divider to adjust the width of the editor and preview panes.
+
+You can also press **Ctrl+Shift+V / ⌘⇧V** to cycle preview modes. If the shortcut does not respond, click inside the Editor or Preview and try again.
 
 ### 13-8. Search returns no results
 
