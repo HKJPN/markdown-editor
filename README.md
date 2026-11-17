@@ -1,4 +1,4 @@
-# 🚀 MD//WORKS v1.6.7 —Standalone Markdown Editor for AI-assisted writing
+# 🚀 MD//WORKS v1.6.8 —Standalone Markdown Editor for AI-assisted writing
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![No Tracking](https://img.shields.io/badge/tracking-none-green)
@@ -40,26 +40,20 @@ You are also free to host MD//WORKS on your own website under the MIT License. H
 
 ---
 
-## What's New in v1.6.7
+## What's New in v1.6.8
 
-### Security & Stability
-- **Updated Core Libraries:** Updated Marked, Mammoth, Mermaid, DOMPurify, KaTeX, and Typo.js to newer versions for improved security, compatibility, and stability.
-- **Dependency Integrity Verification:** Added SHA-384 integrity checks for externally loaded libraries and English spell-check dictionaries, helping prevent modified or unexpected resources from being loaded.
-- **Dependency Cleanup:** Removed the unused `encoding-japanese` library and documented the application's direct dependencies for easier future maintenance.
+### **⌨️ Write. Preview. Stay in Flow. (`Ctrl+Shift+V`)**  
+From your first draft to the final read-through, keep your hands on the keyboard and your attention on your words. Press `Ctrl+Shift+V` (`Cmd+Shift+V` on macOS) to cycle through **Editor Only → Split Preview → Focused Preview**. Find the right view for every stage of writing, one shortcut at a time.
 
-### Focused Preview
-- **Distraction-Free Reading:** Improved Focused Preview to provide a cleaner, more immersive reading experience with fewer interface distractions.
+### **✨ See Your Line Endings. Keep Them Intact.**  
+Small details matter when your text moves between apps and operating systems. **Show Invisibles** now distinguishes **LF (↓)** from **CRLF (↵)**, and saving preserves the document’s line-ending format. Check what’s there before sharing a file or copying your next draft.
 
-### Editing Improvements
-- **Multi-Line Formatting:** Improved Bold, Italic, and Strikethrough operations on multi-line selections. Formatting markers are now applied to each line individually instead of wrapping the entire selection.
-- **Ctrl+H for Replace:** Added support for opening the Replace panel directly with Ctrl+H, while preserving the existing Ctrl+F search workflow.
+### **📱 A Smoother Writing Experience on iPad**  
+Enjoy improved layout and scrolling when writing with the iPad’s on-screen keyboard, so you can spend more time on your words.
 
-### Bug Fixes
-- **Chromium Text Rendering:** Fixed an intermittent display issue in Chromium-based browsers where Markdown heading markers (`#`) could temporarily appear to disappear while typing. The underlying text was not affected.
+> **Home Screen app note:** The view may occasionally remain shifted after dismissing the keyboard. If this happens, close and reopen MD//WORKS, or use it directly in Safari.
 
-### Maintenance Notes
-- Retained existing Markdown features, document import/export behavior, and application settings.
-- Updated dependency verification and regression tests to help maintain compatibility and security across future releases.
+
 
 ---
 
