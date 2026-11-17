@@ -597,7 +597,7 @@ body.show-line-numbers #editor-backdrop{
   overflow:visible;
 }
 #editor-backdrop .invis-nl::after{
-  content:'↵';
+  content:attr(data-symbol);
   pointer-events:none;
   user-select:none;
   color:var(--text3);
@@ -2537,6 +2537,7 @@ MD//WORKS は、1つのHTMLで動くMarkdownエディタです。下書き、プ
 
 ### 2. プレビューする
 * **View > Preview** またはタイトルバーの **Preview** で表示を切り替えます。
+* **表示 > 不可視文字を表示** で改行を確認できます。LFは **↓**、CRLFは **↵** で表示し、保存時も文書の形式を維持します。混在・単独CRはLFに統一し、新規文書・改行なし・形式情報のない従来データはLFとして扱います。
 * Markdownは安全のためサニタイズされたHTMLとして表示されます。
 
 ### 3. 保存する
@@ -2564,6 +2565,7 @@ MD//WORKS is a single-file Markdown editor for drafting, previewing, saving, and
 
 ### 2. Preview safely
 * Toggle **View > Preview** or the title-bar **Preview** button.
+* **View > Show Invisibles** marks LF with **↓** and CRLF with **↵**. Saves preserve the document's format. Mixed endings and lone CR normalize to LF; new documents, files without line breaks, and older stored data without format metadata use LF.
 * Markdown is rendered as sanitized HTML before it is shown.
 
 ### 3. Save your work
@@ -2897,7 +2899,7 @@ const WRAP_LINES_STORAGE_KEY = 'mdworks_wrap_lines';
 const DEEP_EDIT_ENABLED_STORAGE_KEY = 'mdworks_deep_edit_enabled';
 
 function getStoredShowInvisibles() {
-  try { return localStorage.getItem(INVISIBLES_STORAGE_KEY) === '1'; } catch (e) { return false; }
+  try { return localStorage.getItem(INVISIBLES_STORAGE_KEY) !== '0'; } catch (e) { return true; }
 }
 function getStoredShowLineNumbers() {
   try { return localStorage.getItem(LINE_NUMBERS_STORAGE_KEY) === '1'; } catch (e) { return false; }
@@ -2912,6 +2914,26 @@ let previewOpen = false;
 let outlineOpen = false;
 let spellEnabled = false;
 let showInvisibles = getStoredShowInvisibles();
+// textarea values stay LF-normalized; file serialization uses this document metadata.
+let documentLineEnding = 'LF';
+
+function normalizeDocumentLineEnding(value) {
+  return value === 'CRLF' ? 'CRLF' : 'LF';
+}
+
+function detectDocumentLineEnding(value) {
+  const text = String(value ?? '');
+  return text.includes('\r\n') && !/[\r\n]/.test(text.replace(/\r\n/g, '')) ? 'CRLF' : 'LF';
+}
+
+function normalizeDocumentText(value) {
+  return String(value ?? '').replace(/\r\n?/g, '\n');
+}
+
+function serializeDocumentText(value = editor.value, lineEnding = documentLineEnding) {
+  const text = normalizeDocumentText(value);
+  return normalizeDocumentLineEnding(lineEnding) === 'CRLF' ? text.replace(/\n/g, '\r\n') : text;
+}
 let showLineNumbers = getStoredShowLineNumbers();
 let highlightCurrentLine = getStoredHighlightCurrentLine();
 let wrapLinesEnabled = getStoredWrapLines();
@@ -3862,7 +3884,7 @@ function createWorkspaceId() { return createSecureId('workspace'); }
 function getWorkspaceSessionKey(scope = workspaceScope) { return `${WORKSPACE_SESSION_KEY_PREFIX}:${scope}`; }
 function getWorkspaceStorageKeys(id = workspaceId, scope = workspaceScope) {
   const prefix = `${WORKSPACE_STORAGE_PREFIX}:${scope}:${id}`;
-  return { text: `${prefix}:text`, name: `${prefix}:name`, history: `${prefix}:history` };
+  return { text: `${prefix}:text`, name: `${prefix}:name`, history: `${prefix}:history`, lineEnding: `${prefix}:lineEnding` };
 }
 function getAllWorkspaceStorageKeys() {
   const keys = [];
@@ -4070,7 +4092,8 @@ async function requestWorkspaceFork(sourceWorkspaceId, targetWorkspaceId, target
 async function applyForkedWorkspace(forkData, targetWorkspaceId, targetFilename, fallbackContent = editor.value) {
   workspaceId = targetWorkspaceId;
   sessionStorage.setItem(getWorkspaceSessionKey(), workspaceId);
-  setEditorDocumentValue(typeof forkData?.content === 'string' ? forkData.content : fallbackContent);
+  setEditorDocumentValue(typeof forkData?.content === 'string' ? forkData.content : fallbackContent,
+    normalizeDocumentLineEnding(forkData?.lineEnding));
   resetDocumentIdentity(targetFilename);
   historyCache = await readWorkspaceHistory(targetWorkspaceId);
   update();
@@ -4098,7 +4121,8 @@ async function forkDuplicatedWorkspace(sourceFilename = filenameInput.value || '
     } catch (historyErr) { console.warn('Workspace history copy failed', historyErr); }
     await secureSetItem(targetKeys.text, editor.value);
     await secureSetItem(targetKeys.name, targetFilename);
-    forkData = { content: editor.value, targetFilename };
+    await secureSetItem(targetKeys.lineEnding, documentLineEnding);
+    forkData = { content: editor.value, lineEnding: documentLineEnding, targetFilename };
   }
   await applyForkedWorkspace(forkData, targetWorkspaceId, targetFilename);
   toast(warning ? T.duplicatedTabSeparatedWithWarning(targetFilename) : T.duplicatedTabSeparated(targetFilename));
@@ -4116,8 +4140,9 @@ async function handleWorkspaceMessage(data) {
       const clonedHistory = JSON.parse(JSON.stringify(sourceHistory));
       await secureSetItem(targetKeys.text, editor.value);
       await secureSetItem(targetKeys.name, data.targetFilename || 'untitled.md');
+      await secureSetItem(targetKeys.lineEnding, documentLineEnding);
       await secureSetItem(targetKeys.history, JSON.stringify(clonedHistory));
-      postWorkspaceMessage({ type: WORKSPACE_MESSAGES.FORK_READY, requestId: data.requestId, sourceWorkspaceId: workspaceId, targetWorkspaceId: data.targetWorkspaceId, originalFilename: filenameInput.value || 'untitled.md', targetFilename: data.targetFilename, content: editor.value, historyCount: clonedHistory.length });
+      postWorkspaceMessage({ type: WORKSPACE_MESSAGES.FORK_READY, requestId: data.requestId, sourceWorkspaceId: workspaceId, targetWorkspaceId: data.targetWorkspaceId, originalFilename: filenameInput.value || 'untitled.md', targetFilename: data.targetFilename, content: editor.value, lineEnding: documentLineEnding, historyCount: clonedHistory.length });
     } catch (err) {
       postWorkspaceMessage({ type: WORKSPACE_MESSAGES.FORK_FAILED, requestId: data.requestId, sourceWorkspaceId: workspaceId, targetWorkspaceId: data.targetWorkspaceId, message: err?.message || String(err) });
     }
@@ -4306,7 +4331,8 @@ async function encodeHistoryRecord(entry, documentSessionId) {
   const historyId = entry.historyId && (!entry.documentSessionId || entry.documentSessionId === documentSessionId)
     ? entry.historyId
     : createSecureId('history');
-  const eventData = entry.eventData || { content: String(entry.content || '') };
+  const eventData = { ...(entry.eventData || { content: String(entry.content || '') }),
+    lineEnding: normalizeDocumentLineEnding(entry.lineEnding ?? entry.eventData?.lineEnding) };
   const payload = await encryptString(JSON.stringify({
     fileName: entry.filename || entry.fileName || 'untitled.md',
     eventType: entry.eventType || 'snapshot',
@@ -4327,7 +4353,8 @@ async function decodeHistoryRecord(record) {
       timestamp: record.timestamp,
       eventType: data.eventType || 'snapshot',
       eventData: data.eventData || {},
-      content: typeof data.eventData?.content === 'string' ? data.eventData.content : ''
+      content: typeof data.eventData?.content === 'string' ? data.eventData.content : '',
+      lineEnding: normalizeDocumentLineEnding(data.eventData?.lineEnding)
     };
   } catch (error) {
     console.warn('History record could not be decrypted', record?.historyId, error);
@@ -4464,10 +4491,14 @@ async function triggerAutoSave() {
   const keys = getWorkspaceStorageKeys(savingWorkspaceId);
   if (isSaving) return;
   isSaving = true;
+  const savedText = editor.value;
+  const savedName = filenameInput.value;
+  const savedLineEnding = documentLineEnding;
   try {
-    const textSaved = await secureSetItem(keys.text, editor.value);
-    const nameSaved = await secureSetItem(keys.name, filenameInput.value);
-    if (savingWorkspaceId === workspaceId) setAutoSaveHealth(textSaved && nameSaved);
+    const textSaved = await secureSetItem(keys.text, savedText);
+    const nameSaved = await secureSetItem(keys.name, savedName);
+    const lineEndingSaved = await secureSetItem(keys.lineEnding, savedLineEnding);
+    if (savingWorkspaceId === workspaceId) setAutoSaveHealth(textSaved && nameSaved && lineEndingSaved);
     if (nameSaved && savingWorkspaceId === workspaceId) commitPendingDeepFilenameChange();
   } catch (e) {
     console.warn('Auto save failed', e);
@@ -4482,14 +4513,17 @@ async function loadAutoSave() {
   const keys = getWorkspaceStorageKeys(loadingWorkspaceId);
   const savedTxt = await secureGetItem(keys.text);
   const savedName = await secureGetItem(keys.name);
-  if (savedTxt && savedTxt !== T.defaultMd && !isLegacyDefaultMarkdown(savedTxt) && savedTxt !== '') {
+  const savedLineEnding = normalizeDocumentLineEnding(await secureGetItem(keys.lineEnding));
+  if (savedTxt !== null && !isLegacyDefaultMarkdown(savedTxt) &&
+      ((savedTxt !== '' && savedTxt !== T.defaultMd) || savedLineEnding === 'CRLF')) {
     if (confirm(T.restorePrompt)) {
-      setEditorDocumentValue(savedTxt);
+      setEditorDocumentValue(savedTxt, savedLineEnding);
       if (savedName) setFilenameProgrammatically(savedName);
       markDirty();
     } else {
       secureRemoveItem(keys.text);
       secureRemoveItem(keys.name);
+      secureRemoveItem(keys.lineEnding);
     }
   }
 }
@@ -4504,7 +4538,8 @@ async function preserveAutoSaveForFileLaunch() {
   const savedName = await secureGetItem(keys.name);
   if (localStorage.getItem(keys.name) != null && savedName === null) throw new Error('AutoSave filename could not be read');
   const backupName = `${savedName || 'untitled.md'} (AutoSave ${Date.now()})`;
-  const result = await saveToHistoryList(backupName, savedTxt);
+  const savedLineEnding = normalizeDocumentLineEnding(await secureGetItem(keys.lineEnding));
+  const result = await saveToHistoryList(backupName, savedTxt, workspaceId, savedLineEnding);
   if (!result) throw new Error('AutoSave draft could not be saved to History');
   const history = await readWorkspaceHistory();
   if (!history.some(entry => entry.filename === backupName && entry.content === savedTxt)) {
@@ -4514,11 +4549,11 @@ async function preserveAutoSaveForFileLaunch() {
 
 let hasStandaloneData = false;
 
-function getStandaloneAutosaveSuffix(filename, content) {
+function getStandaloneAutosaveSuffix(filename, content, lineEnding = 'LF') {
   const name = String(filename || 'untitled.md');
   const text = String(content || '');
   let hash = 2166136261;
-  const seed = `${name}\n${text}`;
+  const seed = `${name}\n${text}${lineEnding === 'CRLF' ? '\nCRLF' : ''}`;
   for (let i = 0; i < seed.length; i += 1) {
     hash ^= seed.charCodeAt(i);
     hash = Math.imul(hash, 16777619);
@@ -4533,11 +4568,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (dataScript && dataScript.textContent.trim().length > 2) {
       const data = JSON.parse(dataScript.textContent);
       if (data.content !== undefined) {
-        setEditorDocumentValue(data.content);
+        setEditorDocumentValue(data.content, normalizeDocumentLineEnding(data.lineEnding));
         setFilenameProgrammatically(data.filename || 'untitled.md');
         hasStandaloneData = true;
         
-        const standaloneKeySuffix = getStandaloneAutosaveSuffix(data.filename, data.content);
+        const standaloneKeySuffix = getStandaloneAutosaveSuffix(data.filename, data.content, data.lineEnding);
         workspaceScope = `standalone:${standaloneKeySuffix}`;
       }
     }
@@ -5464,6 +5499,7 @@ async function getAllWorkspaceDataForMigration() {
   };
   upsertMigrationItem(currentKeys.text, editor.value);
   upsertMigrationItem(currentKeys.name, filenameInput.value || 'untitled.md');
+  upsertMigrationItem(currentKeys.lineEnding, documentLineEnding);
   const history = await readAllHistory();
   return { ok: true, data, history };
 }
@@ -6097,10 +6133,11 @@ function clearPendingReplaceAllUndoRestore() {
   pendingReplaceAllUndoRestore = null;
 }
 
-function setEditorDocumentValue(value) {
+function setEditorDocumentValue(value, lineEnding = detectDocumentLineEnding(value)) {
   ipadKeyboardTrial.documentChanged();
   clearPendingReplaceAllUndoRestore();
-  editor.value = value;
+  documentLineEnding = normalizeDocumentLineEnding(lineEnding);
+  editor.value = normalizeDocumentText(value);
   resetSearchForDocumentSwitch();
 }
 
@@ -6205,7 +6242,7 @@ function deferPasteTask(fn, preferIdle) {
 async function handlePlainTextPaste(text) {
   if (!text || isEditorComposing || !guardEditorCommand()) return;
 
-  const normalizedText = String(text).normalize('NFC');
+  const normalizedText = normalizeDocumentText(String(text).normalize('NFC'));
   const pasteLength = normalizedText.length;
   const start = editor.selectionStart;
   const end = editor.selectionEnd;
@@ -6955,7 +6992,7 @@ function refreshBackdrop() {
     }
 
     if (showInvisibles && hasFollowingNewline) {
-      html += '<span class="invis invis-nl" aria-hidden="true"></span>';
+      html += `<span class="invis invis-nl" data-symbol="${documentLineEnding === 'CRLF' ? '↵' : '↓'}" aria-hidden="true"></span>`;
     }
     if (!html) html = '&#8203;';
 
@@ -8694,7 +8731,7 @@ function tryParseAcademicReport(htmlText) {
       throw new Error('Invalid or unsupported Academic Report payload');
     }
 
-    return { matched: true, markdown: payload.document.markdown };
+    return { matched: true, markdown: payload.document.markdown, lineEnding: normalizeDocumentLineEnding(payload.document.lineEnding) };
   } catch (error) {
     return { matched: true, error };
   }
@@ -8717,7 +8754,7 @@ async function importAcademicReportHtml(htmlText, sourceName) {
 
   const logicalFilename = academicReportSourceToMarkdownName(sourceName);
   const continueDeepEdit = prepareDeepEditForFreshDocumentContext();
-  setEditorDocumentValue(inspection.markdown);
+  setEditorDocumentValue(inspection.markdown, inspection.lineEnding);
   setFilenameProgrammatically(logicalFilename);
   fileHandle = null;
   lastPickerStartHandle = null;
@@ -8785,7 +8822,7 @@ async function importRestrictedViewerHtml(htmlText, sourceName, openMethod = '')
 
     // 文書切り替え：Restricted Viewerからの復元
     const continueDeepEdit = prepareDeepEditForFreshDocumentContext();
-    setEditorDocumentValue(payload.markdown.normalize('NFC'));
+    setEditorDocumentValue(payload.markdown.normalize('NFC'), normalizeDocumentLineEnding(payload.lineEnding));
     setFilenameProgrammatically(ensureMarkdownFilename(payload.filename || payload.title || restrictedViewerSourceToMarkdownName(sourceName)));
     fileHandle = null;
     syncFilenameInputState();
@@ -8857,7 +8894,7 @@ async function importPrivateViewerHtml(htmlText, sourceName, openMethod = '') {
 
     // 文書切り替え：Private Viewerからの復元
     const continueDeepEdit = prepareDeepEditForFreshDocumentContext();
-    setEditorDocumentValue(payload.markdown.normalize('NFC'));
+    setEditorDocumentValue(payload.markdown.normalize('NFC'), normalizeDocumentLineEnding(payload.lineEnding));
     setFilenameProgrammatically(ensureMarkdownFilename(payload.title || String(sourceName || '').replace(/\.(private\.)?view\.html?$/i, '') || 'document'));
     fileHandle = null;
     syncFilenameInputState();
@@ -8997,7 +9034,7 @@ function extractStandaloneDocument(standaloneHtml, privateAppPayload = null) {
   const filename = typeof data.filename === 'string' && data.filename.trim()
     ? data.filename.trim()
     : privateAppPayload?.meta?.originalFilename || 'untitled.md';
-  return { content: data.content, filename };
+  return { content: data.content, filename, lineEnding: normalizeDocumentLineEnding(data.lineEnding) };
 }
 
 async function importPrivateAppHtml(htmlText, sourceName, openMethod = '') {
@@ -9040,7 +9077,7 @@ async function importPrivateAppHtml(htmlText, sourceName, openMethod = '') {
         restoredFrom
       }
     });
-    setEditorDocumentValue(restoredDocument.content.normalize('NFC'));
+    setEditorDocumentValue(restoredDocument.content.normalize('NFC'), restoredDocument.lineEnding);
     setFilenameProgrammatically(ensureMarkdownFilename(restoredDocument.filename));
     fileHandle = null;
     syncFilenameInputState();
@@ -9222,13 +9259,14 @@ async function handleAndroidSave(isSaveAs, deepSaveSnapshot, savingWorkspaceId) 
   const inputFilename = filenameInput.value;
   const filename = ensureMarkdownFilename(inputFilename);
   const content = editor.value;
+  const savedLineEnding = documentLineEnding;
   const savingDeepSession = deepEditSession;
   const mimeType = /\.txt$/i.test(filename) ? 'text/plain' : 'text/markdown';
   let method = 'download';
 
   // Start sharing in the button's activation, before any asynchronous History work.
   try {
-    const file = new File([content], filename, { type: mimeType });
+    const file = new File([serializeDocumentText(content, savedLineEnding)], filename, { type: mimeType });
     if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({ files: [file], title: filename });
       method = 'share';
@@ -9241,7 +9279,7 @@ async function handleAndroidSave(isSaveAs, deepSaveSnapshot, savingWorkspaceId) 
   if (method === 'download') {
     try {
       const downloadedFilename = fallbackDownload({
-        filename, content, mimeType: `${mimeType};charset=utf-8`, updateSaveState: false
+        filename, content: serializeDocumentText(content, savedLineEnding), mimeType: `${mimeType};charset=utf-8`, updateSaveState: false
       });
       if (!downloadedFilename) throw new Error('Download did not start');
     } catch (error) {
@@ -9253,7 +9291,7 @@ async function handleAndroidSave(isSaveAs, deepSaveSnapshot, savingWorkspaceId) 
 
   // Only the snapshot handed to the OS was saved; later edits remain unsaved.
   if (workspaceId === savingWorkspaceId && filenameInput.value === inputFilename) {
-    if (editor.value === content) {
+    if (editor.value === content && documentLineEnding === savedLineEnding) {
       setFilenameProgrammatically(filename);
       markSaved();
       syncFilenameInputState();
@@ -9263,7 +9301,7 @@ async function handleAndroidSave(isSaveAs, deepSaveSnapshot, savingWorkspaceId) 
     }
   }
   try {
-    await saveToHistoryList(filename, content, savingWorkspaceId);
+    await saveToHistoryList(filename, content, savingWorkspaceId, savedLineEnding);
   } catch (error) {
     console.warn('Failed to save Android shared/downloaded content to History:', error?.name, error?.message);
   }
@@ -9280,7 +9318,7 @@ async function handleSave(isSaveAs = false) {
   const saveFilename = ensureMarkdownFilename(filenameInput.value);
   if (isMobile) {
     const filename = saveFilename;
-    const file = new File([editor.value], filename, { type: 'text/markdown' });
+    const file = new File([serializeDocumentText()], filename, { type: 'text/markdown' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({ files: [file], title: filename });
@@ -9333,7 +9371,7 @@ async function handleSave(isSaveAs = false) {
           syncFilenameInputState();
         }
         const writable = await fileHandle.createWritable();
-        await writable.write(editor.value);
+        await writable.write(serializeDocumentText());
         await writable.close();
         try { await updateSavedHistoryFilename(historyWriteResult, fileHandle.name); }
         catch (error) { console.warn('Failed to update saved history filename', error); }
@@ -9355,7 +9393,7 @@ async function handleSave(isSaveAs = false) {
 }
 
 function fallbackDownload({
-  filename = ensureMarkdownFilename(filenameInput.value), content = editor.value,
+  filename = ensureMarkdownFilename(filenameInput.value), content = serializeDocumentText(),
   mimeType = 'text/markdown;charset=utf-8', updateSaveState = true
 } = {}) {
   if (updateSaveState) setFilenameProgrammatically(filename);
@@ -9587,7 +9625,8 @@ function buildStandaloneHtmlForExport() {
   if (dataScript) {
     const data = {
       filename: filenameInput.value.trim() || 'untitled.md',
-      content: editor.value
+      content: editor.value,
+      lineEnding: documentLineEnding
     };
 
     dataScript.textContent = JSON.stringify(data)
@@ -9846,7 +9885,8 @@ async function exportRestrictedViewer() {
       filename: originalFilename,
       createdAt,
       format: RESTRICTED_VIEWER_FORMAT,
-      markdown: editor.value
+      markdown: editor.value,
+      lineEnding: documentLineEnding
     };
     const box = {
       format: RESTRICTED_VIEWER_FORMAT,
@@ -10050,6 +10090,7 @@ async function exportPrivateViewer() {
       title,
       createdAt: new Date().toISOString(),
       markdown: editor.value,
+      lineEnding: documentLineEnding,
       html: renderPackage.html,
       math: renderPackage.math
     };
@@ -10445,6 +10486,7 @@ textarea{
 const PRIVATE_APP_PAYLOAD = ${payloadJson};
 let decryptedHtml = '';
 let rescueFilename = 'rescued.md';
+let rescueLineEnding = 'LF';
 
 const $ = id => document.getElementById(id);
 
@@ -10598,6 +10640,7 @@ function rescueText() {
     const data = JSON.parse(dataScript.textContent || '{}');
     const content = data.content || '';
     rescueFilename = data.filename || PRIVATE_APP_PAYLOAD?.meta?.originalFilename || 'rescued.md';
+    rescueLineEnding = data.lineEnding === 'CRLF' ? 'CRLF' : 'LF';
 
     if (!content) {
       throw new Error('content is empty');
@@ -10632,7 +10675,9 @@ function downloadRescueText() {
   let name = rescueFilename || 'rescued.md';
   if (!/\\.(md|txt|markdown)$/i.test(name)) name += '.md';
 
-  const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+  const normalized = text.replace(/\\r\\n?/g, '\\n');
+  const content = rescueLineEnding === 'CRLF' ? normalized.replace(/\\n/g, '\\r\\n') : normalized;
+  const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = name;
@@ -10746,12 +10791,12 @@ function jumpToOffset(offset) {
   });
 }
 
-async function saveToHistoryList(filename, content, targetWorkspaceId = workspaceId) {
+async function saveToHistoryList(filename, content, targetWorkspaceId = workspaceId, lineEnding = documentLineEnding) {
   if (workspaceStoragePaused) { pendingWorkspaceHistorySave = true; return null; }
   if (!content || content.trim() === '' || content === T.defaultMd || isLegacyDefaultMarkdown(content)) return null;
   const savingWorkspaceId = targetWorkspaceId || workspaceId;
   let hist = await readWorkspaceHistory(savingWorkspaceId);
-  const entry = { filename, content, date: Date.now(), eventType: 'snapshot', eventData: { content } };
+  const entry = { filename, content, lineEnding: normalizeDocumentLineEnding(lineEnding), date: Date.now(), eventType: 'snapshot', eventData: { content, lineEnding: normalizeDocumentLineEnding(lineEnding) } };
   const retained = hist.filter(h => h.filename !== filename).slice(0, 9);
   const removedIds = hist.filter(h => h.filename === filename || !retained.includes(h)).map(h => h.historyId).filter(Boolean);
   let storedEntry;
@@ -10832,7 +10877,7 @@ async function openHistory() {
         summary: isJa ? '作業履歴から復元しました' : 'Restored from work history',
         meta: { previousFilename, restoredFilename, method: 'work-history' }
       });
-      setEditorDocumentValue(typeof h.content === 'string' ? h.content : '');
+      setEditorDocumentValue(typeof h.content === 'string' ? h.content : '', normalizeDocumentLineEnding(h.lineEnding ?? h.eventData?.lineEnding));
       setFilenameProgrammatically(restoredFilename);
       fileHandle = null;
       syncFilenameInputState();
@@ -12004,7 +12049,7 @@ async function closeFile() {
   await saveToHistoryList(filenameInput.value, editor.value);
   const continueDeepEdit = prepareDeepEditForFreshDocumentContext();
   setEditorDocumentValue(''); resetDocumentIdentity(); update(); markSaved();
-  { const keys = getWorkspaceStorageKeys(); secureRemoveItem(keys.text); secureRemoveItem(keys.name); }
+  { const keys = getWorkspaceStorageKeys(); secureRemoveItem(keys.text); secureRemoveItem(keys.name); secureRemoveItem(keys.lineEnding); }
   const continuedSessionId = resumeDeepEditForFreshDocumentContext(continueDeepEdit, 'file-close');
   toast(T.closedToast);
   scheduleDeepEditContinuationToast(continuedSessionId);
