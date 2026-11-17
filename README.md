@@ -48,6 +48,8 @@ From your first draft to the final read-through, keep your hands on the keyboard
 ### **✨ See Your Line Endings. Keep Them Intact.**  
 Small details matter when your text moves between apps and operating systems. **Show Invisibles** now distinguishes **LF (↓)** from **CRLF (↵)**, and saving preserves the document’s line-ending format. Check what’s there before sharing a file or copying your next draft.
 
+> **Show Invisibles is now on by default.** Subtle markers help you spot line breaks and extra whitespace as you write. You can toggle this in the **View** menu. If you’ve already saved a preference, it will remain unchanged.
+
 ### **📱 A Smoother Writing Experience on iPad**  
 Enjoy improved layout and scrolling when writing with the iPad’s on-screen keyboard, so you can spend more time on your words.
 
