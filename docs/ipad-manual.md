@@ -684,7 +684,7 @@ Select **View > Outline** to display a list of headings in the document. In long
 
 ### 9-2. Showing Invisible Characters
 
-Select **View > Show Invisibles** to reveal characters that are normally hidden (like Full-width spaces, Tabs, Trailing spaces, and Line breaks).
+Show Invisibles is enabled by default. You can turn it on or off via **View > Show Invisibles**, and your preference is saved.
 
 | Character | Use case |
 | --- | --- |

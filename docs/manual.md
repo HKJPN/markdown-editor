@@ -708,7 +708,7 @@ In long documents, click a heading to jump directly to that section. This makes 
 
 
 
-Select **View > Show Invisibles** to reveal characters that are normally hidden.
+Show Invisibles is enabled by default. You can turn it on or off via **View > Show Invisibles**, and your preference is saved.
 
 Examples include:
 
