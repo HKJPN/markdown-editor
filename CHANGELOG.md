@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+##  2026-11-17 v1.6.8 Candidate
+- Show Invisibles is now enabled by default, including for existing users without a saved preference. Saved ON/OFF preferences are preserved.
+
 ## 2026-11-16 v1.6.8 Candidate
 - **Preserve document line endings**<br> 
 Show Invisibles now distinguishes **LF (↓)** and **CRLF (↵)**, preserving the document's format across file saves, AutoSave, history, and standalone app exports. Mixed endings and lone CR normalize to LF.
