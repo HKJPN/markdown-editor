@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-11-19 v1.6.8 - Official Release
+
 ##  2026-11-17 v1.6.8 Candidate
 - Show Invisibles is now enabled by default, including for existing users without a saved preference. Saved ON/OFF preferences are preserved.
 
