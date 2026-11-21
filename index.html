@@ -1994,7 +1994,7 @@ body.zen-mode #zen-exit-btn { display: flex; }
   <div class="rn-content">
     <div class="rn-head">
       <h3 id="rn-title"></h3>
-      <button class="rn-btn" style="padding:4px 10px" onclick="closeReleaseNotesModal()" aria-label="Close">✕</button>
+      <button id="rn-dismiss-btn" class="rn-btn" style="padding:4px 10px" onclick="closeReleaseNotesModal()">✕</button>
     </div>
     <div id="rn-body" class="rn-body"></div>
     <div class="rn-foot">
@@ -2167,9 +2167,9 @@ const PREVIEW_SHORTCUT_ARIA = isApplePlatform ? 'Meta+Shift+V' : 'Control+Shift+
 
 const isJa = (navigator.language || navigator.languages?.[0] || '').startsWith('ja');
 document.documentElement.lang = isJa ? 'ja' : 'en';
-const APP_VERSION = '1.6.7';
-const APP_VERSION_LABEL = 'v1.6.7';
-const RELEASE_NOTES_VERSION = '1.6.7-release';
+const APP_VERSION = '1.6.8';
+const APP_VERSION_LABEL = `v${APP_VERSION}`;
+const RELEASE_NOTES_VERSION = `${APP_VERSION}-release`;
 const LEGACY_DEFAULT_MARKDOWN_SAMPLES = [
   `# MD//WORKS エディタ
 
@@ -2693,35 +2693,33 @@ MD//WORKS is a Markdown editor focused on safe writing, previewing, and portable
 
 `,
 
-  releaseNotesTitle: `MD//WORKS ${APP_VERSION_LABEL}`,
-  releaseNotesIntro: isJa ? 'セキュリティと安定性を強化し、閲覧・編集機能を改善しました。' : 'Security and stability updates, plus improvements to reading and editing.',
+  releaseNotesTitle: isJa ? `MD//WORKS ${APP_VERSION_LABEL} の更新内容` : `What’s new in MD//WORKS ${APP_VERSION_LABEL}`,
   releaseNotesClose: isJa ? '閉じる' : 'Close',
+  releaseNotesContinue: isJa ? '編集画面へ' : 'Continue to editor',
   releaseNotesContent: isJa ? `
-### 🔒 セキュリティと安定性
-主要ライブラリを更新し、外部リソースの整合性検証を強化しました。
+### 不可視文字の表示が既定でオンに
+改行や余分な空白が、入力中に目立ちすぎない記号で表示されます。「表示」メニューの「不可視文字を表示」で切り替えられます。すでに設定している場合は、その設定が引き続き適用されます。
 
-### 📖 Focused Preview
-画面上の余分な要素を抑え、文書に集中できる閲覧環境を改善しました。
+### ショートカットでプレビューを切り替え
+**Ctrl+Shift+V**（macOSでは**Cmd+Shift+V**）を押すたびに、「編集のみ → 分割プレビュー → Focused Preview」の順に切り替わります。
 
-### ✏️ 編集機能の改善
-- 複数行選択時の太字・斜体・取り消し線を、各行に個別に適用するよう改善しました。
-- **Ctrl+H**で置換パネルを直接開けるようになりました。
+### 文書の改行コードを保持
+不可視文字を表示すると、LFは「↓」、CRLFは「↵」で表示されます。ファイル保存、自動保存、履歴からの復元、スタンドアロンアプリへのエクスポートでも、文書の改行コードが保持されます。改行コードが混在している場合や単独のCRがある場合は、LFに統一されます。
 
-### 🛠 不具合修正
-Chromium系ブラウザで、入力中にMarkdownの見出し記号（\`#\`）が一時的に見えなくなる表示上の問題を修正しました。
+### iPadでのキーボード表示時の動作を改善
+画面キーボードを開いたときのエディターの表示位置を改善しました。
 ` : `
-### 🔒 Security & Stability
-Updated core libraries and strengthened dependency integrity verification for safer, more reliable operation.
+### Show Invisibles is now on by default
+Subtle markers show line breaks and extra whitespace as you type. You can toggle Show Invisibles in the View menu. Your saved preference still applies.
 
-### 📖 Focused Preview
-Enjoy a cleaner, distraction-free reading experience with the improved Focused Preview.
+### Switch preview modes with a shortcut
+Press **Ctrl+Shift+V** (**Cmd+Shift+V** on macOS) to cycle through Editor Only → Split Preview → Focused Preview.
 
-### ✏️ Editing Improvements
-- Bold, Italic, and Strikethrough now format multi-line selections line by line.
-- Press **Ctrl+H** to open the Replace panel directly.
+### Keep your document’s line endings
+Show Invisibles displays LF (↓) and CRLF (↵). Your document’s line endings are preserved when saving files, using AutoSave, restoring from history, or exporting a standalone app. Mixed line endings and lone CR are normalized to LF.
 
-### 🛠 Bug Fixes
-Fixed a Chromium rendering issue that could temporarily hide Markdown heading markers while typing.
+### Improved iPad keyboard behavior
+The editor is positioned more reliably when the on-screen keyboard opens.
 `};
 
 const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
@@ -4753,12 +4751,6 @@ const ipadKeyboardTrial = (() => {
       pageObserved:extraResult.pageObserved ? {...extraResult.pageObserved} : null,
       pageDelta:extraResult.pageDelta ? {...extraResult.pageDelta} : null} };
   }
-  function description() {
-    const x = extraResult;
-    const status = x.executed ? (x.moved ? `実行済み（${x.before}→${x.after}px）` : `設定したが実移動なし（${x.before}→${x.after}px）`) :
-      x.status==='pending' ? '予約済み' : x.status==='cancelled' ? '取消' : x.status==='waiting-origin' ? '通常1px補正待ち' : '対象外';
-    return `${build} / 通常1px：${last}\n追加${extraDistance}px（暫定 ${extraDelayMs}ms）：${status}${x.reason ? ` / ${x.reason}` : ''}`;
-  }
   function bounds() {
     const viewport = window.visualViewport;
     return { height:viewport.height, width:viewport.width,
@@ -4939,7 +4931,7 @@ const ipadKeyboardTrial = (() => {
           (editor.selectionStart !== candidate.start || editor.selectionEnd !== candidate.end))) cancel('選択変更');
     });
   }
-  return { build, extraDistance, extraDelayMs, setup, results, description,
+  return { build, extraDistance, extraDelayMs, setup, results,
     isCurrentSession:id=>session?.id===id, documentChanged:() => { cancelExtra('document-changed'); cancel('文書切替'); } };
 })();
 
@@ -11567,7 +11559,7 @@ function closeDocModal() {
 
 function showQuickStart() { openDocModal(T.quickStart, T.quickStartDoc); }
 function showKeyboardShortcuts() { openDocModal(T.keyboardShortcuts, T.keyboardShortcutsDoc); }
-function showAboutMdworks() { openDocModal(T.aboutMdworks, T.aboutDoc + '\n\n' + ipadKeyboardTrial.description()); }
+function showAboutMdworks() { openDocModal(T.aboutMdworks, T.aboutDoc); }
 
 function openGitHubRepo() {
   closeMenus();
@@ -11770,10 +11762,9 @@ function maybeShowReleaseNotes() {
 
 function openReleaseNotesModal() {
   set('rn-title', T.releaseNotesTitle);
-  set('rn-close-btn', T.releaseNotesClose);
-  document.getElementById('rn-body').innerHTML = renderDocMarkdown(`${T.releaseNotesIntro}
-
-${T.releaseNotesContent}`);
+  set('rn-close-btn', T.releaseNotesContinue);
+  document.getElementById('rn-dismiss-btn').setAttribute('aria-label', T.releaseNotesClose);
+  document.getElementById('rn-body').innerHTML = renderDocMarkdown(T.releaseNotesContent);
   setReleaseNotesModalState(true);
 
   const closeButton = document.querySelector('#rn-modal .rn-foot .rn-btn');
