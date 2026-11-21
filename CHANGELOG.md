@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-11-22 v1.6.8.1 -Fixed the internal version (1.6.7 -> 1.6.8)
+- Fixed the internal version number so the update indicator (💡) no longer stays visible when v1.6.8 is up to date.
+
 ## 2026-11-19 v1.6.8 - Official Release
 
 ##  2026-11-17 v1.6.8 Candidate
