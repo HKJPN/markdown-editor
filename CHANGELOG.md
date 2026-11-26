@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-11-26 v1.6.8.3 - Fixed stale previews
+- Fixed stale previews when opening another file while preserving the current preview mode and split width.
+
 ## 2026-11-26 v1.6.8.2 - Security update
 - Updated DOMPurify from 3.4.17 to 3.5.0 for HTML and SVG sanitization in the editor and during Word import.
 - Fixed a redraw loop that could leave multiple Mermaid diagrams stuck in source view. Resizing the preview or dragging the divider now preserves rendered diagrams.
