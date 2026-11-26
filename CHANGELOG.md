@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2026-11-26 v1.6.8.2 - Security update
+- Updated DOMPurify from 3.4.17 to 3.5.0 for HTML and SVG sanitization in the editor and during Word import.
+- Fixed a redraw loop that could leave multiple Mermaid diagrams stuck in source view. Resizing the preview or dragging the divider now preserves rendered diagrams.
+- Updated Marked from 18.0.14 to 18.3.0. Some Markdown blockquotes and lists may render differently due to parser fixes.
+- Updated KaTeX from 0.19.0 to 0.19.1 for math rendering.
+- Updated Mermaid from 11.16.1 to 12.3.0. The new defaults can change the layout and styling of existing diagrams. On Safari, Mermaid rendering requires Safari 17.4 or later (iOS or iPadOS 17.4 or later).
+
 ## 2026-11-22 v1.6.8.1 -Fixed the internal version (1.6.7 -> 1.6.8)
 - Fixed the internal version number so the update indicator (💡) no longer stays visible when v1.6.8 is up to date.
 
