@@ -5609,6 +5609,7 @@ async function closePreviewBeforeOpen() {
   previewFocusSnapshot = null;
   isPreviewFocusTransitioning = false;
   suppressPreviewScrollSync = false;
+  previewWrap.style.width = '';
   renderPreviewFocusState();
   renderPreviewState();
   scheduleViewportRefresh('preview-open-reset');
@@ -6138,6 +6139,20 @@ function setEditorDocumentValue(value, lineEnding = detectDocumentLineEnding(val
   clearPendingReplaceAllUndoRestore();
   documentLineEnding = normalizeDocumentLineEnding(lineEnding);
   editor.value = normalizeDocumentText(value);
+  if (previewFocusSnapshot) {
+    // Keep the preview session and start at the beginning of the new document.
+    Object.assign(previewFocusSnapshot, {
+      previewScrollTop: 0,
+      previewScrollLeft: 0,
+      editorSelectionStart: 0,
+      editorSelectionEnd: 0,
+      editorSelectionDirection: 'none',
+      editorScrollTop: 0,
+      editorScrollLeft: 0,
+    });
+    previewWrap.scrollTop = 0;
+    previewWrap.scrollLeft = 0;
+  }
   resetSearchForDocumentSwitch();
 }
 
@@ -9155,7 +9170,6 @@ async function openFileFromHandle(handle, { method = 'file-system-access', prote
 
 async function handleOpen() {
   closeMenus();
-  await closePreviewBeforeOpen();
   if (!isMobile && window.showOpenFilePicker) {
     try {
       const openOptions = {
