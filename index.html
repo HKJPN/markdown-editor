@@ -743,6 +743,7 @@ body.show-line-numbers #editor-backdrop{
 .sr-options{display:flex;gap:12px;font-size:11px;color:var(--text2);margin-bottom:8px;user-select:none;flex-wrap:wrap}
 .sr-options label{display:flex;align-items:center;gap:4px;cursor:pointer}
 .sr-options input[type="checkbox"]{accent-color:var(--accent)}
+.sr-word-hint{font-size:11px;line-height:1.4;color:var(--text2);margin:-4px 0 8px;overflow-wrap:anywhere}
 .sr-error-msg{color:var(--danger);font-size:11px;margin-bottom:8px;display:none}
 #sr-replace-area{display:none}
 /* #endregion */
@@ -1681,7 +1682,7 @@ body.zen-mode #zen-exit-btn { display: flex; }
     <button class="menu-trigger" data-menu="file" id="t-file"></button>
     <div class="menu-dropdown" id="dd-file">
       <div class="menu-entry" onclick="newFile()">
-        <span id="m-new"></span><span class="menu-shortcut">Ctrl+N</span>
+        <span id="m-new"></span>
       </div>
       <div class="menu-entry" onclick="handleOpen()">
         <span id="m-open"></span><span class="menu-shortcut">Ctrl+O</span>
@@ -1950,6 +1951,7 @@ body.zen-mode #zen-exit-btn { display: flex; }
         <label><input type="checkbox" id="sr-opt-case"> <span id="sr-lbl-case">Case Sensitive</span></label>
         <label><input type="checkbox" id="sr-opt-word"> <span id="sr-lbl-word">Whole Word</span></label>
       </div>
+      <p id="sr-word-hint" class="sr-word-hint" hidden>日本語の語句が見つからない場合は、このオプションをオフにしてください</p>
       <div id="sr-replace-area">
         <div class="sr-row">
           <input type="text" class="sr-input" id="sr-replace-input" placeholder="Replace with">
@@ -2248,7 +2250,9 @@ const T = {
   exportViewerTitle: isJa ? 'Viewer' : 'Viewer',
   exportViewerDescription: isJa ? 'Outline付きの標準閲覧用HTMLです。' : 'Standard read-only HTML with a collapsible outline.',
   exportRestrictedTitle: isJa ? '制限付きViewer' : 'Restricted Viewer',
-  exportRestrictedDescription: isJa ? '選択、コピー、右クリック、ドラッグ、印刷を抑制します。' : 'Suppresses selection, copying, right-click, dragging, and printing.',
+  exportRestrictedDescription: isJa
+    ? '選択、コピー、右クリック、ドラッグ、印刷を抑制します。閲覧時はパスワード不要です。復元用パスワードは、再編集用に元のMarkdownを取り出すときに使います。'
+    : 'Suppresses selection, copying, right-click, dragging, and printing. No password is needed to view. The recovery password is used to restore the original Markdown for editing.',
   exportPasswordViewerTitle: isJa ? 'パスワード付きViewer' : 'Password-protected Viewer',
   exportPasswordViewerDescription: isJa ? '開くときにパスワードが必要なViewerです。' : 'Requires a password when the file is opened.',
   exportStandaloneTitle: isJa ? 'Standalone App' : 'Standalone App',
@@ -2387,10 +2391,10 @@ const T = {
   viewerEnterPassword: isJa ? 'パスワードを入力してください。' : 'Enter the password.',
   viewerPassphraseError: isJa ? 'パスフレーズが正しくないか、ファイルが破損しています。' : 'The passphrase is incorrect or the file may be corrupted.',
   viewerSecurityNotice: isJa ? 'このファイルはパスフレーズで保護された簡易Viewerです。表示後の内容はブラウザ内で平文として扱われます。コピー、印刷、スクリーンショット、開発者ツールによる確認を完全に防ぐものではありません。パスフレーズを知っているユーザーは、MD//WORKS Editorで元Markdownを復元して編集できます。' : 'This is a simple password-protected viewer. Once decrypted, the content is plain text/HTML in the browser. It does not prevent copying, printing, screenshots, or inspection through developer tools. Users who know the passphrase can restore and edit the original Markdown in MD//WORKS Editor.',
-  privateViewerImportPrompt: isJa ? 'Private Viewerを開くにはパスフレーズを入力してください' : 'Enter the passphrase to open this Private Viewer',
-  privateViewerImported: isJa ? 'Private ViewerからMarkdownを復元しました' : 'Markdown restored from Private Viewer',
-  privateViewerImportError: isJa ? 'Private Viewerの復元に失敗しました' : 'Failed to restore Private Viewer',
-  privateViewerImportMissingMarkdown: isJa ? 'このPrivate Viewerには復元可能なMarkdownが含まれていません' : 'This Private Viewer does not contain restorable Markdown',
+  privateViewerImportPrompt: isJa ? 'パスワード付きViewerを開くにはパスワードを入力してください' : 'Enter the password to open this Password-protected Viewer',
+  privateViewerImported: isJa ? 'パスワード付きViewerからMarkdownを復元しました' : 'Markdown restored from Password-protected Viewer',
+  privateViewerImportError: isJa ? 'パスワード付きViewerの復元に失敗しました' : 'Failed to restore Password-protected Viewer',
+  privateViewerImportMissingMarkdown: isJa ? 'このパスワード付きViewerには復元可能なMarkdownが含まれていません' : 'This Password-protected Viewer does not contain restorable Markdown',
   privateAppImportPrompt: isJa ? 'Password-protected Appを開くにはパスワードを入力してください' : 'Enter the password to open this Password-protected App',
   privateAppImportDecrypting: isJa ? 'Password-protected Appを復号しています...' : 'Decrypting Password-protected App...',
   privateAppImportRestoring: isJa ? 'Appから文書を復元しています...' : 'Restoring the document from the App...',
@@ -2534,7 +2538,18 @@ const T = {
     : name => `${name} — Failed to read the file`,
   defaultMd: '',
   
-  quickStartDoc: isJa ? `
+  get quickStartDoc() {
+    const saveAction = isMobile ? this.share : window.showSaveFilePicker ? this.save : this.download;
+    const savePath = `**${this.menuFile} > ${saveAction}**`;
+    const exportPath = `**${this.menuFile} > ${this.exportMenu} > ${this.exportStandaloneTitle}**`;
+    const isIPad = isIPadOS || /iPad/i.test(navigator.userAgent);
+    const ipadSaveHint = isIPad
+      ? (isJa ? ' 共有シートで「“ファイル”に保存」を選びます。' : ' In the share sheet, choose **Save to Files**.')
+      : '';
+    const downloadHint = isMobile
+      ? (isJa ? ' ファイルを共有できない環境では、ブラウザからダウンロードされます。' : ' If file sharing is unavailable, the browser downloads the file.')
+      : '';
+    return isJa ? `
 ## Quick Start
 
 MD//WORKS は、1つのHTMLで動くMarkdownエディタです。下書き、プレビュー、保存、スタンドアロン書き出しを同じ画面で行えます。
@@ -2550,14 +2565,14 @@ MD//WORKS は、1つのHTMLで動くMarkdownエディタです。下書き、プ
 * Markdownは安全のためサニタイズされたHTMLとして表示されます。
 
 ### 3. 保存する
-* **File > Save** でMarkdownファイルとして保存します。
-* **File > Export as App** で、現在の原稿を含んだスタンドアロンHTMLを書き出せます。
+* ${savePath} でMarkdownファイルとして保存します。${ipadSaveHint}${downloadHint}
+* ${exportPath} で、現在の原稿を含んだスタンドアロンHTMLを書き出せます。
 * Auto encrypted では、ローカルの下書きと履歴を平文のまま保存しないようにします。
 * **Private Storage** を使うと、ローカルの下書きと履歴にパスフレーズによる追加保護をかけられます。
 
 ### 4. 探す・整える
 * **Edit > Find** / **Replace** で検索と置換を行います。
-* **書式 > Markdownを整形** で余分な空行や行末スペースを整えます。
+* **書式 > Markdownを整形** で余分な空行や行末スペースを整えます。コードブロック内でも、行末の空白が削除され、連続する空行が詰められます。
 
 ### 5. オフラインで使う
 * スタンドアロンHTMLはネットワークがなくても開けます。
@@ -2578,27 +2593,35 @@ MD//WORKS is a single-file Markdown editor for drafting, previewing, saving, and
 * Markdown is rendered as sanitized HTML before it is shown.
 
 ### 3. Save your work
-* Use **File > Save** to save a Markdown file.
-* Use **File > Export as App** to export a standalone HTML file containing the current draft and editor.
+* Use ${savePath} to save a Markdown file.${ipadSaveHint}${downloadHint}
+* Use ${exportPath} to export a standalone HTML file containing the current draft and editor.
 * **Auto encrypted** helps avoid storing local drafts and history as plain text.
 * Enable **Private Storage** when you want passphrase-based protection for local drafts and history.
 
 ### 4. Find and tidy
 * Use **Edit > Find** / **Replace** for search and replacement.
-* Use **Format > Format Markdown** to clean excess blank lines and trailing spaces.
+* Use **Format > Format Markdown** to clean up excess blank lines and trailing spaces. This also removes trailing whitespace and reduces runs of blank lines inside code blocks.
 
 ### 5. Work offline
 * Standalone HTML exports can open without a network connection.
 * This help content is embedded in the app and never fetched from an external document.
-`,
-  keyboardShortcutsDoc: isJa ? `
+`;
+  },
+  get keyboardShortcutsDoc() {
+    const saveKey = isApplePlatform ? '⌘S' : 'Ctrl+S';
+    const saveAsKey = isApplePlatform ? '⌘⇧S' : 'Ctrl+Shift+S';
+    const saveAsAction = window.showSaveFilePicker ? this.saveAs : this.downloadAs;
+    const saveAction = window.showSaveFilePicker ? this.save : this.download;
+    const downloadHint = isJa ? '（ファイルを共有できない場合はダウンロード）' : ' (or download if file sharing is unavailable)';
+    const saveShortcuts = isMobile
+      ? `* **${saveKey} / ${saveAsKey}**: ${this.share}${downloadHint}`
+      : `* **${saveKey}**: ${saveAction}\n* **${saveAsKey}**: ${saveAsAction}`;
+    return isJa ? `
 ## Keyboard Shortcuts
 
 ### File
-* **Ctrl+N**: 新規作成
 * **Ctrl+O**: 開く
-* **Ctrl+S**: 保存
-* **Ctrl+Shift+S**: 名前を付けて保存
+${saveShortcuts}
 
 ### Edit
 * **Ctrl+Z**: 元に戻す
@@ -2635,10 +2658,8 @@ MD//WORKS is a single-file Markdown editor for drafting, previewing, saving, and
 ## Keyboard Shortcuts
 
 ### File
-* **Ctrl+N**: New file
 * **Ctrl+O**: Open
-* **Ctrl+S**: Save
-* **Ctrl+Shift+S**: Save As
+${saveShortcuts}
 
 ### Edit
 * **Ctrl+Z**: Undo
@@ -2671,7 +2692,8 @@ MD//WORKS is a single-file Markdown editor for drafting, previewing, saving, and
 ### UI
 * **Ctrl+Shift+V / Cmd+Shift+V (macOS)**: Editor only → Split Preview → Focused Preview → Editor only
 * **Esc**: Close only the frontmost panel or modal
-`,
+`;
+  },
   aboutDoc: isJa ? `
 ## About MD//WORKS
 
@@ -7335,7 +7357,19 @@ function navMatch(dir) {
 document.getElementById('sr-next').onclick = () => navMatch(1);
 document.getElementById('sr-prev').onclick = () => navMatch(-1);
 
-[srInput, document.getElementById('sr-opt-regex'), document.getElementById('sr-opt-case'), document.getElementById('sr-opt-word')].forEach(el => {
+const srWholeWord = document.getElementById('sr-opt-word');
+if (isJa) {
+  const srWordHint = document.getElementById('sr-word-hint');
+  const updateWholeWordHint = () => {
+    srWordHint.hidden = !srWholeWord.checked;
+    if (srWholeWord.checked) srWholeWord.setAttribute('aria-describedby', srWordHint.id);
+    else srWholeWord.removeAttribute('aria-describedby');
+  };
+  srWholeWord.addEventListener('change', updateWholeWordHint);
+  updateWholeWordHint();
+}
+
+[srInput, document.getElementById('sr-opt-regex'), document.getElementById('sr-opt-case'), srWholeWord].forEach(el => {
   el.addEventListener('input', (e) => { if (e.isComposing || isComposing) return; performSearch(true); });
   el.addEventListener('change', () => performSearch(true));
 });
@@ -10238,8 +10272,8 @@ async function exportPrivateStandalone() {
   if (!window.crypto || !crypto.subtle || !window.TextEncoder || !window.TextDecoder) {
     alert(
       isJa
-        ? 'このブラウザでは暗号化Appを作成できません。\nPC版のChromeまたはEdgeの最新版を推奨します。'
-        : 'This browser cannot create a Private App. Latest desktop Chrome or Edge is recommended.'
+        ? 'このブラウザではパスワード付きAppを作成できません。\nPC版のChromeまたはEdgeの最新版を推奨します。'
+        : 'This browser cannot create a Password-protected App. Latest desktop Chrome or Edge is recommended.'
     );
     return;
   }
@@ -10250,7 +10284,7 @@ async function exportPrivateStandalone() {
   await saveToHistoryList(filenameInput.value, editor.value);
 
   try {
-    showLoader(isJa ? '暗号化Appを作成中...' : 'Creating Private App...');
+    showLoader(isJa ? 'パスワード付きAppを作成しています...' : 'Creating Password-protected App...');
 
     const { htmlStr, privateAppName } = buildStandaloneHtmlForExport();
 
@@ -10272,15 +10306,15 @@ async function exportPrivateStandalone() {
       }
     } else {
       triggerDownload(loaderHtml, privateAppName, 'text/html');
-      toast(isJa ? '暗号化Appを書き出しました' : 'Private App exported');
+      toast(isJa ? 'パスワード付きAppを書き出しました' : 'Password-protected App exported');
     }
   } catch (err) {
     hideLoader();
     console.error(err);
     alert(
       isJa
-        ? `暗号化Appの作成に失敗しました。\n${err?.message || err}`
-        : `Failed to create Private App.\n${err?.message || err}`
+        ? `パスワード付きAppの作成に失敗しました。\n${err?.message || err}`
+        : `Failed to create Password-protected App.\n${err?.message || err}`
     );
   }
 }
@@ -10445,7 +10479,7 @@ textarea{
 <body>
 <div class="card">
   <div class="head">
-    <div class="kicker">MD//WORKS Pro Private App</div>
+    <div class="kicker">MD//WORKS Pro パスワード付きApp</div>
     <h1>このファイルはパスフレーズで保護されています</h1>
     <p class="sub">正しいパスフレーズを入力すると、ブラウザ上で復号され、MD//WORKS Editorを起動できます。</p>
   </div>
@@ -10456,7 +10490,7 @@ textarea{
       ・ファイルが破損した場合、復号できないことがあります。原本またはバックアップを安全な場所に保管してください。<br>
       ・復号後の本文は画面上およびブラウザのメモリ上に存在します。<br>
       ・機密文書を扱う場合は、拡張機能を無効化したシークレットウィンドウ、または拡張機能を入れていない専用ブラウザプロファイルで開くことを推奨します。<br>
-      ・このPrivate Appは外部ライブラリを読み込む場合があります。完全オフライン環境では、エディタが起動しないことがあります。<br>
+      ・このパスワード付きAppは外部ライブラリを読み込む場合があります。完全オフライン環境では、エディタが起動しないことがあります。<br>
       ・復号後にブラウザ上で編集を続ける場合、エディタ内の一時保存はMD//WORKS本体のStorage設定（Auto encrypted等）に従います。
     </div>
 
@@ -10612,7 +10646,7 @@ async function unlock() {
       decryptedHtml = await decryptBox(box, passphrase);
       $('success').style.display = 'block';
       setError(label === 'backup'
-        ? 'primaryの復号に失敗しましたが、backupから復号できました。ファイル破損に備えて新しいPrivate Appとして書き出し直すことを推奨します。'
+        ? 'primaryの復号に失敗しましたが、backupから復号できました。ファイル破損に備えて新しいパスワード付きAppとして書き出し直すことを推奨します。'
         : ''
       );
       setBusy(false);
