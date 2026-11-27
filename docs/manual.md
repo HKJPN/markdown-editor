@@ -97,12 +97,12 @@ The regular web edition is compatible with a wide range of modern browsers. Plea
 
 ## 2. Creating and Opening Files
 
-![Image: File menu showing New (Ctrl+N / ⌘N), Open (Ctrl+O / ⌘O), and Import Word (.docx)](<./images/FileNewOpenWord-en.jpg>)
+![Image: File menu showing New, Open (Ctrl+O / ⌘O), and Import Word (.docx)](<./images/FileNewOpenWord-en.jpg>)
 
 
 ### 2-1. Creating a New File
 
-To create a new Markdown document, select **File > New (Ctrl+N / ⌘N)** from the menu bar.
+To create a new Markdown document, select **File > New** from the menu bar.
 
 If you have unsaved work, save it before creating a new file.  
 Depending on the current state of the document, you may also be prompted to save the current content to History before proceeding.
@@ -193,9 +193,9 @@ For security reasons, SVG images are not supported. Convert SVG files to PNG, JP
 
 ### 3-4. Local Files and Relative Links
 	
-MD//WORKS Editor allows you to display and play local files such as images, videos, audio, and PDFs in the preview screen by specifying them with "relative paths." Images can also be embedded using Base64. This section explains how to display files using relative links and how to embed them.
+Preview displays images, including images embedded as Base64. Where local relative paths are supported, you can play MP4 and WebM videos inline using a `<video>` tag. Use a relative path such as `videos/demo.mp4` with no `..` segments. To open an audio file or PDF, select its link in the document.
 
->  **⚠️Note**:On mobile operating systems like iPadOS, local relative links do not function due to strict OS security restrictions. Please use the direct embedding method instead.
+> **⚠️ Note:** On mobile operating systems like iPadOS, local relative links do not function due to strict OS security restrictions. Embed images directly in the Markdown document.
 
 #### 3-4-1. Opening the App from a Local Folder
 
@@ -496,12 +496,12 @@ For stronger protection or to remove stored data, use the following features:
 
 ### 6-5. Private Storage vs. Private App Export
 
-Both **Private Storage** and **Save as Private App** use passphrases, but they serve different purposes.
+To protect an exported HTML file with a passphrase, choose **File > Export... > Password-protected App**.
 
 | Feature | Purpose | Protected data |
 | --- | --- | --- |
 | Private Storage | Protects drafts and history stored in the current browser | Local browser data |
-| Save as Private App | Exports the current document as a passphrase-protected HTML file | The exported HTML file |
+| Password-protected App | Exports the current document as a passphrase-protected HTML file | The exported HTML file |
 
 If you forget the passphrase, the protected data cannot be recovered.  
 For important documents, keep a separate Markdown backup (`.md`) in a secure location (see "13-18. Long-term access and compatibility of encrypted files" for details on managing passwords for long-term storage).
@@ -551,10 +551,10 @@ MD//WORKS features the ability to export your documents as a single HTML file. T
 You can choose from the following two categories of export formats based on your needs:
 
 **1. View-Only Formats (Viewer Formats: 3 types)**
-Specialized for viewing documents. These formats are ideal for secure information disclosure, such as distributing presentation materials.
+Use a Viewer to distribute documents such as presentation handouts.
 
 * **Standard:** A highly readable format featuring a built-in outline (table of contents).
-* **Restricted:** Disables unauthorized text copying and printing operations.
+* **Restricted:** Limits text selection, copying, and printing in the Viewer.
 * **Password-Protected:** Requires a password to view the document, ensuring the protection of sensitive information.
 
 **2. Editable Formats (Standalone App Formats: 2 types)**
@@ -633,7 +633,7 @@ To search within the document, select **Edit > Find (Ctrl+F / ⌘F)** from the m
 
 
 
-To replace text, select **Edit > Replace (Ctrl+H / ⌘H)**.
+To replace text, select **Edit > Replace (Ctrl+H)**.
 
 #### Steps
 
@@ -655,14 +655,14 @@ The Find and Replace panel provides the following options:
 | --- | --- |
 | [RegExp](regex-recipes.md) | Enables [regular expression](regex-recipes.md) search |
 | Case Sensitive | Matches uppercase and lowercase letters exactly |
-| Whole Word | Matches complete words only |
+| Whole Word | Matches complete words only. If a Japanese search term yields no matches, turn this option off. |
 
 ### 8-4. Formatting Markdown
 
 
 
-Select **Format > Format Markdown** to clean up excessive blank lines and trailing spaces.
-Running this before sharing, submitting, or exporting helps keep the document clean and consistent.
+Select **Format > Format Markdown** to remove trailing whitespace and reduce runs of blank lines throughout the document.
+Running this before sharing, submitting, or exporting helps keep the document clean and consistent. Formatting also affects code blocks. If spacing or blank lines matter in a code sample, check it after formatting.
 
 ### 8-5. Inserting a Table of Contents
 Selecting **Format > Insert / Update TOC** automatically generates a clickable, linked table of contents based on the headings (`#` to `###` / H1 to H3) in your document.
@@ -914,7 +914,6 @@ Common shortcuts include:
 
 | Action | Shortcut |
 | --- | --- |
-| New File | Ctrl+N / ⌘N |
 | Open | Ctrl+O / ⌘O |
 | Save | Ctrl+S / ⌘S |
 | Save As | Ctrl+Shift+S / ⌘⇧S |
@@ -925,7 +924,7 @@ Common shortcuts include:
 | Paste | Ctrl+V / ⌘V |
 | Select All | Ctrl+A / ⌘A |
 | Find | Ctrl+F / ⌘F |
-| Replace | Ctrl+H / ⌘H |
+| Replace | Ctrl+H |
 | Cycle preview modes | Ctrl+Shift+V / ⌘⇧V |
 | Close the frontmost panel or modal | ⌘ + . or Esc |
 | Clear search highlights | Esc (when no panel or modal is open) |
@@ -1210,7 +1209,7 @@ For important documents, do not rely solely on Private Storage. Save a separate 
 
 ### 13-17. I forgot my Private App passphrase
 
-HTML files created with **File > Save as Private App** cannot be decrypted without the correct passphrase. If the passphrase is forgotten, the document cannot be recovered, so be sure to save the original Markdown document securely on your computer before exporting a Private App (see "13-18" for general long-term storage guidance).
+HTML files created with **File > Export... > Password-protected App** cannot be decrypted without the correct passphrase. If the passphrase is forgotten, the document cannot be recovered, so be sure to save the original Markdown document securely on your computer before exporting (see "13-18" for general long-term storage guidance).
 
 ### 13-18. Long-term access and compatibility of encrypted files
 
