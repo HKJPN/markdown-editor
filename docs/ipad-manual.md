@@ -84,11 +84,11 @@ This section displays the app name, file name, save status, and primary operatio
 
 ## 2. Creating and Opening Files
 
-![Image: File menu showing New (Ctrl+N / ⌘N), Open (Ctrl+O / ⌘O), and Import Word (.docx)](<./images/FileNewOpenWord-en.jpg>)
+![Image: File menu showing New, Open (⌘O), and Import Word (.docx)](<./images/FileNewOpenWord-en.jpg>)
 
 ### 2-1. Creating a New File
 
-To create a new Markdown document, select **File > New (⌘N)** from the menu bar.
+To create a new Markdown document, select **File > New** from the menu bar.
 
 If you have unsaved work, save it before creating a new file.  
 Depending on the current state of the document, you may also be prompted to save the current content to History before proceeding.
@@ -135,7 +135,7 @@ The maximum file size is **10 MB**.
 
 > **Note:** Word import is designed to convert document structure into Markdown. Detailed layout elements such as fonts, margins, complex charts, footnotes, and intricate tables may not be reproduced exactly. After importing, review the result in the Preview area.
 
-> **Note:** Importing a Word file replaces the current draft. Save any important work with **File > Save (⌘S)** before importing.
+> **Note:** Importing a Word file replaces the current draft. Before importing, choose **File > Share (⌘S)** and then **Save to Files** to save your work.
 
 ---
 
@@ -196,11 +196,11 @@ For security reasons, SVG images are not supported. Convert SVG files to PNG, JP
 
 ### 3-4. Local Files and Relative Links
 	
-MD//WORKS Editor allows you to display and play local files such as images, videos, audio, and PDFs in the preview screen by specifying them with "relative paths." Images can also be embedded using Base64. This section explains how to display files using relative links and how to embed them.
+Preview displays images, including images embedded as Base64. Where local relative paths are supported, you can play MP4 and WebM videos inline using a `<video>` tag. Use a relative path such as `videos/demo.mp4` with no `..` segments. To open an audio file or PDF, select its link in the document.
 
-> ⚠️ **Note**:On mobile operating systems like iPadOS, local relative links do not function due to strict OS security restrictions. Please use the direct embedding method instead.
+> **Note:** On mobile operating systems like iPadOS, local relative links do not function due to strict OS security restrictions. Embed images directly in the Markdown document.
 
-#### 3-4-1. Opening the App from a Local Folder
+#### 3-4-1. Opening the App from a Local Folder on a Desktop Computer
 
 Relative links will function correctly by placing the MD//WORKS HTML file, your Markdown file, and all related media files within the same folder structure.
 
@@ -242,7 +242,7 @@ With this configuration, you can smoothly view images, navigate through file lin
 
 #### 3-4-2. Opening Local Files from MD//WORKS on the Web
 
-When using the web version of MD//WORKS hosted on a website and selecting a Markdown file from your local computer to edit, images and other media files in the same folder will not be loaded automatically. This is a standard behavior driven by web browser security specifications (same-origin policy) and is not a malfunction of the application.
+When you open a Markdown file from the Files app in the web version of MD//WORKS, the browser does not automatically load images or other media from the same folder. This is a standard behavior driven by web browser security specifications (same-origin policy) and is not a malfunction of the application.
 
 > 💡 **For a small number of images or small image sizes (up to a few tens of MBs in total):**
 > Even if files cannot be automatically loaded from the folder, you can directly embed (drag and drop) images into your Markdown by referring to "3-3. Inserting Images". Images embedded in the created Markdown file have the advantage of being stably displayed inline in any environment.
@@ -465,7 +465,7 @@ The title bar shows the current save status.
 | Indicator | Meaning |
 | --- | --- |
 | Unsaved | The document contains unsaved changes |
-| Saved | All changes have been saved |
+| Saved | When you use Share, this means the app has successfully handed the document to the selected destination. |
 ![Image: Saved / Unsaved indicator highlighted](<./images/SaveUndUnsavedStatus.jpg>)
 
 If you edit the document after saving, the status changes to **Unsaved**.
@@ -483,18 +483,18 @@ For stronger protection or to remove stored data, use the following features:
 * **Private Storage**: Adds passphrase-based protection to drafts and history stored in the current browser.
 * **Clear Local Data**: Available under **Storage Security** in the File menu. This removes all protected drafts and history stored in the browser.
 
-> **Important:** Auto encrypted and Private Storage protect browser-based drafts and history. They do not replace saving your document as a file. To keep your work permanently, save it as a `.md` file with **File > Save (⌘S)**. **On iPad, if you move to another app or the Home screen while editing, the browser may release memory, which can cause the Auto encrypted restoration to fail.**
+> **Important:** Auto encrypted and Private Storage protect browser-based drafts and history. They do not replace saving your document as a file. To keep a `.md` copy, choose **File > Share (⌘S)** and then **Save to Files**. **On iPad, if you move to another app or the Home screen while editing, the browser may release memory, which can cause the Auto encrypted restoration to fail.**
 >
 > The AutoSave warning badge and the file's Saved / Unsaved state are separate. The file can be saved through the normal share flow even while the warning remains. An exit confirmation may be eligible only when AutoSave is failing and file-unsaved changes remain, but iPadOS, the browser, and the way you exit determine whether it appears. It does not replace manual saving.
 
 ### 6-5. Private Storage vs. Private App Export
 
-Both **Private Storage** and **Save as Private App** use passphrases, but they serve different purposes.
+To protect an exported HTML file with a passphrase, choose **File > Export... > Password-protected App**.
 
 | Feature | Purpose | Protected data |
 | --- | --- | --- |
 | Private Storage | Protects drafts and history stored in the current browser | Local browser data |
-| Save as Private App | Exports the current document as a passphrase-protected HTML file | The exported HTML file |
+| Password-protected App | Exports the current document as a passphrase-protected HTML file | The exported HTML file |
 
 If you forget the passphrase, the protected data cannot be recovered.
 
@@ -544,10 +544,10 @@ MD//WORKS features the ability to export your documents as a single HTML file. T
 You can choose from the following two categories of export formats based on your needs:
 
 **1. View-Only Formats (Viewer Formats: 3 types)**
-Specialized for viewing documents. These formats are ideal for secure information disclosure, such as distributing presentation materials.
+Use a Viewer to distribute documents such as presentation handouts.
 
 * **Standard:** A highly readable format featuring a built-in outline (table of contents).
-* **Restricted:** Disables unauthorized text copying and printing operations.
+* **Restricted:** Limits text selection, copying, and printing in the Viewer.
 * **Password-Protected:** Requires a password to view the document, ensuring the protection of sensitive information.
 
 **2. Editable Formats (Standalone App Formats: 2 types)**
@@ -626,7 +626,7 @@ To search within the document, select **Edit > Find (⌘F)** from the menu bar.
 
 ### 8-2. Replacing Text
 
-To replace text, select **Edit > Replace (⌘H)**.
+To replace text, select **Edit > Replace**. With an external keyboard, you can also press **Ctrl+H**.
 
 1. Select **Edit > Replace**.
 2. Enter the text you want to find in the upper field.
@@ -644,11 +644,12 @@ The Find and Replace panel provides the following options:
 | --- | --- |
 | [RegExp](regex-recipes.md) | Enables [regular expression](regex-recipes.md) search |
 | Case Sensitive | Matches uppercase and lowercase letters exactly |
-| Whole Word | Matches complete words only |
+| Whole Word | Matches complete words only. If a Japanese search term yields no matches, turn this option off. |
 
 ### 8-4. Formatting Markdown
 
-Select **Format > Format Markdown** to clean up excessive blank lines and trailing spaces. Running this before sharing or exporting helps keep the document clean.
+Select **Format > Format Markdown** to remove trailing whitespace and reduce runs of blank lines throughout the document.
+Running this before sharing or exporting helps keep the document clean. Formatting also affects code blocks. If spacing or blank lines matter in a code sample, check it after formatting.
 
 ### 8-5. Inserting a Table of Contents
 Selecting **Format > Insert / Update TOC** automatically generates a clickable, linked table of contents based on the headings (`#` to `###` / H1 to H3) in your document.
@@ -866,10 +867,8 @@ Select **Help > Keyboard Shortcuts** to view available shortcuts.
 
 | Action | Shortcut |
 | --- | --- |
-| New File | ⌘N |
 | Open | ⌘O |
-| Save | ⌘S |
-| Save As | ⌘⇧S |
+| Share | ⌘S or ⌘⇧S |
 | Undo | ⌘Z |
 | Redo | ⌘⇧Z |
 | Cut | ⌘X |
@@ -877,7 +876,7 @@ Select **Help > Keyboard Shortcuts** to view available shortcuts.
 | Paste | ⌘V |
 | Select All | ⌘A |
 | Find | ⌘F |
-| Replace | ⌘H |
+| Replace | Ctrl+H |
 | Cycle preview modes | ⌘⇧V |
 | Close the frontmost panel or modal | ⌘ + . or Esc |
 | Clear search highlights | Esc (when no panel or modal is open) |
@@ -981,9 +980,9 @@ This means the document has been modified since the last save. Save the document
 
 ### 13-2. I saved the document, but I cannot find the file
 
-Check your browser’s default Downloads folder or the "Files" app destination you selected.
+Open the Files app and check the folder you selected in **Save to Files**. If you downloaded the file, check your browser’s Downloads folder.
 
-Remember that **Auto encrypted** only protects drafts stored in the browser; it does not permanently create a `.md` file (see "6-4. Understanding Local Draft Protection" for details). Always use **File > Save (⌘S)**.
+**Auto encrypted** protects drafts stored in the browser (see "6-4. Understanding Local Draft Protection"). To save a copy, choose **File > Share (⌘S)** and then **Save to Files**.
 
 ### 13-3. Cannot Save Directly to the Cloud
 
@@ -993,11 +992,11 @@ MD//WORKS intentionally does not support direct cloud integration. This is a del
 
 * **Privacy:** All processing remains strictly within your browser. By not connecting to external servers, the risk of data leaks is eliminated.
 * **Longevity:** Avoiding reliance on external cloud APIs prevents the application from breaking if those services suddenly change or shut down.
-* **Reliability:** Official desktop sync apps are much more stable and less prone to file corruption from network errors compared to direct browser uploads.
+* **File synchronization:** The cloud provider you select handles synchronization after you save.
 
 **Workaround**
 
-To sync your documents to the cloud, please save your files directly into your local cloud sync folder (such as OneDrive, Google Drive, iCloud, or Dropbox) on your device. Your cloud provider's desktop application will automatically and safely handle the synchronization.
+Choose **File > Share**, then **Save to Files**. Select a folder in iCloud Drive or another cloud provider listed in the Files app.
 
 ### 13-4. I cannot paste from the menu
 
@@ -1083,7 +1082,7 @@ Drafts protected by Private Storage cannot be recovered without the passphrase. 
 
 ### 13-17. I forgot my Private App passphrase
 
-HTML files exported as Private Apps cannot be decrypted without the correct passphrase. Before exporting a Private App, save the original Markdown document securely on your computer (see "13-18").
+HTML files created with **File > Export... > Password-protected App** require the original passphrase to decrypt. Before exporting, keep a separate copy of the original Markdown document in a secure location (see section 13-18).
 
 ### 13-18. Long-term access and compatibility of encrypted files
 
