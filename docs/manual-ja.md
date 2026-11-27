@@ -392,7 +392,7 @@ graph TD
 ```
 ````
 
-このコードはPreviewで図として表示されます。また、**印刷 / PDF保存** の実行時、および **Viewer**、**Restricted Viewer**、**Private Viewer** の生成時にも、描画された図が埋め込まれます。
+このコードはPreviewで図として表示されます。また、**印刷 / PDF保存** の実行時、および **Viewer**、**Restricted Viewer**、**Private Viewer** の生成時にも、描画された図が埋め込まれます。Mermaid図が表示されない場合は、`## 13. よくあるトラブル`の`### 13-19.`及び`### 13-20.`をご覧ください。
 
 > **互換性:** Mermaid記法自体は標準MarkdownやGFMではなく、MD//WORKSが追加する拡張機能です。そのため、他のMarkdownアプリでは図ではなくコードフェンス内のソースとして表示される場合があります。
 
