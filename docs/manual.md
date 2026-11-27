@@ -1230,7 +1230,33 @@ For important long-term records, keep the following files and information togeth
 Do not store the password in plain text in the same location as the encrypted file.
 
 
-### 13-19. Mermaid diagrams are not rendered
+### 13-19. Mermaid diagrams are not rendered (syntax and formatting)
+
+A chart displayed in an AI chat may be specific to that chat interface. If you copy the response into MD//WORKS and the chart is missing, ask the AI to include the diagram as a `mermaid` code block in the Markdown document.
+
+If Preview shows the diagram as plain code, check the opening and closing lines in the editor. The opening line should contain three backticks followed immediately by `mermaid`. The closing line should contain only three backticks. If an extra code block surrounds the entire document, remove its opening and closing lines, keeping the diagram's own code block intact.
+
+If Preview reports a Mermaid syntax error, copy the error message and the diagram source into the AI chat and ask it to correct that diagram.
+
+When asking an AI to create a document with diagrams, you can add this prompt to your request:
+
+```text
+Prepare the document for MD//WORKS Preview.
+
+1. Include each diagram in its own Mermaid code block in the Markdown document. Open the block with three backticks immediately followed by mermaid. Close it with three backticks on a separate line. Put only the Mermaid source inside the block.
+
+2. For flowcharts, start with flowchart TD (top to bottom) or flowchart LR (left to right). Give each node a short ID such as A, B, or N1. Put the visible label in straight double quotes, as in A["Order received (web)"].
+
+3. Keep each flowchart label on one line and avoid HTML tags such as <br/>. Write one arrow per line. For example, to connect A to both B and C, write A --> B on one line and A --> C on the next.
+
+4. For line and bar charts, use xychart-beta. Write each series as line [12, 18, 15] or bar [12, 18, 15]. If the x-axis lists categories, provide one value per category in each series, in the same order.
+
+5. Provide the finished document as a .md file. If you cannot attach a file, return the Markdown source so I can copy it into MD//WORKS. Keep each diagram's Mermaid code block intact. Do not wrap the entire document in an outer code block.
+```
+
+If a previously working diagram stops rendering, or Preview warns that the document has too many diagrams or that a diagram is too large, see section 13-20.
+
+### 13-20. Mermaid diagrams are not rendered (technical issues)
 
 The Mermaid renderer is loaded from an external CDN when a Mermaid diagram is displayed for the first time. An internet connection is therefore required for the initial rendering of a diagram.
 
