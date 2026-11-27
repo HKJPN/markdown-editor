@@ -1,6 +1,6 @@
 # MD//WORKS Direct Dependency Inventory
 
-Last verified: 2026-10-13 (Japan Standard Time). The implementation's APP_VERSION is 1.6.6. This inventory records the state after the stage 2 update.
+Last updated: 2026-11-26 (Japan Standard Time), for the DOMPurify, Marked, KaTeX, and Mermaid updates in v1.6.8. The table records each library's verification date.
 
 The application remains a single HTML file, with no npm dependency management or build process. `tests/dependency-assets.json` contains distribution identifiers used for verification; it is not an application dependency management file.
 
@@ -8,12 +8,12 @@ The application remains a single HTML file, with no npm dependency management or
 
 | Name | Version | Purpose | Loading method | Package license | Verification date |
 |---|---|---|---|---|---|
-| Marked | 18.0.14 | Markdown parsing, custom extensions, table of contents, and output | Bundled UMD | MIT | 2026-10-13 |
+| Marked | 18.3.0 | Markdown parsing, custom extensions, table of contents, and output | Bundled UMD | MIT | 2026-11-26 |
 | Typo.js | 1.3.2 | English spellchecking | Library from CDN; dictionaries via fetch | BSD-3-Clause | 2026-10-13 |
 | Mammoth | 1.13.0 | DOCX-to-HTML conversion | CDN, on demand | BSD-2-Clause | 2026-10-13 |
-| Mermaid | 11.16.1 | Diagram rendering | CDN, on demand | MIT | 2026-10-13 |
-| DOMPurify | 3.4.17 | HTML/SVG sanitization | Bundled in the application; CDN in the Word iframe | (MPL-2.0 OR Apache-2.0) | 2026-10-13 |
-| KaTeX | 0.19.0 | Mathematical expression rendering | CDN, on demand | MIT | 2026-10-13 |
+| Mermaid | 12.3.0 | Diagram rendering | CDN, on demand | MIT | 2026-11-26 |
+| DOMPurify | 3.5.0 | HTML/SVG sanitization | Bundled in the application; CDN in the Word iframe | (MPL-2.0 OR Apache-2.0) | 2026-11-26 |
+| KaTeX | 0.19.1 | Mathematical expression rendering | CDN, on demand | MIT | 2026-11-26 |
 | Turndown | 7.2.4 | Conversion of Word-derived HTML to Markdown | CDN, on demand | MIT | 2026-10-13 |
 
 ## Distributions and Hashes
@@ -22,13 +22,13 @@ For every specified version, the official npm package.json and tarball SHA-512 w
 
 When comparing bundled Marked and DOMPurify, the existing HTML's CRLF line endings are normalized to LF before comparison with the official source. No custom modifications have been made inside the libraries. The SHA-256 values below identify the original bytes of the official distributions, not the entire HTML file.
 
-### Marked 18.0.14 — lib/marked.umd.js
+### Marked 18.3.0 — lib/marked.umd.js
 
-- Distribution URL: [Version-pinned CDN distribution](https://cdn.jsdelivr.net/npm/marked@18.0.14/lib/marked.umd.js)
-- Distribution identifier: `package/lib/marked.umd.js` in `https://registry.npmjs.org/marked/-/marked-18.0.14.tgz`
-- Size: 46891 bytes
-- SHA-256: `21568877a938d2c4e7d74e27f18e60da96bb73a68809610ca39216e1efebae62`
-- SHA-384: `sha384-2vpGtuKqJvFlwJqYnf/wUMuzUfhUnYBt9oay0e2yaFcq0Dh6/aEbQ8YAOeKGzlYo`
+- Distribution URL: [Version-pinned CDN distribution](https://cdn.jsdelivr.net/npm/marked@18.3.0/lib/marked.umd.js)
+- Distribution identifier: `package/lib/marked.umd.js` in `https://registry.npmjs.org/marked/-/marked-18.3.0.tgz`
+- Size: 55534 bytes
+- SHA-256: `f8c7f128939415995e2219e8a84bec42fab27f5980d22e361339e6901da5eadf`
+- SHA-384: `sha384-hH4NOxDIQY57RnVrD2fqqLH/RL4DK2iPPnw/nHh2KuepyxA6z62hUUPNnuXf6AMX`
 - Verification use: Comparison with the bundled source, not script SRI
 
 ### Typo.js 1.3.2 — typo.js
@@ -67,40 +67,41 @@ When comparing bundled Marked and DOMPurify, the existing HTML's CRLF line endin
 - SHA-384: `sha384-8NWE3bZDrmRI4IePMoQaEoLhAQ1MmRMJkdNgnGiHRFanTqsFKr0TmK6aSZvFJ/PO`
 - Verification use: script/link integrity
 
-### Mermaid 11.16.1 — dist/mermaid.min.js
+### Mermaid 12.3.0 — dist/mermaid.min.js
 
-- Distribution URL: [Version-pinned CDN distribution](https://cdn.jsdelivr.net/npm/mermaid@11.16.1/dist/mermaid.min.js)
-- Distribution identifier: `package/dist/mermaid.min.js` in `https://registry.npmjs.org/mermaid/-/mermaid-11.16.1.tgz`
-- Size: 3566058 bytes
-- SHA-256: `18327bef70d96fb505fe7287d9f6a7362ebf07ff6576ddfaffb1a06f3e1a2954`
-- SHA-384: `sha384-aBQXj4hK6Jm05i7aQAsUV3bLdSUrHX1BGYfMB0166TtWt/RRaw+h0Eelme9OCOvy`
+- Distribution URL: [Version-pinned CDN distribution](https://cdn.jsdelivr.net/npm/mermaid@12.3.0/dist/mermaid.min.js)
+- Distribution identifier: `package/dist/mermaid.min.js` in `https://registry.npmjs.org/mermaid/-/mermaid-12.3.0.tgz`
+- Size: 5537838 bytes
+- SHA-256: `336df803d87a38b70a01e736e666c8f7601d2ce42f5e47c8fafe5d721074b9a3`
+- SHA-384: `sha384-HHW54r639fK42Ip0coGF3mz8oSiGn0eEoWNTLs75X7H63pLSDBa0Tqs0RwGmLlXE`
 - Verification use: script/link integrity
+- Bundled DOMPurify: 3.4.17 in the official single-file build. Updates follow official Mermaid releases.
 
-### DOMPurify 3.4.17 — dist/purify.min.js
+### DOMPurify 3.5.0 — dist/purify.min.js
 
-- Distribution URL: [Version-pinned CDN distribution](https://cdn.jsdelivr.net/npm/dompurify@3.4.17/dist/purify.min.js)
-- Distribution identifier: `package/dist/purify.min.js` in `https://registry.npmjs.org/dompurify/-/dompurify-3.4.17.tgz`
-- Size: 29828 bytes
-- SHA-256: `cd37898f9782adf54820c413191b5691803f0f137c799d6edcfd38523b4c2c31`
-- SHA-384: `sha384-P0JNneQf81HOl9VwNXK76cQ9VMD6Nfsnepxb0cCOg8+UzEdzgPHAPV4wVQrvYQSx`
+- Distribution URL: [Version-pinned CDN distribution](https://cdn.jsdelivr.net/npm/dompurify@3.5.0/dist/purify.min.js)
+- Distribution identifier: `package/dist/purify.min.js` in `https://registry.npmjs.org/dompurify/-/dompurify-3.5.0.tgz`
+- Size: 30839 bytes
+- SHA-256: `f69a46022ab1f53e969c8ebbca98172c8995785a9b3be72ea4a12d25b1a1bf67`
+- SHA-384: `sha384-DOUwTXbuiiQxlONuue5N42674XXDfjIJ/LTPtJMZ2ZV1Ir4NRQ3OnM/yM505YQAc`
 - Verification use: Comparison with the application bundle, and integrity in the Word iframe
 
-### KaTeX 0.19.0 — dist/katex.min.js
+### KaTeX 0.19.1 — dist/katex.min.js
 
-- Distribution URL: [Version-pinned CDN distribution](https://cdn.jsdelivr.net/npm/katex@0.19.0/dist/katex.min.js)
-- Distribution identifier: `package/dist/katex.min.js` in `https://registry.npmjs.org/katex/-/katex-0.19.0.tgz`
-- Size: 272868 bytes
-- SHA-256: `103a53763cc033bba8d175bf3f0ba597c3505c9b6747dd3f2c7bc2a6bfcc8ae7`
-- SHA-384: `sha384-QFFtAGzvvj+bfgCGxXJlNZZR1nXEZgvG8tDLCCY1F19xl20WlfTYgguB4VcNdxYk`
+- Distribution URL: [Version-pinned CDN distribution](https://cdn.jsdelivr.net/npm/katex@0.19.1/dist/katex.min.js)
+- Distribution identifier: `package/dist/katex.min.js` in `https://registry.npmjs.org/katex/-/katex-0.19.1.tgz`
+- Size: 273081 bytes
+- SHA-256: `fa140498b8cfc8302cbe5e7cb1bdbc1f952bc38b3fa258ede09e73edbf9a74bc`
+- SHA-384: `sha384-a1WQdjRj162i159OYq041X6I4K8NenkrI09LlPmiHg0YOb7CR+wJOraXwK9abpnE`
 - Verification use: script/link integrity
 
-### KaTeX 0.19.0 — dist/katex.min.css
+### KaTeX 0.19.1 — dist/katex.min.css
 
-- Distribution URL: [Version-pinned CDN distribution](https://cdn.jsdelivr.net/npm/katex@0.19.0/dist/katex.min.css)
-- Distribution identifier: `package/dist/katex.min.css` in `https://registry.npmjs.org/katex/-/katex-0.19.0.tgz`
+- Distribution URL: [Version-pinned CDN distribution](https://cdn.jsdelivr.net/npm/katex@0.19.1/dist/katex.min.css)
+- Distribution identifier: `package/dist/katex.min.css` in `https://registry.npmjs.org/katex/-/katex-0.19.1.tgz`
 - Size: 24793 bytes
-- SHA-256: `d4ab5b8ee16989b070cdb0ea24bd6ad48fc8df1b787f280f29d3ae4f959f2c00`
-- SHA-384: `sha384-3rdsX6e5mueWyoweR9NIVmtEsUkokpBT/0ALqKKIBMr9j4qhHkaIkAcGgsE6uVlp`
+- SHA-256: `00e0b094171b07f58422075f469b4feac2b2f7bce1aeec943c08da4d697f4dcf`
+- SHA-384: `sha384-WwGtaC6ywCHxA5cstpj/3+xIZvTez8dq2IcBQaXRkenHZ7FVVq1ZROtURwfbtTlG`
 - Verification use: script/link integrity
 
 ### Turndown 7.2.4 — lib/turndown.browser.umd.js
@@ -116,7 +117,7 @@ When comparing bundled Marked and DOMPurify, the existing HTML's CRLF line endin
 
 - The en_US dictionary in the Typo.js 1.3.2 distribution uses the UTF-8 Hunspell format. Its README identifies it as the SCOWL-derived 2020.12.07 version. The package version and dictionary creation date are distinct.
 - The Typo.js library is identified as BSD-3-Clause in npm and as Modified BSD in its README. The dictionary data includes multiple copyright notices and permissions from SCOWL and other sources, so it should not be classified solely under the library's BSD-3-Clause license. See the [official dictionary distribution README](https://cdn.jsdelivr.net/npm/typo-js@1.3.2/dictionaries/en_US/README.md).
-- KaTeX font URLs resolve to `dist/fonts/` relative to the CSS from the same 0.19.0 version. Font existence, browser loading, and rendering were verified. A complete inventory of individual font hashes and licenses has not been verified.
+- KaTeX font URLs resolve to `dist/fonts/` relative to the CSS from the same 0.19.1 version. Font existence, browser loading, and rendering were verified. A complete inventory of individual font hashes and licenses has not been verified.
 - Existing external style resources such as Google Fonts are separate from the seven direct JavaScript libraries listed above. Version-pinned SRI was not added to those resources in this update.
 
 ## Removed Dependency
