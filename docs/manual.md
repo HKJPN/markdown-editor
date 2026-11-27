@@ -385,7 +385,7 @@ graph TD
 ```
 ````
 
-The code is rendered as a diagram in Preview. The rendered diagram is also embedded when using **Print / Save as PDF** and when generating a **Viewer**, **Restricted Viewer**, or **Private Viewer**.
+The code is rendered as a diagram in Preview. The rendered diagram is also embedded when using **Print / Save as PDF** and when generating a **Viewer**, **Restricted Viewer**, or **Private Viewer**.If a Mermaid diagram does not display properly, please see "13-19. Mermaid diagrams are not rendered" under "13. Troubleshooting."
 
 > **Compatibility:** Mermaid syntax is neither standard Markdown nor GFM. It is an extension provided by MD//WORKS, so other Markdown applications may display the fenced block as source code instead of a diagram.
 
